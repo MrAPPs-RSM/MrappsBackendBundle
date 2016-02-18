@@ -31,6 +31,8 @@ mrapps_amazon:
        
 mrapps_backend:
    temp_folder: temp
+   images_url: 'http://www.google.it'
+   default_route_name: backend_default_index
    file_accepted_types:
        image: image/jpeg, image/jpg, image/png, image/gif
        video: video/quicktime, video/mp4, video/mpeg, video/x-msvideo, video/3gpp

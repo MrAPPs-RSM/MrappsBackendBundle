@@ -21,72 +21,72 @@ class DefaultController extends Controller
     public function __navigationAction()
     {
 
-        return $this->render('MrappsMrappsBackendBundle:Default:navigation.html.twig', array());
+        return $this->render('MrappsBackendBundle:Default:navigation.html.twig', array());
     }
 
     public function __footerAction()
     {
 
-        return $this->render('MrappsMrappsBackendBundle:Default:footer.html.twig', array());
+        return $this->render('MrappsBackendBundle:Default:footer.html.twig', array());
     }
 
     public function __topNavBarAction()
     {
 
-        return $this->render('MrappsMrappsBackendBundle:Default:top-navbar.html.twig', array());
+        return $this->render('MrappsBackendBundle:Default:top-navbar.html.twig', array());
     }
 
     public function __sideBarAction()
     {
         $menu = array();
-        $sidebar = ($this->container->hasParameter('mrapps_backend.sidebar_menu')) ? $this->container->getParameter('mrapps_backend.sidebar_menu') : '';
-        if (strlen($sidebar) > 0) {
 
-            foreach ($sidebar as $firstLevel) {
+        $sidebar = ($this->container->hasParameter('mrapps_backend.sidebar_menu')) ? $this->container->getParameter('mrapps_backend.sidebar_menu') : null;
+        if(!is_array($sidebar)) $sidebar = array();
+            
+        foreach ($sidebar as $firstLevel) {
 
-                $hasSubmenu = (isset($firstLevel['has_submenu'])) ? (bool)$firstLevel['has_submenu'] : false;
-                $minRole = (isset($firstLevel['min_role'])) ? trim($firstLevel['min_role']) : '';
-                $icon = (isset($firstLevel['icon'])) ? trim($firstLevel['icon']) : '';
-                $routeName = (isset($firstLevel['route_name'])) ? trim($firstLevel['route_name']) : '';
-                $title = (isset($firstLevel['title'])) ? trim($firstLevel['title']) : '';
+            $hasSubmenu = (isset($firstLevel['has_submenu'])) ? (bool)$firstLevel['has_submenu'] : false;
+            $minRole = (isset($firstLevel['min_role'])) ? trim($firstLevel['min_role']) : '';
+            $icon = (isset($firstLevel['icon'])) ? trim($firstLevel['icon']) : '';
+            $routeName = (isset($firstLevel['route_name'])) ? trim($firstLevel['route_name']) : '';
+            $title = (isset($firstLevel['title'])) ? trim($firstLevel['title']) : '';
 
-                if ($hasSubmenu) {
+            if($hasSubmenu) {
 
-                    $submenu = array();
-                    $sub = (isset($firstLevel['submenu']) && is_array($firstLevel['submenu'])) ? $firstLevel['submenu'] : array();
-                    foreach ($sub as $secondLevel) {
+                $submenu = array();
+                $sub = (isset($firstLevel['submenu']) && is_array($firstLevel['submenu'])) ? $firstLevel['submenu'] : array();
+                foreach ($sub as $secondLevel) {
 
-                        $subTitle = (isset($secondLevel['title'])) ? trim($secondLevel['title']) : '';
-                        $subRouteName = (isset($secondLevel['route_name'])) ? trim($secondLevel['route_name']) : '';
-                        $subUrl = (strlen($subRouteName) > 0) ? $this->generateUrl($subRouteName) : '';
+                    $subTitle = (isset($secondLevel['title'])) ? trim($secondLevel['title']) : '';
+                    $subRouteName = (isset($secondLevel['route_name'])) ? trim($secondLevel['route_name']) : '';
+                    $subUrl = (strlen($subRouteName) > 0) ? $this->generateUrl($subRouteName) : '';
 
-                        $submenu[] = array('title' => $subTitle, 'url' => $subUrl);
-                    }
-
-                    $url = $submenu;
-
-                } else {
-                    $url = (strlen($routeName) > 0) ? $this->generateUrl($routeName) : '';
+                    $submenu[] = array('title' => $subTitle, 'url' => $subUrl);
                 }
 
-                $menu[] = array(
-                    'has_submenu' => $hasSubmenu,
-                    'title' => $title,
-                    'icon' => $icon,
-                    'url' => $url,
-                    'min_role' => $minRole,
-                );
+                $url = $submenu;
+
+            }else {
+                $url = (strlen($routeName) > 0) ? $this->generateUrl($routeName) : '';
             }
+
+            $menu[] = array(
+                'has_submenu' => $hasSubmenu,
+                'title' => $title,
+                'icon' => $icon,
+                'url' => $url,
+                'min_role' => $minRole,
+            );
         }
 
-        return $this->render('MrappsMrappsBackendBundle:Default:sidebar.html.twig', array(
+        return $this->render('MrappsBackendBundle:Default:sidebar.html.twig', array(
             'menu' => $menu,
         ));
     }
 
     public function __offSideBarAction()
     {
-        return $this->render('MrappsMrappsBackendBundle:Default:offsidebar.html.twig', array());
+        return $this->render('MrappsBackendBundle:Default:offsidebar.html.twig', array());
     }
 
     /**
@@ -102,7 +102,7 @@ class DefaultController extends Controller
     public function __listAction($title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null)
     {
 
-        return $this->render('MrappsMrappsBackendBundle:Default:table.html.twig', array(
+        return $this->render('MrappsBackendBundle:Default:table.html.twig', array(
             'title' => $title,
             'tableColumns' => $tableColumns,
             'defaultSorting' => json_encode($defaultSorting),
@@ -120,7 +120,7 @@ class DefaultController extends Controller
 
     public function __newAction($title, $fields, $linkSave = null, $linkEdit = null, $linkBreadcrumb = null, $create, $edit)
     {
-        return $this->render('MrappsMrappsBackendBundle:Default:new.html.twig', array(
+        return $this->render('MrappsBackendBundle:Default:new.html.twig', array(
             'title' => $title,
             'fields' => $fields,
             'linkSave' => $linkSave,
@@ -128,7 +128,7 @@ class DefaultController extends Controller
             'create' => $create,
             'edit' => $edit,
             'linkBreadcrumb' => $linkBreadcrumb,
-            'aws_img_url' => ($this->container->hasParameter('mrapps_backend.aws_img_url')) ? $this->container->getParameter('mrapps_backend.aws_img_url') : '',
+            'images_url' => ($this->container->hasParameter('mrapps_backend.images_url')) ? $this->container->getParameter('mrapps_backend.images_url') : '',
             'angular' => '"localytics.directives","angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree"',
         ));
     }
@@ -169,7 +169,7 @@ class DefaultController extends Controller
                 if (!$s3->objectExists($s3Key)) $s3->uploadObject($s3Key, $filePath);
 
                 //Entity
-                $immagine = $em->getRepository('MrappsMrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
+                $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
                 if ($immagine == null) {
                     $immagine = new Immagine();
                 }
@@ -255,7 +255,7 @@ class DefaultController extends Controller
                         $s3Key = 'mrapps_backend_images/' . sha1(file_get_contents($absolutePath));
 
                         //Entity
-                        $immagine = $em->getRepository('MrappsMrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
+                        $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
                         if ($immagine == null) {
                             $immagine = new Immagine();
                         }
@@ -304,7 +304,7 @@ class DefaultController extends Controller
             $url = $this->generateUrl($defaultRouteName);
         }
 
-        return $this->render('MrappsMrappsBackendBundle:Default:password.html.twig', [
+        return $this->render('MrappsBackendBundle:Default:password.html.twig', [
             'title' => 'Cambia Password',
             'redirect' => $url,
         ]);
