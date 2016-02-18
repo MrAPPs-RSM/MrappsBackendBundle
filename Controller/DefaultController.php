@@ -39,44 +39,43 @@ class DefaultController extends Controller
     public function __sideBarAction()
     {
         $menu = array();
-        $sidebar = ($this->container->hasParameter('mrapps_backend.sidebar_menu')) ? $this->container->getParameter('mrapps_backend.sidebar_menu') : '';
-        if(strlen($sidebar) > 0) {
+        $sidebar = ($this->container->hasParameter('mrapps_backend.sidebar_menu')) ? $this->container->getParameter('mrapps_backend.sidebar_menu') : null;
+        if(!is_array($sidebar)) $sidebar = array();
             
-            foreach ($sidebar as $firstLevel) {
-                
-                $hasSubmenu = (isset($firstLevel['has_submenu'])) ? (bool)$firstLevel['has_submenu'] : false;
-                $minRole = (isset($firstLevel['min_role'])) ? trim($firstLevel['min_role']) : '';
-                $icon = (isset($firstLevel['icon'])) ? trim($firstLevel['icon']) : '';
-                $routeName = (isset($firstLevel['route_name'])) ? trim($firstLevel['route_name']) : '';
-                $title = (isset($firstLevel['title'])) ? trim($firstLevel['title']) : '';
-                
-                if($hasSubmenu) {
-                    
-                    $submenu = array();
-                    $sub = (isset($firstLevel['submenu']) && is_array($firstLevel['submenu'])) ? $firstLevel['submenu'] : array();
-                    foreach ($sub as $secondLevel) {
-                        
-                        $subTitle = (isset($secondLevel['title'])) ? trim($secondLevel['title']) : '';
-                        $subRouteName = (isset($secondLevel['route_name'])) ? trim($secondLevel['route_name']) : '';
-                        $subUrl = (strlen($subRouteName) > 0) ? $this->generateUrl($subRouteName) : '';
-                        
-                        $submenu[] = array('title' => $subTitle, 'url' => $subUrl);
-                    }
-                    
-                    $url = $submenu;
-                    
-                }else {
-                    $url = (strlen($routeName) > 0) ? $this->generateUrl($routeName) : '';
+        foreach ($sidebar as $firstLevel) {
+
+            $hasSubmenu = (isset($firstLevel['has_submenu'])) ? (bool)$firstLevel['has_submenu'] : false;
+            $minRole = (isset($firstLevel['min_role'])) ? trim($firstLevel['min_role']) : '';
+            $icon = (isset($firstLevel['icon'])) ? trim($firstLevel['icon']) : '';
+            $routeName = (isset($firstLevel['route_name'])) ? trim($firstLevel['route_name']) : '';
+            $title = (isset($firstLevel['title'])) ? trim($firstLevel['title']) : '';
+
+            if($hasSubmenu) {
+
+                $submenu = array();
+                $sub = (isset($firstLevel['submenu']) && is_array($firstLevel['submenu'])) ? $firstLevel['submenu'] : array();
+                foreach ($sub as $secondLevel) {
+
+                    $subTitle = (isset($secondLevel['title'])) ? trim($secondLevel['title']) : '';
+                    $subRouteName = (isset($secondLevel['route_name'])) ? trim($secondLevel['route_name']) : '';
+                    $subUrl = (strlen($subRouteName) > 0) ? $this->generateUrl($subRouteName) : '';
+
+                    $submenu[] = array('title' => $subTitle, 'url' => $subUrl);
                 }
-                
-                $menu[] = array(
-                    'has_submenu' => $hasSubmenu,
-                    'title' => $title,
-                    'icon' => $icon,
-                    'url' => $url,
-                    'min_role' => $minRole,
-                );
+
+                $url = $submenu;
+
+            }else {
+                $url = (strlen($routeName) > 0) ? $this->generateUrl($routeName) : '';
             }
+
+            $menu[] = array(
+                'has_submenu' => $hasSubmenu,
+                'title' => $title,
+                'icon' => $icon,
+                'url' => $url,
+                'min_role' => $minRole,
+            );
         }
 
         return $this->render('MrappsBackendBundle:Default:sidebar.html.twig', array(
