@@ -161,7 +161,8 @@ class DefaultController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 
                 $filePath = $file->getPathname();
-                $s3Key = sha1(file_get_contents($filePath));
+                $sha1 = sha1(file_get_contents($filePath));
+                $s3Key = 'mrapps_backend_images/'.$sha1;
                 
                 //Upload immagine su s3
                 if(!$s3->objectExists($s3Key)) $s3->uploadObject($s3Key, $filePath);
@@ -184,7 +185,7 @@ class DefaultController extends Controller
                     if (intval(getimagesize($file)[0]) > 1000) {
                         $url = $this->container->get('liip_imagine.controller')->filterAction($request, $immagine->getUrl(), 'textarea')->getTargetUrl();
                     } else {
-                        $s3->uploadObject('textarea/'.$s3Key, $filePath);
+                        $s3->uploadObject('mrapps_backend_images/textarea/'.$sha1, $filePath);
                     }
                     //problema con permessi senza jpg
                     $url = $this->container->get('liip_imagine.controller')->filterAction($request, $immagine->getUrl(), 'jpg')->getTargetUrl();
@@ -250,7 +251,7 @@ class DefaultController extends Controller
                         $absolutePath = $tempFolder.$tempName;
 
                         $image->writeImage($relativePath);
-                        $s3Key = sha1(file_get_contents($absolutePath));
+                        $s3Key = 'mrapps_backend_images/'.sha1(file_get_contents($absolutePath));
 
                         //Entity
                         $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
