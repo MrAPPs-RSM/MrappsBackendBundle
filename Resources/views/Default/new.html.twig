@@ -1,4 +1,4 @@
-{% extends 'BackendBundle:Default:layout.html.twig' %}
+{% extends 'MrappsBackendBundle:Default:layout.html.twig' %}
 {% block css  %}
 <link rel="stylesheet" href="{{ asset('assets/vendor/chosen/chosen.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/angular-ui-bootstrap-bower/ui-bootstrap-csp.css') }}">
@@ -14,7 +14,7 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     {% for field in fields %}
-                        {% set twig_name = ['BackendBundle:Type:',field.type,'.html.twig']|join %}
+                        {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
                         {{ include(twig_name, { 'field': field }) }}
                     {% endfor %}
                 </div>
