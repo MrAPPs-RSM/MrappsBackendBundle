@@ -42,9 +42,9 @@ mrapps_backend:
 
 ```
 {
-  "name": "marlu",
+  "name": "mrapps-common",
   "authors": [
-    "Luca Mussoni <luca@mr-apps.com>"
+    "Mr.APPs <info@mr-apps.com>"
   ],
   "description": "",
   "main": "",
