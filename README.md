@@ -86,3 +86,10 @@ mrapps_backend:
   }
 }
 ```
+
+.bowerrc
+```
+{
+    "directory": "web/assets/vendor/"
+}
+```
