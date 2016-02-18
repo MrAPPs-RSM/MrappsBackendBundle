@@ -19,7 +19,7 @@
     
 {% for opt_value, opt_data in field.data %}
     <div class="dashed" ng-show="form.{{field.name}} == '{{ opt_value }}'">
-    {% set twig_name = ['BackendBundle:Type:',opt_data.type,'.html.twig']|join %}
+    {% set twig_name = ['MrappsBackendBundle:Type:',opt_data.type,'.html.twig']|join %}
     {{ include(twig_name, { 'field': opt_data, 'switch': field.name, 'switch_option':opt_value }) }}
     </div>
 {% endfor %}

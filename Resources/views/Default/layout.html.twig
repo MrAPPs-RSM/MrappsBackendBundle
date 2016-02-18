@@ -23,18 +23,18 @@
         <div data-ui-view="" data-autoscroll="false" class="wrapper">
             <header class="topnavbar-wrapper">
                 {% block topnavbar %}
-                    {{ render(controller('BackendBundle:Default:__topNavBar')) }}
+                    {{ render(controller('MrappsBackendBundle:Default:__topNavBar')) }}
                 {% endblock topnavbar %}
             </header>
             {#<aside class="aside" class="aside" ng-controller="SidebarController">#}
             <aside class="aside" class="aside">
                 {% block sidebar %}
-                    {{ render(controller('BackendBundle:Default:__sideBar')) }}
+                    {{ render(controller('MrappsBackendBundle:Default:__sideBar')) }}
                 {% endblock sidebar %}
             </aside>
             {#<aside class="offsidebar">
                 {% block offsidebar %}
-                    {{ render(controller('BackendBundle:Default:__offSideBar')) }}
+                    {{ render(controller('MrappsBackendBundle:Default:__offSideBar')) }}
                 {% endblock offsidebar %}
             </aside>#}
             <section>
@@ -77,7 +77,7 @@
                 </div>
             </section>
             {% block footer %}
-                {{ render(controller('BackendBundle:Default:__footer')) }}
+                {{ render(controller('MrappsBackendBundle:Default:__footer')) }}
             {% endblock footer %}
         </div>
         <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>

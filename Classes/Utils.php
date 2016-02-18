@@ -27,7 +27,7 @@ class Utils {
         $risultato = null;
         preg_match_all('(src="'.$cdn.'(.*?)")', $texarea , $risultato);
         
-        $oggetti = $em->getRepository("MrappsBackendBundle:$nomerelazione")->findBy(array("item" => $item));
+        $oggetti = $em->getRepository("MrappsMrappsBackendBundle:$nomerelazione")->findBy(array("item" => $item));
         foreach ($oggetti as $oggetto) {
             $em->remove($oggetto);
         }
@@ -35,7 +35,7 @@ class Utils {
         $nomerelazione = "MrappsBackendBundle\\Entity\\".$nomerelazione;
         if(isset($risultato[1]) && is_array($risultato[1])) {
             foreach ($risultato[1] as $value) {
-                $immagine = $em->getRepository('BackendBundle:Immagine')->findOneBy(array("url" => $value));
+                $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array("url" => $value));
                 $relazione = new $nomerelazione();
                 $relazione->setImmagine($immagine);
                 $relazione->setItem($item);
