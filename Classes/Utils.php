@@ -108,7 +108,12 @@ class Utils {
         if($container !== null && $file !== null) {
             
             $parameterName = 'mrapps_backend.file_accepted_types.'.$type;
-            $acceptedTypes = $container->hasParameter($parameterName) ? $container->getParameter($parameterName) : array();
+            $exploded = explode(',', $container->hasParameter($parameterName) ? $container->getParameter($parameterName) : '');
+            $acceptedTypes = array();
+            foreach ($exploded as $t) {
+                $t = trim($t);
+                if(strlen($t) > 0) $acceptedTypes[] = $t;
+            }
             
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $mime = strtolower(trim(finfo_file($finfo, $file->getPathname())));
