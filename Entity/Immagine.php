@@ -3,7 +3,7 @@
 namespace Mrapps\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Mrapps\BackendBundle\Classes\Utils;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="BackendBundle\Entity\ImmagineRepository")
@@ -16,11 +16,6 @@ class Immagine extends Base
      * @Assert\Length(max=254)
      */
     protected $url;
-
-    /**
-     * @Accessor(getter="getUrlCompleto")
-     */
-    protected $urlCompleto;
 
     /**
      * Set url
@@ -45,13 +40,4 @@ class Immagine extends Base
         return $this->url;
     }
 
-    /**
-     * Get urlCompleto
-     *
-     * @return string
-     */
-    public function getUrlCompleto()
-    {
-        return Utils::getCdnUrl().'/jpg/'.$this->url;
-    }
 }
