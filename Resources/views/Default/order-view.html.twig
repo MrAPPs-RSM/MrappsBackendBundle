@@ -1,0 +1,70 @@
+{% extends 'BackendBundle:Default:layout.html.twig' %}
+{% block css  %}
+{% endblock css %}
+{% block content %}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Informazioni Ordine</div>
+        <div class="panel-body">
+            {% for paragrafo in paragrafi %}
+                {% if loop.index is odd %}
+                    <div class="row">
+                {% endif %}
+                        <div class="col-md-6">
+                            <p class="lead bb">{{ paragrafo.titolo }}</p>
+                            <form class="form-horizontal p-20">
+                                {% for campo in paragrafo.campi %}
+                                    <div class="form-group">
+                                        <div class="col-sm-4">{{ campo.name }}:</div>
+                                        <div class="col-sm-8">
+                                            {% if campo.label is defined %}
+                                                <div class="label label-{{ campo.label }}">
+                                            {% endif %}
+                                                    <strong>{{ campo.value }}</strong>
+                                            {% if campo.label is defined %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </form>
+                        </div>
+                {% if loop.index is even or loop.last %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {#<div class="alert alert-warning">
+                <em class="fa fa-exclamation-circle fa-lg fa-fw"></em>Shipping address is different than billing address</div>#}
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-heading">Prodotti nel ordine</div>
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped">
+                <thead>
+                <tr>
+                    {% for label in prodotti.label %}
+                        <th>{{ label }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for prodotto in prodotti.value  %}
+                    <tr>
+                        {% for value in prodotto %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock content %}
+{% block srcjavascript  %}
+
+{% endblock srcjavascript  %}
+{% block javascript  %}
+
+{% endblock javascript %}
