@@ -95,7 +95,8 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return new RedirectResponse($this->generateUrl("mrapps_backend_slides_list"));
+        $defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
+        return new RedirectResponse($this->generateUrl($defaultRouteName));
     }
 
     public function __listAction($title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null)
@@ -299,7 +300,8 @@ class DefaultController extends Controller
     {
         $url = null;
         if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
-            $url = $this->generateUrl('mrapps_backend_slides_list');
+            $defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
+            $url = $this->generateUrl($defaultRouteName);
         }
 
         return $this->render('MrappsBackendBundle:Default:password.html.twig', [
