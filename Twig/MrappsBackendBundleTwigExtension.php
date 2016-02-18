@@ -24,9 +24,6 @@ class MrappsBackendBundleTwigExtension extends Twig_Extension {
     
     public function getFilters() {
         return array(
-            new \Twig_SimpleFilter('cdn', function($string) {
-                return Utils::replaceCdnString($string);
-            }),
             new \Twig_SimpleFilter('quote', function($string) {
                 return Utils::replaceQuote($string);
             }),
