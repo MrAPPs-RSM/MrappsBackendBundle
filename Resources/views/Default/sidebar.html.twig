@@ -30,7 +30,7 @@
             </li>
 
             {% for item in menu %}
-                {% if item.min_role|length == 0 or is_granted(min_role) %}
+                {% if item.min_role|length == 0 or is_granted(item.min_role) %}
                 <li class="ng-scope">
                     {% if item.has_submenu == true %}
                         <a data-toggle="collapse" data-parent="#accordion" href="#backendSidebar{{ loop.index }}" title="{{ item.title }}" class="ng-scope">
