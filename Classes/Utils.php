@@ -22,10 +22,10 @@ class Utils {
     }
 
     
-    public static function setRelazioneTexarea($texarea, $item, $nomerelazione, $cdn, $em) {
+    public static function setRelazioneTexarea($texarea, $item, $nomerelazione, $imagesUrl, $em) {
         
         $risultato = null;
-        preg_match_all('(src="'.$cdn.'(.*?)")', $texarea , $risultato);
+        preg_match_all('(src="'.$imagesUrl.'(.*?)")', $texarea , $risultato);
         
         $oggetti = $em->getRepository("MrappsMrappsBackendBundle:$nomerelazione")->findBy(array("item" => $item));
         foreach ($oggetti as $oggetto) {
@@ -44,6 +44,7 @@ class Utils {
             $em->flush();
         }
     }
+
     
     static public function slugify($text) {
         

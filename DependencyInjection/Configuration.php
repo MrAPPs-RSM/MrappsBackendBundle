@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('temp_folder')->defaultValue('temp')->end()
+                ->scalarNode('images_url')->defaultValue('http://www.google.it')->end()
                 ->scalarNode('default_route_name')->defaultValue('mrapps_backend_default_index')->end()
                 ->arrayNode('file_accepted_types')
                     ->addDefaultsIfNotSet()
