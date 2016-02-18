@@ -21,19 +21,19 @@ class DefaultController extends Controller
     public function __navigationAction()
     {
 
-        return $this->render('MrappsMrappsBackendBundle:Default:navigation.html.twig', array());
+        return $this->render('MrappsBackendBundle:Default:navigation.html.twig', array());
     }
 
     public function __footerAction()
     {
 
-        return $this->render('MrappsMrappsBackendBundle:Default:footer.html.twig', array());
+        return $this->render('MrappsBackendBundle:Default:footer.html.twig', array());
     }
 
     public function __topNavBarAction()
     {
 
-        return $this->render('MrappsMrappsBackendBundle:Default:top-navbar.html.twig', array());
+        return $this->render('MrappsBackendBundle:Default:top-navbar.html.twig', array());
     }
 
     public function __sideBarAction()
@@ -79,14 +79,14 @@ class DefaultController extends Controller
             }
         }
 
-        return $this->render('MrappsMrappsBackendBundle:Default:sidebar.html.twig', array(
+        return $this->render('MrappsBackendBundle:Default:sidebar.html.twig', array(
             'menu' => $menu,
         ));
     }
 
     public function __offSideBarAction()
     {
-        return $this->render('MrappsMrappsBackendBundle:Default:offsidebar.html.twig', array());
+        return $this->render('MrappsBackendBundle:Default:offsidebar.html.twig', array());
     }
 
     /**
@@ -102,7 +102,7 @@ class DefaultController extends Controller
     public function __listAction($title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null)
     {
 
-        return $this->render('MrappsMrappsBackendBundle:Default:table.html.twig', array(
+        return $this->render('MrappsBackendBundle:Default:table.html.twig', array(
             'title' => $title,
             'tableColumns' => $tableColumns,
             'defaultSorting' => json_encode($defaultSorting),
@@ -120,7 +120,7 @@ class DefaultController extends Controller
 
     public function __newAction($title, $fields, $linkSave = null, $linkEdit = null, $linkBreadcrumb = null, $create, $edit)
     {
-        return $this->render('MrappsMrappsBackendBundle:Default:new.html.twig', array(
+        return $this->render('MrappsBackendBundle:Default:new.html.twig', array(
             'title' => $title,
             'fields' => $fields,
             'linkSave' => $linkSave,
@@ -169,7 +169,7 @@ class DefaultController extends Controller
                 if(!$s3->objectExists($s3Key)) $s3->uploadObject($s3Key, $filePath);
                 
                 //Entity
-                $immagine = $em->getRepository('MrappsMrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
+                $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
                 if ($immagine == null) {
                     $immagine = new Immagine();
                 }
@@ -255,7 +255,7 @@ class DefaultController extends Controller
                         $s3Key = 'mrapps_backend_images/'.sha1(file_get_contents($absolutePath));
 
                         //Entity
-                        $immagine = $em->getRepository('MrappsMrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
+                        $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
                         if ($immagine == null) {
                             $immagine = new Immagine();
                         }
@@ -304,7 +304,7 @@ class DefaultController extends Controller
             $url = $this->generateUrl($defaultRouteName);
         }
 
-        return $this->render('MrappsMrappsBackendBundle:Default:password.html.twig', [
+        return $this->render('MrappsBackendBundle:Default:password.html.twig', [
             'title' => 'Cambia Password',
             'redirect' => $url,
         ]);
