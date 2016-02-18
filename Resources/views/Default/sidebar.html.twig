@@ -1,0 +1,63 @@
+<!-- START Sidebar (left)-->
+{%  set list_name = 'Lista' %}
+{%  set add_name = 'Aggiungi' %}
+<div class="aside-inner">
+    <nav sidebar="" sidebar-anyclick-close="" class="sidebar">
+        <!-- START sidebar nav-->
+        <ul class="nav">
+            <!-- START user info-->
+            <li class="has-user-block">
+                {#<div collapse="userBlockVisible" ng-controller="UserBlockController">#}
+                <div collapse="userBlockVisible">
+                    <div class="item user-block">
+                        {#<div class="user-block-picture">
+                            <div class="user-block-status">
+                                <img src="" alt="Logo" class="img-thumbnail img-circle" />
+                                <div class="circle circle-success circle-lg"></div>
+                            </div>
+                        </div>#}
+                        <div class="user-block-info">
+                            <span class="user-block-name">{{ app.user.username }}</span>
+                            <span class="user-block-role">{% if is_granted('ROLE_SUPER_ADMIN') %}SUPER Amministratore{% elseif is_granted('ROLE_ADMIN') %}Amministratore{% endif %}</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <!-- END user info-->
+            <!-- Iterates over all sidebar items-->
+            <li ng-click="toggleCollapse(pIndex, true)" class="ng-scope nav-heading">
+                <span class="ng-binding ng-scope">Main Navigation</span>
+            </li>
+
+            {% for item in menu %}
+                {% if item.min_role|length == 0 or is_granted(min_role) %}
+                <li class="ng-scope">
+                    {% if item.has_submenu == true %}
+                        <a data-toggle="collapse" data-parent="#accordion" href="#backendSidebar{{ loop.index }}" title="{{ item.title }}" class="ng-scope">
+                            {% if item.icon is defined %}<em class="fa {{ item.icon }}"></em> {% endif %}
+                            <span class="ng-binding">{{ item.title }}</span>
+                        </a>
+                        <ul id="backendSidebar{{ loop.index }}" class="nav sidebar-subnav ng-scope panel-collapse collapse">
+                            {% for sub_item in item.url %}
+                                <li class="ng-scope">
+                                    <a ng-href="{{ sub_item.url }}" title="{{ sub_item.title }}" class="ng-scope">
+                                        {% if sub_item.icon is defined %}<em class="fa {{ sub_item.icon }}"></em> {% endif %}
+                                        <span class="ng-binding">{{ sub_item.title }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <a ng-href="{{ item.url }}" title="{{ item.title }}" class="ng-scope">
+                            {% if item.icon is defined %}<em class="fa {{ item.icon }}"></em> {% endif %}
+                            <span class="ng-binding">{{ item.title }}</span>
+                        </a>
+                    {% endif %}
+                </li>
+                {% endif %}
+            {% endfor %}
+      </ul>
+      <!-- END sidebar nav-->
+   </nav>
+</div>
+<!-- END Sidebar (left)-->

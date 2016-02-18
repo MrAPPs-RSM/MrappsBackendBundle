@@ -1,0 +1,5 @@
+<fieldset {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
+    <div class="form-group">
+        <input type="hidden" name="{{field.name}}" ng-model="form.{{field.name}}" ng-init="form.{{field.name}}='{{field.value}}'" class="form-control" />
+    </div>
+</fieldset>

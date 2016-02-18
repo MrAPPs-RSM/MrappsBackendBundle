@@ -1,0 +1,14 @@
+<fieldset {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{field.title}}{% if switch is not defined and field.required %} *{% endif %}</label>
+        <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
+            <input type="number" name="{{field.name}}" {% if switch is not defined and field.required %}required="true"{% endif %} ng-model="form.{{field.name}}" {% if field.value is not null %}ng-init="form.{{field.name}}={{field.value}}"{% endif %} class="form-control" />
+            <span ng-show="form.validateInput('{{field.name}}', 'number') {% if switch is not defined and field.required %}|| form.validateInput('{{field.name}}', 'required'){% endif %}" {% if field.placeholder is defined %}placeholder="{{field.placeholder}}"{% endif %} class="text-danger">This field must be a valid number</span>
+        </div>
+        {% if field.didascalia is defined %}
+            <div class="col-sm-4">
+                <small class="text-muted">{{field.didascalia}}</small>
+            </div>
+        {% endif %}
+    </div>
+</fieldset>

@@ -1,0 +1,24 @@
+{# fare una divisione nel caso sia una lista di testi o di immagini#}
+<fieldset {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
+    <div class="form-group">
+    	<div class="row">
+	        <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">{{field.title}}{% if switch is not defined and field.required %} *{% endif %}</label>
+	        <div class="col-sm-4">
+	        	{% if field.didascalia is defined %}
+                            <small class="text-muted">{{field.didascalia}}</small>
+                        {% endif %}
+	        </div>
+        </div><!-- .row -->
+        <br />
+        <ul ui-sortable="sortableOptions" ng-model="form.{{field.name}}" class="row" style="list-style: none;">
+            <li ng-repeat="immagine in form.{{field.name}}" class="col-xs-12 col-sm-3 col-md-3 col-lg-2 text-center">
+            	<div class="row">
+            		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            			<div class="gallery-backend" ng-style="{'background-image':'url({/ immagine.url /})'}"></div>
+						<br />
+            		</div><!-- .col -->
+            	</div><!-- .row -->              
+            </li>
+        </ul>
+    </div>
+</fieldset>

@@ -1,0 +1,27 @@
+<fieldset class="bb0">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{field.title}}{% if switch is not defined and field.required %} *{% endif %}</label>
+        <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
+            
+            <select name="{{field.name}}" {% if field.required %}required="true"{% endif %} ng-model="form.{{field.name}}" {% if field.value is defined %}ng-init="form.{{field.name}} = '{{field.value}}'"{% endif %} {% if field.disable is defined %}ng-disabled="{{field.disable}}"{% endif %} class="form-control">
+                {% for opt_value, opt_data in field.data %}
+                    <option value="{{ opt_value }}">{{ opt_data.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% if field.didascalia is defined %}
+            <div class="col-sm-4">
+                <small class="text-muted">{{field.didascalia}}</small>
+            </div>
+        {% endif %}
+    </div>
+</fieldset>
+    
+{% for opt_value, opt_data in field.data %}
+    <div class="dashed" ng-show="form.{{field.name}} == '{{ opt_value }}'">
+    {% set twig_name = ['BackendBundle:Type:',opt_data.type,'.html.twig']|join %}
+    {{ include(twig_name, { 'field': opt_data, 'switch': field.name, 'switch_option':opt_value }) }}
+    </div>
+{% endfor %}
+
+{% if field.disable_dotted is not defined or field.disable_dotted == false %}<fieldset class="bb0"></fieldset>{% endif %}

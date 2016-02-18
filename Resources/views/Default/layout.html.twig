@@ -1,0 +1,127 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="description" content="Descrizione">
+        <meta name="keywords" content="app, responsive, angular, bootstrap, dashboard, admin">
+        <title>Marlu | Area Admin</title>
+        <!-- Bootstrap styles-->
+        <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
+        <!-- Application styles-->
+        <link rel="stylesheet" href="{{ asset('bundles/backend/css/backend.css') }}">
+        <!-- Themes-->
+        <link rel="stylesheet" href="{{ asset('bundles/backend/css/backend-theme.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/components-font-awesome/css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/simple-line-icons/css/simple-line-icons.css') }}">
+        <link rel='stylesheet' href='{{ asset('assets/vendor/toastr/toastr.min.css') }}'>
+        <link rel='stylesheet' href='{{ asset('assets/vendor/SpinKit/css/spinkit.css') }}'>
+        {% block css  %}
+        {% endblock css %}
+    </head>
+    <body ng-app="app" ng-cloak id="main_body">
+        <div data-preloader></div>
+        <div data-ui-view="" data-autoscroll="false" class="wrapper">
+            <header class="topnavbar-wrapper">
+                {% block topnavbar %}
+                    {{ render(controller('BackendBundle:Default:__topNavBar')) }}
+                {% endblock topnavbar %}
+            </header>
+            {#<aside class="aside" class="aside" ng-controller="SidebarController">#}
+            <aside class="aside" class="aside">
+                {% block sidebar %}
+                    {{ render(controller('BackendBundle:Default:__sideBar')) }}
+                {% endblock sidebar %}
+            </aside>
+            {#<aside class="offsidebar">
+                {% block offsidebar %}
+                    {{ render(controller('BackendBundle:Default:__offSideBar')) }}
+                {% endblock offsidebar %}
+            </aside>#}
+            <section>
+                <div ui-view="" autoscroll="false" class="content-wrapper">
+                    <h3> {{ title }} </h3>
+                    {% if linkBreadcrumb is defined and linkBreadcrumb is not null %}
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <ol ng-controller="Breadcrumb" class="breadcrumb">
+                                    {% if linkBreadcrumb.type == 'js' %}
+                                        <li ng-repeat="bc in breadcrumbs" ng-click="showChildren(bc.id)">
+                                            <a><i ng-show="bc.icon!=null" ng-class="bc.icon"></i>{/bc.title/}</a>
+                                        </li>
+                                    {% elseif linkBreadcrumb.type == 'url' %}
+                                        {% for item in linkBreadcrumb.url %}
+                                            <li>
+                                                {% if loop.last %}
+                                                    <span>
+                                                {% else %}
+                                                    <a href="{{ item.url }}">
+                                                {% endif %}
+                                            		{% if loop.first %}
+														<i class="fa fa-home"></i>
+													{% endif %}
+                                                	{{ item.name }}
+                                                {% if loop.last %}
+                                                    </span>
+                                                {% else %}
+                                                    </a>
+                                                {% endif %}
+                                            </li>
+                                        {% endfor %}
+                                    {% endif %}
+                                </ol>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% block content %}
+                    {% endblock content %}
+                </div>
+            </section>
+            {% block footer %}
+                {{ render(controller('BackendBundle:Default:__footer')) }}
+            {% endblock footer %}
+        </div>
+        <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor/angular/angular.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+        <script src='{{ asset('assets/vendor/toastr/toastr.min.js') }}'></script>
+        {% block srcjavascript  %}
+        {% endblock srcjavascript %}
+        {% if angular is not defined %}{% set angular = "" %}{% endif %}
+        <script type="text/javascript">
+            var myAngular = angular.module('app', [{{angular|raw}}]);
+            myAngular.config(function ($interpolateProvider) {
+                $interpolateProvider.startSymbol('{/');
+                $interpolateProvider.endSymbol('/}');
+            });
+
+            myAngular.controller("Breadcrumb", Breadcrumb);
+
+            function Breadcrumb($http, $scope, $rootScope) {
+
+                {% if linkBreadcrumb is defined and linkBreadcrumb is not null and linkBreadcrumb.type == 'js' %}
+                    $scope.isBcRefreshing;
+                    $rootScope.refreshBreadcrumbs = function (id) {
+                        if (!$scope.isBcRefreshing) {
+                            $scope.isBcRefreshing = true;
+                            $http({
+                                method: 'POST',
+                                url: '{{ linkBreadcrumb.url }}',
+                                data: {'id': id},
+                            })
+                            .success(function (data) {
+                                $scope.breadcrumbs = data;
+                                $scope.isBcRefreshing = false;
+                            })
+                            .error(function (data, status, headers, config) {
+                                $scope.isBcRefreshing = false;
+                            });
+                        }
+                    };
+                {% endif %}
+            }
+        </script>
+        {% block javascript  %}
+        {% endblock javascript %}
+
+    </body>
+</html>
