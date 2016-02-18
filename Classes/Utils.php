@@ -27,7 +27,7 @@ class Utils {
         $risultato = null;
         preg_match_all('(src="'.$imagesUrl.'(.*?)")', $texarea , $risultato);
         
-        $oggetti = $em->getRepository("MrappsMrappsBackendBundle:$nomerelazione")->findBy(array("item" => $item));
+        $oggetti = $em->getRepository("MrappsBackendBundle:$nomerelazione")->findBy(array("item" => $item));
         foreach ($oggetti as $oggetto) {
             $em->remove($oggetto);
         }

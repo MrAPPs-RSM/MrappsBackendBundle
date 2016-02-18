@@ -299,7 +299,7 @@
 
             paste_data_images: true,
             images_upload_url: "{{path('backend_default_uploadimmagine')}}?texarea=1",
-            images_upload_base_path: "{{ aws_img_url }}/textarea/",
+            images_upload_base_path: "{{ images_url }}/textarea/",
             images_upload_credentials: true,
             file_browser_callback: function(field_name, url, type, win) {
                 tinymce.activeEditor.windowManager.open({
