@@ -94,7 +94,6 @@
                         $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
                         Api.query(params.url(), function(data) {
                             // update table params
-                            data = data.data;
                             params.total(data.length);
                             // use build-in angular filter
                             /*var orderedData = params.filter() ?
