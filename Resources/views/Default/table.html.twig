@@ -146,6 +146,7 @@
                     $scope.sortableOptions = {
                         stop: function(e, ui) {
                             //if(!self.tableParams2.hasFilter()){
+                                $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
                                 $http({
                                     method: 'POST',
                                     url: '{{ linkOrder }}',
@@ -158,11 +159,14 @@
                                         'Content-Type': 'application/json'
                                     },
                                 }).then(function successCallback(response) {
+                                    $('#overlay-waiting').remove();
+                                    self.tableParams2.reload();
                                     toastr.success('Ordinato!', 'Ordine salvato');
                                 }, function errorCallback(response) {
+                                    $('#overlay-waiting').remove();
+                                    self.tableParams2.reload();
                                     toastr.error('Errore!', 'Errore nel salvataggio');
                                 });
-                                self.tableParams2.reload();
                             //}
                         }
                     };
