@@ -185,4 +185,15 @@ class Utils {
 
         return $string;
     }
+
+    public static function check_in_range($start_date, $end_date, $date)
+    {
+        // Convert to timestamp
+        $start_ts = strtotime($start_date->format('Y-m-d H:i:s'));
+        $end_ts = strtotime($end_date->format('Y-m-d H:i:s'));
+        $ts = strtotime($date);
+
+        // Check that user date is between start & end
+        return (($ts >= $start_ts) && ($ts <= $end_ts));
+    }
 }
