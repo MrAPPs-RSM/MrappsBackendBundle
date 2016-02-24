@@ -32,6 +32,13 @@ class File extends Base
     protected $originalName;
 
 
+    /**
+     * @ORM\Column(name="mime_type", type="string", length=50, nullable=true)
+     * @Assert\Length(max=50)
+     */
+    protected $mimeType;
+
+
 
     /**
      * Set key
@@ -103,5 +110,29 @@ class File extends Base
     public function getBucket()
     {
         return $this->bucket;
+    }
+
+    /**
+     * Set mimeType
+     *
+     * @param string $mimeType
+     *
+     * @return File
+     */
+    public function setMimeType($mimeType)
+    {
+        $this->mimeType = $mimeType;
+
+        return $this;
+    }
+
+    /**
+     * Get mimeType
+     *
+     * @return string
+     */
+    public function getMimeType()
+    {
+        return $this->mimeType;
     }
 }
