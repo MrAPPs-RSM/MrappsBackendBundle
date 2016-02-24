@@ -3,7 +3,7 @@
         <label class="col-sm-2 control-label">{{field.title}}{% if field.required %} *{% endif %}</label>
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
             <div ng-show="isTreeRefreshing"><i class="fa fa-spin fa-spinner"></i> Caricamento albero...</div>
-            <div id="{{field.name}}" js-tree="{{field.name}}Config" ng-model="{{field.name}}" tree-events="activate_node:{{field.name}}ChangeNode"></div>
+            <div id="{{field.name}}" js-tree="{{field.name}}Config" ng-model="{{field.name}}" tree="{{field.name}}Tree" tree-events="activate_node:{{field.name}}ChangeNode"></div>
         </div>
         {% if field.didascalia is defined %}
             <div class="col-sm-4">
@@ -12,9 +12,3 @@
         {% endif %}
     </div>
 </fieldset>
-
-{#<select {% if field.chosen is defined %}chosen{% endif %} name="{{field.name}}" {% if switch is not defined and field.required %}required="true"{% endif %} ng-model="form.{{field.name}}" {% if field.value is defined %}ng-init="form.{{field.name}} = '{{field.value}}'"{% endif %} {% if field.disable is defined %}ng-disabled="{{field.disable}}"{% endif %} class="form-control">
-      {% for item in field.options %}
-          <option value="{{item.value}}">{{item.name}}</option>
-      {% endfor %}
-  </select>#}

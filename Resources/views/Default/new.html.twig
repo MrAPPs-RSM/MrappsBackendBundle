@@ -179,7 +179,7 @@
                 $scope.{{field.name}} = {{field.options | raw}};
                 $scope.{{field.name}}Config = {
                     core:{
-                        multiple : false,
+                        multiple : {{ field.multiple|default("false") }},
                         animation: true,
                         error : function(error) {
                             alert('treeCtrl: error from js tree - ' + angular.toJson(error));
@@ -189,9 +189,18 @@
                     }
                 };
                 $scope.{{field.name}}ChangeNode = function(event, object) {
-                    if (typeof (object) !== "undefined" && typeof (object.node) !== "undefined") {
-                        $scope.form.{{field.name}} = object.node.id;
-                    }
+                    {% if field.multiple is defined and field.multiple %}
+                        var selected_nodes = $scope.{{field.name}}Tree.jstree(true).get_selected();
+                        var tmp = "";
+                        $.each(selected_nodes, function(i,v) {
+                            tmp += v+"|";
+                        });
+                        $scope.form.{{field.name}} = tmp;
+                    {% else %}
+                        if (typeof (object) !== "undefined" && typeof (object.node) !== "undefined") {
+                            $scope.form.{{field.name}} = object.node.id;
+                        }
+                    {% endif %}
                 };
                 {% if field.value is defined %}
                     $scope.form.{{field.name}} = '{{field.value}}';
