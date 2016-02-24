@@ -100,7 +100,7 @@ class DefaultController extends Controller
         return new RedirectResponse($this->generateUrl($defaultRouteName));
     }
 
-    public function __listAction($title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null)
+    public function __listAction($title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null)
     {
 
         return $this->render('MrappsBackendBundle:Default:table.html.twig', array(
@@ -114,7 +114,8 @@ class DefaultController extends Controller
             'linkDelete' => $linkDelete,
             'linkOrder' => $linkOrder,
             'linkBreadcrumb' => $linkBreadcrumb,
-            'linkCustom' => $linkCustom,    //Ogni elemento ha url, class, icon
+            'linkCustom' => $linkCustom,
+            'linkAction' => $linkAction,
             'angular' => '"ngTable","ngResource","ui.sortable"',
         ));
     }
