@@ -6,16 +6,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="BackendBundle\Entity\FileRepository")
+ * @ORM\Entity(repositoryClass="Mrapps\BackendBundle\Repository\FileRepository")
  * @ORM\Table(name="mrapps_backend_files")
  */
 class File extends Base
 {
     /**
-     * @ORM\Column(name="key", type="string", length=1000)
+     * @ORM\Column(name="s3_key", type="string", length=1000)
      * @Assert\Length(max=1000)
      */
-    protected $key;
+    protected $s3Key;
 
 
     /**
@@ -38,31 +38,6 @@ class File extends Base
      */
     protected $mimeType;
 
-
-
-    /**
-     * Set key
-     *
-     * @param string $key
-     *
-     * @return File
-     */
-    public function setKey($key)
-    {
-        $this->key = $key;
-
-        return $this;
-    }
-
-    /**
-     * Get key
-     *
-     * @return string
-     */
-    public function getKey()
-    {
-        return $this->key;
-    }
 
     /**
      * Set originalName
@@ -134,5 +109,29 @@ class File extends Base
     public function getMimeType()
     {
         return $this->mimeType;
+    }
+
+    /**
+     * Set s3Key
+     *
+     * @param string $s3Key
+     *
+     * @return File
+     */
+    public function setS3Key($s3Key)
+    {
+        $this->s3Key = $s3Key;
+
+        return $this;
+    }
+
+    /**
+     * Get s3Key
+     *
+     * @return string
+     */
+    public function getS3Key()
+    {
+        return $this->s3Key;
     }
 }

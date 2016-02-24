@@ -274,12 +274,7 @@ class DefaultController extends Controller
             $message = 'File non trovato.';
         }
 
-
-        return new Response(array(
-            'success' => $success,
-            'message' => $message,
-            'data' => $data,
-        ));
+        return Utils::generateResponse($success, $message, $data);
     }
 
     /**
