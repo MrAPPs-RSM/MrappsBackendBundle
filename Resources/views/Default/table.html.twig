@@ -21,7 +21,7 @@
         <tbody {% if linkOrder is not null %} ui-sortable="sortableOptions" ng-model="table.data" {% endif %}>
             <tr ng-repeat="row in $data">
                 {% for colums in tableColumns %}
-                        <td data-title="'{{colums.title}}'" {%if colums.filterable %}filter="{ '{{colums.name}}': '{{colums.type}}' }"{% endif %} {%if colums.sortable%}sortable="'{{colums.name}}'"{% endif %} {% if colums.clickable is defined%}ng-click="showChildren(row.id)"{% endif %}>
+                        <td data-title="'{{colums.title}}'" {%if colums.filterable %}filter="{ '{{colums.name}}': '{{colums.type}}' }"{% endif %} {%if colums.sortable%}sortable="'{{colums.name}}'"{% endif %} {% if colums.clickable is defined%}ng-click="$event.stopPropagation();showChildren(row.id)"{% endif %}>
                             {% if colums.type == 'image' %}
                                 <img src="{/ row.{{colums.name}} /}">
                             {% else %}
@@ -76,11 +76,15 @@
                 $scope.go = function ( path ) {
                     $window.location.href = path;
                 };
+                
+                $scope.isDragging = false;
 
                 $rootScope.showChildren = function ( id ) {
-                    self.tableParams2.filter()["parent.id"] = id;
-                    $rootScope.refreshBreadcrumbs(id);
-                    self.tableParams2.reload();
+                    if(!$scope.isDragging) {
+                        self.tableParams2.filter()["parent.id"] = id;
+                        $rootScope.refreshBreadcrumbs(id);
+                        self.tableParams2.reload();
+                    }
                 };
 
                 self.tableParams2 = new NgTableParams({
@@ -144,8 +148,13 @@
                 {% endif %}
                 {% if linkOrder is not null %}
                     $scope.sortableOptions = {
+                        start: function(e, ui) {
+                            $scope.isDragging = true;
+                        },
                         stop: function(e, ui) {
+                            setTimeout(function(){ $scope.isDragging = false; }, 300);
                             //if(!self.tableParams2.hasFilter()){
+                                $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
                                 $http({
                                     method: 'POST',
                                     url: '{{ linkOrder }}',
@@ -158,11 +167,14 @@
                                         'Content-Type': 'application/json'
                                     },
                                 }).then(function successCallback(response) {
+                                    $('#overlay-waiting').remove();
+                                    self.tableParams2.reload();
                                     toastr.success('Ordinato!', 'Ordine salvato');
                                 }, function errorCallback(response) {
+                                    $('#overlay-waiting').remove();
+                                    self.tableParams2.reload();
                                     toastr.error('Errore!', 'Errore nel salvataggio');
                                 });
-                                self.tableParams2.reload();
                             //}
                         }
                     };
