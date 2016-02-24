@@ -33,10 +33,10 @@ class FileRepository extends EntityRepository
         $key = trim($key);
         if(strlen($key) > 0) {
 
-            $file = $this->findOneBy(array('key' => $key));
+            $file = $this->findOneBy(array('s3Key' => $key));
             if($file == null) {
                 $file = new File();
-                $file->setKey($key);
+                $file->setS3Key($key);
             }
 
             if($bucket !== null) $file->setBucket(trim($bucket));
