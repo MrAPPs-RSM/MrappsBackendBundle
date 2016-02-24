@@ -67,7 +67,7 @@
         {% endfor %}
 
         {% for field in jsFields %}
-            {% if field.type == "file" %}
+            {% if field.type == "image" %}
                 $scope.{{field.name}}_url = '';
                 {% if field.value is not null %}
                     var {{field.name}} = {{field.value | raw }};
