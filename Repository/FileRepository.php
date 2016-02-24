@@ -36,6 +36,7 @@ class FileRepository extends EntityRepository
             $file = $this->findOneBy(array('key' => $key));
             if($file == null) {
                 $file = new File();
+                $file->setKey($key);
             }
 
             if($bucket !== null) $file->setBucket(trim($bucket));
