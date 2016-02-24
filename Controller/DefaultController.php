@@ -211,6 +211,83 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/upload/file")
+     * @Method({"POST"})
+     */
+    public function uploadFileAction(Request $request)
+    {
+        $responseLocation = '';
+        $responseId = 0;
+        $responseUrl = '';
+        $responseError = '';
+
+        $tmpFile = $request->files->all();
+
+        if (isset($tmpFile['file']) && !$tmpFile['file']->getError()) {
+
+            if (Utils::bundleMrappsAmazonExists($this->container)) {
+                
+                /* @var $s3 \Mrapps\AmazonBundle\Handler\S3Handler */
+                $s3 = $this->container->get('mrapps.amazon.s3');
+
+                $file = $tmpFile['file'];
+
+                if (!Utils::isValidFile($this->container, 'image', $file)) {
+                    return new JsonResponse(array('location' => '', 'id' => 0, 'error' => 'Immagine non valida.'));
+                }
+
+                $em = $this->getDoctrine()->getManager();
+
+                $filePath = $file->getPathname();
+                $sha1 = sha1(file_get_contents($filePath));
+                $s3Key = 'mrapps_backend_images/' . $sha1;
+
+                //Upload immagine su s3
+                if (!$s3->objectExists($s3Key)) $s3->uploadObject($s3Key, $filePath);
+
+                //Entity
+                $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
+                if ($immagine == null) {
+                    $immagine = new Immagine();
+                }
+                $immagine->setUrl($s3Key);
+                $em->persist($immagine);
+                $em->flush();
+
+                $responseLocation = $immagine->getUrl();
+                $responseId = $immagine->getId();
+                $responseUrl = $this->container->get('liip_imagine.controller')->filterAction($request, $immagine->getUrl(), 'mrapps_backend_thumbnail')->getTargetUrl();
+                $responseError = '';
+
+                if (intval($request->get('texarea')) > 0) {
+                    if (intval(getimagesize($file)[0]) > 1000) {
+                        $url = $this->container->get('liip_imagine.controller')->filterAction($request, $immagine->getUrl(), 'textarea')->getTargetUrl();
+                    } else {
+                        $s3->uploadObject('mrapps_backend_images/textarea/' . $sha1, $filePath);
+                    }
+                    //problema con permessi senza jpg
+                    $url = $this->container->get('liip_imagine.controller')->filterAction($request, $immagine->getUrl(), 'jpg')->getTargetUrl();
+                }
+
+            } else {
+                $responseError = "Bundle MrappsAmazonBundle non installato.";
+            }
+
+        } else {
+            $responseError = 'Immagine non trovata.';
+        }
+
+        $data = array(
+            'location' => $responseLocation,       //location viene usato da tinymce
+            'id' => $responseId,
+            'url' => $responseUrl,
+            'error' => $responseError,
+        );
+
+        return new Response($data);
+    }
+
+    /**
      * @Route("/upload/pdf")
      * @Method({"POST"})
      */
