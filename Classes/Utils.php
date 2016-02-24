@@ -90,7 +90,7 @@ class Utils {
         if($errorCode !== null) $data['error_code'] = $errorCode;
         
         $json = new JsonResponse();
-        $json->setData();
+        $json->setData($data);
         return $json;  
     }
     

@@ -261,7 +261,6 @@
             if (vm.formValidate.$valid) {
                 document.getElementById("save").disabled = true;
                 $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
-                console.log('cio');
                 $http({
                     method: 'POST',
                     url: '{{ linkSave }}',
