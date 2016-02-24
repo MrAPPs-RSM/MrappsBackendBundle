@@ -2,13 +2,13 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">{{field.title}}{% if switch is not defined and field.required %} *{% endif %}</label>
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
-            <select ng-options="v.value as v.name for v in options_{{ field.name }}" {% if field.chosen is defined %}chosen{% endif %} {% if field.multiple is defined %}multiple{% endif %} name="{{field.name}}" {% if switch is not defined and field.required %}required="true"{% endif %} ng-model="form.{{field.name}}" {% if field.value is defined %}ng-init="form.{{field.name}} = '{{field.value}}'"{% endif %} {% if field.disable is defined %}ng-disabled="{{field.disable}}"{% endif %} class="form-control">
-                {#{% for item in field.options %}
+            <select {% if field.multiple is defined %}multiple{% endif %} name="{{field.name}}" {% if switch is not defined and field.required %}required="true"{% endif %} ng-model="form.{{field.name}}" {% if field.value is defined and field.chosen is not defined %}ng-init="form.{{field.name}} = '{{field.value}}'"{% endif %} {% if field.disable is defined %}ng-disabled="{{field.disable}}"{% endif %} class="form-control">
+                {% for item in field.options %}
                     <option value="{{item.value}}">{{item.name}}</option>
-                {% endfor %}#}
+                {% endfor %}
             </select>
-            {% if switch is not defined and field.required %}<span ng-show="form.validateInput('{{field.name}}', 'required')" class="text-danger">This field is required</span>{% endif %}
         </div>
+        {% if switch is not defined and field.required %}<span ng-show="form.validateInput('{{field.name}}', 'required')" class="text-danger">This field is required</span>{% endif %}
         {% if field.didascalia is defined %}
             <div class="col-sm-4">
                 <small class="text-muted">{{field.didascalia}}</small>
