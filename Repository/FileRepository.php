@@ -3,6 +3,7 @@
 namespace Mrapps\BackendBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Mrapps\BackendBundle\Entity\File;
 
 /**
  * FileRepository
@@ -12,4 +13,42 @@ use Doctrine\ORM\EntityRepository;
  */
 class FileRepository extends EntityRepository
 {
+    public function getMimeType($filePath = '') {
+
+        $mime = '';
+
+        if(file_exists($filePath)) {
+
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $filePath);
+            finfo_close($finfo);
+        }
+
+        return $mime;
+    }
+
+
+    public function createFile($key = '', $bucket = null, $originalName = null, $mimeType = null) {
+
+        $key = trim($key);
+        if(strlen($key) > 0) {
+
+            $file = $this->findOneBy(array('key' => $key));
+            if($file == null) {
+                $file = new File();
+            }
+
+            if($bucket !== null) $file->setBucket(trim($bucket));
+            if($originalName !== null) $file->setOriginalName(trim($originalName));
+            if($mimeType !== null) $file->setMimeType($mimeType);
+
+            $em = $this->getEntityManager();
+            $em->persist($file);
+            $em->flush($file);
+
+            return $file;
+        }
+
+        return null;
+    }
 }
