@@ -6,8 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="BackendBundle\Repository\ImmagineRepository")
- * @ORM\Table(name="mrapps_backend_immagini")
+ * @ORM\Entity(repositoryClass="Mrapps\BackendBundle\Repository\ImmagineRepository")
+ * @ORM\Table(name="mrapps_backend_images")
  */
 class Immagine extends Base
 {
