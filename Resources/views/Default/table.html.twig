@@ -18,8 +18,10 @@
             {% endif %}
             {% if linkCustom is not null %}
                 {% for item in linkCustom %}
-                    <button type="button" ng-click="go('{{ item.url }})" class="{{ item.class }}">
-                        <em class="{{ item.icon }}"></em>
+                    <button type="submit" ng-click="go('{{ item.url }}')" class="btn btn-labeled pull-right {{ item.class }}">
+                        <span class="btn-label">
+                            <em class="{{ item.icon }}"></em>
+                        </span>{{ item.text }}
                     </button>
                 {% endfor %}
             {% endif %}
