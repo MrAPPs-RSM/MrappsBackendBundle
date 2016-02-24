@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="BackendBundle\Entity\ImmagineRepository")
+ * @ORM\Entity(repositoryClass="BackendBundle\Entity\FileRepository")
  * @ORM\Table(name="mrapps_backend_files")
  */
 class File extends Base
@@ -30,6 +30,13 @@ class File extends Base
      * @Assert\Length(max=1000)
      */
     protected $originalName;
+
+
+    /**
+     * @ORM\Column(name="mime_type", type="string", length=50, nullable=true)
+     * @Assert\Length(max=50)
+     */
+    protected $mimeType;
 
 
 
@@ -79,5 +86,29 @@ class File extends Base
     public function getOriginalName()
     {
         return $this->originalName;
+    }
+
+    /**
+     * Set bucket
+     *
+     * @param string $bucket
+     *
+     * @return File
+     */
+    public function setBucket($bucket)
+    {
+        $this->bucket = $bucket;
+
+        return $this;
+    }
+
+    /**
+     * Get bucket
+     *
+     * @return string
+     */
+    public function getBucket()
+    {
+        return $this->bucket;
     }
 }
