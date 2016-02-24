@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="BackendBundle\Entity\FileRepository")
+ * @ORM\Entity(repositoryClass="BackendBundle\Repository\FileRepository")
  * @ORM\Table(name="mrapps_backend_files")
  */
 class File extends Base
