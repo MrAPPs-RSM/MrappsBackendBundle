@@ -42,7 +42,7 @@ class DefaultController extends Controller
 
         $sidebar = ($this->container->hasParameter('mrapps_backend.sidebar_menu')) ? $this->container->getParameter('mrapps_backend.sidebar_menu') : null;
         if(!is_array($sidebar)) $sidebar = array();
-            
+
         foreach ($sidebar as $firstLevel) {
 
             $hasSubmenu = (isset($firstLevel['has_submenu'])) ? (bool)$firstLevel['has_submenu'] : false;
@@ -293,22 +293,6 @@ class DefaultController extends Controller
         return Utils::generateResponse($success, $message, $array);
     }
 
-    /**
-     * @Route("/password")
-     */
-    public function passwordAction()
-    {
-        $url = null;
-        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
-            $defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
-            $url = $this->generateUrl($defaultRouteName);
-        }
 
-        return $this->render('MrappsBackendBundle:Default:password.html.twig', [
-            'title' => 'Cambia Password',
-            'redirect' => $url,
-        ]);
 
-    }
 }
-
