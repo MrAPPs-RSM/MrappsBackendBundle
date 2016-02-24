@@ -10,7 +10,7 @@ class Utils {
     public static function bundleExists($container = null, $bundleName = '') {
         
         if($container !== null && strlen($bundleName) > 0) {
-            $bundles = $this->container->getParameter('kernel.bundles');
+            $bundles = $container->getParameter('kernel.bundles');
             return array_key_exists($bundleName, $bundles);
         }
         
@@ -18,7 +18,7 @@ class Utils {
     }
     
     public static function bundleMrappsAmazonExists($container = null) {
-        return $this->bundleExists($container, 'MrappsAmazonBundle');
+        return Utils::bundleExists($container, 'MrappsAmazonBundle');
     }
 
     
