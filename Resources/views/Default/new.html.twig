@@ -170,6 +170,11 @@
 
             {% elseif field.type == "select" %}
                 $scope.options_{{ field.name }} = [{% for item in field.options %}{"value":"{{item.value}}", "name":"{{item.name}}"}{% if loop.last == false %},{% endif %}{% endfor %}];
+                {% if field.chosen is defined %}
+                    $scope.form.{{field.name}} = {{field.value|json_encode}};
+                    $("select[name='{{field.name}}']").val({{field.value|json_encode}});
+                    $("select[name='{{field.name}}']").chosen();
+                {% endif %}
             {% elseif field.type == "textarea" %}
                 {% if field.value is defined %}
                     $scope.form.{{field.name}} = '{{field.value|e('js')}}';
