@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('image')->defaultValue('image/jpeg, image/jpg, image/png, image/gif')->end()
             ->scalarNode('video')->defaultValue('video/quicktime, video/mp4, video/mpeg, video/x-msvideo, video/3gpp')->end()
             ->scalarNode('pdf')->defaultValue('application/pdf, x-pdf, application/vnd.pdf, text/pdf')->end()
+            ->scalarNode('zip')->defaultValue('application/zip, application/octet-stream')->end()
             ->end()
             ->end()
             ->arrayNode('sidebar_menu')
