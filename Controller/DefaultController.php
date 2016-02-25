@@ -364,16 +364,4 @@ class DefaultController extends Controller
         return Utils::generateResponse($success, $message, $array);
     }
 
-    /**
-     * @Route("/change_password", name="mrapps_backend_changepwd")
-     * @Method({"GET"})
-     */
-    public function changePasswordAction(Request $request)
-    {
-        return $this->render('MrappsBackendBundle:Profile:change_password.html.twig', array(
-            'title' => "Cambia Password",
-        ));
-    }
-
-
 }
