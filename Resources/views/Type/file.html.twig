@@ -14,7 +14,12 @@
             </div>
         {% endif %}
     </div>
-    <div ng-show="{{field.name}}_uploading" id="load_{{field.name}}" class="hide sk-circle">
+    <div class="progress" ng-show="{{field.name}}_uploading">
+        <div class="progress-bar" role="progressbar" aria-valuenow="{/ {{field.name}}_progress /}"
+             aria-valuemin="0" aria-valuemax="100" ng-style="{'width':{{field.name}}_progress+'%'}">
+        </div>
+    </div>
+    <div ng-show="{{field.name}}_uploading && {{field.name}}_progress >= 100" id="load_{{field.name}}" class="hide sk-circle">
       <div class="sk-circle1 sk-child"></div>
       <div class="sk-circle2 sk-child"></div>
       <div class="sk-circle3 sk-child"></div>

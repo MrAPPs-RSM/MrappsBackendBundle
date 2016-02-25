@@ -130,19 +130,30 @@ class Utils {
         $millis = explode(".", $date_array[0]);
         return $date . '_' . ($millis[1]) . '_' . mt_rand(1, 999999);
     }
+
+    public static function getAcceptedTypes($container = null, $type = '') {
+
+        $acceptedTypes = array();
+
+        $type = strtolower(trim($type));
+        if($container !== null && strlen($type) > 0) {
+            $parameterName = 'mrapps_backend.file_accepted_types.'.$type;
+            $exploded = explode(',', $container->hasParameter($parameterName) ? $container->getParameter($parameterName) : '');
+            foreach ($exploded as $t) {
+                $t = trim($t);
+                if(strlen($t) > 0) $acceptedTypes[] = $t;
+            }
+        }
+
+        return $acceptedTypes;
+    }
     
     public static function isValidFile($container = null, $type = '', UploadedFile $file = null) {
         
         $type = strtolower(trim($type));
         if($container !== null && $file !== null) {
-            
-            $parameterName = 'mrapps_backend.file_accepted_types.'.$type;
-            $exploded = explode(',', $container->hasParameter($parameterName) ? $container->getParameter($parameterName) : '');
-            $acceptedTypes = array();
-            foreach ($exploded as $t) {
-                $t = trim($t);
-                if(strlen($t) > 0) $acceptedTypes[] = $t;
-            }
+
+            $acceptedTypes = Utils::getAcceptedTypes($container, $type);
             
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $mime = strtolower(trim(finfo_file($finfo, $file->getPathname())));
