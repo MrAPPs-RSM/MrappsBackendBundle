@@ -100,6 +100,19 @@
                     document.getElementById("save").disabled = false;
                 };
             {% elseif field.type == "file" %}
+
+                $scope.{{field.name}}_uploading = false;
+                $scope.{{field.name}}_original_name = '';
+                $scope.{{field.name}}_mime_type = '';
+                $scope.{{field.name}}_normalized_type = '';
+
+                $scope.{{field.name}}_assets = {
+                    'file': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
+                    'image': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
+                    'video': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
+                    'pdf': '{{ asset('/bundles/mrappsbackend/img/pdf.png') }}',
+                };
+
                 {% if field.value is not null %}
                 var {{field.name}} = {{field.value | raw }};
                 $scope.form.{{field.name}} = {{field.name}}.id;
@@ -116,9 +129,11 @@
                 };
                 $scope.{{field.name}}.onAfterAddingFile = function(item) {
                     document.getElementById("save").disabled = true;
+                    $scope.{{field.name}}_uploading = true;
                 };
                 $scope.{{field.name}}.onSuccessItem = function(fileItem, response, status, headers) {
                     $('#load_{{field.name}}').addClass('hide');
+                    $scope.{{field.name}}_uploading = false;
                     if(!response.success) {
                         toastr.error('Errore!', response.message);
                         $scope.{{field.name}}.clearQueue();
@@ -129,6 +144,13 @@
                         $scope.{{field.name}}_mime_type = response.data.mime;
                     }
                     document.getElementById("save").disabled = false;
+                };
+                $scope.{{field.name}}.onErrorItem = function(fileItem, response, status, headers) {
+                    $('#load_{{field.name}}').addClass('hide');
+                    $scope.{{field.name}}_uploading = false;
+                    toastr.error('Errore!', response);
+                    $scope.{{field.name}}.clearQueue();
+                    $scope.form.{{field.name}} = null;
                 };
             {% elseif field.type == "gallery" %}
 
