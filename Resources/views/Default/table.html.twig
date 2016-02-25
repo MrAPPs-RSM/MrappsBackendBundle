@@ -7,14 +7,23 @@
 <div ng-controller="NGTableCtrl as table" class="container-fluid">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <div class="panel-title {% if linkNew is not null%}pull-left{% endif %}">Filtri</div>
-            {% if linkNew is not null%}
+            <div class="panel-title {% if linkNew is not null or linkCustom is not null %}pull-left{% endif %}">Filtri</div>
+            {% if linkNew is not null %}
                 <button type="submit" class="btn btn-labeled btn-success pull-right" ng-click="go('{{linkNew}}')">
                     <span class="btn-label">
                         <em class="fa fa-plus"></em>
                     </span>Add
                 </button>
                 <div class="cb"></div>
+            {% endif %}
+            {% if linkCustom is not null %}
+                {% for item in linkCustom %}
+                    <button type="submit" ng-click="go('{{ item.url }}')" class="btn btn-labeled pull-right {{ item.class }}">
+                        <span class="btn-label">
+                            <em class="{{ item.icon }}"></em>
+                        </span>{{ item.text }}
+                    </button>
+                {% endfor %}
             {% endif %}
         </div>
         <table ng-table="table.tableParams2" show-filter="true" class="table table-bordered table-striped">
@@ -40,8 +49,8 @@
                             <em class="fa fa-trash-o"></em>
                         </button>
                     {% endif %}
-                    {% if linkCustom is not null%}
-                        {% for item in linkCustom %}
+                    {% if linkAction is not null%}
+                        {% for item in linkAction %}
                             <button type="button" ng-click="{% if item.is_js == false %}go('{{ item.url }}/'+row.id){% else %}customFunction{{ loop.index }}(row.id){% endif %}" class="{{ item.class }}">
                                 <em class="{{ item.icon }}"></em>
                             </button>
@@ -179,8 +188,8 @@
                         }
                     };
                 {% endif %}
-                {% if linkCustom is not null %}
-                    {% for item in linkCustom %}
+                {% if linkAction is not null %}
+                    {% for item in linkAction %}
                         {% if item.is_js == true %}
                         $scope.customFunction{{ loop.index }} = function(id) {
                             {{ item.javascript|raw }}
