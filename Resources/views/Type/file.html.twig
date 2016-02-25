@@ -14,10 +14,12 @@
             </div>
         {% endif %}
     </div>
-    <div class="progress" ng-show="{{field.name}}_uploading && {{field.name}}_progress < 100">
+    <input type="text" ng-model="{{field.name}}_progress" />
+    {#ng-show="{{field.name}}_uploading && {{field.name}}_progress < 100"#}
+    <div class="progress" >
         <div class="progress-bar" role="progressbar" aria-valuenow="{/ {{field.name}}_progress /}"
              aria-valuemin="0" aria-valuemax="100" ng-style="{'width':{{field.name}}_progress+'%'}">
-            <span class="sr-only">70% Complete</span>
+            <span class="sr-only">Caricamento in corso: {/ {{field.name}}_progress /}%...</span>
         </div>
     </div>
     <div ng-show="{{field.name}}_uploading && {{field.name}}_progress >= 100" id="load_{{field.name}}" class="hide sk-circle">
