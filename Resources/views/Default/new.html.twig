@@ -142,6 +142,7 @@
                         $scope.form.{{field.name}} = response.data.id;
                         $scope.{{field.name}}_original_name = response.data.file_name;
                         $scope.{{field.name}}_mime_type = response.data.mime;
+                        $scope.{{field.name}}_normalized_type = response.data.normalized_type;
                     }
                     document.getElementById("save").disabled = false;
                 };

@@ -33,15 +33,20 @@ class FileRepository extends EntityRepository
         $mime = strtolower(trim($mime));
 
         $types = array('image', 'video', 'pdf');
+        $canProceed = true;
         foreach($types as $t) {
-            $parameterName = 'mrapps_backend.file_accepted_types.'.$t;
-            $exploded = explode(',', $container->hasParameter($parameterName) ? $container->getParameter($parameterName) : '');
 
-            foreach ($exploded as $t) {
-                $t = strtolower(trim($t));
-                if(strlen($t) > 0 && $t == $mime) {
-                    $normalizedType = $t;
-                    break;
+            if($canProceed) {
+                $parameterName = 'mrapps_backend.file_accepted_types.'.$t;
+                $exploded = explode(',', $container->hasParameter($parameterName) ? $container->getParameter($parameterName) : '');
+
+                foreach ($exploded as $t) {
+                    $t = strtolower(trim($t));
+                    if(strlen($t) > 0 && $t == $mime) {
+                        $normalizedType = $t;
+                        $canProceed = false;
+                        break;
+                    }
                 }
             }
         }
