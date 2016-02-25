@@ -13,6 +13,18 @@ use Mrapps\BackendBundle\Entity\File;
  */
 class FileRepository extends EntityRepository
 {
+    public function checkTypeOf($container = null, File $file = null, $expectedType = '') {
+
+        $expectedType = strtolower(trim($expectedType));
+        if($container !== null && $file !== null && strlen($expectedType) > 0) {
+            $acceptedTypes = BackendUtils::getAcceptedTypes($container, $expectedType);
+            return in_array($file->getMimeType(), $acceptedTypes);
+        }
+
+        return false;
+    }
+
+
     public function getMimeType($filePath = '') {
 
         $mime = '';
@@ -32,7 +44,7 @@ class FileRepository extends EntityRepository
         $normalizedType = 'file';
         $mime = strtolower(trim($mime));
 
-        $types = array('image', 'video', 'pdf');
+        $types = array('image', 'video', 'pdf', 'zip');
         $canProceed = true;
         foreach($types as $type) {
 
