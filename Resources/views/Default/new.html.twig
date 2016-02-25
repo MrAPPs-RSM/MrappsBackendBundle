@@ -76,7 +76,7 @@
                 {% endif %}
 
                 $scope.{{field.name}} = new FileUploader({
-                    url: '{{path('mrapps_backend_default_uploadimmagine')}}',
+                    url: '{{path('mrapps_backend_uploadimmagine:')}}',
                     autoUpload: true,
                     queueLimit: 1
                 });
@@ -119,7 +119,7 @@
                 {% endif %}
 
                 $scope.{{field.name}} = new FileUploader({
-                    url: '{{ path('mrapps_backend_default_uploadfile') }}',
+                    url: '{{ path('mrapps_backend_uploadfile') }}',
                     autoUpload: true,
                     queueLimit: 1
                 });
@@ -160,7 +160,7 @@
                 $scope.gallery_{{field.name}}_immagini = [];
 
                 $scope.{{uploader_name}} = new FileUploader({
-                    url: '{{path('mrapps_backend_default_uploadimmagine')}}',
+                    url: '{{path('mrapps_backend_uploadimmagine:')}}',
                     autoUpload: true
                 });
 
@@ -276,7 +276,7 @@
                 {% endif %}
 
                 $scope.{{field.name}} = new FileUploader({
-                    url: '{{path('mrapps_backend_default_uploadpdf')}}',
+                    url: '{{path('mrapps_backend_uploadfile')}}',
                     autoUpload: true,
                     queueLimit: 1
                 });
@@ -365,7 +365,7 @@
             image_advtab: true ,
 
             paste_data_images: true,
-            images_upload_url: "{{path('mrapps_backend_default_uploadimmagine')}}?texarea=1",
+            images_upload_url: "{{path('mrapps_backend_uploadimmagine:')}}?texarea=1",
             images_upload_base_path: "{{ images_url }}/textarea/",
             images_upload_credentials: true,
             file_browser_callback: function(field_name, url, type, win) {
