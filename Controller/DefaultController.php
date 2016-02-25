@@ -33,9 +33,11 @@ class DefaultController extends Controller
 
     public function __topNavBarAction()
     {
+        $defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
 
         return $this->render('MrappsBackendBundle:Default:top-navbar.html.twig',
-            array("logo_path" => $this->container->hasParameter('mrapps_backend.logo_path') ? $this->container->getParameter('mrapps_backend.logo_path') : null));
+            array("logo_path" => $this->container->hasParameter('mrapps_backend.logo_path') ? $this->container->getParameter('mrapps_backend.logo_path') : null,
+                "default_route_name" => $defaultRouteName,));
     }
 
     public function __sideBarAction()
