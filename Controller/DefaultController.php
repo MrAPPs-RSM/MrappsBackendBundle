@@ -92,7 +92,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/")
+     * @Route("/", name="mrapps_backend_index")
      * @Method({"GET"})
      */
     public function indexAction()
@@ -137,7 +137,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/upload/immagine")
+     * @Route("/upload/immagine", name="mrapps_backend_uploadimmagine")
      * @Method({"POST"})
      */
     public function uploadImmagineAction(Request $request)
@@ -214,7 +214,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/upload/file")
+     * @Route("/upload/file", name="mrapps_backend_uploadfile")
      * @Method({"POST"})
      */
     public function uploadFileAction(Request $request)
@@ -280,7 +280,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/upload/pdf")
+     * @Route("/upload/pdf", name="mrapps_backend_uploadpdf")
      * @Method({"POST"})
      */
     public function uploadPdfAction(Request $request)
@@ -363,7 +363,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/change_password")
+     * @Route("/change_password", name="mrapps_backend_changepwd")
      * @Method({"GET"})
      */
     public function changePasswordAction(Request $request)
