@@ -114,8 +114,11 @@
                 };
 
                 {% if field.value is not null %}
-                var {{field.name}} = {{field.value | raw }};
+                var {{field.name}} = {{field.value }};
                 $scope.form.{{field.name}} = {{field.name}}.id;
+                $scope.{{field.name}}_original_name = {{field.name}}.original_name;
+                $scope.{{field.name}}_mime_type = {{field.name}}.mime_type;
+                $scope.{{field.name}}_normalized_type = {{field.name}}.normalized_type;
                 {% endif %}
 
                 $scope.{{field.name}} = new FileUploader({
