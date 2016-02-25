@@ -34,7 +34,8 @@ class DefaultController extends Controller
     public function __topNavBarAction()
     {
 
-        return $this->render('MrappsBackendBundle:Default:top-navbar.html.twig', array());
+        return $this->render('MrappsBackendBundle:Default:top-navbar.html.twig',
+            array("logo_path" => $this->container->hasParameter('mrapps_backend.logo_path') ? $this->container->getParameter('mrapps_backend.logo_path') : null));
     }
 
     public function __sideBarAction()
@@ -42,7 +43,7 @@ class DefaultController extends Controller
         $menu = array();
 
         $sidebar = ($this->container->hasParameter('mrapps_backend.sidebar_menu')) ? $this->container->getParameter('mrapps_backend.sidebar_menu') : null;
-        if(!is_array($sidebar)) $sidebar = array();
+        if (!is_array($sidebar)) $sidebar = array();
 
         foreach ($sidebar as $firstLevel) {
 
@@ -52,7 +53,7 @@ class DefaultController extends Controller
             $routeName = (isset($firstLevel['route_name'])) ? trim($firstLevel['route_name']) : '';
             $title = (isset($firstLevel['title'])) ? trim($firstLevel['title']) : '';
 
-            if($hasSubmenu) {
+            if ($hasSubmenu) {
 
                 $submenu = array();
                 $sub = (isset($firstLevel['submenu']) && is_array($firstLevel['submenu'])) ? $firstLevel['submenu'] : array();
@@ -67,7 +68,7 @@ class DefaultController extends Controller
 
                 $url = $submenu;
 
-            }else {
+            } else {
                 $url = (strlen($routeName) > 0) ? $this->generateUrl($routeName) : '';
             }
 
@@ -100,7 +101,7 @@ class DefaultController extends Controller
         return new RedirectResponse($this->generateUrl($defaultRouteName));
     }
 
-    public function __listAction($title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null)
+    public function __listAction($title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null)
     {
 
         return $this->render('MrappsBackendBundle:Default:table.html.twig', array(
@@ -114,7 +115,8 @@ class DefaultController extends Controller
             'linkDelete' => $linkDelete,
             'linkOrder' => $linkOrder,
             'linkBreadcrumb' => $linkBreadcrumb,
-            'linkCustom' => $linkCustom,    //Ogni elemento ha url, class, icon
+            'linkCustom' => $linkCustom,
+            'linkAction' => $linkAction,
             'angular' => '"ngTable","ngResource","ui.sortable"',
         ));
     }
@@ -230,7 +232,7 @@ class DefaultController extends Controller
         if (isset($tmpFile['file']) && !$tmpFile['file']->getError()) {
 
             if (Utils::bundleMrappsAmazonExists($this->container)) {
-                
+
                 /* @var $s3 \Mrapps\AmazonBundle\Handler\S3Handler */
                 $s3 = $this->container->get('mrapps.amazon.s3');
 
@@ -251,7 +253,7 @@ class DefaultController extends Controller
                 //Entity
                 $fileEntity = $em->getRepository('MrappsBackendBundle:File')->createFile($s3Key, $defaultBucket, $originalName, $mimeType);
 
-                if($fileEntity !== null) {
+                if ($fileEntity !== null) {
 
                     $data['id'] = $fileEntity->getId();
                     $data['mime'] = $mimeType;
@@ -261,7 +263,7 @@ class DefaultController extends Controller
                     $success = true;
                     $message = '';
 
-                }else {
+                } else {
                     $success = false;
                     $message = "Si è verificato un problema imprevisto durante l'elaborazione del file. Riprovare tra qualche minuto.";
                 }
@@ -362,6 +364,16 @@ class DefaultController extends Controller
         return Utils::generateResponse($success, $message, $array);
     }
 
+    /**
+     * @Route("/change_password")
+     * @Method({"GET"})
+     */
+    public function changePasswordAction(Request $request)
+    {
+        return $this->render('MrappsBackendBundle:Profile:change_password.html.twig', array(
+            'title' => "Cambia Password",
+        ));
+    }
 
 
 }

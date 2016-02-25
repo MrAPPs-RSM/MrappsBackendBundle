@@ -65,7 +65,7 @@ class Utils {
 
         if(empty($text))
         {
-          return null;
+            return null;
         }
 
         return $text;
@@ -91,9 +91,37 @@ class Utils {
         
         $json = new JsonResponse();
         $json->setData($data);
-        return $json;  
+
+        return $json;
     }
-    
+
+    public static function getHttpResponse($url, $content = null) {
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+        if ($content !== null) {
+
+            $data_string = json_encode($content);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen($data_string))
+            );
+        } else {
+            curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        }
+
+
+        $body = curl_exec($ch);
+        curl_close($ch);
+
+        return $body;
+    }
+
     public static function getDateStringForUniqueFiles() {
 
         $micro_date = microtime();
@@ -195,5 +223,63 @@ class Utils {
 
         // Check that user date is between start & end
         return (($ts >= $start_ts) && ($ts <= $end_ts));
+    }
+
+    public static function check_youtube($container, $url) {
+
+        $data = [];
+
+        if (strlen($url) > 0) {
+
+            $videoId = Utils::getYouTubeIdFromUrl($url);
+            $googleServerKey = ($container->hasParameter('google_server_key')) ? $container->getParameter('google_server_key') : '';
+
+            if(strlen($videoId) > 0 && strlen($googleServerKey) > 0) {
+
+                $apisUrl = sprintf("https://www.googleapis.com/youtube/v3/videos?id=%s&key=%s&part=snippet&fields=items(snippet(title,thumbnails))", $videoId, $googleServerKey);
+                $info = json_decode(Utils::getHttpResponse($apisUrl), true);
+
+                if ($info !== null && is_array($info)) {
+
+                    //Navigazione nella struttura del risultato
+                    if( isset($info['items']) &&
+                        is_array($info['items']) &&
+                        isset($info['items'][0]) &&
+                        is_array($info['items'][0]) &&
+                        isset($info['items'][0]['snippet']) &&
+                        is_array($info['items'][0]['snippet'])) {
+
+                        $snippet = $info['items'][0]['snippet'];
+
+                        //Titolo
+                        $title = (isset($snippet['title'])) ? trim($snippet['title']) : '';
+
+                        //Thumbnail
+                        $thumbnail = '';
+                        if(isset($snippet['thumbnails']) && is_array($snippet['thumbnails'])) {
+                            foreach ($snippet['thumbnails'] as $t) {
+
+                                if(isset($t['url']) && strlen($t['url']) > 0) {
+                                    $thumbnail = $t['url'];
+                                    break;
+                                }
+                            }
+                        }
+
+                        $data['exists'] = true;
+                        $data['title'] = $title;
+                        $data['url'] = $url;
+                        if(strlen($thumbnail) > 0) $data['thumb'] = $thumbnail;
+                    }
+                }
+            }
+        }
+
+        return $data;
+    }
+
+
+    public static function getYouTubeIdFromUrl($text) {
+        return preg_replace('~https?://(?:[0-9A-Z-]+\.)?(?:youtu\.be/| youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>| </a>))[?=&+%\w.-]*~ix', '$1', $text);
     }
 }
