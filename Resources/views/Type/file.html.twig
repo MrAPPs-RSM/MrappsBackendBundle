@@ -32,12 +32,14 @@
         <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2"></div>
         <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10">
             <br />
-            <img ng-src="{/{{field.name}}_assets[{{field.name}}_normalized_type]/}" />
-            <div>{/ {{field.name}}_original_name /}</div>
-            <div>{/ {{field.name}}_mime_type /}</div>
+            <p>
+                <img style="float:left;" ng-src="{/{{field.name}}_assets[{{field.name}}_normalized_type]/}" />
+                <h3>{/ {{field.name}}_original_name /}</h3>
+                <span>{/ {{field.name}}_mime_type /}</span>
+            </p>
         </div>
     </div>
-    <div ng-show="form.{{field.name}} == 0 || form.{{field.name}} == null" class="row">
+    <div ng-show="{{field.name}}_uploading == false && (form.{{field.name}} == 0 || form.{{field.name}} == null)" class="row">
         <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2"></div>
         <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10">
             <div>Nessun file caricato.</div>
