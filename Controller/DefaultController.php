@@ -223,6 +223,7 @@ class DefaultController extends Controller
             'id' => null,
             'mime' => null,
             'file_name' => null,
+            'normalized_type' => null,
         );
 
         $tmpFile = $request->files->all();
@@ -255,6 +256,7 @@ class DefaultController extends Controller
                     $data['id'] = $fileEntity->getId();
                     $data['mime'] = $mimeType;
                     $data['file_name'] = $originalName;
+                    $data['normalized_type'] = $em->getRepository('MrappsBackendBundle:File')->getNormalizedType($this->container, $mimeType);
 
                     $success = true;
                     $message = '';

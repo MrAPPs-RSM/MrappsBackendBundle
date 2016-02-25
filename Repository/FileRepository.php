@@ -27,6 +27,28 @@ class FileRepository extends EntityRepository
         return $mime;
     }
 
+    public function getNormalizedType($container = null, $mime = '') {
+
+        $normalizedType = 'file';
+        $mime = strtolower(trim($mime));
+
+        $types = array('image', 'video', 'pdf');
+        foreach($types as $t) {
+            $parameterName = 'mrapps_backend.file_accepted_types.'.$t;
+            $exploded = explode(',', $container->hasParameter($parameterName) ? $container->getParameter($parameterName) : '');
+
+            foreach ($exploded as $t) {
+                $t = strtolower(trim($t));
+                if(strlen($t) > 0 && $t == $mime) {
+                    $normalizedType = $t;
+                    break;
+                }
+            }
+        }
+
+        return $normalizedType;
+    }
+
 
     public function createFile($key = '', $bucket = null, $originalName = null, $mimeType = null) {
 
