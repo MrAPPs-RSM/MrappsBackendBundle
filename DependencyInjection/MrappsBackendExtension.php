@@ -27,6 +27,7 @@ class MrappsBackendExtension extends Extension
         $container->setParameter('mrapps_backend.file_accepted_types.image', $config['file_accepted_types']['image']);
         $container->setParameter('mrapps_backend.file_accepted_types.video', $config['file_accepted_types']['video']);
         $container->setParameter('mrapps_backend.file_accepted_types.pdf', $config['file_accepted_types']['pdf']);
+        $container->setParameter('mrapps_backend.file_accepted_types.zip', $config['file_accepted_types']['zip']);
         $container->setParameter('mrapps_backend.sidebar_menu', $config['sidebar_menu']);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
