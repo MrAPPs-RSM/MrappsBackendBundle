@@ -7348,7 +7348,7 @@
  * Module: config.js
  * App routes and resources configuration
  =========================================================*/
-
+/*
 
 (function() {
     'use strict';
@@ -7940,6 +7940,7 @@
 })();
 
 
+
 (function() {
     'use strict';
 
@@ -7996,6 +7997,7 @@
     }
 
 })();
+ */
 
 /**=========================================================
  * Module: sidebar-menu.js
