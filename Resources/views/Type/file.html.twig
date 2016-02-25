@@ -28,7 +28,7 @@
       <div class="sk-circle11 sk-child"></div>
       <div class="sk-circle12 sk-child"></div>
     </div>
-    <div ng-show="{{field.name}} > 0" class="row">
+    <div ng-show="{{field.name}}.id > 0" class="row">
         <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2"></div>
         <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10">
             <br />
@@ -37,7 +37,7 @@
             <div>{/ {{field.name}}_mime_type /}</div>
         </div>
     </div>
-    <div ng-show="{{field.name}} == 0" class="row">
+    <div ng-show="{{field.name}}.id == 0 || {{field.name}}.id == null" class="row">
         <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2"></div>
         <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10">
             <div>Nessun file caricato.</div>
