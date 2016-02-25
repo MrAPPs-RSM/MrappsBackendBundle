@@ -28,12 +28,12 @@
       <div class="sk-circle11 sk-child"></div>
       <div class="sk-circle12 sk-child"></div>
     </div>
-    <div ng-show="form.{{field.name}} > 0" class="row">
+    <div ng-show="{{field.name}}_uploading == false && form.{{field.name}} > 0" class="row">
         <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2"></div>
         <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10">
             <br />
             <p>
-                <img style="float:left;" ng-src="{/{{field.name}}_assets[{{field.name}}_normalized_type]/}" />
+                <img style="float:left; width:100px; height:100px" ng-src="{/{{field.name}}_assets[{{field.name}}_normalized_type]/}" />
                 <h3>{/ {{field.name}}_original_name /}</h3>
                 <span>{/ {{field.name}}_mime_type /}</span>
             </p>
