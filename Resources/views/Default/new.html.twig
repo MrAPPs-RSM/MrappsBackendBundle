@@ -134,6 +134,9 @@
                     document.getElementById("save").disabled = true;
                     $scope.{{field.name}}_uploading = true;
                 };
+                $scope.{{field.name}}.onProgressItem = function(item, progress) {
+                    console.log(progress);
+                };
                 $scope.{{field.name}}.onSuccessItem = function(fileItem, response, status, headers) {
                     $('#load_{{field.name}}').addClass('hide');
                     $scope.{{field.name}}_uploading = false;
