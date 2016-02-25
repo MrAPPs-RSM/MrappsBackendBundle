@@ -31,6 +31,11 @@ class DefaultController extends Controller
         return $this->render('MrappsBackendBundle:Default:footer.html.twig', array());
     }
 
+    public function getLocalUploadDir($dir = 'mrapps_backend_files')
+    {
+        return $this->container->getParameter('kernel.root_dir') . '/../web/' . $dir;
+    }
+
     public function __topNavBarAction()
     {
         $defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
@@ -39,6 +44,7 @@ class DefaultController extends Controller
             array("logo_path" => $this->container->hasParameter('mrapps_backend.logo_path') ? $this->container->getParameter('mrapps_backend.logo_path') : null,
                 "default_route_name" => $defaultRouteName,));
     }
+
 
     public function __sideBarAction()
     {
@@ -153,22 +159,22 @@ class DefaultController extends Controller
 
         if (isset($tmpImg['file']) && !$tmpImg['file']->getError()) {
 
+            $file = $tmpImg['file'];
+
+            if (!Utils::isValidFile($this->container, 'image', $file)) {
+                return new JsonResponse(array('location' => '', 'id' => 0, 'error' => 'Immagine non valida.'));
+            }
+
+            $em = $this->getDoctrine()->getManager();
+
+            $filePath = $file->getPathname();
+            $sha1 = sha1(file_get_contents($filePath));
+            $s3Key = 'mrapps_backend_images/' . $sha1;
+
             if (Utils::bundleMrappsAmazonExists($this->container)) {
 
                 /* @var $s3 \Mrapps\AmazonBundle\Handler\S3Handler */
                 $s3 = $this->container->get('mrapps.amazon.s3');
-
-                $file = $tmpImg['file'];
-
-                if (!Utils::isValidFile($this->container, 'image', $file)) {
-                    return new JsonResponse(array('location' => '', 'id' => 0, 'error' => 'Immagine non valida.'));
-                }
-
-                $em = $this->getDoctrine()->getManager();
-
-                $filePath = $file->getPathname();
-                $sha1 = sha1(file_get_contents($filePath));
-                $s3Key = 'mrapps_backend_images/' . $sha1;
 
                 //Upload immagine su s3
                 if (!$s3->objectExists($s3Key)) $s3->uploadObject($s3Key, $filePath);
@@ -182,23 +188,36 @@ class DefaultController extends Controller
                 $em->persist($immagine);
                 $em->flush();
 
+
                 $responseLocation = $immagine->getUrl();
                 $responseId = $immagine->getId();
-                $responseUrl = $this->container->get('liip_imagine.controller')->filterAction($request, $immagine->getUrl(), 'mrapps_backend_thumbnail')->getTargetUrl();
+                $responseUrl = $immagine->getUrl();
                 $responseError = '';
 
-                if (intval($request->get('texarea')) > 0) {
-                    if (intval(getimagesize($file)[0]) > 1000) {
-                        $url = $this->container->get('liip_imagine.controller')->filterAction($request, $immagine->getUrl(), 'textarea')->getTargetUrl();
-                    } else {
-                        $s3->uploadObject('mrapps_backend_images/textarea/' . $sha1, $filePath);
-                    }
-                    //problema con permessi senza jpg
-                    $url = $this->container->get('liip_imagine.controller')->filterAction($request, $immagine->getUrl(), 'jpg')->getTargetUrl();
-                }
-
             } else {
-                $responseError = "Bundle MrappsAmazonBundle non installato.";
+
+                if (mkdir($this->getLocalUploadDir(), 0755, true)) {
+                    $file->move(
+                        $this->getLocalUploadDir(),
+                        $this->getFile()->getClientOriginalName()
+                    );
+
+                    //Entity
+                    $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
+                    if ($immagine == null) {
+                        $immagine = new Immagine();
+                    }
+                    $immagine->setUrl($s3Key);
+                    $em->persist($immagine);
+                    $em->flush();
+
+                    $responseLocation = $immagine->getUrl();
+                    $responseId = $immagine->getId();
+                    $responseUrl = $immagine->getUrl();
+                    $responseError = '';
+
+                    $success = true;
+                }
             }
 
         } else {
@@ -233,47 +252,62 @@ class DefaultController extends Controller
         $tmpFile = $request->files->all();
         if (isset($tmpFile['file']) && !$tmpFile['file']->getError()) {
 
+            $file = $tmpFile['file'];
+
+            $em = $this->getDoctrine()->getManager();
+
+            $originalName = $file->getClientOriginalName();
+            $filePath = $file->getPathname();
+            $sha1 = sha1(file_get_contents($filePath));
+            $s3Key = 'mrapps_backend_files/' . $sha1;
+            $mimeType = $em->getRepository('MrappsBackendBundle:File')->getMimeType($filePath);
+
             if (Utils::bundleMrappsAmazonExists($this->container)) {
 
                 /* @var $s3 \Mrapps\AmazonBundle\Handler\S3Handler */
                 $s3 = $this->container->get('mrapps.amazon.s3');
 
-                $file = $tmpFile['file'];
-
-                $em = $this->getDoctrine()->getManager();
-
-                $originalName = $file->getClientOriginalName();
-                $filePath = $file->getPathname();
-                $sha1 = sha1(file_get_contents($filePath));
-                $s3Key = 'mrapps_backend_files/' . $sha1;
                 $defaultBucket = $this->container->getParameter('mrapps_amazon.parameters.default_bucket');
-                $mimeType = $em->getRepository('MrappsBackendBundle:File')->getMimeType($filePath);
 
                 //Upload file su s3
                 if (!$s3->objectExists($s3Key)) $s3->uploadObject($s3Key, $filePath);
 
-                //Entity
-                $fileEntity = $em->getRepository('MrappsBackendBundle:File')->createFile($s3Key, $defaultBucket, $originalName, $mimeType);
+                $success = true;
 
-                if ($fileEntity !== null) {
+            } else {
 
-                    $data['id'] = $fileEntity->getId();
-                    $data['mime'] = $mimeType;
-                    $data['file_name'] = $originalName;
-                    $data['normalized_type'] = $em->getRepository('MrappsBackendBundle:File')->getNormalizedType($this->container, $mimeType);
+                if (mkdir($this->getLocalUploadDir(), 0755, true)) {
+                    $file->move(
+                        $this->getLocalUploadDir(),
+                        $this->getFile()->getClientOriginalName()
+                    );
 
                     $success = true;
-                    $message = '';
-
-                } else {
-                    $success = false;
-                    $message = "Si è verificato un problema imprevisto durante l'elaborazione del file. Riprovare tra qualche minuto.";
                 }
+            }
+
+            //Entity
+            $fileEntity = null;
+
+            if ($success) {
+                $fileEntity = $em->getRepository('MrappsBackendBundle:File')->createFile($s3Key, $defaultBucket, $originalName, $mimeType);
+            }
+
+            if ($fileEntity !== null) {
+
+                $data['id'] = $fileEntity->getId();
+                $data['mime'] = $mimeType;
+                $data['file_name'] = $originalName;
+                $data['normalized_type'] = $em->getRepository('MrappsBackendBundle:File')->getNormalizedType($this->container, $mimeType);
+
+                $success = true;
+                $message = '';
 
             } else {
                 $success = false;
-                $message = 'Bundle MrappsAmazonBundle non installato.';
+                $message = "Si è verificato un problema imprevisto durante l'elaborazione del file. Riprovare tra qualche minuto.";
             }
+
 
         } else {
             $success = false;
