@@ -4,6 +4,7 @@ namespace Mrapps\BackendBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Mrapps\BackendBundle\Entity\File;
+use Mrapps\BackendBundle\Classes\Utils as BackendUtils;
 
 /**
  * FileRepository
