@@ -2,7 +2,7 @@
 Pannello Backend standard - Symfony2
 
 ##setup .gitignore
-escludere la cartella web/uploads perchè è il percorso dove vengono salvate le immagini si usi lo spazio del server e non s3
+escludere la cartella web/uploads perchè è il percorso dove vengono salvate le immagini se usi lo spazio del server e non s3
 
 ##setup composer.json##
 
@@ -77,6 +77,8 @@ mrapps_backend:
        image: image/jpeg, image/jpg, image/png, image/gif
        video: video/quicktime, video/mp4, video/mpeg, video/x-msvideo, video/3gpp
        pdf: application/pdf, x-pdf, application/vnd.pdf, text/pdf
+       zip: application/zip, application/octet-stream
+       json: application/json, text/plain, text/json
     sidebar_menu: [{ has_submenu: true, min_role: ROLE_USER, title: Voce 1, icon: icon-test, submenu: [{ title: Submenu 1, route_name: mrapps_backend_index }, { title: Submenu 2, route_name: mrapps_backend_index }] }, { has_submenu: false, min_role: ROLE_ADMIN, title: Voce 2, icon: icon-test, route_name: mrapps_backend_index }]
 ```
 

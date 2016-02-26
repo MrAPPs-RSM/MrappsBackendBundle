@@ -331,7 +331,7 @@
             vm.submitted = true;
             if (vm.formValidate.$valid) {
                 {% if confirmSave == true %}
-                if(confirm("{% if create %}Creare il nuovo elemento?{% else %}Salvare le modifiche?{% endif %}")) {
+                if(confirm("{% if edit == false %}Creare il nuovo elemento?{% else %}Salvare le modifiche?{% endif %}")) {
                 {% endif %}
                     document.getElementById("save").disabled = true;
                     $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
