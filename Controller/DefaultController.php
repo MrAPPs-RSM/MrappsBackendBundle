@@ -140,7 +140,7 @@ class DefaultController extends Controller
             'edit' => $edit,
             'linkBreadcrumb' => $linkBreadcrumb,
             'images_url' => ($this->container->hasParameter('mrapps_backend.images_url')) ? $this->container->getParameter('mrapps_backend.images_url') : '',
-            'angular' => '"localytics.directives","angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree"',
+            'angular' => '"localytics.directives","angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate"',
         ));
     }
 
