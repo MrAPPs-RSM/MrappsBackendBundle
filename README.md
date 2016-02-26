@@ -22,6 +22,42 @@ escludere la cartella web/uploads perchè è il percorso dove vengono salvate le
    ]
 ```
 
+##setup config.yml per usare liip_bundle + MrappsAmazonBundle
+
+```
+knp_gaufrette:
+    stream_wrapper:
+        protocol: gaufrette
+        filesystems:
+            amazon_s3: amazon_s3_fs
+    adapters:
+        amazon_s3_adapter:
+            aws_s3:
+                service_id: amazonS3
+                bucket_name: %amazon_s3_bucket%
+                options:
+                    create: true
+    filesystems:
+        amazon_s3_fs:
+            adapter:    amazon_s3_adapter
+            
+liip_imagine:
+    loaders:
+        stream.amazon_s3:
+            stream:
+                wrapper: gaufrette://amazon_s3/
+    data_loader: stream.amazon_s3
+    cache: cache.amazon_s3
+    filter_sets:
+        
+        backend_thumbnail:
+            data_loader: stream.amazon_s3
+            quality: 80
+            format: png
+            filters:
+                relative_resize: { widen: 100 }
+```
+
 ##setup config.yml##
 
 ```
