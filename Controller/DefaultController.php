@@ -36,6 +36,11 @@ class DefaultController extends Controller
         return $this->container->getParameter('kernel.root_dir') . '/../web/uploads/' . $dir;
     }
 
+    public function getLocalUrlDir($dir = 'mrapps_backend_files')
+    {
+        return $this->getRequest()->getSchemeAndHttpHost() . '/uploads/' . $dir;
+    }
+
     public function __topNavBarAction()
     {
         $defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
@@ -131,7 +136,14 @@ class DefaultController extends Controller
 
     public function __newAction($title, $fields, $linkSave = null, $linkEdit = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false)
     {
-        if($confirmSave == null) $confirmSave = false;
+        if ($confirmSave == null) $confirmSave = false;
+
+        $imagesUrl = '';
+        if (Utils::bundleMrappsAmazonExists($this->container)) {
+            $imagesUrl = ($this->container->hasParameter('mrapps_backend.images_url')) ? $this->container->getParameter('mrapps_backend.images_url') : '';
+        } else {
+            $imagesUrl = $this->getLocalUrlDir('');
+        }
 
         return $this->render('MrappsBackendBundle:Default:new.html.twig', array(
             'title' => $title,
@@ -142,7 +154,7 @@ class DefaultController extends Controller
             'edit' => $edit,
             'linkBreadcrumb' => $linkBreadcrumb,
             'confirmSave' => $confirmSave,
-            'images_url' => ($this->container->hasParameter('mrapps_backend.images_url')) ? $this->container->getParameter('mrapps_backend.images_url') : '',
+            'images_url' => $imagesUrl,
             'angular' => '"localytics.directives","angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate"',
         ));
     }
@@ -182,15 +194,18 @@ class DefaultController extends Controller
 
                 $s3Key = 'mrapps_backend_images/' . $sha1;
 
+                $position = strrpos($file->getClientOriginalName(), ".");
+                $s3Path = $s3Key . substr($file->getClientOriginalName(), $position);
+
                 //Upload immagine su s3
-                if (!$s3->objectExists($s3Key)) $s3->uploadObject($s3Key, $filePath);
+                if (!$s3->objectExists($s3Path)) $s3->uploadObject($s3Path, $filePath);
 
                 //Entity
-                $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
+                $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Path));
                 if ($immagine == null) {
                     $immagine = new Immagine();
                 }
-                $immagine->setUrl($s3Key);
+                $immagine->setUrl($s3Path);
                 $em->persist($immagine);
                 $em->flush();
 
@@ -289,12 +304,21 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $originalName = $file->getClientOriginalName();
+
             $filePath = $file->getPathname();
             $sha1 = sha1(file_get_contents($filePath));
-            $s3Key = 'mrapps_backend_files/' . $sha1;
+
+            $localDir = $this->getLocalUploadDir('mrapps_backend_files');
+
             $mimeType = $em->getRepository('MrappsBackendBundle:File')->getMimeType($filePath);
 
+            $url=null;
+
             if (Utils::bundleMrappsAmazonExists($this->container)) {
+
+                $s3Key = 'mrapps_backend_files/' . $sha1;
+                $position = strrpos($file->getClientOriginalName(), ".");
+                $url = $s3Key . substr($file->getClientOriginalName(), $position);
 
                 /* @var $s3 \Mrapps\AmazonBundle\Handler\S3Handler */
                 $s3 = $this->container->get('mrapps.amazon.s3');
@@ -302,23 +326,45 @@ class DefaultController extends Controller
                 $defaultBucket = $this->container->getParameter('mrapps_amazon.parameters.default_bucket');
 
                 //Upload file su s3
-                if (!$s3->objectExists($s3Key)) $s3->uploadObject($s3Key, $filePath);
+                if (!$s3->objectExists($url)) $s3->uploadObject($url, $filePath);
 
                 $success = true;
 
             } else {
                 $localDir = $this->getLocalUploadDir();
+                $s3Key = $sha1;
+
+                $dirAvailable = false;
+
 
                 if (!is_dir($localDir)) {
+
                     if (false === mkdir($localDir, 0755, true)) {
-                        $success = false;
+                        $dirAvailable = false;
                     } else {
-                        $file->move(
-                            $this->getLocalUploadDir(),
-                            $file->getClientOriginalName()
-                        );
-                        $success = true;
+                        $dirAvailable = true;
                     }
+
+                } else {
+                    $dirAvailable = true;
+                }
+
+                if ($dirAvailable) {
+                    $s3Key = $sha1;
+                    $position = strrpos($file->getClientOriginalName(), ".");
+                    $fileName = $s3Key . substr($file->getClientOriginalName(), $position);
+
+                    $url = 'uploads/mrapps_backend_files/' . $fileName;
+
+                    $file->move(
+                        $localDir,
+                        $fileName
+                    );
+
+                    $success = true;
+                } else {
+                    $success = false;
+                    $message = "Non è stato possibile salvare il file";
                 }
             }
 
@@ -326,7 +372,7 @@ class DefaultController extends Controller
             $fileEntity = null;
 
             if ($success) {
-                $fileEntity = $em->getRepository('MrappsBackendBundle:File')->createFile($s3Key, $defaultBucket, $originalName, $mimeType);
+                $fileEntity = $em->getRepository('MrappsBackendBundle:File')->createFile($url, $defaultBucket, $originalName, $mimeType);
             }
 
             if ($fileEntity !== null) {
