@@ -129,8 +129,10 @@ class DefaultController extends Controller
         ));
     }
 
-    public function __newAction($title, $fields, $linkSave = null, $linkEdit = null, $linkBreadcrumb = null, $create, $edit)
+    public function __newAction($title, $fields, $linkSave = null, $linkEdit = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false)
     {
+        if($confirmSave == null) $confirmSave = false;
+
         return $this->render('MrappsBackendBundle:Default:new.html.twig', array(
             'title' => $title,
             'fields' => $fields,
@@ -139,6 +141,7 @@ class DefaultController extends Controller
             'create' => $create,
             'edit' => $edit,
             'linkBreadcrumb' => $linkBreadcrumb,
+            'confirmSave' => $confirmSave,
             'images_url' => ($this->container->hasParameter('mrapps_backend.images_url')) ? $this->container->getParameter('mrapps_backend.images_url') : '',
             'angular' => '"localytics.directives","angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate"',
         ));

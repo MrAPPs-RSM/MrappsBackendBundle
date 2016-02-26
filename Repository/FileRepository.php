@@ -45,7 +45,7 @@ class FileRepository extends EntityRepository
         $normalizedType = 'file';
         $mime = strtolower(trim($mime));
 
-        $types = array('image', 'video', 'pdf', 'zip');
+        $types = array('image', 'video', 'pdf', 'zip', 'json');
         $canProceed = true;
         foreach($types as $type) {
 
