@@ -22,6 +22,22 @@ escludere la cartella web/uploads perchè è il percorso dove vengono salvate le
    ]
 ```
 
+##setup config.yml per usare liip_bundle + storage files locale
+
+```
+liip_imagine:
+    resolvers:
+            default:
+                web_path:
+                    cache_prefix: uploads/cache
+    filter_sets:
+        backend_thumbnail:
+            quality: 85
+            format: jpg
+            filters:
+                relative_resize: { widen: 500 }
+```
+
 ##setup config.yml per usare liip_bundle + MrappsAmazonBundle
 
 ```
