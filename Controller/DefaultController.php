@@ -33,7 +33,7 @@ class DefaultController extends Controller
 
     public function getLocalUploadDir($dir = 'mrapps_backend_files')
     {
-        return $this->container->getParameter('kernel.root_dir') . '/../web/' . $dir;
+        return $this->container->getParameter('kernel.root_dir') . '/../web/uploads/' . $dir;
     }
 
     public function __topNavBarAction()
@@ -169,12 +169,15 @@ class DefaultController extends Controller
 
             $filePath = $file->getPathname();
             $sha1 = sha1(file_get_contents($filePath));
-            $s3Key = 'mrapps_backend_images/' . $sha1;
+
+            $localDir = $this->getLocalUploadDir('mrapps_backend_images');
 
             if (Utils::bundleMrappsAmazonExists($this->container)) {
 
                 /* @var $s3 \Mrapps\AmazonBundle\Handler\S3Handler */
                 $s3 = $this->container->get('mrapps.amazon.s3');
+
+                $s3Key = 'mrapps_backend_images/' . $sha1;
 
                 //Upload immagine su s3
                 if (!$s3->objectExists($s3Key)) $s3->uploadObject($s3Key, $filePath);
@@ -196,28 +199,54 @@ class DefaultController extends Controller
 
             } else {
 
-                if (mkdir($this->getLocalUploadDir(), 0755, true)) {
+                $dirAvailable = false;
+
+
+                if (!is_dir($localDir)) {
+
+                    if (false === mkdir($localDir, 0755, true)) {
+                        $dirAvailable = false;
+                    } else {
+                        $dirAvailable = true;
+                    }
+
+                } else {
+                    $dirAvailable = true;
+                }
+
+                if ($dirAvailable) {
+
+                    $s3Key = $sha1;
+                    $position = strrpos($file->getClientOriginalName(), ".");
+                    $fileName = $s3Key . substr($file->getClientOriginalName(), $position);
+
                     $file->move(
-                        $this->getLocalUploadDir(),
-                        $this->getFile()->getClientOriginalName()
+                        $localDir,
+                        $fileName
                     );
 
+                    $url = 'uploads/mrapps_backend_images/' . $fileName;
+
                     //Entity
-                    $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
+                    $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $url));
                     if ($immagine == null) {
                         $immagine = new Immagine();
                     }
-                    $immagine->setUrl($s3Key);
+                    $immagine->setUrl($url);
                     $em->persist($immagine);
                     $em->flush();
 
-                    $responseLocation = $immagine->getUrl();
+                    $responseLocation = $this->getRequest()->getSchemeAndHttpHost() . '/' . $url;
                     $responseId = $immagine->getId();
-                    $responseUrl = $immagine->getUrl();
+                    $responseUrl = $this->getRequest()->getSchemeAndHttpHost() . '/' . $url;
                     $responseError = '';
 
                     $success = true;
+                } else {
+                    $success = false;
+                    $responseError = "Non è stato possibile salvare l'immagine";
                 }
+
             }
 
         } else {
@@ -231,7 +260,7 @@ class DefaultController extends Controller
             'error' => $responseError,
         );
 
-        return new Response($data);
+        return new JsonResponse($data);
     }
 
     /**
@@ -275,14 +304,18 @@ class DefaultController extends Controller
                 $success = true;
 
             } else {
+                $localDir = $this->getLocalUploadDir();
 
-                if (mkdir($this->getLocalUploadDir(), 0755, true)) {
-                    $file->move(
-                        $this->getLocalUploadDir(),
-                        $this->getFile()->getClientOriginalName()
-                    );
-
-                    $success = true;
+                if (!is_dir($localDir)) {
+                    if (false === mkdir($localDir, 0755, true)) {
+                        $success = false;
+                    } else {
+                        $file->move(
+                            $this->getLocalUploadDir(),
+                            $file->getClientOriginalName()
+                        );
+                        $success = true;
+                    }
                 }
             }
 
