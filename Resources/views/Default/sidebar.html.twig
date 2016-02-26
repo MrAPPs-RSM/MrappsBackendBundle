@@ -29,9 +29,10 @@
                 <span class="ng-binding ng-scope">Main Navigation</span>
             </li>
 
+            {% set active_page = app.request.get('_route')|default('') %}
             {% for item in menu %}
                 {% if item.min_role|length == 0 or is_granted(item.min_role) %}
-                <li class="ng-scope">
+                <li class="ng-scope {% if item.route_name == active_page %}active{% endif %}">
                     {% if item.has_submenu == true %}
                         <a data-toggle="collapse" data-parent="#accordion" href="#backendSidebar{{ loop.index }}" title="{{ item.title }}" class="ng-scope">
                             {% if item.icon is defined %}<em class="fa {{ item.icon }}"></em> {% endif %}
@@ -39,7 +40,7 @@
                         </a>
                         <ul id="backendSidebar{{ loop.index }}" class="nav sidebar-subnav ng-scope panel-collapse collapse">
                             {% for sub_item in item.url %}
-                                <li class="ng-scope">
+                                <li class="ng-scope {% if sub_item.route_name == active_page %}active{% endif %}">
                                     <a ng-href="{{ sub_item.url }}" title="{{ sub_item.title }}" class="ng-scope">
                                         {% if sub_item.icon is defined %}<em class="fa {{ sub_item.icon }}"></em> {% endif %}
                                         <span class="ng-binding">{{ sub_item.title }}</span>

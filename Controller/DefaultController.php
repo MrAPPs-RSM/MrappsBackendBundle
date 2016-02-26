@@ -76,7 +76,7 @@ class DefaultController extends Controller
                     $subRouteName = (isset($secondLevel['route_name'])) ? trim($secondLevel['route_name']) : '';
                     $subUrl = (strlen($subRouteName) > 0) ? $this->generateUrl($subRouteName) : '';
 
-                    $submenu[] = array('title' => $subTitle, 'url' => $subUrl);
+                    $submenu[] = array('title' => $subTitle, 'url' => $subUrl, 'route_name' => $subRouteName);
                 }
 
                 $url = $submenu;
@@ -90,6 +90,7 @@ class DefaultController extends Controller
                 'title' => $title,
                 'icon' => $icon,
                 'url' => $url,
+                'route_name' => $routeName,
                 'min_role' => $minRole,
             );
         }
