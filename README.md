@@ -1,11 +1,14 @@
 # MrappsBackendBundle
 Pannello Backend standard - Symfony2
 
+##setup .gitignore
+escludere la cartella web/uploads perchè è il percorso dove vengono salvate le immagini si usi lo spazio del server e non s3
+
 ##setup composer.json##
 
 ```
-"mrapps/amazonbundle": "dev-master",
-       "mrapps/backendbundle": "dev-master”
+"mrapps/backendbundle": "dev-master”
+"mrapps/amazonbundle": "dev-master", //opzionale - se si vuole usare s3
 
 "repositories" : [
        {
@@ -22,6 +25,7 @@ Pannello Backend standard - Symfony2
 ##setup config.yml##
 
 ```
+#solo se si include MrappsAmazonBundle
 mrapps_amazon:
    parameters:
        access: ~
