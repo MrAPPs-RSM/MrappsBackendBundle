@@ -329,35 +329,41 @@
         vm.submitForm = function() {
             vm.submitted = true;
             if (vm.formValidate.$valid) {
-                document.getElementById("save").disabled = true;
-                $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
-                $http({
-                    method: 'POST',
-                    url: '{{ linkSave }}',
-                    data: $scope.form,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                }).then(function successCallback(response) {
-                    $('#overlay-waiting').remove();
-                    if(!response.data.success) {
-                        toastr.error(response.data.message, 'Errore!');
-                    }else{
-                        {% if edit %}
+                {% if confirmSave == true %}
+                if(confirm("{% if create %}Creare il nuovo elemento?{% else %}Salvare le modifiche?{% endif %}")) {
+                {% endif %}
+                    document.getElementById("save").disabled = true;
+                    $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
+                    $http({
+                        method: 'POST',
+                        url: '{{ linkSave }}',
+                        data: $scope.form,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                    }).then(function successCallback(response) {
+                        $('#overlay-waiting').remove();
+                        if (!response.data.success) {
+                            toastr.error(response.data.message, 'Errore!');
+                        } else {
+                            {% if edit %}
                             toastr.success('Salvato!', 'Elemento modificato');
-                        {% else %}
-                            location.href = '{{ linkEdit }}/'+ response.data.data + '?create=true';
-                        {% endif %}
-                    }
-                    document.getElementById("save").disabled = false;
+                            {% else %}
+                            location.href = '{{ linkEdit }}/' + response.data.data + '?create=true';
+                            {% endif %}
+                        }
+                        document.getElementById("save").disabled = false;
 
-                }, function errorCallback(response) {
-                    $('#overlay-waiting').remove();
-                    toastr.error('Errore!', 'Errore nella richiesta al server');
-                    document.getElementById("save").disabled = false;
-                });
+                    }, function errorCallback(response) {
+                        $('#overlay-waiting').remove();
+                        toastr.error('Errore!', 'Errore nella richiesta al server');
+                        document.getElementById("save").disabled = false;
+                    });
+                {% if confirmSave == true %}
+                }
+                {% endif %}
             } else {
-                toastr.error('Errore', 'Compila i campi rischiesti');
+                toastr.error('Errore', 'Compila i campi richiesti.');
                 return false;
             }
         };
