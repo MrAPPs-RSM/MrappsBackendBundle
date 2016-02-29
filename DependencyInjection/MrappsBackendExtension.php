@@ -21,7 +21,8 @@ class MrappsBackendExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-        
+
+        $container->setParameter('mrapps_backend.logo_path', $config['logo_path']);
         $container->setParameter('mrapps_backend.temp_folder', $config['temp_folder']);
         $container->setParameter('mrapps_backend.default_route_name', $config['default_route_name']);
         $container->setParameter('mrapps_backend.file_accepted_types.image', $config['file_accepted_types']['image']);
