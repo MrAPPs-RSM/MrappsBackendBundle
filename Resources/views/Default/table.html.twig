@@ -39,13 +39,13 @@
                         </td>
                 {% endfor %}
                 <td>
-                    {% if linkEdit is not null%}
-                        <button type="button" ng-click="go('{{ linkEdit }}/'+row.id)" class="btn btn-sm btn-warning">
+                    {% if linkEdit is not null %}
+                        <button ng-if="typeof(row.disableEdit)=='undefined'||row.disableEdit==false" type="button" ng-click="go('{{ linkEdit }}/'+row.id)" class="btn btn-sm btn-warning">
                             <em class="fa fa-edit"></em>
                         </button>
                     {% endif %}
-                    {% if linkDelete is not null%}
-                        <button type="button" ng-click="deleteajax(row.id)" class="btn btn-sm btn-danger">
+                    {% if linkDelete is not null %}
+                        <button ng-if="typeof(row.disableDelete)=='undefined'||row.disableDelete==false" type="button" ng-click="deleteajax(row.id)" class="btn btn-sm btn-danger">
                             <em class="fa fa-trash-o"></em>
                         </button>
                     {% endif %}

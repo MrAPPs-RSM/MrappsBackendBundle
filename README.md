@@ -46,6 +46,22 @@ fos_user_change_password:
     
 ```
 
+##setup config.yml per usare liip_bundle + storage files locale
+
+```
+liip_imagine:
+    resolvers:
+            default:
+                web_path:
+                    cache_prefix: uploads/cache
+    filter_sets:
+        backend_thumbnail:
+            quality: 85
+            format: jpeg
+            filters:
+                relative_resize: { widen: 500 }
+                background: { color: '#FFFFFF' }
+```
 
 ##setup config.yml per usare liip_bundle + MrappsAmazonBundle
 
