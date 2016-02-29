@@ -1,0 +1,4 @@
+services:
+    mrapps_backend.twig:
+        class: Mrapps\BackendBundle\Twig
+        arguments: ['@service_container']
