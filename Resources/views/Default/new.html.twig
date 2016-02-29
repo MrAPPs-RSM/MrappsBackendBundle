@@ -1,40 +1,41 @@
 {% extends 'MrappsBackendBundle:Default:layout.html.twig' %}
-{% block css  %}
-<link rel="stylesheet" href="{{ asset('assets/vendor/chosen/chosen.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/vendor/angular-ui-bootstrap-bower/ui-bootstrap-csp.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/vendor/jstree/dist/themes/default/style.min.css') }}">
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/chosen/chosen.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/angular-ui-bootstrap-bower/ui-bootstrap-csp.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/jstree/dist/themes/default/style.min.css') }}">
 {% endblock css %}
 {% block content %}
-<!-- START row-->
-<div ng-controller="FormValidationController as form" class="container-fluid">
-   <div class="row">
-      <div class="col-md-12">
-         <form name="form.formValidate" ng-submit="form.submitForm()" novalidate="" class="form-validate form-horizontal">
-            <!-- START panel-->
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    {% for field in fields %}
-                        {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
-                        {{ include(twig_name, { 'field': field }) }}
-                    {% endfor %}
-                </div>
-                <div class="panel-footer text-center">
-                    {% if edit %}
-                        <button type="submit" id="save" class="btn btn-info">Modifica</button>
-                    {% else %}
-                        <button type="submit" id="save" class="btn btn-success">Crea</button>
-                    {% endif %}
-                </div>
+    <!-- START row-->
+    <div ng-controller="FormValidationController as form" class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form name="form.formValidate" ng-submit="form.submitForm()" novalidate=""
+                      class="form-validate form-horizontal">
+                    <!-- START panel-->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            {% for field in fields %}
+                                {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
+                                {{ include(twig_name, { 'field': field }) }}
+                            {% endfor %}
+                        </div>
+                        <div class="panel-footer text-center">
+                            {% if edit %}
+                                <button type="submit" id="save" class="btn btn-info">Modifica</button>
+                            {% else %}
+                                <button type="submit" id="save" class="btn btn-success">Crea</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- END panel-->
+                </form>
             </div>
-            <!-- END panel-->
-         </form>
-      </div>
-   </div>
-   <!-- END row-->
-</div>
+        </div>
+        <!-- END row-->
+    </div>
 
 {% endblock content %}
-{% block srcjavascript  %}
+{% block srcjavascript %}
     <script src="{{ asset('assets/vendor/chosen/chosen.jquery.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/angular-chosen-localytics/chosen.js') }}"></script>
     <script src="{{ asset('assets/vendor/angular-resource/angular-resource.min.js') }}"></script>
@@ -47,415 +48,478 @@
     <script src="{{ asset('assets/vendor/jstree/dist/jstree.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/ng-js-tree/dist/ngJsTree.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/angular-ui-validate/dist/validate.min.js') }}"></script>
-{% endblock srcjavascript  %}
-{% block javascript  %}
-<script type="text/javascript">
-    'use strict';
+{% endblock srcjavascript %}
+{% block javascript %}
+    <script type="text/javascript">
+        'use strict';
 
-    myAngular.controller("FormValidationController", FormValidationController);
+        myAngular.controller("FormValidationController", FormValidationController);
 
-    function FormValidationController($scope, $http, FileUploader) {
-        var vm = this;
+        function FormValidationController($scope, $http, FileUploader) {
+            var vm = this;
 
-        {% set jsFields = [] %}
-        {% for field in fields %}
+            {% set jsFields = [] %}
+            {% for field in fields %}
             {% set jsFields = jsFields|merge([field]) %}
             {% if field.type == 'switch' %}
-                {% for inner_field in field.data %}
-                    {% set jsFields = jsFields|merge([inner_field]) %}
-                {% endfor %}
+            {% for inner_field in field.data %}
+            {% set jsFields = jsFields|merge([inner_field]) %}
+            {% endfor %}
             {% endif %}
-        {% endfor %}
+            {% endfor %}
 
-        {% for field in jsFields %}
+            {% for field in jsFields %}
             {% if field.type == "image" %}
-                $scope.{{field.name}}_url = '';
-                {% if field.value is not null %}
-                    var {{field.name}} = {{field.value | raw }};
-                    $scope.form.{{field.name}} = {{field.name}}.id;
-                    $scope.{{field.name}}_url = {{field.name}}.url;
-                {% endif %}
+            $scope.{{ field.name }}_url = '';
+            {% if field.value is not null %}
+            {% set field_url=field.value.url | imagine_filter('backend_thumbnail') %}
+            var {{ field.name }} =
+            {
+                'id' :{{ field.value.id }},
+                'url': '{{ field_url }}'
+            }
+            ;
 
-                $scope.{{field.name}} = new FileUploader({
-                    url: '{{path('mrapps_backend_uploadimmagine')}}',
-                    autoUpload: true,
-                    queueLimit: 1
-                });
-                $scope.{{field.name}}.onBeforeUploadItem = function(item) {
-                    $scope.{{field.name}}.clearQueue();
-                    $('#load_{{field.name}}').removeClass('hide');
-                };
-                $scope.{{field.name}}.onAfterAddingFile = function(item) {
-                    document.getElementById("save").disabled = true;
-                };
-                $scope.{{field.name}}.onSuccessItem = function(fileItem, response, status, headers) {
-                    $('#load_{{field.name}}').addClass('hide');
-                    if(response.error.length > 0) {
-                        toastr.error('Errore!', response.error);
-                        $scope.{{field.name}}.clearQueue();
-                        $scope.form.{{field.name}} = null;
-                    }else {
-                        $scope.form.{{field.name}} = response.id;
-                        $scope.{{field.name}}_url = response.url;
-                    }
-                    document.getElementById("save").disabled = false;
-                };
+            $scope.form.{{ field.name }} = {{ field.name }}.
+            id;
+            $scope.{{ field.name }}_url = {{ field.name }}.
+            url;
+            {% endif %}
+
+            $scope.{{ field.name }} = new FileUploader({
+                url: '{{ path('mrapps_backend_uploadimmagine') }}',
+                autoUpload: true,
+                queueLimit: 1
+            });
+            $scope
+        .{{ field.name }}.
+            onBeforeUploadItem = function (item) {
+                $scope
+                .{{ field.name }}.
+                clearQueue();
+                $('#load_{{ field.name }}').removeClass('hide');
+            };
+            $scope
+        .{{ field.name }}.
+            onAfterAddingFile = function (item) {
+                document.getElementById("save").disabled = true;
+            };
+            $scope
+        .{{ field.name }}.
+            onSuccessItem = function (fileItem, response, status, headers) {
+                $('#load_{{ field.name }}').addClass('hide');
+                if (response.error.length > 0) {
+                    toastr.error('Errore!', response.error);
+                    $scope
+                .{{ field.name }}.
+                    clearQueue();
+                    $scope.form.{{ field.name }} = null;
+                } else {
+                    $scope.form.{{ field.name }} = response.id;
+                    $scope.{{ field.name }}_url = response.url;
+                }
+                document.getElementById("save").disabled = false;
+            };
             {% elseif field.type == "file" %}
 
-                $scope.{{field.name}}_uploading = false;
-                $scope.{{field.name}}_progress = 0;
-                $scope.{{field.name}}_original_name = '';
-                $scope.{{field.name}}_mime_type = '';
-                $scope.{{field.name}}_normalized_type = 'file';
+            $scope.{{ field.name }}_uploading = false;
+            $scope.{{ field.name }}_progress = 0;
+            $scope.{{ field.name }}_original_name = '';
+            $scope.{{ field.name }}_mime_type = '';
+            $scope.{{ field.name }}_normalized_type = 'file';
 
-                $scope.{{field.name}}_assets = {
-                    'file': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
-                    'image': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
-                    'video': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
-                    'pdf': '{{ asset('/bundles/mrappsbackend/img/pdf.png') }}',
-                    'zip': '{{ asset('/bundles/mrappsbackend/img/zip.png') }}',
-                    'json': '{{ asset('/bundles/mrappsbackend/img/json.png') }}'
-                };
+            $scope.{{ field.name }}_assets = {
+                'file': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
+                'image': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
+                'video': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
+                'pdf': '{{ asset('/bundles/mrappsbackend/img/pdf.png') }}',
+                'zip': '{{ asset('/bundles/mrappsbackend/img/zip.png') }}',
+                'json': '{{ asset('/bundles/mrappsbackend/img/json.png') }}'
+            };
 
-                {% if field.value is not null %}
-                $scope.form.{{field.name}} = {{field.value.id}};
-                $scope.{{field.name}}_original_name = "{{field.value.original_name}}";
-                $scope.{{field.name}}_mime_type = "{{field.value.mime_type}}";
-                $scope.{{field.name}}_normalized_type = "{{field.value.normalized_type}}";
-                {% endif %}
+            {% if field.value is not null %}
+            $scope.form.{{ field.name }} = {{ field.value.id }};
+            $scope.{{ field.name }}_original_name = "{{ field.value.original_name }}";
+            $scope.{{ field.name }}_mime_type = "{{ field.value.mime_type }}";
+            $scope.{{ field.name }}_normalized_type = "{{ field.value.normalized_type }}";
+            {% endif %}
 
-                $scope.{{field.name}} = new FileUploader({
-                    url: '{{ path('mrapps_backend_uploadfile') }}',
-                    autoUpload: true,
-                    queueLimit: 1
-                });
-                $scope.{{field.name}}.onBeforeUploadItem = function(item) {
-                    $scope.{{field.name}}.clearQueue();
-                    $('#load_{{field.name}}').removeClass('hide');
-                };
-                $scope.{{field.name}}.onAfterAddingFile = function(item) {
-                    document.getElementById("save").disabled = true;
-                    $scope.{{field.name}}_uploading = true;
-                    $scope.{{field.name}}_progress = 0;
-                };
-                $scope.{{field.name}}.onProgressItem = function(item, progress) {
-                    $scope.{{field.name}}_progress = progress;
-                };
-                $scope.{{field.name}}.onSuccessItem = function(fileItem, response, status, headers) {
-                    $('#load_{{field.name}}').addClass('hide');
-                    $scope.{{field.name}}_uploading = false;
-                    $scope.{{field.name}}_progress = 0;
-                    if(!response.success) {
-                        toastr.error('Errore!', response.message);
-                        $scope.{{field.name}}.clearQueue();
-                        $scope.form.{{field.name}} = null;
-                    }else {
-                        $scope.form.{{field.name}} = response.data.id;
-                        $scope.{{field.name}}_original_name = response.data.file_name;
-                        $scope.{{field.name}}_mime_type = response.data.mime;
-                        $scope.{{field.name}}_normalized_type = response.data.normalized_type;
-                    }
-                    document.getElementById("save").disabled = false;
-                };
-                $scope.{{field.name}}.onErrorItem = function(fileItem, response, status, headers) {
-                    $('#load_{{field.name}}').addClass('hide');
-                    $scope.{{field.name}}_uploading = false;
-                    $scope.{{field.name}}_progress = 0;
-                    toastr.error('Errore!', response);
-                    $scope.{{field.name}}.clearQueue();
-                    $scope.form.{{field.name}} = null;
-                };
+            $scope.{{ field.name }} = new FileUploader({
+                url: '{{ path('mrapps_backend_uploadfile') }}',
+                autoUpload: true,
+                queueLimit: 1
+            });
+            $scope
+        .{{ field.name }}.
+            onBeforeUploadItem = function (item) {
+                $scope
+                .{{ field.name }}.
+                clearQueue();
+                $('#load_{{ field.name }}').removeClass('hide');
+            };
+            $scope
+        .{{ field.name }}.
+            onAfterAddingFile = function (item) {
+                document.getElementById("save").disabled = true;
+                $scope.{{ field.name }}_uploading = true;
+                $scope.{{ field.name }}_progress = 0;
+            };
+            $scope
+        .{{ field.name }}.
+            onProgressItem = function (item, progress) {
+                $scope.{{ field.name }}_progress = progress;
+            };
+            $scope
+        .{{ field.name }}.
+            onSuccessItem = function (fileItem, response, status, headers) {
+                $('#load_{{ field.name }}').addClass('hide');
+                $scope.{{ field.name }}_uploading = false;
+                $scope.{{ field.name }}_progress = 0;
+                if (!response.success) {
+                    toastr.error('Errore!', response.message);
+                    $scope
+                .{{ field.name }}.
+                    clearQueue();
+                    $scope.form.{{ field.name }} = null;
+                } else {
+                    $scope.form.{{ field.name }} = response.data.id;
+                    $scope.{{ field.name }}_original_name = response.data.file_name;
+                    $scope.{{ field.name }}_mime_type = response.data.mime;
+                    $scope.{{ field.name }}_normalized_type = response.data.normalized_type;
+                }
+                document.getElementById("save").disabled = false;
+            };
+            $scope
+        .{{ field.name }}.
+            onErrorItem = function (fileItem, response, status, headers) {
+                $('#load_{{ field.name }}').addClass('hide');
+                $scope.{{ field.name }}_uploading = false;
+                $scope.{{ field.name }}_progress = 0;
+                toastr.error('Errore!', response);
+                $scope
+                .{{ field.name }}.
+                clearQueue();
+                $scope.form.{{ field.name }} = null;
+            };
             {% elseif field.type == "gallery" %}
 
-                {% set uploader_name = ['gallery_',field.name]|join %}
+            {% set uploader_name = ['gallery_',field.name]|join %}
 
-                $scope.gallery_{{field.name}}_immagini = [];
+            $scope.gallery_{{ field.name }}_immagini = [];
 
-                $scope.{{uploader_name}} = new FileUploader({
-                    url: '{{path('mrapps_backend_uploadimmagine')}}',
-                    autoUpload: true
-                });
+            $scope.{{ uploader_name }} = new FileUploader({
+                url: '{{ path('mrapps_backend_uploadimmagine') }}',
+                autoUpload: true
+            });
 
-                $scope.{{uploader_name}}.removeId = function(array, index){
-                    array.splice(index, 1);
-                    $scope.form.{{field.name}} = $scope.gallery_{{field.name}}_immagini;
+            $scope
+        .{{ uploader_name }}.
+            removeId = function (array, index) {
+                array.splice(index, 1);
+                $scope.form.{{ field.name }} = $scope.gallery_{{ field.name }}_immagini;
+            }
+
+            $scope
+        .{{ uploader_name }}.
+            onBeforeUploadItem = function (item) {
+                document.getElementById("save").disabled = true;
+                $('#load_{{ field.name }}').removeClass('hide');
+            }
+
+            $scope
+        .{{ uploader_name }}.
+            onSuccessItem = function (fileItem, response, status, headers) {
+                if (response.error.length > 0) {
+                    toastr.error('Errore!', response.error);
+                } else {
+                    $('#load_{{ field.name }}').addClass('hide');
+                    $scope.gallery_{{field.name}}_immagini.push(response);
+                    $scope.form.{{ field.name }} = $scope.gallery_{{ field.name }}_immagini;
+                    toastr.success('Salvato!', "Immagine salvata");
                 }
+                document.getElementById("save").disabled = false;
+            }
 
-                $scope.{{uploader_name}}.onBeforeUploadItem = function(item){
-                    document.getElementById("save").disabled = true;
-                    $('#load_{{field.name}}').removeClass('hide');
+            {% if field.value is not null %}
+            var gallery = {{ field.value | raw }};
+            gallery.forEach(function (item) {
+                $scope.gallery_{{field.name}}_immagini.push(item);
+            });
+            $scope.form.{{ field.name }} = $scope.gallery_{{ field.name }}_immagini;
+            {% endif %}
+
+            $scope.sortableOptions = {
+                stop: function (e, ui) {
+                    $scope.form.{{ field.name }} = $scope.gallery_{{ field.name }}_immagini;
                 }
-
-                $scope.{{uploader_name}}.onSuccessItem = function(fileItem, response, status, headers) {
-                    if(response.error.length > 0) {
-                        toastr.error('Errore!', response.error);
-                    }else {
-                        $('#load_{{field.name}}').addClass('hide');
-                        $scope.gallery_{{field.name}}_immagini.push(response);
-                        $scope.form.{{field.name}} = $scope.gallery_{{field.name}}_immagini;
-                        toastr.success('Salvato!', "Immagine salvata");
-                    }
-                    document.getElementById("save").disabled = false;
-                }
-
-                {% if field.value is not null %}
-                    var gallery = {{field.value | raw}};
-                    gallery.forEach(function(item) {
-                        $scope.gallery_{{field.name}}_immagini.push(item);
-                    });
-                    $scope.form.{{field.name}} = $scope.gallery_{{field.name}}_immagini;
-                {% endif %}
-
-                $scope.sortableOptions = {
-                        stop: function(e, ui) {
-                            $scope.form.{{field.name}} = $scope.gallery_{{field.name}}_immagini;
-                        }
-                    };
+            };
 
             {% elseif field.type == "order" %}
 
-                var prodotti = {{field.value | raw}};
-                $scope.form.{{field.name}} = [];
-                prodotti.forEach(function(item) {
-                    $scope.form.{{field.name}}.push(item);
-                });
+            var prodotti = {{ field.value | raw }};
+            $scope.form.{{ field.name }} = [];
+            prodotti.forEach(function (item) {
+                $scope.form
+                .{{ field.name }}.
+                push(item);
+            });
 
             {% elseif field.type == "data" %}
-                $scope.{{field.name}}_dpOpened = false;
-                $scope.{{field.name}}_dpOpen = function ($event) {
-                    $event.preventDefault();
-                    $event.stopPropagation();
-                    $scope.{{field.name}}_dpOpened = true;
-                };
-                $scope.{{field.name}}_dpOptions = {
-                    startingDay: 1
-                };
+            $scope.{{ field.name }}_dpOpened = false;
+            $scope.{{ field.name }}_dpOpen = function ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.{{ field.name }}_dpOpened = true;
+            };
+            $scope.{{ field.name }}_dpOptions = {
+                startingDay: 1
+            };
 
-                var date_{{field.name}} = new Date('{{field.value}}');
-                $scope.form.{{field.name}} = date_{{field.name}};
+            var date_{{ field.name }} = new Date('{{ field.value }}');
+            $scope.form.{{ field.name }} = date_{{ field.name }};
 
             {% elseif field.type == "select" %}
-                $scope.options_{{ field.name }} = [{% for item in field.options %}{"value":"{{item.value}}", "name":"{{item.name}}"}{% if loop.last == false %},{% endif %}{% endfor %}];
-                {% if field.chosen is defined %}
-                    $scope.form.{{field.name}} = {{field.value|json_encode}};
-                    $("select[name='{{field.name}}']").val({{field.value|json_encode}});
-                    $("select[name='{{field.name}}']").chosen();
-                {% endif %}
-            {% elseif field.type == "textarea" %}
-                {% if field.value is defined %}
-                    $scope.form.{{field.name}} = '{{field.value|e('js')}}';
-                    $scope.form.{{field.name}} = $scope.form.{{field.name}}.toString();
-                {% endif %}
-            {% elseif field.type == "tree" %}
-                $scope.{{field.name}} = {{field.options | raw}};
-                $scope.{{field.name}}Config = {
-                    core:{
-                        multiple : {{ field.multiple|default("false") }},
-                        animation: true,
-                        error : function(error) {
-                            alert('treeCtrl: error from js tree - ' + angular.toJson(error));
-                        },
-                        check_callback : true,
-                        worker : true
-                    }
-                };
-                $scope.{{field.name}}ChangeNode = function(event, object) {
-                    {% if field.multiple is defined and field.multiple %}
-                        var selected_nodes = $scope.{{field.name}}Tree.jstree(true).get_selected();
-                        var tmp = "";
-                        $.each(selected_nodes, function(i,v) {
-                            tmp += v+"|";
-                        });
-                        $scope.form.{{field.name}} = tmp;
-                    {% else %}
-                        if (typeof (object) !== "undefined" && typeof (object.node) !== "undefined") {
-                            $scope.form.{{field.name}} = object.node.id;
-                        }
-                    {% endif %}
-                };
-                {% if field.value is defined %}
-                    $scope.form.{{field.name}} = '{{field.value}}';
-                {% endif %}
-            {% elseif field.type == "pdf" %}
-                $scope.{{field.name}}_url = '';
-                {% if field.value is not null %}
-                {#
-                    TODO: fare la parte per il value
-                #}
-                //var {{field.name}} = {{field.value | raw }};
-                //$scope.form.{{field.name}} = {{field.name}}.id;
-                //$scope.{{field.name}}_url = {{field.name}}.url;
-                {% endif %}
-
-                $scope.{{field.name}} = new FileUploader({
-                    url: '{{path('mrapps_backend_uploadfile')}}',
-                    autoUpload: true,
-                    queueLimit: 1
-                });
-                $scope.{{field.name}}.onBeforeUploadItem = function(item) {
-                    $scope.{{field.name}}.clearQueue();
-                    $('#load_{{field.name}}').removeClass('hide');
-                };
-                $scope.{{field.name}}.onAfterAddingFile = function(item) {
-                    document.getElementById("save").disabled = true;
-                };
-                $scope.{{field.name}}.onSuccessItem = function(fileItem, response, status, headers) {
-                    $('#load_{{field.name}}').addClass('hide');
-                    console.log(response);
-                    if(!response.success) {
-                        toastr.error('Errore!', response.message);
-                        $scope.{{field.name}}.clearQueue();
-                        $scope.form.{{field.name}} = null;
-                    }else {
-                        toastr.success('Salvato!', response.message);
-                        $scope.form.{{field.name}} = response.data;
-                        //$scope.{{field.name}}_url = response.url;
-                    }
-                    document.getElementById("save").disabled = false;
-                };
+            $scope.options_{{ field.name }} = [{% for item in field.options %}{
+                "value": "{{ item.value }}",
+                "name": "{{ item.name }}"
+            }{% if loop.last == false %},{% endif %}{% endfor %}];
+            {% if field.chosen is defined %}
+            $scope.form.{{ field.name }} = {{ field.value|json_encode }};
+            $("select[name='{{ field.name }}']").val({{ field.value|json_encode }});
+            $("select[name='{{ field.name }}']").chosen();
             {% endif %}
-        {% endfor %}
-
-        vm.submitted = false;
-        vm.validateInput = function(name, type) {
-            var input = vm.formValidate[name];
-            return (input.$dirty || vm.submitted) && input.$error[type];
-        };
-
-        {% if create %}
-            toastr.success('Creato!', 'Elemento creato');
-        {% endif %}
-
-        // Submit form
-        vm.submitForm = function() {
-            vm.submitted = true;
-            if (vm.formValidate.$valid) {
-                {% if confirmSave == true %}
-                if(confirm("{% if edit == false %}Creare il nuovo elemento?{% else %}Salvare le modifiche?{% endif %}")) {
-                {% endif %}
-                    document.getElementById("save").disabled = true;
-                    $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
-                    $http({
-                        method: 'POST',
-                        url: '{{ linkSave }}',
-                        data: $scope.form,
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                    }).then(function successCallback(response) {
-                        $('#overlay-waiting').remove();
-                        if (!response.data.success) {
-                            toastr.error(response.data.message, 'Errore!');
-                        } else {
-                            {% if edit %}
-                            toastr.success('Salvato!', 'Elemento modificato');
-                            {% else %}
-                            location.href = '{{ linkEdit }}/' + response.data.data + '?create=true';
-                            {% endif %}
-                        }
-                        document.getElementById("save").disabled = false;
-
-                    }, function errorCallback(response) {
-                        $('#overlay-waiting').remove();
-                        toastr.error('Errore!', 'Errore nella richiesta al server');
-                        document.getElementById("save").disabled = false;
-                    });
-                {% if confirmSave == true %}
+            {% elseif field.type == "textarea" %}
+            {% if field.value is defined %}
+            $scope.form.{{ field.name }} = '{{ field.value|e('js') }}';
+            $scope.form.{{ field.name }} = $scope.form
+        .{{ field.name }}.
+            toString();
+            {% endif %}
+            {% elseif field.type == "tree" %}
+            $scope.{{ field.name }} = {{ field.options | raw }};
+            $scope.{{ field.name }}Config = {
+                core: {
+                    multiple: {{ field.multiple|default("false") }},
+                    animation: true,
+                    error: function (error) {
+                        alert('treeCtrl: error from js tree - ' + angular.toJson(error));
+                    },
+                    check_callback: true,
+                    worker: true
+                }
+            };
+            $scope.{{ field.name }}ChangeNode = function (event, object) {
+                {% if field.multiple is defined and field.multiple %}
+                var selected_nodes = $scope.{{field.name}}Tree.jstree(true).get_selected();
+                var tmp = "";
+                $.each(selected_nodes, function (i, v) {
+                    tmp += v + "|";
+                });
+                $scope.form.{{ field.name }} = tmp;
+                {% else %}
+                if (typeof (object) !== "undefined" && typeof (object.node) !== "undefined") {
+                    $scope.form.{{ field.name }} = object.node.id;
                 }
                 {% endif %}
-            } else {
-                toastr.error('Errore', 'Compila i campi richiesti.');
-                return false;
-            }
-        };
-        var src = null;
-        $scope.tinymceOptions = {
-            inline: false,
-            skin: 'lightgray',
-            theme : 'modern',
-            plugins: [
- "advlist autolink link image imagetools autoresize lists charmap print preview hr anchor pagebreak",
- "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
- "table contextmenu directionality emoticons paste textcolor code"
-            ],
-            toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect",
-            toolbar2: "| link unlink anchor | image | forecolor backcolor  | print preview code",
-            image_advtab: true ,
+            };
+            {% if field.value is defined %}
+            $scope.form.{{ field.name }} = '{{ field.value }}';
+            {% endif %}
+            {% elseif field.type == "pdf" %}
+            $scope.{{ field.name }}_url = '';
+            {% if field.value is not null %}
+            {#
+                TODO: fare la parte per il value
+            #}
+            //var {{ field.name }} = {{ field.value | raw }};
+            //$scope.form.{{ field.name }} = {{ field.name }}.id;
+            //$scope.{{ field.name }}_url = {{ field.name }}.url;
+            {% endif %}
 
-            paste_data_images: true,
-            images_upload_url: "{{path('mrapps_backend_uploadimmagine')}}?texarea=1",
-            images_upload_base_path: "{{ images_url }}/textarea/",
-            images_upload_credentials: true,
-            file_browser_callback: function(field_name, url, type, win) {
-                tinymce.activeEditor.windowManager.open({
-                    title: 'Insert file',
-					          body: [
-      		              {name: 'file', type: 'textbox', subtype: 'file', label: 'Upload', onchange: uploadFile},
-                        {type:'container', 'minHeight': 50, 'minWidth': 50, html:'<div id="load_textarea" class="hide sk-circle"><div class="sk-circle1 sk-child"></div><div class="sk-circle2 sk-child"></div><div class="sk-circle3 sk-child"></div><div class="sk-circle4 sk-child"></div><div class="sk-circle5 sk-child"></div><div class="sk-circle6 sk-child"></div><div class="sk-circle7 sk-child"></div><div class="sk-circle8 sk-child"></div><div class="sk-circle9 sk-child"></div><div class="sk-circle10 sk-child"></div><div class="sk-circle11 sk-child"></div><div class="sk-circle12 sk-child"></div></div>' },
+            $scope.{{ field.name }} = new FileUploader({
+                url: '{{ path('mrapps_backend_uploadfile') }}',
+                autoUpload: true,
+                queueLimit: 1
+            });
+            $scope
+        .{{ field.name }}.
+            onBeforeUploadItem = function (item) {
+                $scope
+                .{{ field.name }}.
+                clearQueue();
+                $('#load_{{ field.name }}').removeClass('hide');
+            };
+            $scope
+        .{{ field.name }}.
+            onAfterAddingFile = function (item) {
+                document.getElementById("save").disabled = true;
+            };
+            $scope
+        .{{ field.name }}.
+            onSuccessItem = function (fileItem, response, status, headers) {
+                $('#load_{{ field.name }}').addClass('hide');
+                console.log(response);
+                if (!response.success) {
+                    toastr.error('Errore!', response.message);
+                    $scope
+                .{{ field.name }}.
+                    clearQueue();
+                    $scope.form.{{ field.name }} = null;
+                } else {
+                    toastr.success('Salvato!', response.message);
+                    $scope.form.{{ field.name }} = response.data;
+                    //$scope.{{ field.name }}_url = response.url;
+                }
+                document.getElementById("save").disabled = false;
+            };
+            {% endif %}
+            {% endfor %}
 
-				            ],
-					          buttons: [{
-                        text: 'Insert',
-						            classes: 'widget btn primary first abs-layout-item',
-                        id: 'insertImage',
-						            onclick: function( e ) {
-								            if(src != null){
-								                tinyMCE.execCommand('mceInsertContent', false, '<img src="'+ tinymce.activeEditor.settings.images_upload_base_path + src + '"/>');
-								                src = null;
-					                  }
-                            tinymce.activeEditor.windowManager.close();
-                            tinymce.activeEditor.windowManager.close();
-					              },
-                    }, {
-                        text: 'Close',
-						            onclick: function( e ) {
-								            tinymce.activeEditor.windowManager.close();
-				                },
-                    }]
-                });
-		        }
-        };
+            vm.submitted = false;
+            vm.validateInput = function (name, type) {
+                var input = vm.formValidate[name];
+                return (input.$dirty || vm.submitted) && input.$error[type];
+            };
 
-        function uploadFile(a){
-            var file = a.currentTarget.files[0];
-            $('#load_textarea').removeClass('hide');
-            $('#insertImage').addClass('mce-disabled');
-            $('#insertImage > button').prop('disabled', true);
-            tinymce.activeEditor.editorUpload.uploadImages(customUpload);
+            {% if create %}
+            toastr.success('Creato!', 'Elemento creato');
+            {% endif %}
 
-            function customUpload(success){
+            // Submit form
+            vm.submitForm = function () {
+                vm.submitted = true;
+                if (vm.formValidate.$valid) {
+                    {% if confirmSave == true %}
+                    if (confirm("{% if edit == false %}Creare il nuovo elemento?{% else %}Salvare le modifiche?{% endif %}")) {
+                        {% endif %}
+                        document.getElementById("save").disabled = true;
+                        $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
+                        $http({
+                            method: 'POST',
+                            url: '{{ linkSave }}',
+                            data: $scope.form,
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                        }).then(function successCallback(response) {
+                            $('#overlay-waiting').remove();
+                            if (!response.data.success) {
+                                toastr.error(response.data.message, 'Errore!');
+                            } else {
+                                {% if edit %}
+                                toastr.success('Salvato!', 'Elemento modificato');
+                                {% else %}
+                                location.href = '{{ linkEdit }}/' + response.data.data + '?create=true';
+                                {% endif %}
+                            }
+                            document.getElementById("save").disabled = false;
 
-            		var xhr = new XMLHttpRequest();
-                xhr.withCredentials = tinymce.activeEditor.settings.images_upload_credentials;
-
-                xhr.open('POST', tinymce.activeEditor.settings.images_upload_url);
-
-                xhr.onload = function () {
-
-                		var json;
-                    if (xhr.status != 200) {
-                    		failure("HTTP Error: " + xhr.status);
-                        return;
+                        }, function errorCallback(response) {
+                            $('#overlay-waiting').remove();
+                            toastr.error('Errore!', 'Errore nella richiesta al server');
+                            document.getElementById("save").disabled = false;
+                        });
+                        {% if confirmSave == true %}
                     }
+                    {% endif %}
+                } else {
+                    toastr.error('Errore', 'Compila i campi richiesti.');
+                    return false;
+                }
+            };
+            var src = null;
+            $scope.tinymceOptions = {
+                inline: false,
+                skin: 'lightgray',
+                theme: 'modern',
+                plugins: [
+                    "advlist autolink link image imagetools autoresize lists charmap print preview hr anchor pagebreak",
+                    "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
+                    "table contextmenu directionality emoticons paste textcolor code"
+                ],
+                toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect",
+                toolbar2: "| link unlink anchor | image | forecolor backcolor  | print preview code",
+                image_advtab: true,
 
-                    json = JSON.parse(xhr.responseText);
+                paste_data_images: true,
+                images_upload_url: "{{ path('mrapps_backend_uploadimmagine') }}?texarea=1",
+                images_upload_base_path: "{{ images_url }}/textarea/",
+                images_upload_credentials: true,
+                file_browser_callback: function (field_name, url, type, win) {
+                    tinymce.activeEditor.windowManager.open({
+                        title: 'Insert file',
+                        body: [
+                            {name: 'file', type: 'textbox', subtype: 'file', label: 'Upload', onchange: uploadFile},
+                            {
+                                type: 'container',
+                                'minHeight': 50,
+                                'minWidth': 50,
+                                html: '<div id="load_textarea" class="hide sk-circle"><div class="sk-circle1 sk-child"></div><div class="sk-circle2 sk-child"></div><div class="sk-circle3 sk-child"></div><div class="sk-circle4 sk-child"></div><div class="sk-circle5 sk-child"></div><div class="sk-circle6 sk-child"></div><div class="sk-circle7 sk-child"></div><div class="sk-circle8 sk-child"></div><div class="sk-circle9 sk-child"></div><div class="sk-circle10 sk-child"></div><div class="sk-circle11 sk-child"></div><div class="sk-circle12 sk-child"></div></div>'
+                            },
 
-                    if (!json || typeof json.location != "string") {
-                    		failure("Invalid JSON: " + xhr.responseText);
-                        return;
-                    }
-                    $('#load_textarea').addClass('hide');
-                    $('#insertImage').removeClass('mce-disabled');
-                    $('#insertImage > button').prop('disabled', false);
-                    src = json.location;
-                };
+                        ],
+                        buttons: [{
+                            text: 'Insert',
+                            classes: 'widget btn primary first abs-layout-item',
+                            id: 'insertImage',
+                            onclick: function (e) {
+                                if (src != null) {
+                                    tinyMCE.execCommand('mceInsertContent', false, '<img src="' + tinymce.activeEditor.settings.images_upload_base_path + src + '"/>');
+                                    src = null;
+                                }
+                                tinymce.activeEditor.windowManager.close();
+                                tinymce.activeEditor.windowManager.close();
+                            },
+                        }, {
+                            text: 'Close',
+                            onclick: function (e) {
+                                tinymce.activeEditor.windowManager.close();
+                            },
+                        }]
+                    });
+                }
+            };
 
-                var formData = new FormData();
-                formData.append('file', file, 'file');
+            function uploadFile(a) {
+                var file = a.currentTarget.files[0];
+                $('#load_textarea').removeClass('hide');
+                $('#insertImage').addClass('mce-disabled');
+                $('#insertImage > button').prop('disabled', true);
+                tinymce.activeEditor.editorUpload.uploadImages(customUpload);
 
-                xhr.send(formData);
+                function customUpload(success) {
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.withCredentials = tinymce.activeEditor.settings.images_upload_credentials;
+
+                    xhr.open('POST', tinymce.activeEditor.settings.images_upload_url);
+
+                    xhr.onload = function () {
+
+                        var json;
+                        if (xhr.status != 200) {
+                            failure("HTTP Error: " + xhr.status);
+                            return;
+                        }
+
+                        json = JSON.parse(xhr.responseText);
+
+                        if (!json || typeof json.location != "string") {
+                            failure("Invalid JSON: " + xhr.responseText);
+                            return;
+                        }
+                        $('#load_textarea').addClass('hide');
+                        $('#insertImage').removeClass('mce-disabled');
+                        $('#insertImage > button').prop('disabled', false);
+                        src = json.location;
+                    };
+
+                    var formData = new FormData();
+                    formData.append('file', file, 'file');
+
+                    xhr.send(formData);
+                }
             }
         }
-    }
     </script>
 {% endblock javascript %}

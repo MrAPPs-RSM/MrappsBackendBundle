@@ -146,6 +146,7 @@ class DefaultController extends Controller
             $imagesUrl = $this->getLocalUrlDir('');
         }
 
+
         return $this->render('MrappsBackendBundle:Default:new.html.twig', array(
             'title' => $title,
             'fields' => $fields,
@@ -158,6 +159,17 @@ class DefaultController extends Controller
             'images_url' => $imagesUrl,
             'angular' => '"localytics.directives","angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate"',
         ));
+    }
+
+    private function getThumbnailUrl($imageUrl = null)
+    {
+        if (Utils::bundleLiipExists($this->container)) {
+
+            return $this->get('liip_imagine.cache.manager')->getBrowserPath($imageUrl, 'backend_thumbnail');
+
+        } else {
+            return $imageUrl;
+        }
     }
 
     /**
@@ -188,6 +200,8 @@ class DefaultController extends Controller
 
             $localDir = $this->getLocalUploadDir('mrapps_backend_images');
 
+            // $this->container->get('liip_imagine.controller')->filterAction($request, $notizia->getFoto()->getUrl(), 'backend_thumbnail')
+
             if (Utils::bundleMrappsAmazonExists($this->container)) {
 
                 /* @var $s3 \Mrapps\AmazonBundle\Handler\S3Handler */
@@ -210,10 +224,11 @@ class DefaultController extends Controller
                 $em->persist($immagine);
                 $em->flush();
 
+                $thumbnailUrl = $this->getThumbnailUrl($immagine->getUrl());
 
-                $responseLocation = $immagine->getUrl();
+                $responseLocation = $thumbnailUrl;
                 $responseId = $immagine->getId();
-                $responseUrl = $immagine->getUrl();
+                $responseUrl = $thumbnailUrl;
                 $responseError = '';
 
             } else {
@@ -255,9 +270,11 @@ class DefaultController extends Controller
                     $em->persist($immagine);
                     $em->flush();
 
-                    $responseLocation = $this->getRequest()->getSchemeAndHttpHost() . '/' . $url;
+                    $thumbnailUrl = $this->getThumbnailUrl($url);
+
+                    $responseLocation = $thumbnailUrl;
                     $responseId = $immagine->getId();
-                    $responseUrl = $this->getRequest()->getSchemeAndHttpHost() . '/' . $url;
+                    $responseUrl = $thumbnailUrl;
                     $responseError = '';
 
                     $success = true;
@@ -313,7 +330,7 @@ class DefaultController extends Controller
 
             $mimeType = $em->getRepository('MrappsBackendBundle:File')->getMimeType($filePath);
 
-            $url=null;
+            $url = null;
 
             if (Utils::bundleMrappsAmazonExists($this->container)) {
 

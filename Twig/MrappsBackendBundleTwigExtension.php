@@ -5,11 +5,13 @@ namespace Mrapps\BackendBundle\Twig;
 use Twig_Extension;
 use Mrapps\BackendBundle\Classes\Utils;
 
-class MrappsBackendBundleTwigExtension extends Twig_Extension {
-    
+class MrappsBackendBundleTwigExtension extends Twig_Extension
+{
+
     private $container;
 
-    public function __construct($container) {
+    public function __construct($container)
+    {
         $this->container = $container;
     }
 
@@ -18,22 +20,29 @@ class MrappsBackendBundleTwigExtension extends Twig_Extension {
      *
      * @return array An array of functions
      */
-    public function getFunctions() {
+    public function getFunctions()
+    {
         return array();
     }
-    
-    public function getFilters() {
+
+    public function getFilters()
+    {
         return array(
-            new \Twig_SimpleFilter('quote', function($string) {
+            new \Twig_SimpleFilter('quote', function ($string) {
                 return Utils::replaceQuote($string);
+            }),
+            new \Twig_SimpleFilter('check_liip_exists', function () {
+
+                return Utils::bundleLiipExists($this->container);
             }),
         );
     }
-    
+
     /**
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return 'mrapps_backendbundle_twig_extension';
     }
 }

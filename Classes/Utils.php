@@ -5,35 +5,44 @@ namespace Mrapps\BackendBundle\Classes;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class Utils {
-    
-    public static function bundleExists($container = null, $bundleName = '') {
-        
-        if($container !== null && strlen($bundleName) > 0) {
+class Utils
+{
+
+    public static function bundleExists($container = null, $bundleName = '')
+    {
+
+        if ($container !== null && strlen($bundleName) > 0) {
             $bundles = $container->getParameter('kernel.bundles');
             return array_key_exists($bundleName, $bundles);
         }
-        
+
         return false;
     }
-    
-    public static function bundleMrappsAmazonExists($container = null) {
+
+    public static function bundleMrappsAmazonExists($container = null)
+    {
         return Utils::bundleExists($container, 'MrappsAmazonBundle');
     }
 
-    
-    public static function setRelazioneTexarea($texarea, $item, $nomerelazione, $imagesUrl, $em) {
-        
+    public static function bundleLiipExists($container = null)
+    {
+        return Utils::bundleExists($container, 'LiipImagineBundle');
+    }
+
+
+    public static function setRelazioneTexarea($texarea, $item, $nomerelazione, $imagesUrl, $em)
+    {
+
         $risultato = null;
-        preg_match_all('(src="'.$imagesUrl.'(.*?)")', $texarea , $risultato);
-        
+        preg_match_all('(src="' . $imagesUrl . '(.*?)")', $texarea, $risultato);
+
         $oggetti = $em->getRepository("MrappsBackendBundle:$nomerelazione")->findBy(array("item" => $item));
         foreach ($oggetti as $oggetto) {
             $em->remove($oggetto);
         }
-        
-        $nomerelazione = "MrappsBackendBundle\\Entity\\".$nomerelazione;
-        if(isset($risultato[1]) && is_array($risultato[1])) {
+
+        $nomerelazione = "MrappsBackendBundle\\Entity\\" . $nomerelazione;
+        if (isset($risultato[1]) && is_array($risultato[1])) {
             foreach ($risultato[1] as $value) {
                 $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array("url" => $value));
                 $relazione = new $nomerelazione();
@@ -45,9 +54,10 @@ class Utils {
         }
     }
 
-    
-    static public function slugify($text) {
-        
+
+    static public function slugify($text)
+    {
+
         // replace non letter or digits by -
         $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
 
@@ -63,39 +73,40 @@ class Utils {
         // remove unwanted characters
         $text = preg_replace('~[^-\w]+~', '', $text);
 
-        if(empty($text))
-        {
+        if (empty($text)) {
             return null;
         }
 
         return $text;
     }
-    
+
     /**
-     * 
+     *
      * @param bool $stato
      * @param String $messaggio
      * @param array $valori
      * @return type
      */
-    public static function generateResponse($stato, $messaggio = null, $valori = null, $errorCode = null) {
-        
+    public static function generateResponse($stato, $messaggio = null, $valori = null, $errorCode = null)
+    {
+
         //Gestione errori multipli
-        if(is_array($messaggio)) {
+        if (is_array($messaggio)) {
             $valori['errors'] = $messaggio;
             $messaggio = '';
         }
-        
+
         $data = array('success' => $stato, 'message' => $messaggio, 'data' => $valori);
-        if($errorCode !== null) $data['error_code'] = $errorCode;
-        
+        if ($errorCode !== null) $data['error_code'] = $errorCode;
+
         $json = new JsonResponse();
         $json->setData($data);
 
         return $json;
     }
 
-    public static function getHttpResponse($url, $content = null) {
+    public static function getHttpResponse($url, $content = null)
+    {
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -122,7 +133,8 @@ class Utils {
         return $body;
     }
 
-    public static function getDateStringForUniqueFiles() {
+    public static function getDateStringForUniqueFiles()
+    {
 
         $micro_date = microtime();
         $date_array = explode(" ", $micro_date);
@@ -131,64 +143,67 @@ class Utils {
         return $date . '_' . ($millis[1]) . '_' . mt_rand(1, 999999);
     }
 
-    public static function getAcceptedTypes($container = null, $type = '') {
+    public static function getAcceptedTypes($container = null, $type = '')
+    {
 
         $acceptedTypes = array();
 
         $type = strtolower(trim($type));
-        if($container !== null && strlen($type) > 0) {
-            $parameterName = 'mrapps_backend.file_accepted_types.'.$type;
+        if ($container !== null && strlen($type) > 0) {
+            $parameterName = 'mrapps_backend.file_accepted_types.' . $type;
             $exploded = explode(',', $container->hasParameter($parameterName) ? $container->getParameter($parameterName) : '');
             foreach ($exploded as $t) {
                 $t = trim($t);
-                if(strlen($t) > 0) $acceptedTypes[] = $t;
+                if (strlen($t) > 0) $acceptedTypes[] = $t;
             }
         }
 
         return $acceptedTypes;
     }
-    
-    public static function isValidFile($container = null, $type = '', UploadedFile $file = null) {
-        
+
+    public static function isValidFile($container = null, $type = '', UploadedFile $file = null)
+    {
+
         $type = strtolower(trim($type));
-        if($container !== null && $file !== null) {
+        if ($container !== null && $file !== null) {
 
             $acceptedTypes = Utils::getAcceptedTypes($container, $type);
-            
+
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $mime = strtolower(trim(finfo_file($finfo, $file->getPathname())));
             finfo_close($finfo);
 
             return in_array($mime, $acceptedTypes);
         }
-        
+
         return false;
     }
-    
-    public static function getListResults($em = null, $entity = '', $count = 0, $page = 1, $filters = array(), $sorting = array()) {
-        
-        if($em !== null && strlen($entity) > 0) {
-            
+
+    public static function getListResults($em = null, $entity = '', $count = 0, $page = 1, $filters = array(), $sorting = array())
+    {
+
+        if ($em !== null && strlen($entity) > 0) {
+
             $count = intval($count);
             $page = intval($page);
 
             //Fix parametri
-            if($count < 0) $count = 0;
-            if($page < 1) $page = 1;
-            if(!is_array($filters)) $filters = array();
-            if(!is_array($sorting)) $sorting = array('createdAt' => 'desc');    //Sorting di default
+            if ($count < 0) $count = 0;
+            if ($page < 1) $page = 1;
+            if (!is_array($filters)) $filters = array();
+            if (!is_array($sorting)) $sorting = array('createdAt' => 'desc');    //Sorting di default
             //--------------------------------------------------------------------------------------------
 
             //Filtri
             $params = array();
             $where = '';
-            if(count($filters) > 0) {
+            if (count($filters) > 0) {
                 $tmp = array();
                 foreach ($filters as $campo => $valore) {
                     $tmp[] = sprintf(" a.%s LIKE :%s ", $campo, $campo);
-                    $params[$campo] = '%'.$valore.'%';
+                    $params[$campo] = '%' . $valore . '%';
                 }
-                $where = 'WHERE '.implode('AND', $tmp);
+                $where = 'WHERE ' . implode('AND', $tmp);
             }
 
             //Stringa order by
@@ -198,27 +213,28 @@ class Utils {
             }
 
             $query = "SELECT a FROM {$entity} a";
-            if(strlen($where) > 0) $query .= ' '.$where;
-            if(strlen($orderBy) > 0) {
-                $orderBy = substr($orderBy, 0, strlen($orderBy)-1);    //Elimina l'ultima virgola
-                $query .= ' ORDER BY '.$orderBy;
+            if (strlen($where) > 0) $query .= ' ' . $where;
+            if (strlen($orderBy) > 0) {
+                $orderBy = substr($orderBy, 0, strlen($orderBy) - 1);    //Elimina l'ultima virgola
+                $query .= ' ORDER BY ' . $orderBy;
             }
 
             $tmp = $em->createQuery($query);    //->setMaxResults($count)->setFirstResult(($page-1)*$count)
 
-            if(count($params) > 0) {
+            if (count($params) > 0) {
                 $tmp->setParameters($params);
             }
 
             return $tmp->execute();
         }
-        
+
         return array();
     }
-    
-    public static function replaceQuote($string = '') {
 
-        if(strlen(trim($string)) > 0) {
+    public static function replaceQuote($string = '')
+    {
+
+        if (strlen(trim($string)) > 0) {
             return str_replace("'", "\'", $string);
         }
 
@@ -236,7 +252,8 @@ class Utils {
         return (($ts >= $start_ts) && ($ts <= $end_ts));
     }
 
-    public static function check_youtube($container, $url) {
+    public static function check_youtube($container, $url)
+    {
 
         $data = [];
 
@@ -245,7 +262,7 @@ class Utils {
             $videoId = Utils::getYouTubeIdFromUrl($url);
             $googleServerKey = ($container->hasParameter('google_server_key')) ? $container->getParameter('google_server_key') : '';
 
-            if(strlen($videoId) > 0 && strlen($googleServerKey) > 0) {
+            if (strlen($videoId) > 0 && strlen($googleServerKey) > 0) {
 
                 $apisUrl = sprintf("https://www.googleapis.com/youtube/v3/videos?id=%s&key=%s&part=snippet&fields=items(snippet(title,thumbnails))", $videoId, $googleServerKey);
                 $info = json_decode(Utils::getHttpResponse($apisUrl), true);
@@ -253,12 +270,13 @@ class Utils {
                 if ($info !== null && is_array($info)) {
 
                     //Navigazione nella struttura del risultato
-                    if( isset($info['items']) &&
+                    if (isset($info['items']) &&
                         is_array($info['items']) &&
                         isset($info['items'][0]) &&
                         is_array($info['items'][0]) &&
                         isset($info['items'][0]['snippet']) &&
-                        is_array($info['items'][0]['snippet'])) {
+                        is_array($info['items'][0]['snippet'])
+                    ) {
 
                         $snippet = $info['items'][0]['snippet'];
 
@@ -267,10 +285,10 @@ class Utils {
 
                         //Thumbnail
                         $thumbnail = '';
-                        if(isset($snippet['thumbnails']) && is_array($snippet['thumbnails'])) {
+                        if (isset($snippet['thumbnails']) && is_array($snippet['thumbnails'])) {
                             foreach ($snippet['thumbnails'] as $t) {
 
-                                if(isset($t['url']) && strlen($t['url']) > 0) {
+                                if (isset($t['url']) && strlen($t['url']) > 0) {
                                     $thumbnail = $t['url'];
                                     break;
                                 }
@@ -280,7 +298,7 @@ class Utils {
                         $data['exists'] = true;
                         $data['title'] = $title;
                         $data['url'] = $url;
-                        if(strlen($thumbnail) > 0) $data['thumb'] = $thumbnail;
+                        if (strlen($thumbnail) > 0) $data['thumb'] = $thumbnail;
                     }
                 }
             }
@@ -290,7 +308,8 @@ class Utils {
     }
 
 
-    public static function getYouTubeIdFromUrl($text) {
+    public static function getYouTubeIdFromUrl($text)
+    {
         return preg_replace('~https?://(?:[0-9A-Z-]+\.)?(?:youtu\.be/| youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>| </a>))[?=&+%\w.-]*~ix', '$1', $text);
     }
 }

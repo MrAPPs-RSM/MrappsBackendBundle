@@ -31,7 +31,7 @@ class MrappsBackendExtension extends Extension
         $container->setParameter('mrapps_backend.file_accepted_types.json', $config['file_accepted_types']['json']);
         $container->setParameter('mrapps_backend.sidebar_menu', $config['sidebar_menu']);
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.xml');
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.yml');
     }
 }

@@ -22,6 +22,31 @@ escludere la cartella web/uploads perchè è il percorso dove vengono salvate le
    ]
 ```
 
+##setup minimal routing.yml
+
+```
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"
+    
+mrapps_backend:
+    resource: "@MrappsBackendBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /change_password
+    
+```
+
+
 ##setup config.yml per usare liip_bundle + MrappsAmazonBundle
 
 ```
@@ -49,13 +74,12 @@ liip_imagine:
     data_loader: stream.amazon_s3
     cache: cache.amazon_s3
     filter_sets:
-        
         backend_thumbnail:
-            data_loader: stream.amazon_s3
-            quality: 80
-            format: png
+            quality: 85
+            format: jpeg
             filters:
-                relative_resize: { widen: 100 }
+                relative_resize: { widen: 500 }
+                background: { color: '#FFFFFF' }
 ```
 
 ##setup config.yml##
