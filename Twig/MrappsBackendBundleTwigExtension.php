@@ -30,11 +30,7 @@ class MrappsBackendBundleTwigExtension extends Twig_Extension
         return array(
             new \Twig_SimpleFilter('quote', function ($string) {
                 return Utils::replaceQuote($string);
-            }),
-            new \Twig_SimpleFilter('check_liip_exists', function () {
-
-                return Utils::bundleLiipExists($this->container);
-            }),
+            })
         );
     }
 
