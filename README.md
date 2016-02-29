@@ -122,6 +122,42 @@ mrapps_backend:
     sidebar_menu: [{ has_submenu: true, min_role: ROLE_USER, title: Voce 1, icon: icon-test, submenu: [{ title: Submenu 1, route_name: mrapps_backend_index }, { title: Submenu 2, route_name: mrapps_backend_index }] }, { has_submenu: false, min_role: ROLE_ADMIN, title: Voce 2, icon: icon-test, route_name: mrapps_backend_index }]
 ```
 
+##app/config/services.yml (sezione services)##
+
+```
+amazonS3:
+     class: Aws\S3\S3Client
+     factory_class: Aws\S3\S3Client
+     factory_method: 'factory'
+     arguments:
+         -
+             key: %amazon_access_key%
+             secret: %amazon_secret_key%
+             region: %amazon_region%
+
+
+liip_imagine.data.loader.stream.amazon_s3:
+     class: Liip\ImagineBundle\Imagine\Binary\Loader\StreamLoader
+     arguments:
+         - "@liip_imagine"
+         - 'gaufrette://amazon_s3/'
+     tags:
+         - { name: 'liip_imagine.data.loader', loader: 'stream.amazon_s3' }
+
+
+liip_imagine.cache.resolver.amazon_s3:
+       class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
+       arguments:
+           - "@amazonS3"
+           - "%amazon_s3_bucket%"
+       tags:
+           - { name: 'liip_imagine.cache.resolver', resolver: 'cache.amazon_s3' }
+
+
+liip_imagine.controller.imagine_filter:
+     class: Liip\ImagineBundle\Controller\ImagineController
+```
+
 ##bower.json##
 
 ```
