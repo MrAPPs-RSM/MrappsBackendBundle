@@ -11,7 +11,7 @@ class BaseBackendController extends Controller
     public function generateThumbnailsList($url, $thumbnails = array())
     {
         foreach ($thumbnails as $item) {
-            $this->get('liip_imagine.cache.manager')->filter($url, $item);
+            $this->get('liip_imagine.cache.manager')->generateUrl($url, $item);
         }
     }
 
