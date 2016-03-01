@@ -127,13 +127,13 @@
                     $scope.deleteajax = function (id){
                         var data = { id: id };
                         swal({
-                            title: "Are you sure?",
-                            text: "You will not be able to recover this imaginary file!",
+                            title: "Procedere?",
+                            text: "{{ deleteMessages['question'] }}",
                             type: "warning",
                             showCancelButton: true,
                             confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "Yes, delete it!",
-                            cancelButtonText: "No, cancel plx!",
+                            confirmButtonText: "Si",
+                            cancelButtonText: "No",
                             closeOnConfirm: false,
                             closeOnCancel: false
                         }, function(isConfirm){
@@ -141,16 +141,16 @@
                                 $http.post('{{ linkDelete }}', data )
                                     .then(function successCallback(response) {
                                         if(response.data.success) {
-                                            swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                                            swal("Completato!", "{{ deleteMessages['success'] }}", "success");
                                             self.tableParams2.reload();
                                         }else{
-                                            swal("Error", response.data.message, "error");
+                                            swal("Errore!", response.data.message, "error");
                                         }
                                     }, function errorCallback(response) {
-                                        swal("Error", "Server Error", "error");
+                                        swal("Errore!", "{{ deleteMessages['error'] }}", "error");
                                     });
                             } else {
-                                swal("Cancelled", "Your imaginary file is safe :)", "error");
+                                swal("Errore!", "{{ deleteMessages['cancel'] }}", "error");
                             }
                         });
                     };

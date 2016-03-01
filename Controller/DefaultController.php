@@ -115,8 +115,13 @@ class DefaultController extends Controller
         return new RedirectResponse($this->generateUrl($defaultRouteName));
     }
 
-    public function __listAction($title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null)
+    public function __listAction($title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null, $deleteMessages = array())
     {
+        if(!is_array($deleteMessages)) $deleteMessages = array();
+        if(!isset($deleteMessages['question'])) $deleteMessages['question'] = "Procedere con l'eliminazione?";
+        if(!isset($deleteMessages['success'])) $deleteMessages['success'] = 'Procedura completata con successo.';
+        if(!isset($deleteMessages['error'])) $deleteMessages['error'] = 'Si è verificato un problema durante la procedura di eliminazione; si prega di riprovare più tardi.';
+        if(!isset($deleteMessages['cancel'])) $deleteMessages['cancel'] = 'Operazione annullata.';
 
         return $this->render('MrappsBackendBundle:Default:table.html.twig', array(
             'title' => $title,
@@ -132,6 +137,7 @@ class DefaultController extends Controller
             'linkCustom' => $linkCustom,
             'linkAction' => $linkAction,
             'angular' => '"ngTable","ngResource","ui.sortable"',
+            'deleteMessages' => $deleteMessages,
         ));
     }
 
