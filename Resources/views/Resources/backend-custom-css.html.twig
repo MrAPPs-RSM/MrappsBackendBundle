@@ -1,14 +1,37 @@
 <style>
-    {% if navbar_color is not null %}
-    .topnavbar .nav-wrapper {
-        background-image: none !important;
-        background-color: {{ navbar_color }} !important;
-    }
-    {% endif %}
+    
+    
+    
+.topnavbar .navbar-header .brand-logo {
+	padding: 0px 0px;
+}
 
-    {% if navbar_text_color is not null %}
-    .topnavbar .nav-wrapper ul li a {
-        color: {{ navbar_text_color }} !important;
-    }
-    {% endif %}
+.topnavbar .navbar-header .brand-logo > img,
+.topnavbar .navbar-header .brand-logo-collapsed > img {
+    width: auto;
+    height: auto;
+    max-width: 200px;
+    max-height: 50px;
+}
+
+a {
+	-webkit-transition: all 0.2s;
+	-moz-transition: all 0.2s;
+	-o-transition: all 0.2s;
+	-ms-transition: all 0.2s;
+	transition: all 0.2s;
+}
+
+.topnavbar .navbar-nav > li > a, .topnavbar .navbar-nav > .open > a {
+	color:  {{navbar_text_color}};
+    background: {{navbar_color}};
+}
+
+.topnavbar .navbar-nav > li > a:hover, .topnavbar .navbar-nav > .open > a:hover {
+	color: yellow; /* Aggiungere variabile navbar_text_hover_color */
+}
+
+@media screen and (min-width: 768px) {
+	.topnavbar, .topnavbar .nav-wrapper { background-color: {{navbar_color}}; background-image: none; background-repeat: inherit; filter: none; }	
+}
 </style>
