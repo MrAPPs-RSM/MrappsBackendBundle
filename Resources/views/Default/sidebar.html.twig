@@ -37,7 +37,8 @@
                             {% if item.icon is defined %}<em class="fa {{ item.icon }}"></em> {% endif %}
                             <span class="ng-binding">{{ item.title }}</span>
                         </a>
-                        <ul id="backendSidebar{{ loop.index }}" class="nav sidebar-subnav ng-scope panel-collapse collapse">
+                        {# Per tenere l'accordion aperta, aggiungere la classe in all'ul qui sotto (come adesso) #}
+                        <ul id="backendSidebar{{ loop.index }}" class="nav sidebar-subnav ng-scope panel-collapse collapse in">
                             {% for sub_item in item.url %}
                                 <li class="ng-scope {% if sub_item.route_name == active_page %}active{% endif %}">
                                     <a ng-href="{{ sub_item.url }}" title="{{ sub_item.title }}" class="ng-scope">

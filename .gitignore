@@ -38,3 +38,5 @@
 
 # phpstorm
 .idea
+
+*.DS_Store
