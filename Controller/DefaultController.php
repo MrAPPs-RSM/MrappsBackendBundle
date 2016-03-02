@@ -95,8 +95,12 @@ class DefaultController extends Controller
             );
         }
 
+        $actual_link = preg_replace('/\/app_dev.php/', '', $_SERVER['REQUEST_URI']);
+        $route = $this->get('router')->match($actual_link)['_route'];
+
         return $this->render('MrappsBackendBundle:Default:sidebar.html.twig', array(
             'menu' => $menu,
+            'active_page' => $route,
         ));
     }
 
@@ -117,11 +121,11 @@ class DefaultController extends Controller
 
     public function __listAction($title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null, $deleteMessages = array())
     {
-        if(!is_array($deleteMessages)) $deleteMessages = array();
-        if(!isset($deleteMessages['question'])) $deleteMessages['question'] = "Procedere con l'eliminazione?";
-        if(!isset($deleteMessages['success'])) $deleteMessages['success'] = 'Procedura completata con successo.';
-        if(!isset($deleteMessages['error'])) $deleteMessages['error'] = 'Si è verificato un problema durante la procedura di eliminazione; si prega di riprovare più tardi.';
-        if(!isset($deleteMessages['cancel'])) $deleteMessages['cancel'] = 'Operazione annullata.';
+        if (!is_array($deleteMessages)) $deleteMessages = array();
+        if (!isset($deleteMessages['question'])) $deleteMessages['question'] = "Procedere con l'eliminazione?";
+        if (!isset($deleteMessages['success'])) $deleteMessages['success'] = 'Procedura completata con successo.';
+        if (!isset($deleteMessages['error'])) $deleteMessages['error'] = 'Si è verificato un problema durante la procedura di eliminazione; si prega di riprovare più tardi.';
+        if (!isset($deleteMessages['cancel'])) $deleteMessages['cancel'] = 'Operazione annullata.';
 
         return $this->render('MrappsBackendBundle:Default:table.html.twig', array(
             'title' => $title,
