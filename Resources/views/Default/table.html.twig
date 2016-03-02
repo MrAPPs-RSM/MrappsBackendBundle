@@ -6,7 +6,7 @@
 {% block content %}
 <div ng-controller="NGTableCtrl as table" class="container-fluid">
     <div class="panel panel-default">
-        <div class="panel-heading">
+        <div class="panel-heading clearfix">
             <div class="panel-title {% if linkNew is not null or linkCustom is not null %}pull-left{% endif %}">Filtri</div>
             {% if linkNew is not null %}
                 <button type="submit" class="btn btn-labeled btn-success pull-right" ng-click="go('{{linkNew}}')">
