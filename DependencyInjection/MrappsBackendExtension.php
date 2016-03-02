@@ -31,10 +31,14 @@ class MrappsBackendExtension extends Extension
         $container->setParameter('mrapps_backend.file_accepted_types.zip', $config['file_accepted_types']['zip']);
         $container->setParameter('mrapps_backend.file_accepted_types.json', $config['file_accepted_types']['json']);
         $container->setParameter('mrapps_backend.sidebar_menu', $config['sidebar_menu']);
-        $container->setParameter('mrapps_backend.customization.navbar_color', $config['customization']['navbar_color']);
-        $container->setParameter('mrapps_backend.customization.navbar_text_color', $config['customization']['navbar_text_color']);
+        $container->setParameter('mrapps_backend.customization.primary_color', $config['customization']['primary_color']);
+        $container->setParameter('mrapps_backend.customization.text_on_primary_color', $config['customization']['text_on_primary_color']);
+        $container->setParameter('mrapps_backend.customization.secondary_color', $config['customization']['secondary_color']);
+        $container->setParameter('mrapps_backend.customization.text_hover_on_primary_color', $config['customization']['text_hover_on_primary_color']);
+        $container->setParameter('mrapps_backend.customization.text_on_secondary_color', $config['customization']['text_on_secondary_color']);
+        $container->setParameter('mrapps_backend.customization.text_hover_on_secondary_color', $config['customization']['text_hover_on_secondary_color']);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
     }
 }
