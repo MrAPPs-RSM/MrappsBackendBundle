@@ -1,10 +1,14 @@
 <style>
-    div.nav-wrapper {
-        background-image: none;
-        background-color: {{ navbar_color }};
+    {% if navbar_color is not null %}
+    .topnavbar .nav-wrapper {
+        background-image: none !important;
+        background-color: {{ navbar_color }} !important;
     }
+    {% endif %}
 
-    div.nav-wrapper ul li a {
-        color: {{ navbar_text_color }};
+    {% if navbar_text_color is not null %}
+    .topnavbar .nav-wrapper ul li a {
+        color: {{ navbar_text_color }} !important;
     }
+    {% endif %}
 </style>
