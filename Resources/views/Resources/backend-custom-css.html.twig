@@ -23,15 +23,20 @@ a {
 }
 
 .topnavbar .navbar-nav > li > a, .topnavbar .navbar-nav > .open > a {
-	color:  {{navbar_text_color}};
-    background: {{navbar_color}};
+	color:  {{text_on_secondary_color}}; /* Aggiungere variabile text_on_secondary_color */
+    background: {{secondary_color}}; /* Aggiungere variabile secondary_color */
 }
 
 .topnavbar .navbar-nav > li > a:hover, .topnavbar .navbar-nav > .open > a:hover {
-	color: yellow; /* Aggiungere variabile navbar_text_hover_color */
+	color: {{text_hover_on_secondary_color}}; /* Aggiungere variabile text_hover_on_secondary_color */
+}
+
+.sidebar .nav > li.active, .sidebar .nav > li.open, .sidebar .nav > li.active > a, .sidebar .nav > li.open > a, .sidebar .nav > li.active .nav, .sidebar .nav > li.open .nav {
+    background-color: {{primary_color}}; /* Aggiungere variabile primary_color */
+    color: {{text_on_primary_color}}; /* Aggiungere variabile text_on_primary_color */
 }
 
 @media screen and (min-width: 768px) {
-	.topnavbar, .topnavbar .nav-wrapper { background-color: {{navbar_color}}; background-image: none; background-repeat: inherit; filter: none; }	
+	.topnavbar, .topnavbar .nav-wrapper { background-color: {{secondary_color}}; background-image: none; background-repeat: inherit; filter: none; }	
 }
 </style>
