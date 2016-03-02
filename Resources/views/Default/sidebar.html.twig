@@ -28,7 +28,6 @@
             <li ng-click="toggleCollapse(pIndex, true)" class="ng-scope nav-heading">
                 <span class="ng-binding ng-scope">Main Navigation</span>
             </li>
-           <h2> {{ active_page }}</h2>
             {% for item in menu %}
                 {% if item.min_role|length == 0 or is_granted(item.min_role) %}
                 <li class="ng-scope {% if item.route_name == active_page %}active{% endif %}">
