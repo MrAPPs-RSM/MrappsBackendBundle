@@ -1,79 +1,89 @@
 {% extends 'MrappsBackendBundle:Default:layout.html.twig' %}
-{% block css  %}
+{% block css %}
     <link rel="stylesheet" href="{{ asset('assets/vendor/ng-table/dist/ng-table.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/sweetalert/dist/sweetalert.css') }}">
 {% endblock css %}
 {% block content %}
-<div ng-controller="NGTableCtrl as table" class="container-fluid">
-    <div class="panel panel-default">
-        <div class="panel-heading clearfix">
-            <div class="panel-title {% if linkNew is not null or linkCustom is not null %}pull-left{% endif %}">Filtri</div>
-            {% if linkNew is not null %}
-                <button type="submit" class="btn btn-labeled btn-success pull-right" ng-click="go('{{linkNew}}')">
+    <div ng-controller="NGTableCtrl as table" class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <div class="panel-title {% if linkNew is not null or linkCustom is not null %}pull-left{% endif %}">
+                    Filtri
+                </div>
+                {% if linkNew is not null %}
+                    <button type="submit" class="btn btn-labeled btn-success pull-right" ng-click="go('{{ linkNew }}')">
                     <span class="btn-label">
                         <em class="fa fa-plus"></em>
                     </span>Add
-                </button>
-                <div class="cb"></div>
-            {% endif %}
-            {% if linkCustom is not null %}
-                {% for item in linkCustom %}
-                    <button type="submit" ng-click="go('{{ item.url }}')" class="btn btn-labeled pull-right {{ item.class }}">
+                    </button>
+                    {% if linkCustom is null %}
+                        <div class="cb"></div>
+                    {% endif %}
+                {% endif %}
+                {% if linkCustom is not null %}
+                    {% for item in linkCustom %}
+                        <button type="submit" ng-click="go('{{ item.url }}')"
+                                class="btn btn-labeled pull-right {{ item.class }}">
                         <span class="btn-label">
                             <em class="{{ item.icon }}"></em>
                         </span>{{ item.text }}
-                    </button>
-                {% endfor %}
-            {% endif %}
-        </div>
-        <table ng-table="table.tableParams2" show-filter="true" class="table table-bordered table-striped">
-        <tbody {% if linkOrder is not null %} ui-sortable="sortableOptions" ng-model="table.data" {% endif %}>
-            <tr ng-repeat="row in $data">
-                {% for colums in tableColumns %}
-                        <td data-title="'{{colums.title}}'" {%if colums.filterable %}filter="{ '{{colums.name}}': '{{colums.type}}' }"{% endif %} {%if colums.sortable%}sortable="'{{colums.name}}'"{% endif %} {% if colums.clickable is defined%}ng-click="$event.stopPropagation();showChildren(row.id)"{% endif %}>
+                        </button>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <table ng-table="table.tableParams2" show-filter="true" class="table table-bordered table-striped">
+                <tbody {% if linkOrder is not null %} ui-sortable="sortableOptions" ng-model="table.data" {% endif %}>
+                <tr ng-repeat="row in $data">
+                    {% for colums in tableColumns %}
+                        <td data-title="'{{ colums.title }}'"
+                            {% if colums.filterable %}filter="{ '{{ colums.name }}': '{{ colums.type }}' }"{% endif %} {% if colums.sortable %}sortable="'{{ colums.name }}'"{% endif %} {% if colums.clickable is defined %}ng-click="$event.stopPropagation();showChildren(row.id)"{% endif %}>
                             {% if colums.type == 'image' %}
-                                <img src="{/ row.{{colums.name}} /}">
+                                <img src="{/ row.{{ colums.name }} /}">
                             {% else %}
-                                {/ row.{{colums.name}} /}
+                                {/ row.{{ colums.name }} /}
                             {% endif %}
                         </td>
-                {% endfor %}
-                <td>
-                    {% if linkEdit is not null %}
-                        <button ng-if="!row.hasOwnProperty('disableEdit')||row.disableEdit==false" type="button" ng-click="go('{{ linkEdit }}/'+row.id)" class="btn btn-sm btn-warning">
-                            <em class="fa fa-edit"></em>
-                        </button>
-                    {% endif %}
-                    {% if linkDelete is not null %}
-                        <button ng-if="!row.hasOwnProperty('disableDelete')||row.disableDelete==false" type="button" ng-click="deleteajax(row.id)" class="btn btn-sm btn-danger">
-                            <em class="fa fa-trash-o"></em>
-                        </button>
-                    {% endif %}
-                    {% if linkAction is not null%}
-                        {% for item in linkAction %}
-                            <button type="button" ng-click="{% if item.is_js == false %}go('{{ item.url }}/'+row.id){% else %}customFunction{{ loop.index }}(row.id){% endif %}" class="{{ item.class }}">
-                                <em class="{{ item.icon }}"></em>
+                    {% endfor %}
+                    <td>
+                        {% if linkEdit is not null %}
+                            <button ng-if="!row.hasOwnProperty('disableEdit')||row.disableEdit==false" type="button"
+                                    ng-click="go('{{ linkEdit }}/'+row.id)" class="btn btn-sm btn-warning">
+                                <em class="fa fa-edit"></em>
                             </button>
-                        {% endfor %}
-                    {% endif %}
-                </td>
-            </tr>
-         </tbody>
-      </table>
-   </div>
-</div>
+                        {% endif %}
+                        {% if linkDelete is not null %}
+                            <button ng-if="!row.hasOwnProperty('disableDelete')||row.disableDelete==false" type="button"
+                                    ng-click="deleteajax(row.id)" class="btn btn-sm btn-danger">
+                                <em class="fa fa-trash-o"></em>
+                            </button>
+                        {% endif %}
+                        {% if linkAction is not null %}
+                            {% for item in linkAction %}
+                                <button type="button"
+                                        ng-click="{% if item.is_js == false %}go('{{ item.url }}/'+row.id){% else %}customFunction{{ loop.index }}(row.id){% endif %}"
+                                        class="{{ item.class }}">
+                                    <em class="{{ item.icon }}"></em>
+                                </button>
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 {% endblock content %}
-{% block srcjavascript  %}
+{% block srcjavascript %}
     <script src="{{ asset('assets/vendor/angular-resource/angular-resource.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/ng-table/dist/ng-table.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/sweetalert/dist/sweetalert.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery-ui/jquery-ui.min.js') }}"></script>
     <script src='{{ asset('assets/vendor/angular-ui-sortable/sortable.min.js') }}'></script>
 {% endblock srcjavascript %}
-{% block javascript  %}
+{% block javascript %}
     <script type="text/javascript">
-        (function() {
+        (function () {
             "use strict";
 
             myAngular.controller("NGTableCtrl", NGTableCtrl);
@@ -82,14 +92,14 @@
                 var self = this;
                 var Api = $resource('{{ linkData }}');
 
-                $scope.go = function ( path ) {
+                $scope.go = function (path) {
                     $window.location.href = path;
                 };
-                
+
                 $scope.isDragging = false;
 
-                $rootScope.showChildren = function ( id ) {
-                    if(!$scope.isDragging) {
+                $rootScope.showChildren = function (id) {
+                    if (!$scope.isDragging) {
                         self.tableParams2.filter()["parent.id"] = id;
                         $rootScope.refreshBreadcrumbs(id);
                         self.tableParams2.reload();
@@ -99,21 +109,21 @@
                 self.tableParams2 = new NgTableParams({
                     page: 1,            // show first page
                     count: 10,          // count per page
-                    sorting: {{defaultSorting|raw}},
-                    filter: {{defaultFilter|raw}},
+                    sorting: {{ defaultSorting|raw }},
+                    filter: {{ defaultFilter|raw }},
                 }, {
                     //total: dati.length, // length of data
-                    getData: function($defer, params) {
+                    getData: function ($defer, params) {
                         $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
-                        Api.query(params.url(), function(data) {
+                        Api.query(params.url(), function (data) {
                             // update table params
                             params.total(data.length);
                             // use build-in angular filter
                             /*var orderedData = params.filter() ?
-                                $filter('filter')(data, params.filter()) :
-                                    data;*/
+                             $filter('filter')(data, params.filter()) :
+                             data;*/
                             var orderedData = params.sorting() ?
-                                $filter('orderBy')(data, params.orderBy()) :
+                                    $filter('orderBy')(data, params.orderBy()) :
                                     orderedData;
                             self.data = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
 
@@ -123,84 +133,86 @@
                         });
                     }
                 });
-                {% if linkDelete is not null%}
-                    $scope.deleteajax = function (id){
-                        var data = { id: id };
-                        swal({
-                            title: "Procedere?",
-                            text: "{{ deleteMessages['question'] }}",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "Si",
-                            cancelButtonText: "No",
-                            closeOnConfirm: false,
-                            closeOnCancel: false
-                        }, function(isConfirm){
-                            if (isConfirm) {
-                                $http.post('{{ linkDelete }}', data )
+                {% if linkDelete is not null %}
+                $scope.deleteajax = function (id) {
+                    var data = {id: id};
+                    swal({
+                        title: "Procedere?",
+                        text: "{{ deleteMessages['question'] }}",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Si",
+                        cancelButtonText: "No",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    }, function (isConfirm) {
+                        if (isConfirm) {
+                            $http.post('{{ linkDelete }}', data)
                                     .then(function successCallback(response) {
-                                        if(response.data.success) {
+                                        if (response.data.success) {
                                             swal("Completato!", "{{ deleteMessages['success'] }}", "success");
                                             self.tableParams2.reload();
-                                        }else{
+                                        } else {
                                             swal("Errore!", response.data.message, "error");
                                         }
                                     }, function errorCallback(response) {
                                         swal("Errore!", "{{ deleteMessages['error'] }}", "error");
                                     });
-                            } else {
-                                swal("Errore!", "{{ deleteMessages['cancel'] }}", "error");
-                            }
-                        });
-                    };
+                        } else {
+                            swal("Errore!", "{{ deleteMessages['cancel'] }}", "error");
+                        }
+                    });
+                };
                 {% endif %}
                 {% if linkOrder is not null %}
-                    $scope.sortableOptions = {
-                        start: function(e, ui) {
-                            $scope.isDragging = true;
-                        },
-                        stop: function(e, ui) {
-                            setTimeout(function(){ $scope.isDragging = false; }, 300);
-                            //if(!self.tableParams2.hasFilter()){
-                                $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
-                                $http({
-                                    method: 'POST',
-                                    url: '{{ linkOrder }}',
-                                    data: {
-                                        'data': self.data,
-                                        'page': self.tableParams2.url().page - 1,
-                                        'count': self.tableParams2.url().count
-                                    },
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                }).then(function successCallback(response) {
-                                    $('#overlay-waiting').remove();
-                                    self.tableParams2.reload();
-                                    toastr.success('Ordinato!', 'Ordine salvato');
-                                }, function errorCallback(response) {
-                                    $('#overlay-waiting').remove();
-                                    self.tableParams2.reload();
-                                    toastr.error('Errore!', 'Errore nel salvataggio');
-                                });
-                            //}
-                        }
-                    };
+                $scope.sortableOptions = {
+                    start: function (e, ui) {
+                        $scope.isDragging = true;
+                    },
+                    stop: function (e, ui) {
+                        setTimeout(function () {
+                            $scope.isDragging = false;
+                        }, 300);
+                        //if(!self.tableParams2.hasFilter()){
+                        $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
+                        $http({
+                            method: 'POST',
+                            url: '{{ linkOrder }}',
+                            data: {
+                                'data': self.data,
+                                'page': self.tableParams2.url().page - 1,
+                                'count': self.tableParams2.url().count
+                            },
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                        }).then(function successCallback(response) {
+                            $('#overlay-waiting').remove();
+                            self.tableParams2.reload();
+                            toastr.success('Ordinato!', 'Ordine salvato');
+                        }, function errorCallback(response) {
+                            $('#overlay-waiting').remove();
+                            self.tableParams2.reload();
+                            toastr.error('Errore!', 'Errore nel salvataggio');
+                        });
+                        //}
+                    }
+                };
                 {% endif %}
                 {% if linkAction is not null %}
-                    {% for item in linkAction %}
-                        {% if item.is_js == true %}
-                        $scope.customFunction{{ loop.index }} = function(id) {
-                            {{ item.javascript|raw }}
-                        };
-                        {% endif %}
-                    {% endfor %}
+                {% for item in linkAction %}
+                {% if item.is_js == true %}
+                $scope.customFunction{{ loop.index }} = function (id) {
+                    {{ item.javascript|raw }}
+                };
+                {% endif %}
+                {% endfor %}
                 {% endif %}
                 {% if linkBreadcrumb is not null and linkBreadcrumb.type == 'js' %}
-                    $rootScope.refreshBreadcrumbs(self.tableParams2.filter()["parent.id"]);
+                $rootScope.refreshBreadcrumbs(self.tableParams2.filter()["parent.id"]);
                 {% endif %}
             }
         })();
-</script>
+    </script>
 {% endblock javascript %}

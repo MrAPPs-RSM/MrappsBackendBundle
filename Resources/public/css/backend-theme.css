@@ -160,3 +160,7 @@ body,
 .cb {
 	clear: both;
 }
+
+button+button {
+  margin-right: 10px;
+}
