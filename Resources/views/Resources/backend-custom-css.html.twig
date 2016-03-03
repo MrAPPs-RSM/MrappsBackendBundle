@@ -21,7 +21,10 @@ a {
 	transition: all 0.2s;
 }
 
-.topnavbar .navbar-nav > li > a, .topnavbar .navbar-nav > .open > a {
+.topnavbar .navbar-nav > li > a,
+.topnavbar .navbar-nav > .open > a,
+.topnavbar .navbar-nav > li > a:focus,
+.topnavbar .navbar-nav > .open > a:focus {
 	color: {{text_on_secondary_color}};
     background: {{secondary_color}};
 }
@@ -35,19 +38,19 @@ a {
 	border-left: 3px solid transparent;
 }
 
-.sidebar .nav > li.active,
-.sidebar .nav > li.open,
-.sidebar .nav > li.active > a,
-.sidebar .nav > li.open > a,
-.sidebar .nav > li > a:hover,
-.sidebar .nav > li > .nav-item:hover,
-.sidebar .nav > li.active > a+ul > li.active > a:hover {
+.sidebar .nav:not(.sidebar-subnav) > li.active,
+.sidebar .nav:not(.sidebar-subnav) > li.open,
+.sidebar .nav:not(.sidebar-subnav) > li.active > a,
+.sidebar .nav:not(.sidebar-subnav) > li.open > a,
+.sidebar .nav:not(.sidebar-subnav) > li > a:hover,
+.sidebar .nav:not(.sidebar-subnav) > li > .nav-item:hover,
+.sidebar .nav:not(.sidebar-subnav) > li.active > a+ul:not(.sidebar-subnav) > li.active > a:hover {
     background-color: {{primary_color}} !important;
     color: {{text_on_primary_color}} !important;
     border-left-color: rgba(0, 0, 0, 0.3);
 }
 
-.sidebar > .nav > li {
+.sidebar > .nav li {
     border-left: 0px;
     margin-bottom: 1px;
 }
@@ -83,7 +86,12 @@ a {
 }
 
 .sidebar-subnav > li {
-    font-size: 12px;
+    font-size: 13px;
+    margin-bottom: 0px !important;
+}
+
+.sidebar-subnav > li > a {
+    background-color: #f5f5f5 !important;
 }
 
 .sidebar-subnav > li > a {
@@ -127,10 +135,14 @@ a {
     height: 34px;
 }
 
+.sidebar .nav > li > a+ul > li > a:hover,
 .sidebar .nav > li.active > a+ul > li.active > a {
-    background-color: #FFF !important;
-    color: {{primary_color}} !important;
-    font-weight: 600;
+    color: {{primary_color}};
+}
+
+.sidebar .nav > li > a+ul > li > a:hover::before,
+.sidebar .nav > li.active > a+ul > li.active > a::before {
+    background-color: {{primary_color}};
 }
 
 .sidebar .nav > li > a[data-toggle="collapse"]::after {
