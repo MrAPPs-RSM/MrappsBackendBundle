@@ -95,8 +95,15 @@ class DefaultController extends Controller
             );
         }
 
-        $actual_link = preg_replace('/\/app_dev.php/', '', $_SERVER['REQUEST_URI']);
-        $route = $this->get('router')->match($actual_link)['_route'];
+        $urlArray = explode('?', preg_replace('/\/app_dev.php/', '', $_SERVER['REQUEST_URI']));
+
+        $actual_link = $urlArray[0];
+
+        if (empty($actual_link)) {
+            $route = '';
+        } else {
+            $route = $this->get('router')->match($actual_link)['_route'];
+        }
 
         return $this->render('MrappsBackendBundle:Default:sidebar.html.twig', array(
             'menu' => $menu,
