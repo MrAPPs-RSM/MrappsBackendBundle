@@ -205,8 +205,6 @@ class DefaultController extends Controller
 
             $localDir = $this->getLocalUploadDir('mrapps_backend_images');
 
-            // $this->container->get('liip_imagine.controller')->filterAction($request, $notizia->getFoto()->getUrl(), 'backend_thumbnail')
-
             if (Utils::bundleMrappsAmazonExists($this->container)) {
 
                 /* @var $s3 \Mrapps\AmazonBundle\Handler\S3Handler */
@@ -428,78 +426,115 @@ class DefaultController extends Controller
      */
     public function uploadPdfAction(Request $request)
     {
-        if (Utils::bundleMrappsAmazonExists($this->container)) {
+        /* @var $s3 \Mrapps\AmazonBundle\Handler\S3Handler */
+        $s3 = $this->container->get('mrapps.amazon.s3');
 
-            /* @var $s3 \Mrapps\AmazonBundle\Handler\S3Handler */
-            $s3 = $this->container->get('mrapps.amazon.s3');
+        $pdf = $request->files->all();
+        $array = [];
 
-            $pdf = $request->files->all();
-            $array = [];
+        $webFolder = realpath($this->container->get('kernel')->getRootDir() . '/../web') . '/';
+        $tempRelativeFolder = $this->container->get('mrapps_backend.temp_folder') . '/';
+        $tempFolder = $webFolder . $tempRelativeFolder;
 
-            $webFolder = realpath($this->container->get('kernel')->getRootDir() . '/../web') . '/';
-            $tempRelativeFolder = $this->container->get('mrapps_backend.temp_folder') . '/';
-            $tempFolder = $webFolder . $tempRelativeFolder;
+        $success = false;
+        $message = '';
 
-            $success = false;
-            $message = '';
+        if (isset($pdf['file']) && !$pdf['file']->getError()) {
 
-            if (isset($pdf['file']) && !$pdf['file']->getError()) {
+            $file = $pdf['file'];
+            if (Utils::isValidFile($this->container, 'pdf', $file)) {
 
-                $file = $pdf['file'];
-                if (Utils::isValidFile($this->container, 'pdf', $file)) {
+                $em = $this->getDoctrine()->getManager();
+                $filePath = $file->getPathname();
+                $localDir = $this->getLocalUploadDir('mrapps_backend_images');
 
-                    $em = $this->getDoctrine()->getManager();
-                    $filePath = $file->getPathname();
+                $images = new \Imagick();
+                $images->setResolution(300, 300);
+                $images->readImage($filePath);
 
-                    $images = new \Imagick();
-                    $images->setResolution(300, 300);
-                    $images->readImage($filePath);
+                foreach ($images as $image) {
+                    $imagePath = $image->getPathname();
 
-                    foreach ($images as $image) {
 
-                        //$relativePath parte da "web" (dentro il progetto)
-                        //$absolutePath parte da /
-                        $tempName = sprintf("pdf_page_%s.jpg", Utils::getDateStringForUniqueFiles());
-                        $relativePath = $tempRelativeFolder . $tempName;
-                        $absolutePath = $tempFolder . $tempName;
+                    $tempName = sprintf("pdf_page_%s.jpg", Utils::getDateStringForUniqueFiles());
+                    $relativePath = $tempRelativeFolder . $tempName;
+                    $absolutePath = $tempFolder . $tempName;
 
-                        $image->writeImage($relativePath);
-                        $s3Key = 'mrapps_backend_images/' . sha1(file_get_contents($absolutePath));
+                    $image->writeImage($relativePath);
 
-                        //Entity
-                        $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
-                        if ($immagine == null) {
-                            $immagine = new Immagine();
-                        }
+                    $sha1 = sha1(file_get_contents($absolutePath));
+                    $fileName = $sha1 . '.jpg';
 
-                        $immagine->setUrl($s3Key);
-                        $em->persist($immagine);
-                        $em->flush($immagine);
+                    $url = null;
+
+                    if (Utils::bundleMrappsAmazonExists($this->container)) {
+                        $s3 = $this->container->get('mrapps.amazon.s3');
+                        $s3Key = 'mrapps_backend_images/' . $fileName;
+
 
                         //Caricamento file su s3
                         if (!$s3->objectExists($s3Key)) {
                             $s3->uploadObject($s3Key, $absolutePath);
                         }
 
-                        $array[] = $immagine->getId();
+                        $url = $s3Key;
+
+                        unlink($absolutePath);
+
+                    } else {
+                        $s3Key = $sha1;
+
+                        if (!is_dir($localDir)) {
+
+                            if (false === mkdir($localDir, 0755, true)) {
+                                $dirAvailable = false;
+                            } else {
+                                $dirAvailable = true;
+                            }
+
+                        } else {
+                            $dirAvailable = true;
+                        }
+
+                        if ($dirAvailable) {
+                            copy($absolutePath, $localDir . $fileName);
+                            unlink($absolutePath);
+
+                            $url = 'uploads/mrapps_backend_images/' . $fileName;
+                        } else {
+                            unlink($absolutePath);
+
+                            $success = false;
+                            $message = 'Si è verificato un problema durante il caricamento del pdf; Riprovare più tardi.';
+                            return Utils::generateResponse($success, $message, $array);;
+                        }
+
                     }
 
-                    $success = true;
-                    $message = 'Pdf Caricato.';
+                    //Entity
+                    $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $url));
+                    if ($immagine == null) {
+                        $immagine = new Immagine();
+                    }
 
-                } else {
-                    $success = false;
-                    $message = 'Pdf non valido.';
+                    $immagine->setUrl($s3Key);
+                    $em->persist($immagine);
+                    $em->flush($immagine);
+
+                    $array[] = $immagine->getId();
                 }
+
+                $success = true;
+                $message = 'Pdf Caricato.';
 
             } else {
                 $success = false;
-                $message = 'Si è verificato un problema durante il caricamento del pdf; Riprovare più tardi.';
+                $message = 'Pdf non valido.';
             }
 
         } else {
             $success = false;
-            $message = 'Bundle MrappsAmazonBundle non installato.';
+            $message = 'Si è verificato un problema durante il caricamento del pdf; Riprovare più tardi.';
         }
 
         return Utils::generateResponse($success, $message, $array);
