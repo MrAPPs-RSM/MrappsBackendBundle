@@ -40,7 +40,8 @@ a {
 .sidebar .nav > li.active > a,
 .sidebar .nav > li.open > a,
 .sidebar .nav > li > a:hover,
-.sidebar .nav > li > .nav-item:hover {
+.sidebar .nav > li > .nav-item:hover,
+.sidebar .nav > li.active > a+ul > li.active > a:hover {
     background-color: {{primary_color}} !important;
     color: {{text_on_primary_color}} !important;
     border-left-color: rgba(0, 0, 0, 0.3);
@@ -125,6 +126,40 @@ a {
 .input-group-btn .btn {
     height: 34px;
 }
+
+.sidebar .nav > li.active > a+ul > li.active > a {
+    background-color: #FFF !important;
+    color: {{primary_color}} !important;
+    font-weight: 600;
+}
+
+.sidebar .nav > li > a[data-toggle="collapse"]::after {
+    content: "\f106";
+    font-family: 'FontAwesome';
+    display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    float: right;
+    font-size: 18px;
+    -webkit-transition: transform 0.2s;
+    -moz-transition: transform 0.2s;
+    -o-transition: transform 0.2s;
+    -ms-transition: transform 0.2s;
+    transition: transform 0.2s;
+}
+
+.sidebar .nav > li > a[data-toggle="collapse"].collapsed::after {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+
+
+
 
 @media screen and (max-width: 767px) {
 	.wrapper > .aside.aside, .wrapper > .aside.aside+section { -webkit-transition: left 0.2s; -moz-transition: left 0.2s; -o-transition: left 0.2s; -ms-transition: left 0.2s; transition: left 0.2s; left: 0px; }

@@ -37,7 +37,7 @@
                     <li class="ng-scope {% if active_menu==true or item.route_name == active_page %}active{% endif %}">
                         {% if item.has_submenu == true %}
                             <a data-toggle="collapse" data-parent="#accordion" href="#backendSidebar{{ loop.index }}"
-                               title="{{ item.title }}" class="ng-scope">
+                               title="{{ item.title }}" class="ng-scope {% if active_menu==false %}collapsed{% endif %}">
                                 {% if item.icon is defined %}<em class="fa {{ item.icon }}"></em> {% endif %}
                                 <span class="ng-binding">{{ item.title }}</span>
                             </a>
