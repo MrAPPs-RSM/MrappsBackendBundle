@@ -104,11 +104,6 @@ class DefaultController extends Controller
         ));
     }
 
-    public function __offSideBarAction()
-    {
-        return $this->render('MrappsBackendBundle:Default:offsidebar.html.twig', array());
-    }
-
     /**
      * @Route("/", name="mrapps_backend_index")
      * @Method({"GET"})
