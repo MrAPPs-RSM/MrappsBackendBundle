@@ -1,6 +1,7 @@
 {% extends 'MrappsBackendBundle:Default:layout.html.twig' %}
 {% block css %}
-    <link rel="stylesheet" href="{{ asset('assets/vendor/chosen/chosen.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/mrappsbackend/css/select2-bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/angular-ui-bootstrap-bower/ui-bootstrap-csp.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/jstree/dist/themes/default/style.min.css') }}">
 {% endblock css %}
@@ -36,8 +37,8 @@
 
 {% endblock content %}
 {% block srcjavascript %}
-    <script src="{{ asset('assets/vendor/chosen/chosen.jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/angular-chosen-localytics/chosen.js') }}"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.min.js"></script>
     <script src="{{ asset('assets/vendor/angular-resource/angular-resource.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/angular-file-upload/dist/angular-file-upload.min.js') }}"></script>
     <script src='{{ asset('assets/vendor/tinymce-dist/tinymce.min.js') }}'></script>
@@ -75,8 +76,11 @@
             {% set field_url=field.value.url | imagine_filter('backend_thumbnail') %}
             var {{ field.name }} =
             {
-                'id' :{{ field.value.id }},
-                'url': '{{ field_url }}'
+                'id'
+            :{{ field.value.id }},
+                'url'
+            :
+                '{{ field_url }}'
             }
             ;
 
@@ -279,15 +283,22 @@
             $scope.form.{{ field.name }} = date_{{ field.name }};
 
             {% elseif field.type == "select" %}
-            $scope.options_{{ field.name }} = [{% for item in field.options %}{
-                "value": "{{ item.value }}",
-                "name": "{{ item.name }}"
-            }{% if loop.last == false %},{% endif %}{% endfor %}];
+
+            $("#{{ field.name }}").select2();
+            {% if field.value is defined and field.value is not empty %}
+
             {% if field.chosen is defined %}
-            $scope.form.{{ field.name }} = {{ field.value|json_encode }};
-            $("select[name='{{ field.name }}']").val({{ field.value|json_encode }});
-            $("select[name='{{ field.name }}']").chosen();
+            $scope.form.{{ field.name }} = {{ field.value | json_encode }};
+            $("#{{ field.name }}").val($scope.form.{{ field.name }});
+            $("#{{ field.name }}").trigger('change');
             {% endif %}
+
+            {% endif %}
+
+            $("#{{ field.name }}").on("change", function (e) {
+                $scope.form.{{ field.name }} = $("#{{ field.name }}").val();
+            });
+
             {% elseif field.type == "textarea" %}
             {% if field.value is defined %}
             $scope.form.{{ field.name }} = '{{ field.value|e('js') }}';
