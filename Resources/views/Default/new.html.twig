@@ -284,15 +284,27 @@
 
             {% elseif field.type == "select" %}
 
-            $("#{{ field.name }}").select2();
+            $("#{{ field.name }}").select2(
+                    {% if field.required==false %}
+                    "allowClear"
+        :
+            true
+            {% endif %}
+        )
+            ;
+
             {% if field.value is defined and field.value is not empty %}
 
-            {% if field.chosen is defined %}
             $scope.form.{{ field.name }} = {{ field.value | json_encode }};
             $("#{{ field.name }}").val($scope.form.{{ field.name }});
             $("#{{ field.name }}").trigger('change');
+            {% else %}
+            {% if field.required==true %}
+            {% set field_value= field.options | first%}
+            $scope.form.{{ field.name }} = {{ field_value.value | json_encode }};
+            $("#{{ field.name }}").val($scope.form.{{ field.name }});
+            $("#{{ field.name }}").trigger('change');
             {% endif %}
-
             {% endif %}
 
             $("#{{ field.name }}").on("change", function (e) {
