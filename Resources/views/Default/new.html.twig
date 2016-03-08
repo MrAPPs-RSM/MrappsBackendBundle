@@ -284,40 +284,51 @@
 
             {% elseif field.type == "select" %}
 
-            $("#{{ field.name }}").select2({
-                {% if field.required==false %}
-                "allowClear": true
+            setTimeout(function(){
+
+                jQuery("#{{ field.name }}").select2({
+                    {% if field.required==false %}
+                    "allowClear": true
+                    {% endif %}
+                });
+
+                {% if field.disable is defined and field.disable==true %}
+                jQuery("#{{ field.name }}").prop("disabled", true);
                 {% endif %}
-            });
 
-            {% if field.disable is defined and field.disable==true %}
-            $("#{{ field.name }}").prop("disabled", true);
-            {% endif %}
+                {% if field.value is defined and field.value is not empty %}
 
-
-            {% if field.value is defined and field.value is not empty %}
-
-            {% if field.value is iterable %}
-            $scope.form.{{ field.name }} = {{ field.value | json_encode }};
-            {% else %}
-            $scope.form.{{ field.name }} = "{{ field.value }}";
-            {% endif %}
+                {% if field.value is iterable %}
+                $scope.form.{{ field.name }} = {{ field.value | json_encode }};
+                {% else %}
+                $scope.form.{{ field.name }} = "{{ field.value }}";
+                {% endif %}
 
 
-            $("#{{ field.name }}").val($scope.form.{{ field.name }});
-            $("#{{ field.name }}").trigger('change');
-            {% else %}
-            {% if field.required==true %}
-            {% set field_value= field.options | first %}
-            $scope.form.{{ field.name }} = {{ field_value.value | json_encode }};
-            $("#{{ field.name }}").val($scope.form.{{ field.name }});
-            $("#{{ field.name }}").trigger('change');
-            {% endif %}
-            {% endif %}
+                jQuery("#{{ field.name }}").val($scope.form.{{ field.name }});
+                jQuery("#{{ field.name }}").trigger('change');
+                {% else %}
+                {% if field.required==true %}
 
-            $("#{{ field.name }}").on("change", function (e) {
-                $scope.form.{{ field.name }} = $("#{{ field.name }}").val();
-            });
+                {% set field_values= field.options | first %}
+                {% if field_values.values is defined %}
+                {% set field_value= field_values.values | first %}
+                {% else %}
+                {% set field_value= field_values %}
+                {% endif %}
+
+                $scope.form.{{ field.name }} = {{ field_value.value | json_encode }};
+                jQuery("#{{ field.name }}").val($scope.form.{{ field.name }});
+                jQuery("#{{ field.name }}").trigger('change');
+                {% endif %}
+                {% endif %}
+
+                jQuery("#{{ field.name }}").on("change", function (e) {
+                    $scope.form.{{ field.name }} = $("#{{ field.name }}").val();
+                });
+
+            }, 0);
+
 
             {% elseif field.type == "textarea" %}
             {% if field.value is defined %}

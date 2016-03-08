@@ -4,10 +4,18 @@
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
             <select name="{{ field.name }}" id="{{ field.name }}"
                     {% if field.multiple is defined %}multiple="multiple"{% endif %} {% if switch is not defined and field.required %}required="true"{% endif %}
-                    ng-model="form.{{ field.name }}" {% if field.value is defined and field.chosen is not defined %}ng-init="form.{{ field.name }} = '{{ field.value }}'"{% endif %}
+                    ng-model="form.{{ field.name }}"
                     class="form-control select">
                 {% for item in field.options %}
-                    <option value="{{ item.value }}">{{ item.name }}</option>
+                    {% if item.values is defined %}
+                        <optgroup label="{{ item.title }}">
+                            {% for option in item.values %}
+                                <option value="{{ option.value }}">{{ option.name }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    {% else %}
+                        <option value="{{ item.value }}">{{ item.name }}</option>
+                    {% endif %}
                 {% endfor %}
             </select>
         </div>
