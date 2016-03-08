@@ -286,17 +286,19 @@
 
             $("#{{ field.name }}").select2(
                     {% if field.required==false %}
-                    "allowClear"
-        :
-            true
+                    "allowClear":true
             {% endif %}
-        )
-            ;
+        );
+
+            {% if field.disable is defined and field.disable==true%}
+            $("#{{ field.name }}").prop("disabled", true);
+            {% endif %}
+
 
             {% if field.value is defined and field.value is not empty %}
 
             $scope.form.{{ field.name }} = {{ field.value | json_encode }};
-            $("#{{ field.name }}").val($scope.form.{{ field.name }});
+              $("#{{ field.name }}").val($scope.form.{{ field.name }});
             $("#{{ field.name }}").trigger('change');
             {% else %}
             {% if field.required==true %}
