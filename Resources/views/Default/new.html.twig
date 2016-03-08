@@ -284,25 +284,31 @@
 
             {% elseif field.type == "select" %}
 
-            $("#{{ field.name }}").select2(
-                    {% if field.required==false %}
-                    "allowClear":true
-            {% endif %}
-        );
+            $("#{{ field.name }}").select2({
+                {% if field.required==false %}
+                "allowClear": true
+                {% endif %}
+            });
 
-            {% if field.disable is defined and field.disable==true%}
+            {% if field.disable is defined and field.disable==true %}
             $("#{{ field.name }}").prop("disabled", true);
             {% endif %}
 
 
             {% if field.value is defined and field.value is not empty %}
 
+            {% if field.value is iterable %}
             $scope.form.{{ field.name }} = {{ field.value | json_encode }};
-              $("#{{ field.name }}").val($scope.form.{{ field.name }});
+            {% else %}
+            $scope.form.{{ field.name }} = "{{ field.value }}";
+            {% endif %}
+
+
+            $("#{{ field.name }}").val($scope.form.{{ field.name }});
             $("#{{ field.name }}").trigger('change');
             {% else %}
             {% if field.required==true %}
-            {% set field_value= field.options | first%}
+            {% set field_value= field.options | first %}
             $scope.form.{{ field.name }} = {{ field_value.value | json_encode }};
             $("#{{ field.name }}").val($scope.form.{{ field.name }});
             $("#{{ field.name }}").trigger('change');
