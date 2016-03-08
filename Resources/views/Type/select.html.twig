@@ -4,7 +4,7 @@
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
             <select name="{{ field.name }}" id="{{ field.name }}"
                     {% if field.multiple is defined %}multiple="multiple"{% endif %} {% if switch is not defined and field.required %}required="true"{% endif %}
-                    ng-model="form.{{ field.name }}" {% if field.value is defined and field.chosen is not defined %}ng-init="form.{{ field.name }} = '{{ field.value }}'"{% endif %} {% if field.disable is defined %}ng-disabled="{{ field.disable }}"{% endif %}
+                    ng-model="form.{{ field.name }}" {% if field.value is defined and field.chosen is not defined %}ng-init="form.{{ field.name }} = '{{ field.value }}'"{% endif %}
                     class="form-control select">
                 {% for item in field.options %}
                     <option value="{{ item.value }}">{{ item.name }}</option>
