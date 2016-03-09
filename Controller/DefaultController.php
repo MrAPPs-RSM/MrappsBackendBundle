@@ -147,7 +147,7 @@ class DefaultController extends Controller
         ));
     }
 
-    public function __newAction($title, $fields, $linkSave = null, $linkEdit = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false)
+    public function __newAction($title, $fields, $linkSave = null, $linkEdit = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false, $linkNew = null)
     {
         if ($confirmSave == null) $confirmSave = false;
 
@@ -158,7 +158,6 @@ class DefaultController extends Controller
             $imagesUrl = $this->getLocalUrlDir('');
         }
 
-
         return $this->render('MrappsBackendBundle:Default:new.html.twig', array(
             'title' => $title,
             'fields' => $fields,
@@ -166,6 +165,7 @@ class DefaultController extends Controller
             'linkEdit' => $linkEdit,
             'create' => $create,
             'edit' => $edit,
+            'linkNew' => $linkNew,
             'linkBreadcrumb' => $linkBreadcrumb,
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,

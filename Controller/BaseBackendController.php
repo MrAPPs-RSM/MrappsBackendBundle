@@ -7,7 +7,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class BaseBackendController extends Controller
 {
-
     public function generateThumbnailsList($url, $thumbnails = array())
     {
         foreach ($thumbnails as $item) {

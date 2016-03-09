@@ -14,6 +14,18 @@
                       class="form-validate form-horizontal">
                     <!-- START panel-->
                     <div class="panel panel-default">
+                        {% if edit==true and linkNew is defined and linkNew is not empty %}
+                            <div class="panel-heading clearfix">
+                                <div class="panel-title pull-left"></div>
+                                <button type="submit" class="btn btn-labeled btn-success pull-right"
+                                        ng-click="go('{{ linkNew }}')">
+                    <span class="btn-label">
+                        <em class="fa fa-plus"></em>
+                    </span>Aggiungi Nuovo
+                                </button>
+                                <div class="cb"></div>
+                            </div>
+                        {% endif %}
                         <div class="panel-body">
                             {% for field in fields %}
                                 {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}

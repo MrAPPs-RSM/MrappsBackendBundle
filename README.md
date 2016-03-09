@@ -218,3 +218,6 @@ liip_imagine.controller.imagine_filter:
     "directory": "web/assets/vendor/"
 }
 ```
+
+## Controller Backend ##
+Per configurare le thumbnails è necessario estendere la classe BaseBackendController.
