@@ -112,8 +112,8 @@
         .{{ field.name }}.
             onSuccessItem = function (fileItem, response, status, headers) {
                 $('#load_{{ field.name }}').addClass('hide');
-                if (response.error.length > 0) {
-                    toastr.error('Errore!', response.error);
+                if (response.success == false) {
+                    toastr.error('Errore!', response.message);
                     $scope
                 .{{ field.name }}.
                     clearQueue();
@@ -233,8 +233,8 @@
             $scope
         .{{ uploader_name }}.
             onSuccessItem = function (fileItem, response, status, headers) {
-                if (response.error.length > 0) {
-                    toastr.error('Errore!', response.error);
+                if (response.success == false) {
+                    toastr.error('Errore!', response.message);
                 } else {
                     $('#load_{{ field.name }}').addClass('hide');
                     $scope.gallery_{{field.name}}_immagini.push(response);
@@ -284,7 +284,7 @@
 
             {% elseif field.type == "select" %}
 
-            setTimeout(function(){
+            setTimeout(function () {
 
                 jQuery("#{{ field.name }}").select2({
                     {% if field.required==false %}

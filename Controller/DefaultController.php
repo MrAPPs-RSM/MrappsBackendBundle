@@ -194,6 +194,7 @@ class DefaultController extends Controller
         $responseId = 0;
         $responseUrl = '';
         $responseError = '';
+        $success = false;
 
         $tmpImg = $request->files->all();
 
@@ -240,6 +241,7 @@ class DefaultController extends Controller
                 $responseId = $immagine->getId();
                 $responseUrl = $thumbnailUrl;
                 $responseError = '';
+                $success = true;
 
             } else {
 
@@ -303,7 +305,8 @@ class DefaultController extends Controller
             'location' => $responseLocation,       //location viene usato da tinymce
             'id' => $responseId,
             'url' => $responseUrl,
-            'error' => $responseError,
+            'message' => $responseError,
+            'success' => $success,
         );
 
         return new JsonResponse($data);
