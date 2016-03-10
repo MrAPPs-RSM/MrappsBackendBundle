@@ -35,9 +35,15 @@
                 <tr ng-repeat="row in $data">
                     {% for colums in tableColumns %}
                         <td data-title="'{{ colums.title }}'"
-                            {% if colums.filterable %}filter="{ '{{ colums.name }}': '{{ colums.type }}' }"{% endif %} {% if colums.sortable %}sortable="'{{ colums.name }}'"{% endif %} {% if colums.clickable is defined %}ng-click="$event.stopPropagation();showChildren(row.id)"{% endif %}>
+                                {% if colums.filterable %}
+                                    {% set colType= (colums.type=='checkbox'?'select':colums.type) %}
+                                    filter="{ '{{ colums.name }}': '{{ colType }}' }"{% endif %} {% if colums.sortable %}sortable="'{{ colums.name }}'"{% endif %} {% if colums.clickable is defined %}ng-click="$event.stopPropagation();showChildren(row.id)"
+                        {% endif %}>
                             {% if colums.type == 'image' %}
                                 <img src="{/ row.{{ colums.name }} /}">
+                            {% elseif colums.type=='checkbox' %}
+                                <input type="checkbox" onclick='event.preventDefault();'
+                                       ng-checked="{/ row.{{ colums.name }} /}">
                             {% else %}
                                 {/ row.{{ colums.name }} /}
                             {% endif %}
