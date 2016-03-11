@@ -37,7 +37,7 @@
                         <td data-title="'{{ colums.title }}'"
                                 {% if colums.filterable %}
                                     {% set colType= (colums.type=='checkbox'?'select':colums.type) %}
-                                    filter="{ '{{ colums.name }}': '{{ colType }}' }"{% endif %} {% if colums.sortable %}sortable="'{{ colums.name }}'"{% endif %} {% if colums.clickable is defined %}ng-click="$event.stopPropagation();showChildren(row.id)"
+                                    filter="{ '{{ colums.name }}': '{{ colType }}' }" {% if colums.type=='checkbox' or (colums.type=='select' and colums.filter_options is defined) %} filter-data="{{ colums.name }}_filter" {% endif %}{% endif %} {% if colums.sortable %}sortable="'{{ colums.name }}'"{% endif %} {% if colums.clickable is defined %}ng-click="$event.stopPropagation();showChildren(row.id)"
                         {% endif %}>
                             {% if colums.type == 'image' %}
                                 <img src="{/ row.{{ colums.name }} /}">
@@ -102,6 +102,17 @@
                 };
 
                 $scope.isDragging = false;
+
+                {% for colums in tableColumns %}
+                {% if colums.type=='checkbox' %}
+                $scope.{{ colums.name }}_filter = [{"id": null, "title": ""}, {"id": 1, "title": "Si"}, {
+                    "id": 0,
+                    "title": "No"
+                }];
+                {% elseif colums.type=='select' and colums.filter_options is defined %}
+                $scope.{{ colums.name }}_filter ={{ [{'id':null,'title':''}]|merge(colums.filter_options) | json_encode | raw }};
+                {% endif %}
+                {% endfor %}
 
                 $rootScope.showChildren = function (id) {
                     if (!$scope.isDragging) {
