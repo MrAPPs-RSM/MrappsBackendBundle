@@ -169,7 +169,7 @@ class DefaultController extends Controller
             'linkBreadcrumb' => $linkBreadcrumb,
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,
-            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate"',
+            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors"',
         ));
     }
 

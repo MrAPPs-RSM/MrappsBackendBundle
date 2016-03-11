@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="{{ asset('bundles/mrappsbackend/css/select2-bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/angular-ui-bootstrap-bower/ui-bootstrap-csp.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/jstree/dist/themes/default/style.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-minicolors/jquery-minicolors.css') }}">
 {% endblock css %}
 {% block content %}
     <!-- START row-->
@@ -61,6 +62,7 @@
     <script src="{{ asset('assets/vendor/jstree/dist/jstree.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/ng-js-tree/dist/ngJsTree.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/angular-ui-validate/dist/validate.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-minicolors/jquery-minicolors.js') }}"></script>
 {% endblock srcjavascript %}
 {% block javascript %}
     <script type="text/javascript">
@@ -268,6 +270,15 @@
                 stop: function (e, ui) {
                     $scope.form.{{ field.name }} = $scope.gallery_{{ field.name }}_immagini;
                 }
+            };
+
+            {% elseif field.type == "color" %}
+
+            $scope.{{field.name}}ColorSettings = {
+                control: 'brightness',
+                theme: 'bootstrap',
+                position: 'top left',
+                letterCase: 'uppercase'
             };
 
             {% elseif field.type == "order" %}
