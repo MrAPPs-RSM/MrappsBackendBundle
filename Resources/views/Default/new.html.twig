@@ -279,7 +279,10 @@
                 control: 'brightness',
                 theme: 'bootstrap',
                 position: 'top left',
-                letterCase: 'uppercase'
+                {% if field.value is defined and field.value != null %}
+                defaultValue: '{{ field.value }}',
+                {% endif %}
+                letterCase: 'uppercase',
             };
 
             {% elseif field.type == "order" %}
