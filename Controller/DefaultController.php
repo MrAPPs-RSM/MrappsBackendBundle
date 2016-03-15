@@ -55,6 +55,19 @@ class DefaultController extends Controller
     {
         $menu = array();
 
+        /*
+         * PRIMO LIVELLO
+                SELECT * FROM `mrapps_backend_sidebar`
+                where parent is null
+                order by weight asc
+
+        SECONDO LIVELLO
+                SELECT * FROM `mrapps_backend_sidebar`
+                where parent is not null
+                order by weight asc
+
+         */
+
         $sidebar = ($this->container->hasParameter('mrapps_backend.sidebar_menu')) ? $this->container->getParameter('mrapps_backend.sidebar_menu') : null;
         if (!is_array($sidebar)) $sidebar = array();
 
