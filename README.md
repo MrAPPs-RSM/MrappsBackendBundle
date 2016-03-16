@@ -229,11 +229,11 @@ Per configurare le thumbnails o utilizzare altri servizi, è necessario estender
 ```php
 use Mrapps\BackendBundle\Annotation\Sidebar;
 ```
-  - Configurare la Sidebar in corrispondenza dell'action desiderata:
+  - Configurare le annotations in corrispondenza delle action interessate:
 ```php
 @Sidebar("ID_ELEMENTO", label="Elenco Piloti", min_role="ROLE_ADMIN", visible=true, weight=3, parent="ID_ELEMENTO_PADRE" icon="icon-layers")
 ```
-  - Una volta terminata la generazione delle annotations, generare la struttura su Database:
+  - Una volta terminata la configurazione, generare la struttura su Database:
 ```!/bin/bash
 app/console mrapps:backend:buildsidebar
 ```
