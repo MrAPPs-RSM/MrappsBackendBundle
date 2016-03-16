@@ -16,13 +16,19 @@ class SidebarEntryRepository extends EntityRepository
     public function clearSidebar() {
 
         $em = $this->getEntityManager();
-        $q = $em->createQuery('delete from MrappsBackendBundle:SidebarEntry s where 1=1');
-        $numDeleted = $q->execute();
+        
+        //Secondo livello
+        $q2 = $em->createQuery('delete from MrappsBackendBundle:SidebarEntry s where s.parent IS NOT NULL');
+        $numDeleted2 = $q2->execute();
+        
+        //Primo livello
+        $q1 = $em->createQuery('delete from MrappsBackendBundle:SidebarEntry s where s.parent IS NULL');
+        $numDeleted1 = $q1->execute();
 
-        return $numDeleted;
+        return $numDeleted2+$numDeleted1;
     }
 
-    public function addSidebarEntry($sidebar = null, $autoFlush = true) {
+    public function addSidebarEntry($sidebar = null) {
 
         $entry = null;
 
@@ -30,11 +36,14 @@ class SidebarEntryRepository extends EntityRepository
 
             $code = (isset($sidebar['code'])) ? strtoupper(trim($sidebar['code'])) : '';
             $label = (isset($sidebar['label'])) ? trim($sidebar['label']) : '';
+            $icon = (isset($sidebar['icon'])) ? trim($sidebar['icon']) : '';
             $minRole = (isset($sidebar['min_role'])) ? strtoupper(trim($sidebar['min_role'])) : null;
             $visible = (isset($sidebar['visible'])) ? (bool)$sidebar['visible'] : false;
             $parentCode = (isset($sidebar['parent'])) ? strtoupper(trim($sidebar['parent'])) : '';
             $weight = (isset($sidebar['weight'])) ? intval($sidebar['weight']) : 0;
             $route = (isset($sidebar['route'])) ? trim($sidebar['route']) : '';
+            $controller = (isset($sidebar['controller'])) ? trim($sidebar['controller']) : '';
+            $action = (isset($sidebar['action'])) ? trim($sidebar['action']) : '';
 
             if(strlen($code) > 0) {
 
@@ -47,18 +56,19 @@ class SidebarEntryRepository extends EntityRepository
                 }
 
                 $entry->setLabel($label);
+                $entry->setIcon($icon);
                 $entry->setMinRole($minRole);
                 $entry->setVisible($visible);
                 $entry->setWeight($weight);
                 $entry->setRoute($route);
-
+                $entry->setController($controller);
+                $entry->setAction($action);
+                
                 $parent = $this->findOneBy(array('code' => $parentCode));
                 $entry->setParent($parent);
 
                 $em->persist($entry);
-                if($autoFlush) {
-                    $em->flush($entry);
-                }
+                $em->flush($entry);
             }
         }
 

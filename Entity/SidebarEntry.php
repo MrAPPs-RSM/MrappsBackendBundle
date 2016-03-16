@@ -30,12 +30,34 @@ class SidebarEntry extends Base
      * @Assert\Length(max=255)
      */
     protected $minRole;
+    
+    
+    /**
+     * @ORM\Column(name="icon", type="string", length=100, nullable=true)
+     * @Assert\Length(max=100)
+     */
+    protected $icon;
 
+    
     /**
      * @ORM\Column(name="route", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
     protected $route;
+    
+    
+    /**
+     * @ORM\Column(name="controller", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    protected $controller;
+    
+    
+    /**
+     * @ORM\Column(name="action", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    protected $action;
 
 
     /**
@@ -204,5 +226,77 @@ class SidebarEntry extends Base
     public function getRoute()
     {
         return $this->route;
+    }
+
+    /**
+     * Set controller
+     *
+     * @param string $controller
+     *
+     * @return SidebarEntry
+     */
+    public function setController($controller)
+    {
+        $this->controller = $controller;
+
+        return $this;
+    }
+
+    /**
+     * Get controller
+     *
+     * @return string
+     */
+    public function getController()
+    {
+        return $this->controller;
+    }
+
+    /**
+     * Set action
+     *
+     * @param string $action
+     *
+     * @return SidebarEntry
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return string
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * Set icon
+     *
+     * @param string $icon
+     *
+     * @return SidebarEntry
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
     }
 }

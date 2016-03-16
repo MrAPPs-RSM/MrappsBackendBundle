@@ -2,3 +2,9 @@ services:
     mrapps_backend:
         class: Mrapps\BackendBundle\Twig
         arguments: ['@service_container']
+
+    mrapps.backendsignal.buildsidebar_command:
+            class: Mrapps\BackendBundle\Command\BuildSidebarCommand
+            arguments:  []
+            tags:
+                -  { name: console.command }
