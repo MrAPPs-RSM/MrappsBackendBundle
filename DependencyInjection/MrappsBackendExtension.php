@@ -30,7 +30,6 @@ class MrappsBackendExtension extends Extension
         $container->setParameter('mrapps_backend.file_accepted_types.pdf', $config['file_accepted_types']['pdf']);
         $container->setParameter('mrapps_backend.file_accepted_types.zip', $config['file_accepted_types']['zip']);
         $container->setParameter('mrapps_backend.file_accepted_types.json', $config['file_accepted_types']['json']);
-        $container->setParameter('mrapps_backend.sidebar_menu', $config['sidebar_menu']);
         $container->setParameter('mrapps_backend.customization.primary_color', $config['customization']['primary_color']);
         $container->setParameter('mrapps_backend.customization.text_on_primary_color', $config['customization']['text_on_primary_color']);
         $container->setParameter('mrapps_backend.customization.secondary_color', $config['customization']['secondary_color']);

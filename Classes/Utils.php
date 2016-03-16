@@ -4,10 +4,10 @@ namespace Mrapps\BackendBundle\Classes;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use FOS\UserBundle\Model\UserInterface;
 
 class Utils
 {
-
     public static function bundleExists($container = null, $bundleName = '')
     {
 

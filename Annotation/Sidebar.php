@@ -9,6 +9,7 @@ class Sidebar
 {
     private $code = '';
     private $label = '';
+    private $icon = '';
     private $min_role = 'ROLE_USER';
     private $visible = false;
     private $parent = '';
@@ -20,7 +21,6 @@ class Sidebar
             $options['code'] = $options['value'];
             unset($options['value']);
         }
-
 
         foreach ($options as $key => $value) {
 
@@ -40,6 +40,11 @@ class Sidebar
     public function getLabel()
     {
         return trim($this->label);
+    }
+    
+    public function getIcon()
+    {
+        return trim($this->icon);
     }
 
     public function getMinRole()

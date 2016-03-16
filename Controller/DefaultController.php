@@ -2,6 +2,7 @@
 
 namespace Mrapps\BackendBundle\Controller;
 
+use Mrapps\BackendBundle\Entity\SidebarEntry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -50,62 +51,112 @@ class DefaultController extends Controller
                 "default_route_name" => $defaultRouteName,));
     }
 
+    private function _checkRoleSidebar($sidebar = null) {
+        
+        if($sidebar !== null) {
+            $checker = $this->get('security.authorization_checker');
+            $minRole = $sidebar->getMinRole();
+            return (is_null($minRole) || strlen($minRole) == 0 || $checker->isGranted($minRole));
+        }
+        
+        return false;
+    }
 
     public function __sideBarAction()
     {
         $menu = array();
 
-        /*
-         * PRIMO LIVELLO
-                SELECT * FROM `mrapps_backend_sidebar`
-                where parent is null
-                order by weight asc
+        $em = $this->getDoctrine()->getManager();
+        
+        $params = array('visible' => 1, 'route' => '');
+        $where = " AND s.visible = :visible AND s.route != :route AND s.route IS NOT NULL ";
 
-        SECONDO LIVELLO
-                SELECT * FROM `mrapps_backend_sidebar`
-                where parent is not null
-                order by weight asc
+        //Voci di menu al primo livello, ordinate per peso
+        $primoLivello = $em->createQuery("
+                SELECT s
+                FROM MrappsBackendBundle:SidebarEntry s
+                WHERE s.parent IS NULL
+                {$where}
+                ORDER BY s.weight ASC
+        ")->setParameters($params)->execute();
 
-         */
+        //Voci di menu al secondo livello, raggruppate per parent ID e ordinate per peso
+        $secondoLivello = $em->createQuery("
+                SELECT s,p
+                FROM MrappsBackendBundle:SidebarEntry s
+                JOIN s.parent p
+                WHERE s.parent IS NOT NULL
+                {$where}
+                ORDER BY p.id ASC, s.weight ASC
+        ")->setParameters($params)->execute();
 
-        $sidebar = ($this->container->hasParameter('mrapps_backend.sidebar_menu')) ? $this->container->getParameter('mrapps_backend.sidebar_menu') : null;
-        if (!is_array($sidebar)) $sidebar = array();
+        //Organizzazione voci di menu secondo livello
+        $secondoLivelloParents = array();
+        foreach($secondoLivello as $sidebar) {
+            
+            //Check ruolo
+            if($this->_checkRoleSidebar($sidebar)) {
+                
+                $parentId = ($sidebar->getParent() !== null) ? $sidebar->getParent()->getId() : 0;
+                if(!isset($secondoLivelloParents[$parentId])) {
+                    $secondoLivelloParents[$parentId] = array();
+                }
+                $secondoLivelloParents[$parentId][] = $sidebar;
+            }
+        }
 
-        foreach ($sidebar as $firstLevel) {
+        //Gestione sidebar primo livello
+        foreach($primoLivello as $sidebar) {
+            
+            //Check ruolo
+            if($this->_checkRoleSidebar($sidebar)) {
+                
+                $thisId = $sidebar->getId();
+                if(isset($secondoLivelloParents[$thisId]) && count($secondoLivelloParents[$thisId]) > 0) {
 
-            $hasSubmenu = (isset($firstLevel['has_submenu'])) ? (bool)$firstLevel['has_submenu'] : false;
-            $minRole = (isset($firstLevel['min_role'])) ? trim($firstLevel['min_role']) : '';
-            $icon = (isset($firstLevel['icon'])) ? trim($firstLevel['icon']) : '';
-            $routeName = (isset($firstLevel['route_name'])) ? trim($firstLevel['route_name']) : '';
-            $title = (isset($firstLevel['title'])) ? trim($firstLevel['title']) : '';
+                    $hasSubmenu = true;
 
-            if ($hasSubmenu) {
+                    $url = array();
 
-                $submenu = array();
-                $sub = (isset($firstLevel['submenu']) && is_array($firstLevel['submenu'])) ? $firstLevel['submenu'] : array();
-                foreach ($sub as $secondLevel) {
+                    foreach($secondoLivelloParents[$thisId] as $subSidebar) {
 
-                    $subTitle = (isset($secondLevel['title'])) ? trim($secondLevel['title']) : '';
-                    $subRouteName = (isset($secondLevel['route_name'])) ? trim($secondLevel['route_name']) : '';
-                    $subUrl = (strlen($subRouteName) > 0) ? $this->generateUrl($subRouteName) : '';
+                        //Rotta submenu
+                        $route = $subSidebar->getRoute();
+                        try {
+                            $subUrl = (strlen($route) > 0) ? $this->generateUrl($route) : '';
+                        }catch(\Exception $e) {
+                            $subUrl = '';
+                        }
 
-                    $submenu[] = array('title' => $subTitle, 'url' => $subUrl, 'route_name' => $subRouteName);
+                        $url[] = array(
+                            'title' => $subSidebar->getLabel(),
+                            'url' => $subUrl,
+                            'route_name' => $route,
+                        );
+                    }
+
+                }else {
+
+                    $hasSubmenu = false;
+
+                    //No voci di secondo livello: generazione rotta
+                    $route = $sidebar->getRoute();
+                    try {
+                        $url = (strlen($route) > 0) ? $this->generateUrl($route) : '';
+                    }catch(\Exception $e) {
+                        $url = '';
+                    }
                 }
 
-                $url = $submenu;
-
-            } else {
-                $url = (strlen($routeName) > 0) ? $this->generateUrl($routeName) : '';
+                $menu[] = array(
+                    'has_submenu' => $hasSubmenu,
+                    'title' => $sidebar->getLabel(),
+                    'icon' => $sidebar->getIcon(),
+                    'url' => $url,
+                    'route_name' => $route,
+                    'min_role' => $sidebar->getMinRole(),
+                );
             }
-
-            $menu[] = array(
-                'has_submenu' => $hasSubmenu,
-                'title' => $title,
-                'icon' => $icon,
-                'url' => $url,
-                'route_name' => $routeName,
-                'min_role' => $minRole,
-            );
         }
 
         $urlArray = explode('?', preg_replace('/\/app_dev.php/', '', $_SERVER['REQUEST_URI']));
