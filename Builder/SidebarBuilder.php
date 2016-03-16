@@ -119,6 +119,42 @@ class SidebarBuilder
                 $ctrl = new $class;
                 $reflectionObject = new \ReflectionObject($ctrl);
 
+                // Lettura Annotation sul Controller
+                $reflectionClass = new \ReflectionClass($class);
+                $annotationClass = $this->reader->getClassAnnotation($reflectionClass, $this->annotationClass);
+                if (null !== $annotationClass) {
+
+                    //Se l'annotation viene specificata a livello di Controller (e non di Action) ignoro la route
+                    $structure = $this->getStructure($annotationClass, array(
+                        'route' => null,
+                        'controller' => null,
+                        'action' => null,
+                    ));
+                    if(null !== $structure) {
+
+                        $code = $structure['code'];
+                        $parent = $structure['parent'];
+
+                        if($parent == null) {
+
+                            //Primo livello
+                            $sidebar[$code] = $structure;
+
+                        }else {
+
+                            if(isset($sidebar[$parent])) {
+
+                                //Secondo livello: parent già elaborato
+                                $sidebar[$parent]['children'][$code] = $structure;
+                            }else {
+                                //Secondo livello: parent ancora da elaborare
+                                $subMenus[$code] = $structure;
+                            }
+                        }
+                    }
+                }
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
                 //Metodi del Controller
                 foreach ($reflectionObject->getMethods() as $reflectionMethod) {
                     
