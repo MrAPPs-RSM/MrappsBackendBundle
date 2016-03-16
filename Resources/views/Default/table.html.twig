@@ -1,3 +1,4 @@
+{% trans_default_domain 'MrappsBackendBundle' %}
 {% extends 'MrappsBackendBundle:Default:layout.html.twig' %}
 {% block css %}
     <link rel="stylesheet" href="{{ asset('assets/vendor/ng-table/dist/ng-table.min.css') }}">
@@ -13,7 +14,7 @@
                     <button type="submit" class="btn btn-labeled btn-success pull-right" ng-click="go('{{ linkNew }}')">
                     <span class="btn-label">
                         <em class="fa fa-plus"></em>
-                    </span>Aggiungi Nuovo
+                    </span>{{ 'form.aggiungi_nuovo'|trans }}
                     </button>
                     {% if linkCustom is null %}
                         <div class="cb"></div>
@@ -105,7 +106,12 @@
 
                 {% for colums in tableColumns %}
                 {% if colums.type=='checkbox' %}
-                $scope.{{ colums.name }}_filter=["true","false"];
+                $scope.{{ colums.name }}_filter = [{"id": null, "title": ""}, {"id": 1, "title": "{{ 'checkbox.si'|trans }}"}, {
+                    "id": 0,
+                    "title": "{{ 'checkbox.no'|trans }}"
+                }];
+                {% elseif colums.type=='select' and colums.filter_options is defined %}
+                $scope.{{ colums.name }}_filter ={{ [{'id':null,'title':''}]|merge(colums.filter_options) | json_encode | raw }};
                 {% endif %}
                 {% endfor %}
 
@@ -125,7 +131,7 @@
                 }, {
                     //total: dati.length, // length of data
                     getData: function ($defer, params) {
-                        $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
+                        $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>{{ 'form.attendere'|trans }}</div></div>');
                         Api.query(params.url(), function (data) {
                             // update table params
                             params.total(data.length);
@@ -148,13 +154,13 @@
                 $scope.deleteajax = function (id) {
                     var data = {id: id};
                     swal({
-                        title: "Procedere?",
+                        title: "{{ 'form.elemento.procedere'|trans }}",
                         text: "{{ deleteMessages['question'] }}",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Si",
-                        cancelButtonText: "No",
+                        confirmButtonText: "{{ 'checkbox.si'|trans }}",
+                        cancelButtonText: "{{ 'checkbox.no'|trans }}",
                         closeOnConfirm: false,
                         closeOnCancel: false
                     }, function (isConfirm) {
@@ -162,53 +168,18 @@
                             $http.post('{{ linkDelete }}', data)
                                     .then(function successCallback(response) {
                                         if (response.data.success) {
-                                            swal("Completato!", "{{ deleteMessages['success'] }}", "success");
+                                            swal("{{ 'form.elemento.completato'|trans }}", "{{ deleteMessages['success'] }}", "success");
                                             self.tableParams2.reload();
                                         } else {
-                                            swal("Errore!", response.data.message, "error");
+                                            swal("{{ 'form.elemento.errore'|trans }}", response.data.message, "error");
                                         }
                                     }, function errorCallback(response) {
-                                        swal("Errore!", "{{ deleteMessages['error'] }}", "error");
+                                        swal("{{ 'form.elemento.errore'|trans }}", "{{ deleteMessages['error'] }}", "error");
                                     });
                         } else {
-                            swal("Errore!", "{{ deleteMessages['cancel'] }}", "error");
+                            swal("{{ 'form.elemento.errore'|trans }}", "{{ deleteMessages['cancel'] }}", "error");
                         }
                     });
-                };
-                {% endif %}
-                {% if linkOrder is not null %}
-                $scope.sortableOptions = {
-                    start: function (e, ui) {
-                        $scope.isDragging = true;
-                    },
-                    stop: function (e, ui) {
-                        setTimeout(function () {
-                            $scope.isDragging = false;
-                        }, 300);
-                        //if(!self.tableParams2.hasFilter()){
-                        $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
-                        $http({
-                            method: 'POST',
-                            url: '{{ linkOrder }}',
-                            data: {
-                                'data': self.data,
-                                'page': self.tableParams2.url().page - 1,
-                                'count': self.tableParams2.url().count
-                            },
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                        }).then(function successCallback(response) {
-                            $('#overlay-waiting').remove();
-                            self.tableParams2.reload();
-                            toastr.success('Ordinato!', 'Ordine salvato');
-                        }, function errorCallback(response) {
-                            $('#overlay-waiting').remove();
-                            self.tableParams2.reload();
-                            toastr.error('Errore!', 'Errore nel salvataggio');
-                        });
-                        //}
-                    }
                 };
                 {% endif %}
                 {% if linkAction is not null %}
