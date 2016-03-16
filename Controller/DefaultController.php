@@ -619,11 +619,20 @@ class DefaultController extends Controller
      */
     public function permissionsAction(Request $request, $route = '')
     {
+        //Security
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Accesso non autorizzato!');
 
+        $route = trim($route);
+        $em = $this->getDoctrine()->getManager();
 
+        $permissions = $em->getRepository('MrappsBackendBundle:Permission')->findBy(array('route' => $route));
 
-        $defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
-        return new RedirectResponse($this->generateUrl($defaultRouteName));
+        return $this->render('MrappsBackendBundle:Default:permissions.html.twig', array(
+
+            'title' => 'CIAONE',
+            'angular' => '"ngTable","ngResource"',
+            'permissions' => $permissions,
+        ));
     }
 
 }
