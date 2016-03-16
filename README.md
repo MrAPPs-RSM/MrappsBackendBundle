@@ -231,7 +231,7 @@ use Mrapps\BackendBundle\Annotation\Sidebar;
 ```
   - Configurare le annotations in corrispondenza delle action interessate:
 ```php
-@Sidebar("ID_ELEMENTO", label="Elenco Piloti", min_role="ROLE_ADMIN", visible=true, weight=3, parent="ID_ELEMENTO_PADRE" icon="icon-layers")
+@Sidebar("ID_ELEMENTO", label="Elenco Piloti", min_role="ROLE_ADMIN", visible=true, weight=3, parent="ID_ELEMENTO_PADRE", icon="icon-layers")
 ```
   - Una volta terminata la configurazione, generare la struttura su Database:
 ```!/bin/bash

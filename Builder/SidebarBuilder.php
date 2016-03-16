@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Mrapps\BackendBundle\Annotation\Sidebar;
 use Mrapps\BackendBundle\Controller\BaseBackendController;
+use Mrapps\BackendBundle\Classes\Utils;
 
 class SidebarBuilder
 {
@@ -66,27 +67,6 @@ class SidebarBuilder
         return null;
     }
     
-    private function getControllerActionFullName(\ReflectionMethod $method) {
-        
-        $controller = $method->class;
-        $action = $method->name;
-        
-        return trim($controller, '\\').'::'.$action;
-    }
-    
-    private function getRoutesArray() {
-        
-        $arrayRoutes = array();
-        
-        $routes = $this->container->get('router')->getRouteCollection();
-        foreach ($routes as $route) {
-            $controller = $route->getDefault('_controller');
-            $path = $route->getPath();
-            $arrayRoutes[$controller] = $path;
-        }
-        
-        return $arrayRoutes;
-    }
 
     public function build()
     {
@@ -94,7 +74,7 @@ class SidebarBuilder
         $subMenus = array();
         
         //Tutte le rotte
-        $routes = $this->getRoutesArray();
+        $routes = Utils::getRoutesArray($this->container);
         
         //Inizializzazione Controller
         $kernel = $this->container->get('kernel');
@@ -158,7 +138,7 @@ class SidebarBuilder
                 //Metodi del Controller
                 foreach ($reflectionObject->getMethods() as $reflectionMethod) {
                     
-                    $controllerFullName = $this->getControllerActionFullName($reflectionMethod);
+                    $controllerFullName = Utils::getControllerActionFullName($reflectionMethod);
                     $routePath = (isset($routes[$controllerFullName])) ? $routes[$controllerFullName] : '';
                     $routeName = '';
                     

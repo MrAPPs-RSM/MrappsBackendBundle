@@ -3,8 +3,14 @@ services:
         class: Mrapps\BackendBundle\Twig
         arguments: ['@service_container']
 
-    mrapps.backendsignal.buildsidebar_command:
+    mrapps.backend.buildsidebar_command:
             class: Mrapps\BackendBundle\Command\BuildSidebarCommand
+            arguments:  []
+            tags:
+                -  { name: console.command }
+
+    mrapps.backend.generatepermissions_command:
+            class: Mrapps\BackendBundle\Command\GeneratePermissionsCommand
             arguments:  []
             tags:
                 -  { name: console.command }

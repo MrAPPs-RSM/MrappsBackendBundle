@@ -613,4 +613,17 @@ class DefaultController extends Controller
         return Utils::generateResponse($success, $message, $array);
     }
 
+    /**
+     * @Route("/permissions/{route}", name="mrapps_backend_permissions")
+     * @Method({"GET"})
+     */
+    public function permissionsAction(Request $request, $route = '')
+    {
+
+
+
+        $defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
+        return new RedirectResponse($this->generateUrl($defaultRouteName));
+    }
+
 }

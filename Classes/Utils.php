@@ -8,6 +8,48 @@ use FOS\UserBundle\Model\UserInterface;
 
 class Utils
 {
+    public static function getRoutesArray($container = null) {
+
+        $arrayRoutes = array();
+
+        if($container !== null) {
+            $routes = $container->get('router')->getRouteCollection();
+            foreach ($routes as $route) {
+                $controller = $route->getDefault('_controller');
+                $path = $route->getPath();
+                $arrayRoutes[$controller] = $path;
+            }
+        }
+
+        return $arrayRoutes;
+    }
+
+    public static function getControllerActionFullName(\ReflectionMethod $method) {
+
+        $controller = $method->class;
+        $action = $method->name;
+
+        return trim($controller, '\\').'::'.$action;
+    }
+
+    public static function getAllRoles($container = null) {
+
+        $output = array();
+
+        if($container !== null) {
+
+            $roles = array_reverse($container->getParameter('security.role_hierarchy.roles'));
+            foreach($roles as $main => $children) {
+                if(!isset($output[$main])) $output[$main] = $main;
+                foreach($children as $child) {
+                    if(!isset($output[$child])) $output[$child] = $child;
+                }
+            }
+        }
+
+        return array_reverse($output);
+    }
+
     public static function bundleExists($container = null, $bundleName = '')
     {
 
