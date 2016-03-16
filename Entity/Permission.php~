@@ -1,0 +1,40 @@
+<?php
+
+namespace Mrapps\BackendBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity(repositoryClass="Mrapps\BackendBundle\Repository\PermissionRepository")
+ * @ORM\Table(name="mrapps_backend_permissions")
+ */
+class Permission extends Base
+{
+    /**
+     * @ORM\Column(name="route", type="string", length=255)
+     * @Assert\Length(max=255)
+     */
+    protected $route;
+
+    /**
+     * @ORM\Column(name="role", type="string", length=255)
+     * @Assert\Length(max=255)
+     */
+    protected $role;
+
+    /**
+     * @ORM\Column(name="can_view", type="boolean", nullable=true)
+     */
+    protected $canView;
+
+    /**
+     * @ORM\Column(name="can_edit", type="boolean", nullable=true)
+     */
+    protected $canEdit;
+
+    /**
+     * @ORM\Column(name="can_delete", type="boolean", nullable=true)
+     */
+    protected $canDelete;
+}
