@@ -1,0 +1,77 @@
+{% extends 'MrappsBackendBundle:Default:layout.html.twig' %}
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/ng-table/dist/ng-table.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/sweetalert/dist/sweetalert.css') }}">
+{% endblock css %}
+{% block content %}
+    <div ng-controller="NGTableCtrl as table" class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix"></div>
+            <table ng-table="table.tableParams2" show-filter="true" class="table table-bordered table-striped">
+                <thead>
+                    <th data-title="Role">Role</th>
+                    <th data-title="Can View">Can View</th>
+                    <th data-title="Can Edit">Can Edit</th>
+                    <th data-title="Can Delete">Can Delete</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in $data">
+                    <td data-title="Role">{/ row.role /}</td>
+                    <td data-title="Can View">{/ row.can_view /}</td>
+                    <td data-title="Can Edit">{/ row.can_edit /}</td>
+                    <td data-title="Can Delete">{/ row.can_delete /}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock content %}
+{% block srcjavascript %}
+    <script src="{{ asset('assets/vendor/angular-resource/angular-resource.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/ng-table/dist/ng-table.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/sweetalert/dist/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-ui/jquery-ui.min.js') }}"></script>
+{% endblock srcjavascript %}
+{% block javascript %}
+    <script type="text/javascript">
+        (function () {
+            "use strict";
+
+            myAngular.controller("NGTableCtrl", NGTableCtrl);
+
+            function NGTableCtrl($http, $window, $scope, $location, $filter, NgTableParams, $resource, $rootScope) {
+                var self = this;
+
+                $scope.go = function (path) {
+                    $window.location.href = path;
+                };
+
+                $scope.isDragging = false;
+
+
+
+                $rootScope.showChildren = function (id) {
+                    if (!$scope.isDragging) {
+                        self.tableParams2.filter()["parent.id"] = id;
+                        $rootScope.refreshBreadcrumbs(id);
+                        self.tableParams2.reload();
+                    }
+                };
+
+                self.tableParams2 = new NgTableParams({
+                    page: 1,
+                    count: {{ permissions|length }}
+                }, {
+                    //total: dati.length, // length of data
+                    getData: function ($defer, params) {
+
+                        self.data = [{'role':'ROLE_USER','can_view':true,'can_edit':false,'can_delete':true}];
+                        params.total(self.data.length);
+                        $defer.resolve(self.data);
+                    }
+                });
+            }
+        })();
+    </script>
+{% endblock javascript %}
