@@ -68,17 +68,14 @@ class DefaultController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $params = array('visible' => 1, 'route' => '');
-        $where = " AND s.visible = :visible AND s.route != :route AND s.route IS NOT NULL ";
-
         //Voci di menu al primo livello, ordinate per peso
         $primoLivello = $em->createQuery("
                 SELECT s
                 FROM MrappsBackendBundle:SidebarEntry s
                 WHERE s.parent IS NULL
-                {$where}
+                AND s.visible = :visible
                 ORDER BY s.weight ASC
-        ")->setParameters($params)->execute();
+        ")->setParameters(array('visible' => 1))->execute();
 
         //Voci di menu al secondo livello, raggruppate per parent ID e ordinate per peso
         $secondoLivello = $em->createQuery("
@@ -86,9 +83,11 @@ class DefaultController extends Controller
                 FROM MrappsBackendBundle:SidebarEntry s
                 JOIN s.parent p
                 WHERE s.parent IS NOT NULL
-                {$where}
+                AND s.visible = :visible
+                AND s.route != :route
+                AND s.route IS NOT NULL
                 ORDER BY p.id ASC, s.weight ASC
-        ")->setParameters($params)->execute();
+        ")->setParameters(array('visible' => 1, 'route' => ''))->execute();
 
         //Organizzazione voci di menu secondo livello
         $secondoLivelloParents = array();
