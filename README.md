@@ -220,4 +220,20 @@ liip_imagine.controller.imagine_filter:
 ```
 
 ## Controller Backend ##
-Per configurare le thumbnails è necessario estendere la classe BaseBackendController.
+Per configurare le thumbnails o utilizzare altri servizi, è necessario estendere la classe BaseBackendController.
+
+## Generazione Sidebar laterale ##
+
+  - Assicurarsi che i Controller interessati estendano la classe BaseBackendController.
+  - Importare le annotations:
+```php
+use Mrapps\BackendBundle\Annotation\Sidebar;
+```
+  - Configurare la Sidebar in corrispondenza dell'action desiderata:
+```php
+@Sidebar("ID_ELEMENTO", label="Elenco Piloti", min_role="ROLE_ADMIN", visible=true, weight=3, parent="ID_ELEMENTO_PADRE" icon="icon-layers")
+```
+  - Una volta terminata la generazione delle annotations, generare la struttura su Database:
+```!/bin/bash
+app/console mrapps:backend:buildsidebar
+```
