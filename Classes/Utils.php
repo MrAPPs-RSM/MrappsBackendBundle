@@ -8,6 +8,21 @@ use FOS\UserBundle\Model\UserInterface;
 
 class Utils
 {
+    public static function getControllerCompactName($controllerFullName = '') {
+
+        $compactName = $controllerFullName;
+        $pos = strpos($compactName, '::');
+        if($pos !== false) {
+            $compactName = substr($compactName, 0, $pos);
+        }
+
+        if(strlen($compactName) > 0) {
+            $compactName = str_replace('\\\\', ':', str_replace('Controller', '', $compactName));
+        }
+
+        return $compactName;
+    }
+
     public static function getRoutesArray($container = null) {
 
         $arrayRoutes = array();

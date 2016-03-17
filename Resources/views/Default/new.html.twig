@@ -7,7 +7,13 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-minicolors/jquery.minicolors.css') }}">
 {% endblock css %}
 {% block content %}
-    <!-- START row-->
+    {% if is_granted('ROLE_SUPER_ADMIN') and current_route is defined and current_route|length > 0 %}
+        <button type="submit" class="btn btn-labeled btn-info pull-left" ng-click="go('{{ path('mrapps_backend_permissions', {'route':current_route }) }}')">
+            <span class="btn-label">
+                <em class="fa fa-check-square-o"></em>
+            </span>Permessi ({{ current_route }})
+        </button>
+    {% endif %}
     <div ng-controller="FormValidationController as form" class="container-fluid">
         <div class="row">
             <div class="col-md-12">

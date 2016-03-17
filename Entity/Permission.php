@@ -12,10 +12,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Permission extends Base
 {
     /**
-     * @ORM\Column(name="route", type="string", length=255)
+     * @ORM\Column(name="object", type="string", length=255)
      * @Assert\Length(max=255)
      */
-    protected $route;
+    protected $object;
 
     /**
      * @ORM\Column(name="role", type="string", length=255)
@@ -29,6 +29,11 @@ class Permission extends Base
     protected $canView;
 
     /**
+     * @ORM\Column(name="can_create", type="boolean", nullable=true)
+     */
+    protected $canCreate;
+
+    /**
      * @ORM\Column(name="can_edit", type="boolean", nullable=true)
      */
     protected $canEdit;
@@ -39,27 +44,27 @@ class Permission extends Base
     protected $canDelete;
 
     /**
-     * Set route
+     * Set object
      *
-     * @param string $route
+     * @param string $object
      *
      * @return Permission
      */
-    public function setRoute($route)
+    public function setObject($object)
     {
-        $this->route = $route;
+        $this->object = $object;
 
         return $this;
     }
 
     /**
-     * Get route
+     * Get object
      *
      * @return string
      */
-    public function getRoute()
+    public function getObject()
     {
-        return $this->route;
+        return $this->object;
     }
 
     /**
@@ -108,6 +113,30 @@ class Permission extends Base
     public function getCanView()
     {
         return $this->canView;
+    }
+
+    /**
+     * Set canCreate
+     *
+     * @param boolean $canCreate
+     *
+     * @return Permission
+     */
+    public function setCanCreate($canCreate)
+    {
+        $this->canCreate = $canCreate;
+
+        return $this;
+    }
+
+    /**
+     * Get canCreate
+     *
+     * @return boolean
+     */
+    public function getCanCreate()
+    {
+        return $this->canCreate;
     }
 
     /**

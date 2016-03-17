@@ -9,6 +9,13 @@
             <div class="panel-heading clearfix">
                 <div class="panel-title {% if (linkNew is defined and linkNew is not empty) or linkCustom is not null %}pull-left{% endif %}">
                 </div>
+                {% if is_granted('ROLE_SUPER_ADMIN') and current_route is defined and current_route|length > 0 %}
+                    <button type="submit" class="btn btn-labeled btn-info pull-left" ng-click="go('{{ path('mrapps_backend_permissions', {'route':current_route }) }}')">
+                        <span class="btn-label">
+                            <em class="fa fa-check-square-o"></em>
+                        </span>Permessi ({{ current_route }})
+                    </button>
+                {% endif %}
                 {% if linkNew is defined and linkNew is not null %}
                     <button type="submit" class="btn btn-labeled btn-success pull-right" ng-click="go('{{ linkNew }}')">
                     <span class="btn-label">
