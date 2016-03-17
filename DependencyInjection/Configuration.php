@@ -20,12 +20,26 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('mrapps_backend');
 
+        /*
+         * default_routes:
+        - { role: ROLE_ADMIN, name: mrapps_testing_list }
+        - { role: ROLE_SUPER_ADMIN, name: mrapps_testing_list }
+        - { role: ROLE_RISTORATORE, name: mrapps_testing_list }
+         */
+
         $rootNode
             ->children()
             ->scalarNode('logo_path')->defaultValue('temp')->end()
             ->scalarNode('temp_folder')->defaultValue('temp')->end()
             ->scalarNode('images_url')->defaultValue('')->end()
-            ->scalarNode('default_route_name')->defaultValue('mrapps_backend_index')->end()
+            ->arrayNode('default_routes')
+            ->prototype('array')
+            ->children()
+            ->scalarNode('role')->defaultValue('')->end()
+            ->scalarNode('name')->defaultValue('')->end()
+            ->end()
+            ->end()
+            ->end()
             ->arrayNode('file_accepted_types')
             ->addDefaultsIfNotSet()
             ->children()

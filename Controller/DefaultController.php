@@ -77,7 +77,8 @@ class DefaultController extends Controller
 
     public function __topNavBarAction()
     {
-        $defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
+        $defaultRouteName = $this->getDefaultRouteForUser();
+        //$defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
 
         return $this->render('MrappsBackendBundle:Default:top-navbar.html.twig',
             array("logo_path" => $this->container->hasParameter('mrapps_backend.logo_path') ? $this->container->getParameter('mrapps_backend.logo_path') : null,
@@ -87,9 +88,19 @@ class DefaultController extends Controller
     private function _checkRoleSidebar($sidebar = null) {
         
         if($sidebar !== null) {
-            $checker = $this->get('security.authorization_checker');
-            $minRole = $sidebar->getMinRole();
-            return (is_null($minRole) || strlen($minRole) == 0 || $checker->isGranted($minRole));
+
+            $controllerCompact = Utils::getControllerCompactName($sidebar->getController());
+
+            $user = $this->getUser();
+
+            $em = $this->getDoctrine()->getManager();
+            $perm = $em->getRepository('MrappsBackendBundle:Permission')->getPermissions($controllerCompact, $user);
+
+            return $perm['view'];
+
+//            $checker = $this->get('security.authorization_checker');
+//            $minRole = $sidebar->getMinRole();
+//            return (is_null($minRole) || strlen($minRole) == 0 || $checker->isGranted($minRole));
         }
         
         return false;
@@ -207,14 +218,40 @@ class DefaultController extends Controller
         ));
     }
 
+    private function getDefaultRouteForUser() {
+
+        $defaultRoutes = $this->container->getParameter('mrapps_backend.default_routes');
+
+        $user = $this->getUser();
+        $roles = ($user !== null) ? $user->getRoles() : array();
+        $roles[] = 'DEFAULT';
+
+        $defaultRouteForUser = '';
+        $canProceed = true;
+        foreach($roles as $role) {
+            if($canProceed) {
+                foreach($defaultRoutes as $route) {
+                    if($route['role'] == $role) {
+                        $defaultRouteForUser = $route['name'];
+                        $canProceed = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $defaultRouteForUser;
+    }
+
     /**
      * @Route("/", name="mrapps_backend_index")
      * @Method({"GET"})
      */
     public function indexAction()
     {
-        $defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
-        return new RedirectResponse($this->generateUrl($defaultRouteName));
+        $defaultRouteForUser = $this->getDefaultRouteForUser();
+
+        return new RedirectResponse($this->generateUrl($defaultRouteForUser));
     }
 
     public function __listAction(Request $request, $title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null, $deleteMessages = array())
