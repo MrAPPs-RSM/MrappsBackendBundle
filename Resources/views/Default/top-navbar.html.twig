@@ -1,3 +1,4 @@
+{% trans_default_domain 'MrappsBackendBundle' %}
 <!-- START Top Navbar-->
 <nav role="navigation" class="navbar topnavbar">
     <!-- START navbar header-->
@@ -42,15 +43,15 @@
             </li>
             <!-- END lock screen-->#}
             <li>
-                <a href="{{ path('mrapps_backend_profile_changepwd') }}" title="Change password">
+                <a href="{{ path('mrapps_backend_profile_changepwd') }}" title="{{ 'profilo.cambia_pwd'|trans }}">
                     <i class="fa fa-unlock-alt"></i>
-                    Change Password
+                    {{ 'profilo.cambia_pwd'|trans }}
                 </a>
             </li>
             <li>
-                <a href="{{ path('fos_user_security_logout') }}" title="Logout">
+                <a href="{{ path('fos_user_security_logout') }}" title="{{ 'profilo.logout'|trans }}s">
                     <em class="icon-lock"></em>
-                    Logout
+                    {{ 'profilo.logout'|trans }}
                 </a>
             </li>
         </ul>
