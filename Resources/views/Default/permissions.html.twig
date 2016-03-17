@@ -4,6 +4,18 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/sweetalert/dist/sweetalert.css') }}">
 {% endblock css %}
 {% block content %}
+    {% if route_url is defined and route_url|length > 0 %}
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb ng-scope">
+                <li>
+                    <a href="{{ route_url }}">
+                        <i class="fa fa-home"></i>
+                        Torna alla lista
+                    </a>
+                </li>
+            </ol>
+        </div>
+    {% endif %}
     <div ng-controller="NGTableCtrl as table" class="container-fluid">
         <div class="panel panel-default">
             <div class="panel-heading clearfix"></div>
@@ -12,6 +24,7 @@
                 <thead>
                     <th data-title="Role">Role</th>
                     <th data-title="Can View">Can View</th>
+                    <th data-title="Can Create">Can Create</th>
                     <th data-title="Can Edit">Can Edit</th>
                     <th data-title="Can Delete">Can Delete</th>
                 </thead>
@@ -19,6 +32,7 @@
                 <tr ng-repeat="row in $data">
                     <td data-title="Role">{/ row.role /}</td>
                     <td ng-style="{'background-color':(row.can_view)?'#CCFFCC':'#FF9999'}" data-title="Can View"><input type="checkbox" ng-model="row.can_view" ng-disabled="row.role=='ROLE_SUPER_ADMIN'" /> {/ row.can_view /}</td>
+                    <td ng-style="{'background-color':(row.can_create)?'#CCFFCC':'#FF9999'}" data-title="Can Create"><input type="checkbox" ng-model="row.can_create" ng-disabled="row.role=='ROLE_SUPER_ADMIN'" /> {/ row.can_create /}</td>
                     <td ng-style="{'background-color':(row.can_edit)?'#CCFFCC':'#FF9999'}" data-title="Can Edit"><input type="checkbox" ng-model="row.can_edit" ng-disabled="row.role=='ROLE_SUPER_ADMIN'" /> {/ row.can_edit /}</td>
                     <td ng-style="{'background-color':(row.can_delete)?'#CCFFCC':'#FF9999'}" data-title="Can Delete"><input type="checkbox" ng-model="row.can_delete" ng-disabled="row.role=='ROLE_SUPER_ADMIN'" /> {/ row.can_delete /}</td>
                 </tr>
@@ -33,18 +47,6 @@
             <button ng-disabled="saving" type="submit" id="save" class="btn btn-success" ng-click="savePermissions()"><i class="fa fa-spin fa-spinner" ng-show="saving"></i> Salva</button>
         </div>
     </div>
-    {% if route_url|length > 0 %}
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <ol class="breadcrumb ng-scope">
-                <li>
-                    <a href="{{ route_url }}">
-                        <i class="fa fa-home"></i>
-                        Torna alla rotta
-                    </a>
-                </li>
-            </ol>
-        </div>
-    {% endif %}
 
 {% endblock content %}
 {% block srcjavascript %}
@@ -70,7 +72,7 @@
                     $http({
                         method: 'POST',
                         url: '{{ path('mrapps_backend_savepermissions') }}',
-                        data: {'route': '{{ route }}', 'rows': self.tableParams2.data},
+                        data: {'route': '{{ object }}', 'rows': self.tableParams2.data},
                         headers: {
                             'Content-Type': 'application/json'
                         },
@@ -94,7 +96,7 @@
                 }, {
                     //total: dati.length, // length of data
                     getData: function ($defer, params) {
-                        var data = [{% for p in permissions %}{'role':'{{ p.role }}','can_view':{% if p.canView %}true{% else %}false{% endif %},'can_edit':{% if p.canEdit %}true{% else %}false{% endif %},'can_delete':{% if p.canDelete %}true{% else %}false{% endif %}}{% if loop.last == false %},{% endif %}{% endfor %}];
+                        var data = [{% for p in permissions %}{'role':'{{ p.role }}','can_view':{% if p.canView %}true{% else %}false{% endif %},'can_create':{% if p.canCreate %}true{% else %}false{% endif %},'can_edit':{% if p.canEdit %}true{% else %}false{% endif %},'can_delete':{% if p.canDelete %}true{% else %}false{% endif %}}{% if loop.last == false %},{% endif %}{% endfor %}];
                         params.total(data.length);
                         $defer.resolve(data);
                     },

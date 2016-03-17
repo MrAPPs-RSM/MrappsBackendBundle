@@ -23,26 +23,28 @@ class PermissionRepository extends EntityRepository
         return $numDeleted;
     }
 
-    public function addPermission($route = '', $role = '', $permissions = array(), $autoFlush = true) {
+    public function addPermission($object = '', $role = '', $permissions = array(), $autoFlush = true) {
 
         $em = $this->getEntityManager();
-        $route = trim($route);
+        $object = trim($object);
         $role = trim($role);
 
-        if(strlen($route) > 0 && strlen($role) > 0) {
+        if(strlen($object) > 0 && strlen($role) > 0) {
 
-            $p = $this->findOneBy(array('role' => $role, 'route' => $route));
+            $p = $this->findOneBy(array('role' => $role, 'object' => $object));
             if(null == $p) {
                 $p = new Permission();
-                $p->setRoute($route);
+                $p->setObject($object);
                 $p->setRole($role);
             }
 
             $canView = (isset($permissions['view'])) ? intval($permissions['view']) : 0;
+            $canCreate = (isset($permissions['create'])) ? intval($permissions['create']) : 0;
             $canEdit = (isset($permissions['edit'])) ? intval($permissions['edit']) : 0;
             $canDelete = (isset($permissions['delete'])) ? intval($permissions['delete']) : 0;
 
             $p->setCanView($canView);
+            $p->setCanCreate($canCreate);
             $p->setCanEdit($canEdit);
             $p->setCanDelete($canDelete);
 
@@ -55,5 +57,45 @@ class PermissionRepository extends EntityRepository
         }
 
         return null;
+    }
+
+    public function isObjectManaged($object = '') {
+
+        $em = $this->getEntityManager();
+        $count = $em->createQuery("
+          SELECT COUNT(p)
+          FROM MrappsBackendBundle:Permission p
+          WHERE p.object = :object
+          ")->setParameters(array('object' => trim($object)))->getSingleScalarResult();
+
+        return ($count > 0);
+    }
+
+    public function getActiveRoles($object = '', $action = '') {
+
+        $roles = array();
+
+        $object = trim($object);
+        $action = 'can'.ucwords(strtolower(trim($action)));   //canView, canCreate, ecc.
+
+        if(strlen($object) > 0 && strlen($action) > 0) {
+            $em = $this->getEntityManager();
+
+            $perms = $em->createQuery("
+              SELECT p
+              FROM MrappsBackendBundle:Permission p
+              WHERE p.object = :object
+              AND p.".$action." = :action
+            ")->setParameters(array(
+                'object' => $object,
+                'action' => 1,
+            ))->execute();
+
+            foreach($perms as $p) {
+                $roles[] = $p->getRole();
+            }
+        }
+
+        return $roles;
     }
 }

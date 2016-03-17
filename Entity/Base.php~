@@ -47,6 +47,11 @@ class Base {
      */
     protected $visible;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="FOS\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="owner",referencedColumnName="id")
+     */
+    protected $owner;
 
     
     public function __construct() {

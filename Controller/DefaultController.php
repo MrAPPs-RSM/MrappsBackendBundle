@@ -19,6 +19,36 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class DefaultController extends Controller
 {
+    public function security(Request $request, $action) {
+
+        //TODO ELIMINARE
+        return true;
+
+        $canProceed = false;
+
+        $compact = Utils::getControllerCompactName($request->attributes->get('_controller'));
+
+        $user = $this->getUser();
+        if($user !== null && is_object($user)) {
+
+            //Ruoli che possono accedere all'oggetto
+            $em = $this->getDoctrine()->getManager();
+            $roles = $em->getRepository('MrappsBackendBundle:Permission')->getActiveRoles($compact, $action);
+
+            //Ruoli dell'utente
+            $userRoles = $user->getRoles();
+
+//            var_dump($roles);
+//            var_dump($userRoles);
+//            die();
+        }
+
+        if(!$canProceed) {
+            //TODO THROW 403
+        }
+
+        return $canProceed;
+    }
 
     public function __navigationAction()
     {
@@ -184,8 +214,10 @@ class DefaultController extends Controller
         return new RedirectResponse($this->generateUrl($defaultRouteName));
     }
 
-    public function __listAction($title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null, $deleteMessages = array())
+    public function __listAction(Request $request, $title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null, $deleteMessages = array())
     {
+        $this->security($request, 'view');
+
         if (!is_array($deleteMessages)) $deleteMessages = array();
         if (!isset($deleteMessages['question'])) $deleteMessages['question'] = "Procedere con l'eliminazione?";
         if (!isset($deleteMessages['success'])) $deleteMessages['success'] = 'Procedura completata con successo.';
@@ -193,6 +225,7 @@ class DefaultController extends Controller
         if (!isset($deleteMessages['cancel'])) $deleteMessages['cancel'] = 'Operazione annullata.';
 
         return $this->render('MrappsBackendBundle:Default:table.html.twig', array(
+            'current_route' => $request->get('_route'),
             'title' => $title,
             'tableColumns' => $tableColumns,
             'defaultSorting' => json_encode($defaultSorting),
@@ -210,7 +243,7 @@ class DefaultController extends Controller
         ));
     }
 
-    public function __newAction($title, $fields, $linkSave = null, $linkEdit = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false, $linkNew = null)
+    public function __newAction(Request $request, $title, $fields, $linkSave = null, $linkEdit = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false, $linkNew = null)
     {
         if ($confirmSave == null) $confirmSave = false;
 
@@ -222,6 +255,7 @@ class DefaultController extends Controller
         }
 
         return $this->render('MrappsBackendBundle:Default:new.html.twig', array(
+            'current_route' => $request->get('_route'),
             'title' => $title,
             'fields' => $fields,
             'linkSave' => $linkSave,
@@ -614,31 +648,32 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/permissions/{route}", name="mrapps_backend_permissions")
+     * @Route("/permissions/{object}/{returnRoute}", name="mrapps_backend_permissions")
      * @Method({"GET"})
      */
-    public function permissionsAction(Request $request, $route = '')
+    public function permissionsAction(Request $request, $object = '', $returnRoute = '')
     {
         //Security
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Accesso non autorizzato!');
 
-        $route = trim($route);
+        $object = trim($object);
+        $returnRoute = trim($returnRoute);
         try {
-            $bcUrl = $this->generateUrl($route);
+            $routeUrl = (strlen($returnRoute) > 0) ? $this->generateUrl($returnRoute) : '';
         }catch(\Exception $e) {
-            $bcUrl = '';
+            $routeUrl = '';
         }
 
         $em = $this->getDoctrine()->getManager();
 
-        $permissions = $em->getRepository('MrappsBackendBundle:Permission')->findBy(array('route' => $route));
+        $permissions = $em->getRepository('MrappsBackendBundle:Permission')->findBy(array('object' => $object));
 
         return $this->render('MrappsBackendBundle:Default:permissions.html.twig', array(
-            'title' => 'Gestione permessi per la rotta: '.$route,
+            'title' => "Gestione permessi per l'oggetto: ".$object,
             'angular' => '"ngTable","ngResource"',
             'permissions' => $permissions,
-            'route_url' => $bcUrl,
-            'route' => $route,
+            'route_url' => $routeUrl,
+            'object' => $object,
         ));
     }
 
