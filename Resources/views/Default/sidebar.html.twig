@@ -1,6 +1,5 @@
+{% trans_default_domain 'MrappsBackendBundle' %}
 <!-- START Sidebar (left)-->
-{% set list_name = 'Lista' %}
-{% set add_name = 'Aggiungi' %}
 <div class="aside-inner">
     <nav sidebar="" sidebar-anyclick-close="" class="sidebar">
         <!-- START sidebar nav-->
@@ -18,7 +17,7 @@
                         </div>#}
                         <div class="user-block-info">
                             <span class="user-block-name">{{ app.user.username }}</span>
-                            <span class="user-block-role">{% if is_granted('ROLE_SUPER_ADMIN') %}SUPER Amministratore{% elseif is_granted('ROLE_ADMIN') %}Amministratore{% endif %}</span>
+                            <span class="user-block-role">{% if is_granted('ROLE_SUPER_ADMIN') %}Super Admin{% elseif is_granted('ROLE_ADMIN') %}Admin{% endif %}</span>
                         </div>
                     </div>
                 </div>
@@ -26,7 +25,7 @@
             <!-- END user info-->
             <!-- Iterates over all sidebar items-->
             <li ng-click="toggleCollapse(pIndex, true)" class="ng-scope nav-heading">
-                <span class="ng-binding ng-scope">Main Navigation</span>
+                <span class="ng-binding ng-scope">{{ 'sidebar.navigazione_principale'|trans }}</span>
             </li>
             {% for item in menu %}
                 {% if item.min_role|length == 0 or is_granted(item.min_role) %}
