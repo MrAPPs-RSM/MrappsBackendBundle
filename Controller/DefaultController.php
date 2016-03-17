@@ -89,6 +89,14 @@ class DefaultController extends Controller
         
         if($sidebar !== null) {
 
+            //Primo livello con figli => sempre visibile
+            $sidebarRoute = trim($sidebar->getRoute());
+            if(strlen($sidebarRoute) == 0 && $sidebar->getParent() == null) {
+                return true;
+            }
+
+            //Negli altri casi controllo i permessi
+
             $controllerCompact = Utils::getControllerCompactName($sidebar->getController());
 
             $user = $this->getUser();
