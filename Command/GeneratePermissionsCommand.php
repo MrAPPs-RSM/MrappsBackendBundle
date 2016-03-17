@@ -29,13 +29,6 @@ class GeneratePermissionsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $container = $this->getContainer();
-        //$router = $container->get('router');
-
-        //Tutte le rotte
-        //$allRoutes = Utils::getRoutesArray($container);
-
-        //Rotte interessate dalla procedura
-        //$routes = array();
 
         //Controller che estendono BaseBackendBundle
         $controllers = array();
@@ -65,34 +58,6 @@ class GeneratePermissionsCommand extends ContainerAwareCommand
                 if(strlen($compactName) > 0) {
                     $controllers[] = $compactName;
                 }
-
-//                $ctrl = new $class;
-//                $reflectionObject = new \ReflectionObject($ctrl);
-//
-//                //Action del controller
-//                foreach ($reflectionObject->getMethods() as $reflectionMethod) {
-//
-//                    //Rotta esistente?
-//                    $controllerFullName = Utils::getControllerActionFullName($reflectionMethod);
-//                    $routePath = (isset($allRoutes[$controllerFullName])) ? $allRoutes[$controllerFullName] : '';
-//                    $routeName = '';
-//
-//                    //Rotta valida?
-//                    $success = false;
-//                    if(strlen($routePath) > 0) {
-//                        try {
-//                            $routeParams = $router->match($routePath);
-//                            $routeName = $routeParams['_route'];
-//                            $success = true;
-//                        }catch(\Exception $e) {
-//                            $success = false;
-//                        }
-//                    }
-//
-//                    if($success) {
-//                        $routes[] = $routeName;
-//                    }
-//                }
             }
         }
 

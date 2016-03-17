@@ -4,6 +4,7 @@ namespace Mrapps\BackendBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Mrapps\BackendBundle\Entity\Permission;
+use FOS\UserBundle\Model\UserInterface;
 
 /**
  * PermissionRepository
@@ -92,10 +93,64 @@ class PermissionRepository extends EntityRepository
             ))->execute();
 
             foreach($perms as $p) {
-                $roles[] = $p->getRole();
+                $r =  $p->getRole();
+                $roles[$r] = $r;
             }
         }
 
         return $roles;
+    }
+
+    public function getPermissions($object = '', UserInterface $user = null) {
+
+        $canView = false;
+        $canCreate = false;
+        $canEdit = false;
+        $canDelete = false;
+
+        $object = trim($object);
+
+        if(strlen($object) > 0 && $user !== null) {
+
+            $roles = $user->getRoles();
+
+            $em = $this->getEntityManager();
+
+            $perms = $em->createQuery("
+              SELECT p
+              FROM MrappsBackendBundle:Permission p
+              WHERE p.object = :object
+              AND p.role IN (?1)
+            ")->setParameters(array(
+                'object' => $object,
+                '1' => $roles,
+            ))->execute();
+
+            foreach($perms as $r) {
+
+                if($r->getCanView() == true) {
+                    $canView = true;
+                }
+
+                if($r->getCanCreate() == true) {
+                    $canCreate = true;
+                }
+
+                if($r->getCanEdit() == true) {
+                    $canEdit = true;
+                }
+
+                if($r->getCanDelete() == true) {
+                    $canDelete = true;
+                }
+            }
+        }
+
+        return array(
+            'view' => $canView,
+            'create' => $canCreate,
+            'edit' => $canEdit,
+            'delete' => $canDelete,
+        );
     }
 }

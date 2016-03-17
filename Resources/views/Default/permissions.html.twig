@@ -72,7 +72,7 @@
                     $http({
                         method: 'POST',
                         url: '{{ path('mrapps_backend_savepermissions') }}',
-                        data: {'route': '{{ object }}', 'rows': self.tableParams2.data},
+                        data: {'object': '{{ object }}', 'rows': self.tableParams2.data},
                         headers: {
                             'Content-Type': 'application/json'
                         },
