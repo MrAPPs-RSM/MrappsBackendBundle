@@ -1,3 +1,4 @@
+{% trans_default_domain 'MrappsBackendBundle' %}
 {% extends 'MrappsBackendBundle:Default:layout.html.twig' %}
 {% block css %}
     <link rel="stylesheet" href="{{ asset('//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.css') }}">
@@ -28,7 +29,7 @@
                                         ng-click="go('{{ linkNew }}')">
                     <span class="btn-label">
                         <em class="fa fa-plus"></em>
-                    </span>Aggiungi Nuovo
+                    </span>{{ 'form.aggiungi_nuovo'|trans }}
                                 </button>
                                 <div class="cb"></div>
                             </div>
@@ -41,9 +42,9 @@
                         </div>
                         <div class="panel-footer text-right">
                             {% if edit %}
-                                <button type="submit" id="save" class="btn btn-info">Modifica</button>
+                                <button type="submit" id="save" class="btn btn-info">{{ 'form.modifica'|trans }}</button>
                             {% else %}
-                                <button type="submit" id="save" class="btn btn-success">Crea</button>
+                                <button type="submit" id="save" class="btn btn-success">{{ 'form.crea'|trans }}</button>
                             {% endif %}
                         </div>
                     </div>
@@ -134,7 +135,7 @@
             onSuccessItem = function (fileItem, response, status, headers) {
                 $('#load_{{ field.name }}').addClass('hide');
                 if (response.success == false) {
-                    toastr.error('Errore!', response.message);
+                    toastr.error('{{ 'form.errore'|trans }}', response.message);
                     $scope
                 .{{ field.name }}.
                     clearQueue();
@@ -201,7 +202,7 @@
                 $scope.{{ field.name }}_uploading = false;
                 $scope.{{ field.name }}_progress = 0;
                 if (!response.success) {
-                    toastr.error('Errore!', response.message);
+                    toastr.error('{{ 'form.errore'|trans }}', response.message);
                     $scope
                 .{{ field.name }}.
                     clearQueue();
@@ -220,7 +221,7 @@
                 $('#load_{{ field.name }}').addClass('hide');
                 $scope.{{ field.name }}_uploading = false;
                 $scope.{{ field.name }}_progress = 0;
-                toastr.error('Errore!', response);
+                toastr.error('{{ 'form.errore'|trans }}', response);
                 $scope
                 .{{ field.name }}.
                 clearQueue();
@@ -260,7 +261,7 @@
                     $('#load_{{ field.name }}').addClass('hide');
                     $scope.gallery_{{field.name}}_immagini.push(response);
                     $scope.form.{{ field.name }} = $scope.gallery_{{ field.name }}_immagini;
-                    toastr.success('Salvato!', "Immagine salvata");
+                    toastr.success('{{ 'form.errore'|trans }}', "{{ 'form.immagine_salvata'|trans }}");
                 }
                 document.getElementById("save").disabled = false;
             }
@@ -435,13 +436,13 @@
                 $('#load_{{ field.name }}').addClass('hide');
                 console.log(response);
                 if (!response.success) {
-                    toastr.error('Errore!', response.message);
+                    toastr.error('{{ 'form.errore'|trans }}', response.message);
                     $scope
                 .{{ field.name }}.
                     clearQueue();
                     $scope.form.{{ field.name }} = null;
                 } else {
-                    toastr.success('Salvato!', response.message);
+                    toastr.success('{{ 'form.salvato'|trans }}', response.message);
                     $scope.form.{{ field.name }} = response.data;
                     //$scope.{{ field.name }}_url = response.url;
                 }
@@ -457,7 +458,7 @@
             };
 
             {% if create %}
-            toastr.success('Creato!', 'Elemento creato');
+            toastr.success('{{ 'form.elemento.creato'|trans }}', '{{ 'form.elemento.elemento_creato'|trans }}');
             {% endif %}
 
             // Submit form
@@ -465,10 +466,10 @@
                 vm.submitted = true;
                 if (vm.formValidate.$valid) {
                     {% if confirmSave == true %}
-                    if (confirm("{% if edit == false %}Creare il nuovo elemento?{% else %}Salvare le modifiche?{% endif %}")) {
+                    if (confirm("{% if edit == false %}{{ 'form.elemento.nuovo_elemento'|trans }}{% else %}{{ 'form.elemento.salvare_modifiche'|trans }}{% endif %}")) {
                         {% endif %}
                         document.getElementById("save").disabled = true;
-                        $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
+                        $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>{{ 'form.attendere'|trans }}</div></div>');
                         $http({
                             method: 'POST',
                             url: '{{ linkSave }}',
@@ -479,10 +480,10 @@
                         }).then(function successCallback(response) {
                             $('#overlay-waiting').remove();
                             if (!response.data.success) {
-                                toastr.error(response.data.message, 'Errore!');
+                                toastr.error(response.data.message, '{{ 'form.errore'|trans }}');
                             } else {
                                 {% if edit %}
-                                toastr.success('Salvato!', 'Elemento modificato');
+                                toastr.success('{{ 'form.salvato'|trans }}', '{{ 'form.elemento.elemento_modificato'|trans }}');
                                 {% else %}
                                 location.href = '{{ linkEdit }}/' + response.data.data + '?create=true';
                                 {% endif %}
@@ -491,14 +492,14 @@
 
                         }, function errorCallback(response) {
                             $('#overlay-waiting').remove();
-                            toastr.error('Errore!', 'Errore nella richiesta al server');
+                            toastr.error('{{ 'form.errore'|trans }}', '{{ 'form.errore_server'|trans }}');
                             document.getElementById("save").disabled = false;
                         });
                         {% if confirmSave == true %}
                     }
                     {% endif %}
                 } else {
-                    toastr.error('Errore', 'Compila i campi richiesti.');
+                    toastr.error('{{ 'form.errore'|trans }}', '{{ 'form.compila_campi'|trans }}');
                     return false;
                 }
             };
