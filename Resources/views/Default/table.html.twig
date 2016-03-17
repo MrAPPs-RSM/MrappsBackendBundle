@@ -10,14 +10,14 @@
             <div class="panel-heading clearfix">
                 <div class="panel-title {% if (linkNew is defined and linkNew is not empty) or linkCustom is not null %}pull-left{% endif %}">
                 </div>
-                {% if is_granted('ROLE_SUPER_ADMIN') and current_route is defined and current_route|length > 0 %}
-                    <button type="submit" class="btn btn-labeled btn-info pull-left" ng-click="go('{{ path('mrapps_backend_permissions', {'route':current_route }) }}')">
+                {% if is_granted('ROLE_SUPER_ADMIN') and current_object is defined and current_object|length > 0 and current_route is defined and current_route|length > 0 %}
+                    <button type="submit" class="btn btn-labeled btn-info pull-left" ng-click="go('{{ path('mrapps_backend_permissions', {'object':current_object,'returnRoute':current_route }) }}')">
                         <span class="btn-label">
                             <em class="fa fa-check-square-o"></em>
-                        </span>Permessi ({{ current_route }})
+                        </span>Permessi ({{ current_object }})
                     </button>
                 {% endif %}
-                {% if linkNew is defined and linkNew is not null %}
+                {% if linkNew is defined and linkNew is not null and permissions.create == true %}
                     <button type="submit" class="btn btn-labeled btn-success pull-right" ng-click="go('{{ linkNew }}')">
                     <span class="btn-label">
                         <em class="fa fa-plus"></em>
@@ -27,7 +27,7 @@
                         <div class="cb"></div>
                     {% endif %}
                 {% endif %}
-                {% if linkCustom is not null %}
+                {% if linkCustom is not null and permissions.edit == true %}
                     {% for item in linkCustom %}
                         <button type="submit" ng-click="go('{{ item.url }}')"
                                 class="btn btn-labeled pull-right {{ item.class }}">
@@ -58,19 +58,19 @@
                         </td>
                     {% endfor %}
                     <td>
-                        {% if linkEdit is not null %}
+                        {% if linkEdit is not null and permissions.edit == true %}
                             <button ng-if="!row.hasOwnProperty('disableEdit')||row.disableEdit==false" type="button"
                                     ng-click="go('{{ linkEdit }}/'+row.id)" class="btn btn-sm btn-warning">
                                 <em class="fa fa-edit"></em>
                             </button>
                         {% endif %}
-                        {% if linkDelete is not null %}
+                        {% if linkDelete is not null and permissions.delete == true %}
                             <button ng-if="!row.hasOwnProperty('disableDelete')||row.disableDelete==false" type="button"
                                     ng-click="deleteajax(row.id)" class="btn btn-sm btn-danger">
                                 <em class="fa fa-trash-o"></em>
                             </button>
                         {% endif %}
-                        {% if linkAction is not null %}
+                        {% if linkAction is not null and permissions.edit == true %}
                             {% for item in linkAction %}
                                 <button type="button"
                                         ng-click="{% if item.is_js == false %}go('{{ item.url }}/'+row.id){% else %}customFunction{{ loop.index }}(row.id){% endif %}"
@@ -157,7 +157,7 @@
                         });
                     }
                 });
-                {% if linkDelete is not null %}
+                {% if linkDelete is not null and permissions.delete == true %}
                 $scope.deleteajax = function (id) {
                     var data = {id: id};
                     swal({
@@ -189,7 +189,7 @@
                     });
                 };
                 {% endif %}
-                {% if linkAction is not null %}
+                {% if linkAction is not null and permissions.edit == true %}
                 {% for item in linkAction %}
                 {% if item.is_js == true %}
                 $scope.customFunction{{ loop.index }} = function (id) {

@@ -6,6 +6,7 @@ use Mrapps\BackendBundle\Entity\SidebarEntry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Mrapps\BackendBundle\Classes\Utils;
 use Mrapps\BackendBundle\Entity\Immagine;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * @Route("/panel")
@@ -20,9 +22,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class DefaultController extends Controller
 {
     public function security(Request $request, $action) {
-
-        //TODO ELIMINARE
-        return true;
 
         $canProceed = false;
 
@@ -37,14 +36,18 @@ class DefaultController extends Controller
 
             //Ruoli dell'utente
             $userRoles = $user->getRoles();
+            foreach($userRoles as $r) {
 
-//            var_dump($roles);
-//            var_dump($userRoles);
-//            die();
+                //L'utente ha almeno un ruolo valido?
+                if(isset($roles[$r])) {
+                    $canProceed = true;
+                    break;
+                }
+            }
         }
 
         if(!$canProceed) {
-            //TODO THROW 403
+            throw new AccessDeniedHttpException("Accesso non autorizzato!");
         }
 
         return $canProceed;
@@ -218,6 +221,13 @@ class DefaultController extends Controller
     {
         $this->security($request, 'view');
 
+        $em = $this->getDoctrine()->getManager();
+        $currentObject = Utils::getControllerCompactName($request->attributes->get('_controller'));
+
+        //Permessi per questo oggetto
+        $permissions = $em->getRepository('MrappsBackendBundle:Permission')->getPermissions($currentObject, $this->getUser());
+
+        //Messaggi schermata eliminazione
         if (!is_array($deleteMessages)) $deleteMessages = array();
         if (!isset($deleteMessages['question'])) $deleteMessages['question'] = "Procedere con l'eliminazione?";
         if (!isset($deleteMessages['success'])) $deleteMessages['success'] = 'Procedura completata con successo.';
@@ -225,6 +235,7 @@ class DefaultController extends Controller
         if (!isset($deleteMessages['cancel'])) $deleteMessages['cancel'] = 'Operazione annullata.';
 
         return $this->render('MrappsBackendBundle:Default:table.html.twig', array(
+            'current_object' => $currentObject,
             'current_route' => $request->get('_route'),
             'title' => $title,
             'tableColumns' => $tableColumns,
@@ -240,11 +251,14 @@ class DefaultController extends Controller
             'linkAction' => $linkAction,
             'angular' => '"ngTable","ngResource","ui.sortable"',
             'deleteMessages' => $deleteMessages,
+            'permissions' => $permissions,
         ));
     }
 
     public function __newAction(Request $request, $title, $fields, $linkSave = null, $linkEdit = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false, $linkNew = null)
     {
+        $this->security($request, ($edit) ? 'edit' : 'create');
+
         if ($confirmSave == null) $confirmSave = false;
 
         $imagesUrl = '';
@@ -669,7 +683,7 @@ class DefaultController extends Controller
         $permissions = $em->getRepository('MrappsBackendBundle:Permission')->findBy(array('object' => $object));
 
         return $this->render('MrappsBackendBundle:Default:permissions.html.twig', array(
-            'title' => "Gestione permessi per l'oggetto: ".$object,
+            'title' => "Gestione permessi per l'oggetto '".$object."'",
             'angular' => '"ngTable","ngResource"',
             'permissions' => $permissions,
             'route_url' => $routeUrl,
@@ -689,25 +703,28 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $content = json_decode($request->getContent(), true);
 
-        $route = (isset($content['route'])) ? trim($content['route']) : '';
-        if(strlen($route) > 0 && isset($content['rows'])) {
+        $object = (isset($content['object'])) ? trim($content['object']) : '';
+        if(strlen($object) > 0 && isset($content['rows'])) {
 
             foreach($content['rows'] as $row) {
 
                 $role = strtoupper(trim($row['role']));
                 $canView = (bool)$row['can_view'];
+                $canCreate = (bool)$row['can_create'];
                 $canEdit = (bool)$row['can_edit'];
                 $canDelete = (bool)$row['can_delete'];
 
                 //SuperAdmin avrà sempre permessi massimi
                 if($role == 'ROLE_SUPER_ADMIN') {
                     $canView = true;
+                    $canCreate = true;
                     $canEdit = true;
                     $canDelete = true;
                 }
 
-                $em->getRepository('MrappsBackendBundle:Permission')->addPermission($route, $role, array(
+                $em->getRepository('MrappsBackendBundle:Permission')->addPermission($object, $role, array(
                     'view' => $canView,
+                    'create' => $canCreate,
                     'edit' => $canEdit,
                     'delete' => $canDelete,
                 ), false);
