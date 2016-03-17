@@ -171,13 +171,13 @@
                                             swal("{{ 'form.elemento.completato'|trans }}", "{{ deleteMessages['success'] }}", "success");
                                             self.tableParams2.reload();
                                         } else {
-                                            swal("{{ 'form.elemento.errore'|trans }}", response.data.message, "error");
+                                            swal("{{ 'form.errore'|trans }}", response.data.message, "error");
                                         }
                                     }, function errorCallback(response) {
-                                        swal("{{ 'form.elemento.errore'|trans }}", "{{ deleteMessages['error'] }}", "error");
+                                        swal("{{ 'form.errore'|trans }}", "{{ deleteMessages['error'] }}", "error");
                                     });
                         } else {
-                            swal("{{ 'form.elemento.errore'|trans }}", "{{ deleteMessages['cancel'] }}", "error");
+                            swal("{{ 'form.errore'|trans }}", "{{ deleteMessages['cancel'] }}", "error");
                         }
                     });
                 };
