@@ -21,14 +21,14 @@ form:
 
 # sidebar
 sidebar:
-    navigazione_principale: 'Navigazione Principale'
+    navigazione_principale: 'Main Navigation'
 
 # checkbox
 checkbox:
-    si: Si
+    si: Yes
     no: No
 
 # profilo
 profilo:
-    cambia_pwd: 'Cambia Password'
-    logout: 'Esci'
+    cambia_pwd: 'Change Password'
+    logout: 'Logout'
