@@ -1,0 +1,34 @@
+# new, edit e delete
+
+form:
+    attendere: 'Attendere...'
+    errore_server: 'Errore nella richiesta al server'
+    compila_campi: 'Compila i campi richiesti.'
+    aggiungi_nuovo: 'Aggiungi Nuovo'
+    modifica: Modifica
+    crea: Crea
+    errore: Errore!
+    salvato: Salvato!
+    immagine_salvata: 'Immagine salvata'
+    elemento:
+        creato: Creato!
+        completato: Completato!
+        elemento_creato: 'Elemento creato'
+        elemento_modificato: 'Elemento modificato'
+        salvare_modifiche: 'Salvare le modifiche?'
+        nuovo_elemento: 'Creare il nuovo elemento?'
+        procedere: 'Procedere?'
+
+# sidebar
+sidebar:
+    navigazione_principale: 'Navigazione Principale'
+
+# checkbox
+checkbox:
+    si: Si
+    no: No
+
+# profilo
+profilo:
+    cambia_pwd: 'Cambia Password'
+    logout: 'Esci'
