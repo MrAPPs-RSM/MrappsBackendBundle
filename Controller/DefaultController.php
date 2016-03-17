@@ -623,16 +623,72 @@ class DefaultController extends Controller
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Accesso non autorizzato!');
 
         $route = trim($route);
+        try {
+            $bcUrl = $this->generateUrl($route);
+        }catch(\Exception $e) {
+            $bcUrl = '';
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $permissions = $em->getRepository('MrappsBackendBundle:Permission')->findBy(array('route' => $route));
 
         return $this->render('MrappsBackendBundle:Default:permissions.html.twig', array(
-
-            'title' => 'CIAONE',
+            'title' => 'Gestione permessi per la rotta: '.$route,
             'angular' => '"ngTable","ngResource"',
             'permissions' => $permissions,
+            'route_url' => $bcUrl,
+            'route' => $route,
         ));
+    }
+
+    /**
+     * @Route("/save_permissions", name="mrapps_backend_savepermissions")
+     * @Method({"POST"})
+     */
+    public function savepermissionsAction(Request $request)
+    {
+        //Security
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Accesso non autorizzato!');
+
+        $em = $this->getDoctrine()->getManager();
+        $content = json_decode($request->getContent(), true);
+
+        $route = (isset($content['route'])) ? trim($content['route']) : '';
+        if(strlen($route) > 0 && isset($content['rows'])) {
+
+            foreach($content['rows'] as $row) {
+
+                $role = strtoupper(trim($row['role']));
+                $canView = (bool)$row['can_view'];
+                $canEdit = (bool)$row['can_edit'];
+                $canDelete = (bool)$row['can_delete'];
+
+                //SuperAdmin avrà sempre permessi massimi
+                if($role == 'ROLE_SUPER_ADMIN') {
+                    $canView = true;
+                    $canEdit = true;
+                    $canDelete = true;
+                }
+
+                $em->getRepository('MrappsBackendBundle:Permission')->addPermission($route, $role, array(
+                    'view' => $canView,
+                    'edit' => $canEdit,
+                    'delete' => $canDelete,
+                ), false);
+            }
+
+            $em->flush();
+
+            $success = true;
+            $message = '';
+
+        }else {
+            $success = false;
+            $message = 'Parametri non validi.';
+        }
+
+        return Utils::generateResponse($success, $message);
     }
 
 }
