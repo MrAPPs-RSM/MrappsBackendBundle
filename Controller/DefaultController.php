@@ -313,6 +313,9 @@ class DefaultController extends Controller
             $imagesUrl = $this->getLocalUrlDir('');
         }
 
+        $em = $this->getDoctrine()->getManager();
+        $languages = $em->getRepository('MrappsBackendBundle:Language')->findBy(["visible" => true]);
+
         return $this->render('MrappsBackendBundle:Default:new.html.twig', array(
             'current_route' => $request->get('_route'),
             'title' => $title,
@@ -325,6 +328,7 @@ class DefaultController extends Controller
             'linkBreadcrumb' => $linkBreadcrumb,
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,
+            'languages' => $languages,
             'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors"',
         ));
     }
