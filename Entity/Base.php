@@ -152,4 +152,15 @@ class Base {
     public function getRealUpdatedDate() {
         return ($this->getUpdatedAt() !== null) ? $this->getUpdatedAt() : (($this->getCreatedAt() !== null) ? $this->getCreatedAt() : new \DateTime());
     }
+    
+    /**
+     * Reset ID
+     *
+     * @return Base
+     */
+    public function resetId() {
+        $this->id = null;
+
+        return $this;
+    }
 }
