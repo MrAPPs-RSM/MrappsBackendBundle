@@ -31,6 +31,20 @@
                             {% for field in fields %}
                                 {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
                                 {{ include(twig_name, { 'field': field }) }}
+                                {% if field.lang is defined and field.lang %}
+                                    <div class="dropdown">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownLanguage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            it
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownLanguage">
+                                            {% for lang in languages %}
+                                                <li><a href="javascript:changeLaguages('{{ lang.isoCode }}')">{{ lang.name }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                                </div>
                             {% endfor %}
                         </div>
                         <div class="panel-footer text-right">
@@ -68,6 +82,10 @@
 {% block javascript %}
     <script type="text/javascript">
         'use strict';
+
+        function changeLaguages(isoCode){
+            $("#dropdownLanguage").html(isoCode+' <span class="caret"></span>');
+        }
 
         myAngular.controller("FormValidationController", FormValidationController);
 
