@@ -1,6 +1,6 @@
 <?php
 
-namespace Mrapps\EventListener\DraftListener;
+namespace Mrapps\BackendBundle\EventListener;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -17,9 +17,6 @@ class DraftListener
     private $manyToOneClass = 'Doctrine\\ORM\\Mapping\\ManyToOne';
     private $oneToManyClass = 'Doctrine\\ORM\\Mapping\\OneToMany';
 
-    public function __construct(EntityManager $em) {
-        $this->em = $em;
-    }
 
     private function getDraft(Draft $entity) {
         return $this->getOther($entity, false);
@@ -90,14 +87,12 @@ class DraftListener
 
             foreach($propsPubblicata as $p) {
 
-                $propertyName = $p->name;
-
                 //Considera le property OneToOne o ManyToOne (esclusa "other")
                 $annOneToOne    = $reader->getPropertyAnnotation($p, $this->oneToOneClass);
                 $annotManyToOne = $reader->getPropertyAnnotation($p, $this->manyToOneClass);
 
 
-                if($propertyName != 'other' && ($annOneToOne != null || $annotManyToOne != null)) {
+                if($p->name != 'other' && ($annOneToOne != null || $annotManyToOne != null)) {
 
                     //Lettura entity relazionata
                     $p->setAccessible(true);
@@ -130,7 +125,7 @@ class DraftListener
 
             foreach($propsBozza as $p) {
 
-                $annot = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToMany');
+                $annot = $reader->getPropertyAnnotation($p, $this->oneToManyClass);
 
                 if($p->name != 'other' && $annot !== null) {
 
@@ -172,8 +167,10 @@ class DraftListener
     }
 
 
-    public function postUpdate(LifecycleEventArgs $args)
+    public function postPersist(LifecycleEventArgs $args)
     {
+        $this->em = $args->getEntityManager();
+
         /** @var $bozza Draft */
         $bozza = $args->getEntity();
         $class = ($bozza !== null && is_object($bozza)) ? get_class($bozza) : '';
@@ -190,7 +187,7 @@ class DraftListener
                 $pubblicata = clone($bozza);
                 $this->em->detach($pubblicata);
 
-                $pubblicata->setId(null);
+                $pubblicata->resetId();
                 $pubblicata->setPublished(1);
                 $pubblicata->setVisible(0); //pubblicata ma non ancora visibile (l'utente non ha ancora cliccato su "pubblica")
                 $pubblicata->setOther($bozza);

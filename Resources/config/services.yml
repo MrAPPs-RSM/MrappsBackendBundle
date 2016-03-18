@@ -14,3 +14,8 @@ services:
             arguments:  []
             tags:
                 -  { name: console.command }
+
+    mrapps.backend.draft_listener:
+            class: Mrapps\BackendBundle\EventListener\DraftListener
+            tags:
+                - { name: doctrine.event_listener, event: postPersist }
