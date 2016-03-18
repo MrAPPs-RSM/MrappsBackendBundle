@@ -40,6 +40,7 @@
             </div>
             <table ng-table="table.tableParams2" show-filter="true" class="table table-bordered table-striped">
                 <tbody {% if linkOrder is not null %} ui-sortable="sortableOptions" ng-model="table.data" {% endif %}>
+
                 <tr ng-repeat="row in $data">
                     {% for colums in tableColumns %}
                         <td data-title="'{{ colums.title }}'"
