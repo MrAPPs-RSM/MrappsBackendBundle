@@ -65,27 +65,7 @@ class Base {
         return $this->id;
     }
     
-    /**
-     * Get weight
-     *
-     * @return integer
-     */
-    public function getWeight() {
-        return $this->weight;
-    }
-    
-    /**
-     * Set weight
-     *
-     * @param string $weight
-     * @return Base
-     */
-    public function setWeight($weight)
-    {
-        $this->weight = $weight;
 
-        return $this;
-    }
 
     /**
      * Set createdAt
@@ -134,7 +114,7 @@ class Base {
     /**
      * Set visible
      *
-     * @param integer $visible
+     * @param bool $visible
      *
      * @return Base
      */
@@ -147,7 +127,7 @@ class Base {
     /**
      * Get visible
      *
-     * @return \DateTime
+     * @return bool
      */
     public function getVisible() {
         return $this->visible;
