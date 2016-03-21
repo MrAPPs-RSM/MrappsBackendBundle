@@ -371,8 +371,9 @@ class Utils
         return preg_replace('~https?://(?:[0-9A-Z-]+\.)?(?:youtu\.be/| youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>| </a>))[?=&+%\w.-]*~ix', '$1', $text);
     }
 
-    public static function getArrayLang($entity, $method){
+    public static function getArrayLang($entity, $method = 'traduzioni', $fields = null) {
 
+        if(!is_array($fields) || count($fields) == 0) $fields = null;
         $array = [];
         $reader = new AnnotationReader();
         foreach ($entity->$method() as $item){
@@ -380,13 +381,17 @@ class Utils
             $objUser = new \ReflectionObject($item);
             $properties = $objUser->getProperties();
             foreach($properties as $p) {
-                $annOneToOne = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToOne');
-                $annManyToOne = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\ManyToOne');
-                $annOneToMany = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToMany');
 
-                if($annOneToOne == null && $annManyToOne == null && $annOneToMany == null) {
-                    $method = 'get'.Utils::snakeToCamelCase($p->name);
-                    $array[$p->name][$item->getLang()->getId()] = $item->$method();
+                if($fields == null || in_array($p->name, $fields)) {
+
+                    $annOneToOne = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToOne');
+                    $annManyToOne = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\ManyToOne');
+                    $annOneToMany = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToMany');
+
+                    if($annOneToOne == null && $annManyToOne == null && $annOneToMany == null) {
+                        $method = 'get'.Utils::snakeToCamelCase($p->name);
+                        $array[$p->name][$item->getLang()->getId()] = $item->$method();
+                    }
                 }
             }
         }
