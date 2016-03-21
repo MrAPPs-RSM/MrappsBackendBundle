@@ -372,7 +372,7 @@ class Utils
         return preg_replace('~https?://(?:[0-9A-Z-]+\.)?(?:youtu\.be/| youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>| </a>))[?=&+%\w.-]*~ix', '$1', $text);
     }
 
-    public static function getArrayLang($entity, $method = 'traduzioni', $fields = null, $options = array()) {
+    public static function getArrayLang($entity, $method = 'getTraduzioni', $fields = null, $options = array()) {
 
         if(!is_array($fields) || count($fields) == 0) $fields = null;
 
@@ -394,7 +394,7 @@ class Utils
                     $annOneToMany = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToMany');
 
                     if($annOneToOne == null && $annManyToOne == null && $annOneToMany == null) {
-                        
+
                         $method = 'get'.Utils::snakeToCamelCase($p->name);
 
                         $lang = $item->getLang();
