@@ -2,6 +2,7 @@
 
 namespace Mrapps\BackendBundle\Classes;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\UserBundle\Model\UserInterface;
@@ -368,5 +369,32 @@ class Utils
     public static function getYouTubeIdFromUrl($text)
     {
         return preg_replace('~https?://(?:[0-9A-Z-]+\.)?(?:youtu\.be/| youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>| </a>))[?=&+%\w.-]*~ix', '$1', $text);
+    }
+
+    public static function getArrayLang($entity, $method){
+
+        $array = [];
+        $reader = new AnnotationReader();
+        foreach ($entity->$method() as $item){
+
+            $objUser = new \ReflectionObject($item);
+            $properties = $objUser->getProperties();
+            foreach($properties as $p) {
+                $annOneToOne = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToOne');
+                $annManyToOne = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\ManyToOne');
+                $annOneToMany = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToMany');
+
+                if($annOneToOne == null && $annManyToOne == null && $annOneToMany == null) {
+                    $method = 'get'.Utils::snakeToCamelCase($p->name);
+                    $array[$p->name][$item->getLang()->getId()] = $item->$method();
+                }
+            }
+        }
+
+        return $array;
+    }
+
+    public static function snakeToCamelCase($snakeCase) {
+        return str_replace(' ', '', ucwords(str_replace('_', ' ', strtolower($snakeCase))));
     }
 }
