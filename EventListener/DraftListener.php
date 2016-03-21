@@ -214,7 +214,7 @@ class DraftListener
                     $pubblicata->resetId();
                     $pubblicata->setPublished(1);
                     $pubblicata->setVisible(0); //pubblicata ma non ancora visibile (l'utente non ha ancora cliccato su "pubblica")
-                    $pubblicata->setOther($bozza);
+                    $this->setOtherByReflection($pubblicata, $bozza);
 
                     $this->em->persist($pubblicata);
                     $this->em->flush($pubblicata);
@@ -222,7 +222,8 @@ class DraftListener
 
                     $bozza->setPublished(0);
                     $bozza->setVisible(1);
-                    $bozza->setOther($pubblicata);
+                    $this->setOtherByReflection($bozza, $pubblicata);
+
                     $this->em->persist($bozza);
                     $this->em->flush($bozza);
                     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -252,6 +253,18 @@ class DraftListener
         }
         
         return false;
+    }
+
+    public function setOtherByReflection($object, $otherObject) {
+
+        //Setto other tramite Reflection
+        $obj1 = new \ReflectionObject($object);
+        $otherProp = $obj1->getProperty('other');
+        $otherProp->setAccessible(true);
+        $otherProp->setValue($object, $otherObject);
+        $otherProp->setAccessible(false);
+
+        return true;
     }
             
 }

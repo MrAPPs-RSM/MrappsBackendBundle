@@ -70,9 +70,4 @@ class Draft extends Base implements DraftInterface {
     {
         return null;
     }
-
-    public function setOther($interface)
-    {
-        return $this;
-    }
 }

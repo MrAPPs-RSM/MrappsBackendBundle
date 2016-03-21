@@ -103,10 +103,12 @@ class PermissionRepository extends EntityRepository
 
     public function getPermissions($object = '', UserInterface $user = null) {
 
-        $canView = false;
-        $canCreate = false;
-        $canEdit = false;
-        $canDelete = false;
+        $isSuperAdmin = $user->hasRole('ROLE_SUPER_ADMIN');
+
+        $canView = $isSuperAdmin;
+        $canCreate = $isSuperAdmin;
+        $canEdit = $isSuperAdmin;
+        $canDelete = $isSuperAdmin;
 
         $object = trim($object);
 
