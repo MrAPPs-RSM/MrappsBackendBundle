@@ -3,6 +3,7 @@
 namespace Mrapps\BackendBundle\Classes;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Mrapps\BackendBundle\Entity\LanguageBase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\UserBundle\Model\UserInterface;
@@ -371,9 +372,13 @@ class Utils
         return preg_replace('~https?://(?:[0-9A-Z-]+\.)?(?:youtu\.be/| youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>| </a>))[?=&+%\w.-]*~ix', '$1', $text);
     }
 
-    public static function getArrayLang($entity, $method = 'traduzioni', $fields = null) {
+    public static function getArrayLang($entity, $method = 'traduzioni', $fields = null, $options = array()) {
 
         if(!is_array($fields) || count($fields) == 0) $fields = null;
+
+        if(!is_array($options)) $options = array();
+        if(!isset($options['key_isocodes'])) $options['key_isocodes'] = false;
+
         $array = [];
         $reader = new AnnotationReader();
         foreach ($entity->$method() as $item){
@@ -389,8 +394,14 @@ class Utils
                     $annOneToMany = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToMany');
 
                     if($annOneToOne == null && $annManyToOne == null && $annOneToMany == null) {
+                        
                         $method = 'get'.Utils::snakeToCamelCase($p->name);
-                        $array[$p->name][$item->getLang()->getId()] = $item->$method();
+
+                        $lang = $item->getLang();
+                        $key = ($lang !== null) ? (($options['key_isocodes']) ? $lang->getIsoCode() : $lang->getId()) : null;
+                        if($key != null) {
+                            $array[$p->name][$key] = $item->$method();
+                        }
                     }
                 }
             }
