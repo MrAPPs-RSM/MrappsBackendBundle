@@ -8,14 +8,31 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  */
-class LanguageBase extends Base {
+class LanguageBase {
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Language")
      * @ORM\JoinColumn(name="id_lang", referencedColumnName="id")
      */
     private $lang;
-
+    
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId() {
+        return $this->id;
+    }
 
     /**
      * Set lang
