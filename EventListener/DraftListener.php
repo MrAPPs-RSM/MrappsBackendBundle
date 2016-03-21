@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Mrapps\BackendBundle\Entity\Draft;
 use Doctrine\ORM\EntityManager;
 use Mrapps\BackendBundle\Model\DraftInterface;
+use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\UnitOfWork;
 
 class DraftListener
 {
@@ -18,15 +20,15 @@ class DraftListener
     private $oneToManyClass = 'Doctrine\\ORM\\Mapping\\OneToMany';
 
 
-    private function getDraft(Draft $entity) {
+    private function getDraft(Draft $entity = null) {
         return $this->getOther($entity, false);
     }
 
-    private function getPublished(Draft $entity) {
+    private function getPublished(Draft $entity = null) {
         return $this->getOther($entity, true);
     }
 
-    private function getOther(Draft $entity, $forcePublished = null) {
+    private function getOther(Draft $entity = null, $forcePublished = null) {
 
         if($entity !== null) {
 
@@ -41,22 +43,21 @@ class DraftListener
             }
 
             $id = $entity->getId();
-            $draftId = $entity->getDraftId();
 
-            if($id != null && $draftId != null) {
+            if($id != null) {
 
                 $class = get_class($entity);
 
                 $params = array(
                     'id' => $id,
-                    'draftId' => $draftId,
+                    'other' => $entity,
                     'published' => $published,
                 );
                 $result = $this->em->createQuery("
                     SELECT a
                     FROM {$class} a
                     WHERE a.id != :id
-                    AND a.draftId = :draftId
+                    AND a.other = :other
                     AND a.published = :published
                 ")->setMaxResults(1)->setParameters($params)->execute();
 
@@ -67,11 +68,11 @@ class DraftListener
         return null;
     }
 
-    private function setRelazioni($bozza = null, $pubblicata = null) {
+    private function setRelazioni(UnitOfWork $uow = null, $bozza = null, $pubblicata = null) {
 
         /** @var $bozza Draft */
         /** @var $pubblicata Draft */
-        if($bozza !== null && $pubblicata !== null) {
+        if($uow !== null && $bozza !== null && $pubblicata !== null) {
 
             $reader = new AnnotationReader();
 
@@ -97,6 +98,9 @@ class DraftListener
                     //Lettura entity relazionata
                     $p->setAccessible(true);
                     $relazione = $p->getValue($pubblicata);
+                    if($relazione == null) {
+                        $relazione = $p->getValue($bozza);
+                    }
 
                     //Estrae la relativa entity "pubblicata" (se esiste)
                     $relazionePubblicata = $this->getPublished($relazione);
@@ -109,6 +113,7 @@ class DraftListener
 
                         $this->em->persist($pubblicata);
                         $this->em->flush($pubblicata);
+                        $this->computeChangeSet($uow, $pubblicata);
                     }
                 }
             }
@@ -136,7 +141,7 @@ class DraftListener
                         $p->setAccessible(true);
                         $array = $p->getValue($bozza);
 
-                        if($array !== null && count($array) > 0) {
+                        if($array !== null && is_array($array) && count($array) > 0) {
                             foreach($array as $relazione) {
 
                                 $relazioneClass = get_class($relazione);
@@ -152,6 +157,7 @@ class DraftListener
 
                                         $this->em->persist($relazione);
                                         $this->em->flush($relazione);
+                                        $this->computeChangeSet($uow, $relazione);
                                     }
                                 }
                             }
@@ -165,49 +171,87 @@ class DraftListener
 
         return false;
     }
-
-
-    public function postPersist(LifecycleEventArgs $args)
-    {
+    
+    
+    public function onFlush(OnFlushEventArgs $args) {
+        
         $this->em = $args->getEntityManager();
+        
+        //Rimuovo l'evento onFlush per evitare di finire in un ciclo infinito con i flush() dentro questo evento
+        $eventManager = $this->em->getEventManager();
+        $eventManager->removeEventListener('onFlush', $this);
+        
+        $uow = $this->em->getUnitOfWork();
+        $entities = array();
+        
+        foreach ($uow->getScheduledEntityUpdates() as $entity) {
+            $entities[] = $entity;
+        }
+        
+        foreach ($uow->getScheduledEntityInsertions() as $entity) {
+            $entities[] = $entity;
+        }
+        
+        foreach ($entities as $bozza) {
+            
+            /** @var $bozza Draft */
+            $class = ($bozza !== null && is_object($bozza)) ? get_class($bozza) : '';
 
-        /** @var $bozza Draft */
-        $bozza = $args->getEntity();
-        $class = ($bozza !== null && is_object($bozza)) ? get_class($bozza) : '';
+            //Considera solo le entity Draft
+            if (strlen($class) > 0 && is_subclass_of($class, $this->draftClass)) {
 
-        //Considera solo le entity Draft
-        if (strlen($class) > 0 && is_subclass_of($class, $this->draftClass)) {
+                $pubblicata = $bozza->getOther();
 
-            //Nuova Entity bozza?
-            if($bozza->getOther() == null) {
+                //Nuova Entity bozza?
+                if($pubblicata == null) {
 
-                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                /** @var $pubblicata Draft */
-                $pubblicata = clone($bozza);
-                $this->em->detach($pubblicata);
+                    /** @var $pubblicata Draft */
+                    $pubblicata = clone($bozza);
+                    $this->em->detach($pubblicata);
 
-                $pubblicata->resetId();
-                $pubblicata->setPublished(1);
-                $pubblicata->setVisible(0); //pubblicata ma non ancora visibile (l'utente non ha ancora cliccato su "pubblica")
-                $pubblicata->setOther($bozza);
+                    $pubblicata->resetId();
+                    $pubblicata->setPublished(1);
+                    $pubblicata->setVisible(0); //pubblicata ma non ancora visibile (l'utente non ha ancora cliccato su "pubblica")
+                    $pubblicata->setOther($bozza);
 
-                $this->em->persist($pubblicata);
-                $this->em->flush($pubblicata);
+                    $this->em->persist($pubblicata);
+                    $this->em->flush($pubblicata);
+                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                $bozza->setPublished(0);
-                $bozza->setVisible(1);
-                $bozza->setOther($pubblicata);
-                $this->em->persist($bozza);
-                $this->em->flush($bozza);
-
-                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    $bozza->setPublished(0);
+                    $bozza->setVisible(1);
+                    $bozza->setOther($pubblicata);
+                    $this->em->persist($bozza);
+                    $this->em->flush($bozza);
+                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                }
+                
+                $this->computeChangeSet($uow, $pubblicata);
+                $this->computeChangeSet($uow, $bozza);
 
                 //Set relazioni corrette
-                $this->setRelazioni($bozza, $pubblicata);
+                $this->setRelazioni($uow, $bozza, $pubblicata);
             }
         }
+        
+        //Riaggiungo l'evento onFlush
+        $eventManager->addEventListener('onFlush', $this);
     }
+    
+    public function computeChangeSet($uow = null, $entity = null) {
+        
+        if($uow !== null && $entity !== null) {
+            
+            $meta = $this->em->getClassMetadata(get_class($entity));
+            $uow->computeChangeSet($meta, $entity);
+            $uow->recomputeSingleEntityChangeSet($meta, $entity);
+            
+            return true;
+        }
+        
+        return false;
+    }
+            
 }

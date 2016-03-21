@@ -19,3 +19,4 @@ services:
             class: Mrapps\BackendBundle\EventListener\DraftListener
             tags:
                 - { name: doctrine.event_listener, event: postPersist }
+                - { name: doctrine.event_listener, event: onFlush }
