@@ -30,18 +30,23 @@ class DefaultController extends Controller
         $user = $this->getUser();
         if($user !== null && is_object($user)) {
 
-            //Ruoli che possono accedere all'oggetto
-            $em = $this->getDoctrine()->getManager();
-            $roles = $em->getRepository('MrappsBackendBundle:Permission')->getActiveRoles($compact, $action);
+            $canProceed = ($user->hasRole('ROLE_SUPER_ADMIN'));
+            
+            if(!$canProceed) {
 
-            //Ruoli dell'utente
-            $userRoles = $user->getRoles();
-            foreach($userRoles as $r) {
+                //Ruoli che possono accedere all'oggetto
+                $em = $this->getDoctrine()->getManager();
+                $roles = $em->getRepository('MrappsBackendBundle:Permission')->getActiveRoles($compact, $action);
 
-                //L'utente ha almeno un ruolo valido?
-                if(isset($roles[$r])) {
-                    $canProceed = true;
-                    break;
+                //Ruoli dell'utente
+                $userRoles = $user->getRoles();
+                foreach($userRoles as $r) {
+
+                    //L'utente ha almeno un ruolo valido?
+                    if(isset($roles[$r])) {
+                        $canProceed = true;
+                        break;
+                    }
                 }
             }
         }
