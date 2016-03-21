@@ -25,10 +25,4 @@ interface DraftInterface
      * @return DraftInterface
      */
     public function getOther();
-
-    /**
-     * @param $interface DraftInterface
-     * @return DraftInterface
-     */
-    public function setOther($interface);
 }
