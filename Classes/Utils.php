@@ -413,4 +413,23 @@ class Utils
     public static function snakeToCamelCase($snakeCase) {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', strtolower($snakeCase))));
     }
+
+    public static function getContent($content){
+        $content = json_decode($content);
+
+        $array = array();
+
+        foreach ($content as $key => $value){
+            $item = explode("_",$key);
+            $lang = intval($item[count($item) - 1]);
+            if($lang > 0){
+                //CAMPO MULTILINGUA
+                $array[substr($key, 0, -(strlen($lang) + 1))][$lang] = $value;
+            }else{
+                $array[$key] = $value;
+            }
+        }
+        
+        return $array;
+    }
 }
