@@ -12,4 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class LanguageRepository extends EntityRepository
 {
+    public function findByIso($iso) {
+        return $this->findOneBy(array('isoCode' => strtolower(trim($iso))));
+    }
 }
