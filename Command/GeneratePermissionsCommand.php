@@ -29,33 +29,21 @@ class GeneratePermissionsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $container = $this->getContainer();
+        $routes = $container->get('router')->getRouteCollection()->all();
 
         //Controller che estendono BaseBackendBundle
         $controllers = array();
 
-
-        //Inizializzazione Controller
-        $kernel = $container->get('kernel');
-        $bundles = $kernel->getBundles();
-        foreach ($bundles as $value) {
-            $path = $value->getPath();
-            if(strpos($path, '/vendor/') === false) {
-                $controllerPattern = $path.'/Controller/*Controller.php';
-                foreach (glob($controllerPattern) as $fileName) {
-                    include_once $fileName;
-                }
+        foreach ($routes as $r) {
+            $ctrl = $r->getDefaults()['_controller'];
+            $pos = strpos($ctrl, '::');
+            if($pos !== false) {
+                $ctrl = substr($ctrl, 0, $pos);
             }
-        }
-        //---
+            if(is_subclass_of($ctrl, $this->baseControllerClass)) {
+                $compactName = Utils::getControllerCompactName($ctrl);
 
-        $declaredClasses = get_declared_classes();
-        foreach($declaredClasses as $class) {
-
-            //Controller che estente BaseBackendController?
-            if (is_subclass_of($class, $this->baseControllerClass)) {
-
-                $compactName = Utils::getControllerCompactName($class);
-                if(strlen($compactName) > 0) {
+                if(strlen($compactName) > 0 && !in_array($compactName, $controllers)) {
                     $controllers[] = $compactName;
                 }
             }

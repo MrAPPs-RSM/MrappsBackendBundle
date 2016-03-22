@@ -53,6 +53,8 @@
                             {% elseif colums.type=='checkbox' %}
                                 <input type="checkbox" onclick='event.preventDefault();'
                                        ng-checked="{/ row.{{ colums.name }} /}">
+                            {% elseif colums.type=='html' %}
+                                <span ng-bind-html="row.{{ colums.name }}|rawHtml"></span>
                             {% else %}
                                 {/ row.{{ colums.name }} /}
                             {% endif %}
@@ -101,6 +103,12 @@
             "use strict";
 
             myAngular.controller("NGTableCtrl", NGTableCtrl);
+
+            myAngular.filter('rawHtml', ['$sce', function($sce){
+                return function(val) {
+                    return $sce.trustAsHtml(val);
+                };
+            }]);
 
             function NGTableCtrl($http, $window, $scope, $location, $filter, NgTableParams, $resource, $rootScope) {
                 var self = this;
@@ -153,6 +161,7 @@
                             self.data = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
 
                             params.total(orderedData.length); // set total for recalc pagination
+
                             $defer.resolve(self.data);
                             $('#overlay-waiting').remove();
                         });

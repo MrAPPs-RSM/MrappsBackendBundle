@@ -31,7 +31,7 @@ class DefaultController extends Controller
         if($user !== null && is_object($user)) {
 
             $canProceed = ($user->hasRole('ROLE_SUPER_ADMIN'));
-            
+
             if(!$canProceed) {
 
                 //Ruoli che possono accedere all'oggetto

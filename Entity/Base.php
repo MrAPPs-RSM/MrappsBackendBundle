@@ -64,7 +64,27 @@ class Base {
     public function getId() {
         return $this->id;
     }
-    
+
+    /**
+     * Get weight
+     *
+     * @return integer
+     */
+    public function getWeight() {
+        return $this->weight;
+    }
+
+    /**
+     * Set weight
+     *
+     * @param string $weight
+     * @return Base
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+        return $this;
+    }
 
 
     /**
