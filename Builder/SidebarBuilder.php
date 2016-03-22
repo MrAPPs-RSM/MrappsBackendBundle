@@ -76,39 +76,89 @@ class SidebarBuilder
         //Tutte le rotte
         $routes = Utils::getRoutesArray($this->container);
         
-        //Inizializzazione Controller
-        $kernel = $this->container->get('kernel');
-        $bundles = $kernel->getBundles();
-        foreach ($bundles as $value) {
-            $path = $value->getPath();
-            if(strpos($path, '/vendor/') === false) {
-                $controllerPattern = $path.'/Controller/*Controller.php';
-                foreach (glob($controllerPattern) as $fileName) {
-                    include_once $fileName;
-                }
+        $objRoutes = $this->container->get('router')->getRouteCollection()->all();
+
+        //Controller che estendono BaseBackendBundle
+        $controllers = array();
+
+        foreach ($objRoutes as $r) {
+            $ctrl = $r->getDefaults()['_controller'];
+            $pos = strpos($ctrl, '::');
+            if($pos !== false) {
+                $ctrl = substr($ctrl, 0, $pos);
+            }
+            if(strlen($ctrl) > 0 && is_subclass_of($ctrl, $this->baseControllerClass) && !in_array($ctrl, $controllers)) {
+                $controllers[] = $ctrl;
             }
         }
-        //---
         
         //Controller che estendono BaseBackendController
-        $declaredClasses = get_declared_classes();
-        foreach($declaredClasses as $class) {
+        foreach($controllers as $class) {
             
-            if(is_subclass_of($class, $this->baseControllerClass)) {
-                
-                $ctrl = new $class;
-                $reflectionObject = new \ReflectionObject($ctrl);
+            $ctrl = new $class;
+            $reflectionObject = new \ReflectionObject($ctrl);
 
-                // Lettura Annotation sul Controller
-                $reflectionClass = new \ReflectionClass($class);
-                $annotationClass = $this->reader->getClassAnnotation($reflectionClass, $this->annotationClass);
-                if (null !== $annotationClass) {
+            // Lettura Annotation sul Controller
+            $reflectionClass = new \ReflectionClass($class);
+            $annotationClass = $this->reader->getClassAnnotation($reflectionClass, $this->annotationClass);
+            if (null !== $annotationClass) {
 
-                    //Se l'annotation viene specificata a livello di Controller (e non di Action) ignoro la route
-                    $structure = $this->getStructure($annotationClass, array(
-                        'route' => null,
-                        'controller' => null,
-                        'action' => null,
+                //Se l'annotation viene specificata a livello di Controller (e non di Action) ignoro la route
+                $structure = $this->getStructure($annotationClass, array(
+                    'route' => null,
+                    'controller' => null,
+                    'action' => null,
+                ));
+                if(null !== $structure) {
+
+                    $code = $structure['code'];
+                    $parent = $structure['parent'];
+
+                    if($parent == null) {
+
+                        //Primo livello
+                        $sidebar[$code] = $structure;
+
+                    }else {
+
+                        if(isset($sidebar[$parent])) {
+
+                            //Secondo livello: parent già elaborato
+                            $sidebar[$parent]['children'][$code] = $structure;
+                        }else {
+                            //Secondo livello: parent ancora da elaborare
+                            $subMenus[$code] = $structure;
+                        }
+                    }
+                }
+            }
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+            //Metodi del Controller
+            foreach ($reflectionObject->getMethods() as $reflectionMethod) {
+
+                $controllerFullName = Utils::getControllerActionFullName($reflectionMethod);
+                $routePath = (isset($routes[$controllerFullName])) ? $routes[$controllerFullName] : '';
+                $routeName = '';
+
+                if(strlen($routePath) > 0) {
+                    try {
+                        $router = $this->container->get('router');
+                        $routeParams = $router->match($routePath);
+                    }catch(\Exception $e) {
+                        $routeParams = array();
+                    }
+                    $routeName = (isset($routeParams['_route'])) ? trim($routeParams['_route']) : '';
+                }
+
+                // Lettura Annotation
+                $annotation = $this->reader->getMethodAnnotation($reflectionMethod, $this->annotationClass);
+                if (null !== $annotation) {
+
+                    $structure = $this->getStructure($annotation, array(
+                        'route' => $routeName,
+                        'controller' => $reflectionMethod->class,
+                        'action' => $reflectionMethod->name,
                     ));
                     if(null !== $structure) {
 
@@ -129,58 +179,6 @@ class SidebarBuilder
                             }else {
                                 //Secondo livello: parent ancora da elaborare
                                 $subMenus[$code] = $structure;
-                            }
-                        }
-                    }
-                }
-                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-                //Metodi del Controller
-                foreach ($reflectionObject->getMethods() as $reflectionMethod) {
-                    
-                    $controllerFullName = Utils::getControllerActionFullName($reflectionMethod);
-                    $routePath = (isset($routes[$controllerFullName])) ? $routes[$controllerFullName] : '';
-                    $routeName = '';
-                    
-                    if(strlen($routePath) > 0) {
-                        try {
-                            $router = $this->container->get('router');
-                            $routeParams = $router->match($routePath);
-                        }catch(\Exception $e) {
-                            $routeParams = array();
-                        }
-                        $routeName = (isset($routeParams['_route'])) ? trim($routeParams['_route']) : '';
-                    }
-
-                    // Lettura Annotation
-                    $annotation = $this->reader->getMethodAnnotation($reflectionMethod, $this->annotationClass);
-                    if (null !== $annotation) {
-
-                        $structure = $this->getStructure($annotation, array(
-                            'route' => $routeName,
-                            'controller' => $reflectionMethod->class,
-                            'action' => $reflectionMethod->name,
-                        ));
-                        if(null !== $structure) {
-
-                            $code = $structure['code'];
-                            $parent = $structure['parent'];
-
-                            if($parent == null) {
-
-                                //Primo livello
-                                $sidebar[$code] = $structure;
-
-                            }else {
-
-                                if(isset($sidebar[$parent])) {
-
-                                    //Secondo livello: parent già elaborato
-                                    $sidebar[$parent]['children'][$code] = $structure;
-                                }else {
-                                    //Secondo livello: parent ancora da elaborare
-                                    $subMenus[$code] = $structure;
-                                }
                             }
                         }
                     }
