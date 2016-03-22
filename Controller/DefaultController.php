@@ -808,31 +808,36 @@ class DefaultController extends Controller
 
         $url = strtolower(trim($request->get('url')));
 
-        $pos = strpos($url, 'facebook.com');
+        if(strlen($url) > 0) {
 
-        if(strlen($url) > 0 && $pos !== false) {
+            $pos = strpos($url, 'facebook.com');
 
-            if(substr($url, 0, 4) != "http") {
-                $url = 'http://'.$url;
+            if($pos !== false) {
+
+                if(substr($url, 0, 4) != "http") {
+                    $url = 'http://'.$url;
+                }
+
+                $channel = curl_init();
+                curl_setopt($channel, CURLOPT_URL, $url);
+                curl_setopt($channel, CURLOPT_CONNECTTIMEOUT, 10);
+                curl_setopt($channel, CURLOPT_TIMEOUT, 10);
+                curl_setopt($channel, CURLOPT_HEADER, true);
+                curl_setopt($channel, CURLOPT_NOBODY, true);
+                curl_setopt($channel, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($channel, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 6.1; rv:2.2) Gecko/20110201');
+                curl_setopt($channel, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($channel, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+                curl_setopt($channel, CURLOPT_SSL_VERIFYPEER, FALSE);
+                curl_setopt($channel, CURLOPT_SSL_VERIFYHOST, FALSE);
+                curl_exec($channel);
+                $httpCode = curl_getinfo($channel, CURLINFO_HTTP_CODE );
+                curl_close($channel);
+
+                $valid = ($httpCode == 200);
             }
-
-            $channel = curl_init();
-            curl_setopt($channel, CURLOPT_URL, $url);
-            curl_setopt($channel, CURLOPT_CONNECTTIMEOUT, 10);
-            curl_setopt($channel, CURLOPT_TIMEOUT, 10);
-            curl_setopt($channel, CURLOPT_HEADER, true);
-            curl_setopt($channel, CURLOPT_NOBODY, true);
-            curl_setopt($channel, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($channel, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 6.1; rv:2.2) Gecko/20110201');
-            curl_setopt($channel, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($channel, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-            curl_setopt($channel, CURLOPT_SSL_VERIFYPEER, FALSE);
-            curl_setopt($channel, CURLOPT_SSL_VERIFYHOST, FALSE);
-            curl_exec($channel);
-            $httpCode = curl_getinfo($channel, CURLINFO_HTTP_CODE );
-            curl_close($channel);
-
-            $valid = ($httpCode == 200);
+        }else {
+            $valid = true;
         }
 
         return new JsonResponse(array('valid' => $valid, 'code' => $httpCode, 'url' => $url));
