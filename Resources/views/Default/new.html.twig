@@ -140,20 +140,18 @@
         myAngular.controller("FormValidationController", FormValidationController);
 
         {#  DIRETTIVE ANGULAR  #}
-        myAngular.directive('validateFacebookDirective', function() {
+        myAngular.directive('validateFacebookDirective', function($http) {
             var toId;
             return {
                 require: 'ngModel',
                 link: function(scope, element, attr, mCtrl) {
-                    function validateFacebook(value) {
-                        if(toId) clearTimeout(toId);
-                        toId = setTimeout(function(){
-                            $http.get('{{ path('mrapps_backend_validatefacebook') }}?url=' + value).success(function(data) {
+                    element.on('blur', function (evt) {
+                        scope.$apply(function () {
+                            $http.get('{{ path('mrapps_backend_validatefacebook') }}?url=' + element.val()).success(function(data) {
                                 mCtrl.$setValidity('facebook', data.valid);
                             });
-                        }, 200);
-                    }
-                    mCtrl.$parsers.push(validateFacebook);
+                        });
+                    });
                 }
             };
         });
