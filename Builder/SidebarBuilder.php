@@ -77,24 +77,40 @@ class SidebarBuilder
         $routes = Utils::getRoutesArray($this->container);
         
         //Inizializzazione Controller
-        $kernel = $this->container->get('kernel');
-        $bundles = $kernel->getBundles();
-        foreach ($bundles as $value) {
-            $path = $value->getPath();
-            if(strpos($path, '/vendor/') === false) {
-                $controllerPattern = $path.'/Controller/*Controller.php';
-                foreach (glob($controllerPattern) as $fileName) {
-                    include_once $fileName;
-                }
+//        $kernel = $this->container->get('kernel');
+//        $bundles = $kernel->getBundles();
+//        foreach ($bundles as $value) {
+//            $path = $value->getPath();
+//            if(strpos($path, '/vendor/') === false) {
+//                $controllerPattern = $path.'/Controller/*Controller.php';
+//                foreach (glob($controllerPattern) as $fileName) {
+//                    include_once $fileName;
+//                }
+//            }
+//        }
+        //---
+
+        $routes = $this->container->get('router')->getRouteCollection()->all();
+
+        //Controller che estendono BaseBackendBundle
+        $controllers = array();
+
+        foreach ($routes as $r) {
+            $ctrl = $r->getDefaults()['_controller'];
+            $pos = strpos($ctrl, '::');
+            if($pos !== false) {
+                $ctrl = substr($ctrl, 0, $pos);
+            }
+            if(strlen($ctrl) > 0 && is_subclass_of($ctrl, $this->baseControllerClass) && !in_array($ctrl, $controllers)) {
+                $controllers[] = $ctrl;
             }
         }
-        //---
         
         //Controller che estendono BaseBackendController
-        $declaredClasses = get_declared_classes();
-        foreach($declaredClasses as $class) {
+        //$declaredClasses = get_declared_classes();
+        foreach($controllers as $class) {
             
-            if(is_subclass_of($class, $this->baseControllerClass)) {
+//            if(is_subclass_of($class, $this->baseControllerClass)) {
                 
                 $ctrl = new $class;
                 $reflectionObject = new \ReflectionObject($ctrl);
@@ -185,7 +201,7 @@ class SidebarBuilder
                         }
                     }
                 }
-            }
+//            }
         }
 
         //Aggiunta subarray secondo livello
