@@ -797,4 +797,32 @@ class DefaultController extends Controller
         return Utils::generateResponse($success, $message);
     }
 
+    /**
+     * @Route("/validate_facebook", name="mrapps_backend_validatefacebook")
+     * @Method({"GET"})
+     */
+    public function validatefacebookAction(Request $request)
+    {
+        $valid = false;
+
+        $url = strtolower(trim($request->get('url')));
+
+        $pos = strpos($url, 'facebook.com');
+
+        if(strlen($url) > 0 && $pos !== false) {
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if($httpCode == 200 || $httpCode == 302) {
+                $valid = true;
+            }
+        }
+
+        return new JsonResponse(array('valid' => $valid));
+    }
+
 }
