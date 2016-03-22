@@ -139,6 +139,23 @@
 
         myAngular.controller("FormValidationController", FormValidationController);
 
+        {#  DIRETTIVE ANGULAR  #}
+        myAngular.directive('validateFacebookDirective', function() {
+            return {
+                require: 'ngModel',
+                link: function(scope, element, attr, mCtrl) {
+                    function validateFacebook(value) {
+                        if (value.indexOf("facebook") > -1) {
+                            mCtrl.$setValidity('facebook', true);
+                        }else {
+                            mCtrl.$setValidity('facebook', false);
+                        }
+                    }
+                    mCtrl.$parsers.push(validateFacebook);
+                }
+            };
+        });
+
         function FormValidationController($scope, $http, FileUploader) {
             var vm = this;
 
