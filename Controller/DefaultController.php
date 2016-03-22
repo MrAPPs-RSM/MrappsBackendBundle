@@ -803,6 +803,7 @@ class DefaultController extends Controller
      */
     public function validatefacebookAction(Request $request)
     {
+        $httpCode = 0;
         $valid = false;
 
         $url = strtolower(trim($request->get('url')));
@@ -811,18 +812,30 @@ class DefaultController extends Controller
 
         if(strlen($url) > 0 && $pos !== false) {
 
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-            if($httpCode == 200 || $httpCode == 302) {
-                $valid = true;
+            if(substr($url, 0, 4) != "http") {
+                $url = 'http://'.$url;
             }
+
+            $channel = curl_init();
+            curl_setopt($channel, CURLOPT_URL, $url);
+            curl_setopt($channel, CURLOPT_CONNECTTIMEOUT, 10);
+            curl_setopt($channel, CURLOPT_TIMEOUT, 10);
+            curl_setopt($channel, CURLOPT_HEADER, true);
+            curl_setopt($channel, CURLOPT_NOBODY, true);
+            curl_setopt($channel, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($channel, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 6.1; rv:2.2) Gecko/20110201');
+            curl_setopt($channel, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($channel, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+            curl_setopt($channel, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($channel, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_exec($channel);
+            $httpCode = curl_getinfo($channel, CURLINFO_HTTP_CODE );
+            curl_close($channel);
+
+            $valid = ($httpCode == 200);
         }
 
-        return new JsonResponse(array('valid' => $valid));
+        return new JsonResponse(array('valid' => $valid, 'code' => $httpCode, 'url' => $url));
     }
 
 }
