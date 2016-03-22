@@ -1,5 +1,5 @@
 {# PLUGIN DOC: https://github.com/kaihenzler/angular-minicolors #}
-<fieldset {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
+<fieldset id="{{field.name}}" {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
     <div class="form-group">
         <label class="col-sm-2 control-label">{{field.title}}{% if field.required %} *{% endif %}</label>
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
