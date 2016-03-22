@@ -141,15 +141,17 @@
 
         {#  DIRETTIVE ANGULAR  #}
         myAngular.directive('validateFacebookDirective', function() {
+            var toId;
             return {
                 require: 'ngModel',
                 link: function(scope, element, attr, mCtrl) {
                     function validateFacebook(value) {
-                        if (value.indexOf("facebook") > -1) {
-                            mCtrl.$setValidity('facebook', true);
-                        }else {
-                            mCtrl.$setValidity('facebook', false);
-                        }
+                        if(toId) clearTimeout(toId);
+                        toId = setTimeout(function(){
+                            $http.get('{{ path('mrapps_backend_validatefacebook') }}?url=' + value).success(function(data) {
+                                mCtrl.$setValidity('facebook', data.valid);
+                            });
+                        }, 200);
                     }
                     mCtrl.$parsers.push(validateFacebook);
                 }
