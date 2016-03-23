@@ -20,17 +20,17 @@ class DraftListener
     private $oneToManyClass = 'Doctrine\\ORM\\Mapping\\OneToMany';
 
 
-    private function getDraft(Draft $entity = null) {
+    private function getDraft($entity = null) {
         return $this->getOther($entity, false);
     }
 
-    private function getPublished(Draft $entity = null) {
+    private function getPublished($entity = null) {
         return $this->getOther($entity, true);
     }
 
-    private function getOther(Draft $entity = null, $forcePublished = null) {
+    private function getOther($entity = null, $forcePublished = null) {
 
-        if($entity !== null) {
+        if($entity !== null && is_subclass_of($entity, $this->draftClass)) {
 
             if($forcePublished !== null) {
                 $published = $forcePublished;
