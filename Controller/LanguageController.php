@@ -20,9 +20,9 @@ use Symfony\Component\HttpFoundation\Request;
 class LanguageController extends BaseBackendController
 {
     /**
-     * @Route("/new", name="mrapps_language_new")
-     * @Sidebar("language_new", label="New Lingua", min_role="ROLE_ADMIN", visible=true, weight=0, icon="fa-spin",, parent="language_list")
      * @Route("/edit/{id}", name="mrapps_language_edit")
+     * @Route("/new", name="mrapps_language_new")
+     * @Sidebar("language_new", parent="language_list", label="New Lingua", min_role="ROLE_ADMIN", visible=true, weight=0, icon="fa-spin")
      */
     public function newAction(Request $request, $id = null)
     {
