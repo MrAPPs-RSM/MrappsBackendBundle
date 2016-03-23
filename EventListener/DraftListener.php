@@ -145,7 +145,10 @@ class DraftListener
                             foreach($array as $relazione) {
 
                                 $relazioneClass = get_class($relazione);
-                                if(is_subclass_of($relazioneClass, $this->draftClass) && $relazione->getPublished() == true) {
+                                if(
+                                    (is_subclass_of($relazioneClass, $this->draftClass) && $relazione->getPublished() == true) ||
+                                    !is_subclass_of($relazioneClass, $this->draftClass) //tutte le relazioni non-draft vengono girate verso l'entity pubblicata
+                                ) {
 
                                     $objRelazione = new \ReflectionObject($relazione);
                                     $propRelazione = $objRelazione->getProperty($mappedBy);
