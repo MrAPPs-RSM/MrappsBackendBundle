@@ -398,7 +398,7 @@
 
             setTimeout(function () {
 
-                jQuery("#{{ field.name }}").select2({
+                jQuery("select#select_{{ field.name }}").select2({
                     {% if field.required==false %}
                     "allowClear": true
                     {% endif %}

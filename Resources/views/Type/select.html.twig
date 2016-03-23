@@ -2,7 +2,7 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">{{ field.title }}{% if switch is not defined and field.required %} *{% endif %}</label>
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
-            <select name="{{ field.name }}" id="{{ field.name }}"
+            <select name="{{ field.name }}" id="select_{{ field.name }}"
                     {% if field.multiple is defined %}multiple="multiple"{% endif %} {% if switch is not defined and field.required %}required="true"{% endif %}
                     ng-model="form.{{ field.name }}"
                     class="form-control select">
