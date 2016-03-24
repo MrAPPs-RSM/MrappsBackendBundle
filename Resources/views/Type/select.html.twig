@@ -2,7 +2,7 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">{{ field.title }}{% if switch is not defined and field.required %} *{% endif %}</label>
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
-            {% if field.ajax is not defined or field.ajax.enabled == false %}
+            {% if field.ajax is not defined or field.ajax == false %}
                 <select name="{{ field.name }}" id="select_{{ field.name }}"
                         {% if field.multiple is defined %}multiple="multiple"{% endif %} {% if switch is not defined and field.required %}required="true"{% endif %}
                         ng-model="form.{{ field.name }}"
@@ -20,7 +20,14 @@
                     {% endfor %}
                 </select>
             {% else %}
-                <input type="hidden" name="{{ field.name }}" id="select_{{ field.name }}" ng-model="form.{{ field.name }}" class="form-control" />
+                <ui-select name="{{ field.name }}" id="select_{{ field.name }}" ng-model="form.{{ field.name }}">
+                    <ui-select-match>
+                        <span ng-bind="$select.selected.name"></span>
+                    </ui-select-match>
+                    <ui-select-choices refresh="refresh{{ field.name }}($select.search)" refresh-delay="0" group-by="'type'" repeat="item in ({{ field.name }}Items | filter: $select.search) track by item.value">
+                        <span ng-bind="item.name"></span>
+                    </ui-select-choices>
+                </ui-select>
             {% endif %}
         </div>
         {% if switch is not defined and field.required %}<span

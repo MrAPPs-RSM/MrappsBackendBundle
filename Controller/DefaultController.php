@@ -96,7 +96,7 @@ class DefaultController extends Controller
     }
 
     private function _checkRoleSidebar($sidebar = null) {
-        
+
         if($sidebar !== null) {
 
             //Primo livello con figli => sempre visibile
@@ -120,7 +120,7 @@ class DefaultController extends Controller
 //            $minRole = $sidebar->getMinRole();
 //            return (is_null($minRole) || strlen($minRole) == 0 || $checker->isGranted($minRole));
         }
-        
+
         return false;
     }
 
@@ -129,7 +129,7 @@ class DefaultController extends Controller
         $menu = array();
 
         $em = $this->getDoctrine()->getManager();
-        
+
         //Voci di menu al primo livello, ordinate per peso
         $primoLivello = $em->createQuery("
                 SELECT s
@@ -154,10 +154,10 @@ class DefaultController extends Controller
         //Organizzazione voci di menu secondo livello
         $secondoLivelloParents = array();
         foreach($secondoLivello as $sidebar) {
-            
+
             //Check ruolo
             if($this->_checkRoleSidebar($sidebar)) {
-                
+
                 $parentId = ($sidebar->getParent() !== null) ? $sidebar->getParent()->getId() : 0;
                 if(!isset($secondoLivelloParents[$parentId])) {
                     $secondoLivelloParents[$parentId] = array();
@@ -168,10 +168,10 @@ class DefaultController extends Controller
 
         //Gestione sidebar primo livello
         foreach($primoLivello as $sidebar) {
-            
+
             //Check ruolo
             if($this->_checkRoleSidebar($sidebar)) {
-                
+
                 $thisId = $sidebar->getId();
                 if(isset($secondoLivelloParents[$thisId]) && count($secondoLivelloParents[$thisId]) > 0) {
 
@@ -319,7 +319,7 @@ class DefaultController extends Controller
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,
             'languages' => $languages,
-            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors"',
+            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select"',
         ));
     }
 
