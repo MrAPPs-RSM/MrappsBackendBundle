@@ -432,4 +432,35 @@ class Utils
         
         return $array;
     }
+    
+    public static function getLanguages(){
+        return [
+            "it" => "Italiano",
+            "en" => "English"
+        ];
+    }
+    
+    public static function getDefaultRouteForUser($container, $user) {
+
+        $defaultRoutes = $container->getParameter('mrapps_backend.default_routes');
+
+        $roles = ($user !== null) ? $user->getRoles() : array();
+        $roles[] = 'DEFAULT';
+
+        $defaultRouteForUser = '';
+        $canProceed = true;
+        foreach($roles as $role) {
+            if($canProceed) {
+                foreach($defaultRoutes as $route) {
+                    if($route['role'] == $role) {
+                        $defaultRouteForUser = $route['name'];
+                        $canProceed = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $defaultRouteForUser;
+    }
 }

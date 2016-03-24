@@ -80,14 +80,19 @@ class DefaultController extends Controller
         return $this->getRequest()->getSchemeAndHttpHost() . '/uploads/' . $dir;
     }
 
-    public function __topNavBarAction()
+    public function __topNavBarAction(Request $request)
     {
         $defaultRouteName = $this->getDefaultRouteForUser();
         //$defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
+        $url = $this->container->get('request')->get('_route');
 
         return $this->render('MrappsBackendBundle:Default:top-navbar.html.twig',
             array("logo_path" => $this->container->hasParameter('mrapps_backend.logo_path') ? $this->container->getParameter('mrapps_backend.logo_path') : null,
-                "default_route_name" => $defaultRouteName,));
+                "default_route_name" => $defaultRouteName,
+                "request" => $request,
+                "languages" => Utils::getLanguages()
+                )
+        );
     }
 
     private function _checkRoleSidebar($sidebar = null) {
@@ -233,27 +238,7 @@ class DefaultController extends Controller
 
     private function getDefaultRouteForUser() {
 
-        $defaultRoutes = $this->container->getParameter('mrapps_backend.default_routes');
-
-        $user = $this->getUser();
-        $roles = ($user !== null) ? $user->getRoles() : array();
-        $roles[] = 'DEFAULT';
-
-        $defaultRouteForUser = '';
-        $canProceed = true;
-        foreach($roles as $role) {
-            if($canProceed) {
-                foreach($defaultRoutes as $route) {
-                    if($route['role'] == $role) {
-                        $defaultRouteForUser = $route['name'];
-                        $canProceed = false;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return $defaultRouteForUser;
+        return Utils::getDefaultRouteForUser($this->container, $this->getUser());
     }
 
     /**
