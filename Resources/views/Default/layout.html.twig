@@ -24,7 +24,8 @@
 <div data-ui-view="" data-autoscroll="false" class="wrapper">
     <header class="topnavbar-wrapper">
         {% block topnavbar %}
-            {{ render(controller('MrappsBackendBundle:Default:__topNavBar')) }}
+            {# {{ render(controller('MrappsBackendBundle:Default:__topNavBar', {"request" : app.request})) }} #}
+            {{ mrappsBackendLanguages.getTopNavBar() | raw }}
         {% endblock topnavbar %}
     </header>
     {#<aside class="aside" class="aside" ng-controller="SidebarController">#}
