@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/angular-ui-bootstrap-bower/ui-bootstrap-csp.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/jstree/dist/themes/default/style.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-minicolors/jquery.minicolors.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/ui-select/dist/select.min.css') }}">
 {% endblock css %}
 {% block content %}
     <div ng-controller="FormValidationController as form" class="container-fluid">
@@ -90,6 +91,7 @@
     <script src="{{ asset('assets/vendor/angular-ui-validate/dist/validate.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery-minicolors/jquery.minicolors.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/angular-minicolors/angular-minicolors.js') }}"></script>
+    <script src="{{ asset('assets/vendor/ui-select/dist/select.min.js') }}"></script>
 {% endblock srcjavascript %}
 {% block javascript %}
     <script type="text/javascript">
@@ -402,39 +404,44 @@
 
             setTimeout(function () {
 
-                jQuery("#select_{{ field.name }}").select2({
+                {% if field.ajax is defined and field.ajax == true %}
+
+                $scope.{{ field.name }}Items = [];
+                $scope.refresh{{ field.name }} = function(search) {
+                    var text = search;
+                    if(text.length >= {{ field.ajax_options.min_length|default(0) }}) {
+                        var params = {q: search, form:$scope.form};
+                        return $http.post('{{ field.ajax_options.url }}', params)
+                                .then(function (response) {
+                                    $scope.{{ field.name }}Items = response.data
+                                });
+                    }
+                    return true;
+                };
+
+                {% else %}
+
+                $scope.{{ field.name }}Items = [{% for o in field.options %}{"id":"{{ o.id }}","value":"{{ o.value }}"}{% if loop.last == false %},{% endif %}{% endfor %}];
+
+                {#
+                    TODO: vedere se è possibile ottimizzare questo ciclo
+                    Problema: $scope.form.{{ field.name }} vuole per forza l'intero JSON (es. {"id":499, "value":"Italia"}) e non solo l'ID (499)
+                    Per evitare di dover modificare lato backend il passaggio dei dati, ciclo tra i risultati fino a trovare un elemento con lo stesso
+                    ID e setto l'intero JSON a $scope.form.{{ field.name }}
+                #}
+                {% if field.value is defined and field.value is not empty and field.value is not null %}
+                $.each($scope.{{ field.name }}Items, function(i,v) {
+                    if(v.id == {{ field.value }}) {
+                        $scope.form.{{ field.name }} = v;
+                        return false;
+                    }
+                    return true;
+                });
+                {% endif %}
+
+                {#jQuery("#select_{{ field.name }}").select2({
                     {% if field.required==false %}
                     "allowClear": true,
-                    {% endif %}
-                    {% if field.ajax is defined and field.ajax.enabled is defined and field.ajax.enabled==true %}
-                    ajax: {
-                        url: "{{ field.ajax.url }}",
-                        dataType: 'json',
-                        quietMillis: 250,
-                        data: function (term, page) {
-                            return {
-                                q: term,
-                                form: $scope.form
-                            };
-                        },
-                        results: function (data, page) {
-                            return { results: data.data };
-                        },
-                        cache: true
-                    },
-                    initSelection: function(element, callback) {
-                        var id = $(element).val();
-                        if (id !== "") {
-                            $.ajax("{{ field.ajax.url }}?id=" + id, {
-                                dataType: "json"
-                            }).done(function(data) { callback(data); });
-                        }
-                    },
-                    formatResult: select2default,
-                    formatSelection: select2default,
-                    escapeMarkup: function(m) {
-                        return m;
-                    },
                     {% endif %}
                     dropdownCssClass: "bigdrop"
                 });
@@ -451,9 +458,9 @@
                 $scope.form.{{ field.name }} = "{{ field.value }}";
                 {% endif %}
 
-
                 jQuery("#{{ field.name }}").val($scope.form.{{ field.name }});
                 jQuery("#{{ field.name }}").trigger('change');
+
                 {% else %}
                 {% if field.required==true %}
 
@@ -471,8 +478,9 @@
                 {% endif %}
 
                 jQuery("#{{ field.name }}").on("change", function (e) {
-                    $scope.form.{{ field.name }} = $("#{{ field.name }}").val();
-                });
+                    $scope.form.{{ field.name }} = $("#select_{{ field.name }}").val();
+                });#}
+                {% endif %}
 
             }, 0);
             {% elseif field.type == "text" %}
@@ -566,8 +574,14 @@
 
             vm.submitted = false;
             vm.validateInput = function (name, type) {
-                var input = vm.formValidate[name];
-                return (input.$dirty || vm.submitted) && input.$error[type];
+                if(typeof(name) !== "undefined" && typeof(type) !== "undefined") {
+                    var input = vm.formValidate[name];
+                    if(typeof(input) !== "undefined") {
+                        return (input.$dirty || vm.submitted) && input.$error[type];
+                    }
+                }
+
+                return true;
             };
 
             {% if create %}
