@@ -419,6 +419,14 @@
                     return true;
                 };
 
+                //Set initial value
+                {% if field.value is defined and field.value is not empty %}
+                $http.get('{{ field.ajax_options.url }}?id={{ field.value }}')
+                        .then(function (response) {
+                            $scope.form.{{ field.name }} = response.data;
+                        });
+                {% endif %}
+
                 {% else %}
 
                 jQuery("#select_{{ field.name }}").select2({
