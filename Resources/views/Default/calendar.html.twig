@@ -1,0 +1,63 @@
+{% trans_default_domain 'MrappsBackendBundle' %}
+{% extends 'MrappsBackendBundle:Default:layout.html.twig' %}
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/fullcalendar/dist/fullcalendar.min.css') }}">
+{% endblock css %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            {% if fields is not null %}
+                <div class="col-md-4">
+                    <div id='panel'>
+                        <form id="input">
+                            {% for field in fields %}
+                                {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
+                                {{ include(twig_name, { 'field': field }) }}
+                            {% endfor %}
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div id='calendar'></div>
+                </div>
+            {% else %}
+                <div class="col-md-12">
+                    <div id='calendar'></div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock content %}
+{% block srcjavascript %}
+    <script src="{{ asset('assets/vendor/moment/min/moment.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/fullcalendar/dist/fullcalendar.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/fullcalendar/dist/lang-all.js') }}"></script>
+{% endblock srcjavascript %}
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $('#calendar').fullCalendar({
+                lang: 'it',
+                eventSources: [
+                    '{{ linkAjax }}'
+                ],
+                dayClick: function(date, jsEvent, view) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ calendarNew }}",
+                        data: $('#input').serialize() + "&date=" + date.format(),
+                        success: function(data) {
+                            if(data.success){
+                                data = JSON.parse(data.data);
+                                $('#calendar').fullCalendar('renderEvent', data);
+                            }
+                        },
+                        dataType: 'json'
+                    });
+                },
+            })
+        });
+    </script>
+{% endblock javascript %}

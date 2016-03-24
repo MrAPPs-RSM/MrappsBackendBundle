@@ -216,7 +216,8 @@ liip_imagine.controller.imagine_filter:
     "ng-js-tree": "~0.0.7",
     "ui-select": "angular-ui-select#~0.14.2",
     "angular-ui-validate": "^1.2.2",
-    "angular-minicolors": "~0.0.7"
+    "angular-minicolors": "~0.0.7",
+    "fullcalendar": "^2.6.1"
   }
 }
 ```
