@@ -14,19 +14,19 @@
     </div>
     <!-- END navbar header-->
     {% if routeName is defined and routeName|length > 0 %}
-    <ul>
-        {% set paramsList = [] %}
-        {% for key, param in app.request.attributes.get('_route_params') %}
-            {% if key != '_locale' %}
-                {% set paramsList = paramsList|merge({(key):param}) %}
-            {% endif %}
-        {% endfor %}
+        <ul>
+            {% set paramsList = [] %}
+            {% for key, param in routeParams %}
+                {% if key != '_locale' %}
+                    {% set paramsList = paramsList|merge({(key):param}) %}
+                {% endif %}
+            {% endfor %}
 
-        {% for key, lang in languages %}
-            <li><a href="{{ url(routeName, paramsList|merge({"_locale": key})) }}">{{ lang }}</a></li>
-        {% endfor %}
+            {% for key, lang in languages %}
+                <li><a href="{{ url(routeName, paramsList|merge({"_locale": key})) }}">{{ lang }}</a></li>
+            {% endfor %}
 
-    </ul>
+        </ul>
     {% endif %}
     <!-- START Nav wrapper-->
     <div class="nav-wrapper">
@@ -37,10 +37,10 @@
                <a href="" trigger-resize="" ng-click="app.layout.isCollapsed = !app.layout.isCollapsed" class="hidden-xs">
                   <em class="fa fa-navicon"></em>
                </a>#}
-               <!-- Button to show/hide the sidebar on mobile. Visible on mobile only.-->
-               <a href="" id="left_toggler" class="visible-xs sidebar-toggle">
-                  <em class="fa fa-navicon"></em>
-               </a>
+            <!-- Button to show/hide the sidebar on mobile. Visible on mobile only.-->
+            <a href="" id="left_toggler" class="visible-xs sidebar-toggle">
+                <em class="fa fa-navicon"></em>
+            </a>
             </li>
             <!-- START User avatar toggle-->
             {#<li>
@@ -157,11 +157,11 @@
     <!-- END Nav wrapper-->
     <!-- START Search form-->
     {#<form role="search" action="search.html" class="navbar-form">#}
-        {#<div class="form-group has-feedback">#}
-            {#<input type="text" placeholder="" class="form-control"/>#}
-            {#<div search-dismiss="search-dismiss" class="fa fa-times form-control-feedback"></div>#}
-        {#</div>#}
-        {#<button type="submit" class="hidden btn btn-default">Submit</button>#}
+    {#<div class="form-group has-feedback">#}
+    {#<input type="text" placeholder="" class="form-control"/>#}
+    {#<div search-dismiss="search-dismiss" class="fa fa-times form-control-feedback"></div>#}
+    {#</div>#}
+    {#<button type="submit" class="hidden btn btn-default">Submit</button>#}
     {#</form>#}
     <!-- END Search form-->
 </nav>
