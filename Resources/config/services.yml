@@ -19,3 +19,8 @@ services:
             class: Mrapps\BackendBundle\EventListener\DraftListener
             tags:
                 - { name: doctrine.event_listener, event: onFlush }
+
+    mrapps.backend.languages:
+            class: Mrapps\BackendBundle\Handler\LanguageHandler
+            calls:
+                    - [setRequest , ["@service_container"]]
