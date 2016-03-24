@@ -4,6 +4,7 @@ namespace Mrapps\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Mrapps\BackendBundle\Model\DraftInterface;
+use Mrapps\BackendBundle\Exception\NotImplementedException;
 
 /**
  * @ORM\MappedSuperclass
@@ -68,6 +69,6 @@ class Draft extends Base implements DraftInterface {
 
     public function getOther()
     {
-        return null;
+        throw new NotImplementedException();
     }
 }

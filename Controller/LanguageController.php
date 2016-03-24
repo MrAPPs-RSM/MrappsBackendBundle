@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route("/language")
+ * @Route("{_locale}/panel/language")
  */
 class LanguageController extends BaseBackendController
 {

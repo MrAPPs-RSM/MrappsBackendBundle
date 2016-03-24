@@ -13,6 +13,11 @@
         </a>
     </div>
     <!-- END navbar header-->
+    <ul>
+        {% for key, lang in languages %}
+            <li><a href="{{ path (routeName, {"_locale" : key}) }}" >{{ lang }}</a></li>
+        {% endfor %}
+    </ul>
     <!-- START Nav wrapper-->
     <div class="nav-wrapper">
         <!-- START Left navbar-->
