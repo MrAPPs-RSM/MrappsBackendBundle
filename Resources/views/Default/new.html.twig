@@ -421,25 +421,7 @@
 
                 {% else %}
 
-                $scope.{{ field.name }}Items = [{% for o in field.options %}{"id":"{{ o.id }}","value":"{{ o.value }}"}{% if loop.last == false %},{% endif %}{% endfor %}];
-
-                {#
-                    TODO: vedere se è possibile ottimizzare questo ciclo
-                    Problema: $scope.form.{{ field.name }} vuole per forza l'intero JSON (es. {"id":499, "value":"Italia"}) e non solo l'ID (499)
-                    Per evitare di dover modificare lato backend il passaggio dei dati, ciclo tra i risultati fino a trovare un elemento con lo stesso
-                    ID e setto l'intero JSON a $scope.form.{{ field.name }}
-                #}
-                {% if field.value is defined and field.value is not empty and field.value is not null %}
-                $.each($scope.{{ field.name }}Items, function(i,v) {
-                    if(v.id == {{ field.value }}) {
-                        $scope.form.{{ field.name }} = v;
-                        return false;
-                    }
-                    return true;
-                });
-                {% endif %}
-
-                {#jQuery("#select_{{ field.name }}").select2({
+                jQuery("#select_{{ field.name }}").select2({
                     {% if field.required==false %}
                     "allowClear": true,
                     {% endif %}
@@ -447,7 +429,7 @@
                 });
 
                 {% if field.disable is defined and field.disable==true %}
-                jQuery("#{{ field.name }}").prop("disabled", true);
+                jQuery("#select_{{ field.name }}").prop("disabled", true);
                 {% endif %}
 
                 {% if field.value is defined and field.value is not empty %}
@@ -458,8 +440,8 @@
                 $scope.form.{{ field.name }} = "{{ field.value }}";
                 {% endif %}
 
-                jQuery("#{{ field.name }}").val($scope.form.{{ field.name }});
-                jQuery("#{{ field.name }}").trigger('change');
+                jQuery("#select_{{ field.name }}").val($scope.form.{{ field.name }});
+                jQuery("#select_{{ field.name }}").trigger('change');
 
                 {% else %}
                 {% if field.required==true %}
@@ -472,14 +454,15 @@
                 {% endif %}
 
                 $scope.form.{{ field.name }} = {{ field_value.value | json_encode }};
-                jQuery("#{{ field.name }}").val($scope.form.{{ field.name }});
-                jQuery("#{{ field.name }}").trigger('change');
+                jQuery("#select_{{ field.name }}").val($scope.form.{{ field.name }});
+                jQuery("#select_{{ field.name }}").trigger('change');
                 {% endif %}
                 {% endif %}
 
                 jQuery("#{{ field.name }}").on("change", function (e) {
                     $scope.form.{{ field.name }} = $("#select_{{ field.name }}").val();
-                });#}
+                });
+
                 {% endif %}
 
             }, 0);
