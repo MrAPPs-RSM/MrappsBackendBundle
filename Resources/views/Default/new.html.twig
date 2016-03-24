@@ -29,49 +29,49 @@
                         {% endif %}
                         <div class="panel-body">
                             {% for field in fields %}
-                            {% if field.lang is defined and field.lang %}
-                                <div class="dropdown">
-                                    <button class="btn btn-default dropdown-toggle lang_selector" type="button" id="dropdownLanguage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        it
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownLanguage">
+                                {% if field.lang is defined and field.lang %}
+                                    <div class="dropdown">
+                                        <button class="btn btn-default dropdown-toggle lang_selector" type="button" id="dropdownLanguage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            it
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownLanguage">
+                                            {% for lang in languages %}
+                                                <li><a data-idlang="{{ lang.id }}" data-isocode="{{ lang.isoCode }}">{{ lang.name }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
+                                    {% set field_lang = field.value %}
+                                    {% set field_name = field.name %}
+                                    <div class="multilang">
                                         {% for lang in languages %}
-                                            <li><a data-idlang="{{ lang.id }}" data-isocode="{{ lang.isoCode }}">{{ lang.name }}</a></li>
+                                            {% set field = field|merge({"name" : [field_name,'_',lang.id]|join}) %}
+                                            {% set field = field|merge({"value" : field_lang[lang.id]}) %}
+                                            {{ include(twig_name, { 'field': field }) }}
                                         {% endfor %}
-                                    </ul>
-                                </div>
-                                {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
-                                {% set field_lang = field.value %}
-                                {% set field_name = field.name %}
-                                <div class="multilang">
-                                    {% for lang in languages %}
-                                        {% set field = field|merge({"name" : [field_name,'_',lang.id]|join}) %}
-                                        {% set field = field|merge({"value" : field_lang[lang.id]}) %}
-                                        {{ include(twig_name, { 'field': field }) }}
-                                    {% endfor %}
-                                </div>
+                                    </div>
 
-                            {% else %}
-                                {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
-                                {{ include(twig_name, { 'field': field }) }}
-                            {% endif %}
+                                {% else %}
+                                    {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
+                                    {{ include(twig_name, { 'field': field }) }}
+                                {% endif %}
                             {% endfor %}
                         </div>
-                        </div>
-                        <div class="panel-footer text-right">
-                            {% if edit %}
-                                <button type="submit" id="save" class="btn btn-info">{{ 'form.modifica'|trans }}</button>
-                            {% else %}
-                                <button type="submit" id="save" class="btn btn-success">{{ 'form.crea'|trans }}</button>
-                            {% endif %}
-                        </div>
                     </div>
-                    <!-- END panel-->
-                </form>
+                    <div class="panel-footer text-right">
+                        {% if edit %}
+                            <button type="submit" id="save" class="btn btn-info">{{ 'form.modifica'|trans }}</button>
+                        {% else %}
+                            <button type="submit" id="save" class="btn btn-success">{{ 'form.crea'|trans }}</button>
+                        {% endif %}
+                    </div>
             </div>
+            <!-- END panel-->
+            </form>
         </div>
-        <!-- END row-->
+    </div>
+    <!-- END row-->
     </div>
 
 {% endblock content %}
@@ -135,6 +135,10 @@
             changeLaguagesReady("it",1);
             changeLaguages();
         });
+
+        function select2default(item) {
+            return '<div>'+item.value+'</div>';
+        }
 
 
         myAngular.controller("FormValidationController", FormValidationController);
@@ -398,10 +402,41 @@
 
             setTimeout(function () {
 
-                jQuery("#{{ field.name }}").select2({
+                jQuery("#select_{{ field.name }}").select2({
                     {% if field.required==false %}
-                    "allowClear": true
+                    "allowClear": true,
                     {% endif %}
+                    {% if field.ajax is defined and field.ajax.enabled is defined and field.ajax.enabled==true %}
+                    ajax: {
+                        url: "{{ field.ajax.url }}",
+                        dataType: 'json',
+                        quietMillis: 250,
+                        data: function (term, page) {
+                            return {
+                                q: term,
+                                form: $scope.form
+                            };
+                        },
+                        results: function (data, page) {
+                            return { results: data.data };
+                        },
+                        cache: true
+                    },
+                    initSelection: function(element, callback) {
+                        var id = $(element).val();
+                        if (id !== "") {
+                            $.ajax("{{ field.ajax.url }}?id=" + id, {
+                                dataType: "json"
+                            }).done(function(data) { callback(data); });
+                        }
+                    },
+                    formatResult: select2default,
+                    formatSelection: select2default,
+                    escapeMarkup: function(m) {
+                        return m;
+                    },
+                    {% endif %}
+                    dropdownCssClass: "bigdrop"
                 });
 
                 {% if field.disable is defined and field.disable==true %}
