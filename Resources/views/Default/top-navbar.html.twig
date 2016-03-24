@@ -3,7 +3,7 @@
 <nav role="navigation" class="navbar topnavbar">
     <!-- START navbar header-->
     <div class="navbar-header">
-        <a href="{{ path(default_route_name) }}" class="navbar-brand">
+        <a {% if default_route_name is defined and default_route_name|length > 0 %}href="{{ path(default_route_name) }}"{% endif %} class="navbar-brand">
             <div class="brand-logo">
                 <img src="{{ asset(logo_path) }}" alt="Logo" class="img-responsive"/>
             </div>
@@ -13,11 +13,13 @@
         </a>
     </div>
     <!-- END navbar header-->
+    {% if routeName is defined and routeName|length > 0 %}
     <ul>
         {% for key, lang in languages %}
             <li><a href="{{ path (routeName, {"_locale" : key}) }}" >{{ lang }}</a></li>
         {% endfor %}
     </ul>
+    {% endif %}
     <!-- START Nav wrapper-->
     <div class="nav-wrapper">
         <!-- START Left navbar-->
