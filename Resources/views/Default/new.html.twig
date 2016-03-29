@@ -77,7 +77,6 @@
 
 {% endblock content %}
 {% block srcjavascript %}
-
     <script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.min.js"></script>
     <script src="{{ asset('assets/vendor/angular-resource/angular-resource.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/angular-file-upload/dist/angular-file-upload.min.js') }}"></script>
@@ -92,7 +91,9 @@
     <script src="{{ asset('assets/vendor/jquery-minicolors/jquery.minicolors.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/angular-minicolors/angular-minicolors.js') }}"></script>
     <script src="{{ asset('assets/vendor/ui-select/dist/select.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/ngmap/build/scripts/ng-map.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/lodash/dist/lodash.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/angular-simple-logger/dist/angular-simple-logger.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/angular-google-maps/dist/angular-google-maps.min.js') }}"></script>
 {% endblock srcjavascript %}
 {% block javascript %}
     <script type="text/javascript">
@@ -143,6 +144,21 @@
             return '<div>'+item.value+'</div>';
         }
 
+        {% set initializeGmaps = false %}
+        {% for field in fields if initializeGmaps == false %}
+        {% if field.type == "map" %}
+        {% set initializeGmaps = true %}
+        {% endif %}
+        {% endfor %}
+        {% if initializeGmaps == true %}
+        myAngular.config(function(uiGmapGoogleMapApiProvider) {
+            uiGmapGoogleMapApiProvider.configure({
+                key: 'AIzaSyDuBs5L2-vRVDChykp-jF8X-I1STTsAwso',
+                v: '3',
+                libraries: 'weather,geometry,visualization'
+            });
+        })
+        {% endif %}
 
         myAngular.controller("FormValidationController", FormValidationController);
 
@@ -163,7 +179,7 @@
             };
         });
 
-        function FormValidationController($scope, $http, FileUploader, NgMap) {
+        function FormValidationController($scope, $http, FileUploader, uiGmapGoogleMapApi) {
             var vm = this;
 
             {% set jsFields = [] %}
@@ -233,12 +249,42 @@
             };
             {% elseif field.type == "map" %}
 
-            NgMap.getMap().then(function(map) {
-                $scope.form.{{field.name}}_lat = map.getCenter().latitude;
-                $scope.form.{{field.name}}_lng = map.getCenter().longitude;
-            });
+            {% if field.getLatLng_ajax|length > 0 %}
+            $scope.{{field.name}}ObtainLatLngFnc = function() {
 
+                return $http.post('{{ field.getLatLng_ajax }}', {'form':$scope.form})
+                        .then(function (response) {
+                            if(response.data.success) {
+                                $scope.form.{{field.name}}.address = response.data.address;
+                                $scope.form.{{field.name}}.center.latitude = response.data.lat;
+                                $scope.form.{{field.name}}.center.longitude = response.data.lng;
+                            }else {
+                                toastr.error('Errore!', 'Indirizzo non trovato.');
+                            }
+                        });
+            };
+            {% endif %}
 
+            $scope.form.{{field.name}} = { address: '', center: { latitude: {{ field.value.lat|default('42.247564380437346') }}, longitude: {{ field.value.lng|default('12.916211206249972') }} }, zoom: {{ field.value.zoom|default('5') }} };
+
+            $scope.{{field.name}}Marker = {
+                id: {{ field.random_number }},
+                coords: {
+                    latitude: $scope.form.{{field.name}}.center.latitude,
+                    longitude: $scope.form.{{field.name}}.center.longitude
+        },
+            options: { draggable: true },
+            events: {
+                dragend: function (marker, eventName, args) {
+
+                    var lat = marker.getPosition().lat();
+                    var lng = marker.getPosition().lng();
+
+                    $scope.form.{{field.name}}.center.latitude = lat;
+                    $scope.form.{{field.name}}.center.longitude = lng;
+                }
+            }
+        };
             {% elseif field.type == "file" %}
 
             $scope.{{ field.name }}_uploading = false;
