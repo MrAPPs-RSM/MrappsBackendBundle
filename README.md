@@ -207,7 +207,7 @@ liip_imagine.controller.imagine_filter:
     "toastr": "~2.1.2",
     "angular-sanitize": "~1.4.7",
     "ngInfiniteScroll": "~1.2.1",
-    "ngmap": "~1.14.9",
+    "ngmap": "~1.16.7",
     "tinymce": "~4.2.8",
     "angular-ui-sortable": "~0.13.4",
     "angular-ui-tinymce": "~0.0.10",

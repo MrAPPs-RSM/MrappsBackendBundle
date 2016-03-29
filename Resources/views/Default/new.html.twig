@@ -92,6 +92,7 @@
     <script src="{{ asset('assets/vendor/jquery-minicolors/jquery.minicolors.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/angular-minicolors/angular-minicolors.js') }}"></script>
     <script src="{{ asset('assets/vendor/ui-select/dist/select.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/ngmap/build/scripts/ng-map.min.js') }}"></script>
 {% endblock srcjavascript %}
 {% block javascript %}
     <script type="text/javascript">
@@ -162,7 +163,7 @@
             };
         });
 
-        function FormValidationController($scope, $http, FileUploader) {
+        function FormValidationController($scope, $http, FileUploader, NgMap) {
             var vm = this;
 
             {% set jsFields = [] %}
@@ -230,6 +231,14 @@
                 }
                 document.getElementById("save").disabled = false;
             };
+            {% elseif field.type == "map" %}
+
+            NgMap.getMap().then(function(map) {
+                $scope.form.{{field.name}}_lat = map.getCenter().latitude;
+                $scope.form.{{field.name}}_lng = map.getCenter().longitude;
+            });
+
+
             {% elseif field.type == "file" %}
 
             $scope.{{ field.name }}_uploading = false;
