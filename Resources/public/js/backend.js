@@ -160,7 +160,9 @@ now {
     display: inline-block;
 }
 
-.angular-google-map-container { height: 400px; }
+.angular-google-map-container {
+    height: 400px;
+}
 
 .navbar-toggle .icon-bar {
     background-color: #fff;
