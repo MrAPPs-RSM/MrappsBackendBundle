@@ -91,7 +91,7 @@ class DefaultController extends Controller
                 "default_route_name" => $defaultRouteName,
                 "request" => $request,
                 "languages" => Utils::getLanguages()
-                )
+            )
         );
     }
 
@@ -306,6 +306,14 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $languages = $em->getRepository('MrappsBackendBundle:Language')->findBy(["visible" => true]);
 
+        foreach ($fields as $k => $f) {
+            if($f['type'] == 'map') {
+                //Numero random, necessario per il marker (tipo mappa)
+                $rnd = mt_rand(1, 999999);
+                $fields[$k]['random_number'] = $rnd;
+            }
+        }
+
         return $this->render('MrappsBackendBundle:Default:new.html.twig', array(
             'current_route' => $request->get('_route'),
             'title' => $title,
@@ -319,7 +327,7 @@ class DefaultController extends Controller
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,
             'languages' => $languages,
-            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","ngMap"',
+            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps"',
         ));
     }
 
@@ -842,5 +850,4 @@ class DefaultController extends Controller
             'angular' => '',
         ));
     }
-
 }

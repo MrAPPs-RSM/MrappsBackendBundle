@@ -1,9738 +1,11456 @@
-/*!
- *
- * Angle - Bootstrap Admin App + AngularJS
- *
- * Version: 3.1.0
- * Author: @themicon_co
- * Website: http://themicon.co
- * License: https://wrapbootstrap.com/help/licenses
- *
- */
-
-// APP START
-// -----------------------------------
-
-(function() {
-    'use strict';
-
-    angular
-        .module('angle', [
-            'app.core',
-            'app.routes',
-            'app.sidebar',
-            'app.navsearch',
-            'app.preloader',
-            'app.loadingbar',
-            'app.translate',
-            'app.settings',
-            'app.dashboard',
-            'app.icons',
-            'app.flatdoc',
-            'app.notify',
-            'app.bootstrapui',
-            'app.elements',
-            'app.panels',
-            'app.charts',
-            'app.forms',
-            'app.locale',
-            'app.maps',
-            'app.pages',
-            'app.tables',
-            'app.extras',
-            'app.mailbox',
-            'app.utils'
-        ]);
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.charts', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core', [
-            'ngRoute',
-            'ngAnimate',
-            'ngStorage',
-            'ngCookies',
-            'pascalprecht.translate',
-            'ui.bootstrap',
-            'ui.router',
-            'oc.lazyLoad',
-            'cfp.loadingBar',
-            'ngSanitize',
-            'ngResource',
-            'tmh.dynamicLocale',
-            'ui.utils'
-        ]);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.extras', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.flatdoc', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.forms', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.icons', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.lazyload', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.locale', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.mailbox', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.maps', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.notify', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.pages', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.panels', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.preloader', []);
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.routes', [
-            'app.lazyload'
-        ]);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.settings', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sidebar', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.tables', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.utils', [
-          'app.colors'
-          ]);
-})();
-
-/**=========================================================
- * Module: demo-alerts.js
- * Provides a simple demo for pagination
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('AlertDemoCtrl', AlertDemoCtrl);
-
-    function AlertDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.alerts = [
-            { type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' },
-            { type: 'warning', msg: 'Well done! You successfully read this important alert message.' }
-          ];
-
-          vm.addAlert = function() {
-            vm.alerts.push({msg: 'Another alert!'});
-          };
-
-          vm.closeAlert = function(index) {
-            vm.alerts.splice(index, 1);
-          };
-        }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .config(bootstrapuiConfig);
-
-    bootstrapuiConfig.$inject = ['$tooltipProvider'];
-    function bootstrapuiConfig($tooltipProvider){
-      $tooltipProvider.options({appendToBody: true});
-    }
-})();
-/**=========================================================
- * Module: demo-buttons.js
- * Provides a simple demo for buttons actions
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('ButtonsCtrl', ButtonsCtrl);
-
-    function ButtonsCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.singleModel = 1;
-
-          vm.radioModel = 'Middle';
-
-          vm.checkModel = {
-            left: false,
-            middle: true,
-            right: false
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-carousel.js
- * Provides a simple demo for bootstrap ui carousel
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('CarouselDemoCtrl', CarouselDemoCtrl);
-
-    function CarouselDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.myInterval = 5000;
-
-          var slides = vm.slides = [];
-          vm.addSlide = function() {
-            var newWidth = 800 + slides.length;
-            slides.push({
-              image: '//placekitten.com/' + newWidth + '/300',
-              text: ['More','Extra','Lots of','Surplus'][slides.length % 2] + ' ' +
-                ['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 2]
-            });
-          };
-
-          for (var i=0; i<2; i++) {
-            vm.addSlide();
-          }
-
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-datepicker.js
- * Provides a simple demo for bootstrap datepicker
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('DatepickerDemoCtrl', DatepickerDemoCtrl);
-
-    function DatepickerDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.today = function() {
-            vm.dt = new Date();
-          };
-          vm.today();
-
-          vm.clear = function () {
-            vm.dt = null;
-          };
-
-          // Disable weekend selection
-          vm.disabled = function(date, mode) {
-            return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-          };
-
-          vm.toggleMin = function() {
-            vm.minDate = vm.minDate ? null : new Date();
-          };
-          vm.toggleMin();
-
-          vm.open = function($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            vm.opened = true;
-          };
-
-          vm.dateOptions = {
-            formatYear: 'yy',
-            startingDay: 1
-          };
-
-          vm.initDate = new Date('2019-10-20');
-          vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-          vm.format = vm.formats[0];
-        }
-    }
-})();
-
-
-/**=========================================================
- * Module: modals.js
- * Provides a simple way to implement bootstrap modals from templates
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('ModalController', ModalController);
-
-    ModalController.$inject = ['$modal'];
-    function ModalController($modal) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          vm.open = function (size) {
-
-            var modalInstance = $modal.open({
-              templateUrl: '/myModalContent.html',
-              controller: ModalInstanceCtrl,
-              size: size
-            });
-
-            var state = $('#modal-state');
-            modalInstance.result.then(function () {
-              state.text('Modal dismissed with OK status');
-            }, function () {
-              state.text('Modal dismissed with Cancel status');
-            });
-          };
-
-          // Please note that $modalInstance represents a modal window (instance) dependency.
-          // It is not the same as the $modal service used above.
-
-          ModalInstanceCtrl.$inject = ['$scope', '$modalInstance'];
-          function ModalInstanceCtrl($scope, $modalInstance) {
-
-            $scope.ok = function () {
-              $modalInstance.close('closed');
-            };
-
-            $scope.cancel = function () {
-              $modalInstance.dismiss('cancel');
-            };
-          }
-        }
-    }
-
-})();
-
-/**=========================================================
- * Module: demo-pagination.js
- * Provides a simple demo for pagination
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('PaginationDemoCtrl', PaginationDemoCtrl);
-
-    function PaginationDemoCtrl() {
-        var vm = this;
-
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.totalItems = 64;
-          vm.currentPage = 4;
-
-          vm.setPage = function (pageNo) {
-            vm.currentPage = pageNo;
-          };
-
-          vm.pageChanged = function() {
-            console.log('Page changed to: ' + vm.currentPage);
-          };
-
-          vm.maxSize = 5;
-          vm.bigTotalItems = 175;
-          vm.bigCurrentPage = 1;
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-popover.js
- * Provides a simple demo for popovers
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('PopoverDemoCtrl', PopoverDemoCtrl);
-
-    function PopoverDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.dynamicPopover = 'Hello, World!';
-          vm.dynamicPopoverTitle = 'Title';
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-progress.js
- * Provides a simple demo to animate progress bar
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('ProgressDemoCtrl', ProgressDemoCtrl);
-
-    function ProgressDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.max = 200;
-
-          vm.random = function() {
-            var value = Math.floor((Math.random() * 100) + 1);
-            var type;
-
-            if (value < 25) {
-              type = 'success';
-            } else if (value < 50) {
-              type = 'info';
-            } else if (value < 75) {
-              type = 'warning';
-            } else {
-              type = 'danger';
-            }
-
-            vm.showWarning = (type === 'danger' || type === 'warning');
-
-            vm.dynamic = value;
-            vm.type = type;
-          };
-          vm.random();
-
-          vm.randomStacked = function() {
-            vm.stacked = [];
-            var types = ['success', 'info', 'warning', 'danger'];
-
-            for (var i = 0, n = Math.floor((Math.random() * 4) + 1); i < n; i++) {
-                var index = Math.floor((Math.random() * 4));
-                vm.stacked.push({
-                  value: Math.floor((Math.random() * 30) + 1),
-                  type: types[index]
-                });
-            }
-          };
-          vm.randomStacked();
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-rating.js
- * Provides a demo for ratings UI
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('RatingDemoCtrl', RatingDemoCtrl);
-
-    function RatingDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.rate = 7;
-          vm.max = 10;
-          vm.isReadonly = false;
-
-          vm.hoveringOver = function(value) {
-            vm.overStar = value;
-            vm.percent = 100 * (value / vm.max);
-          };
-
-          vm.ratingStates = [
-            {stateOn: 'fa fa-check', stateOff: 'fa fa-check-circle'},
-            {stateOn: 'fa fa-star', stateOff: 'fa fa-star-o'},
-            {stateOn: 'fa fa-heart', stateOff: 'fa fa-ban'},
-            {stateOn: 'fa fa-heart'},
-            {stateOff: 'fa fa-power-off'}
-          ];
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-timepicker.js
- * Provides a simple demo for bootstrap ui timepicker
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('TimepickerDemoCtrl', TimepickerDemoCtrl);
-
-    function TimepickerDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.mytime = new Date();
-
-          vm.hstep = 1;
-          vm.mstep = 15;
-
-          vm.options = {
-            hstep: [1, 2, 3],
-            mstep: [1, 5, 10, 15, 25, 30]
-          };
-
-          vm.ismeridian = true;
-          vm.toggleMode = function() {
-            vm.ismeridian = ! vm.ismeridian;
-          };
-
-          vm.update = function() {
-            var d = new Date();
-            d.setHours( 14 );
-            d.setMinutes( 0 );
-            vm.mytime = d;
-          };
-
-          vm.changed = function () {
-            console.log('Time changed to: ' + vm.mytime);
-          };
-
-          vm.clear = function() {
-            vm.mytime = null;
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-tooltip.js
- * Provides a simple demo for tooltip
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('TooltipDemoCtrl', TooltipDemoCtrl);
-
-    function TooltipDemoCtrl() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.dynamicTooltip = 'Hello, World!';
-          vm.dynamicTooltipText = 'dynamic';
-          vm.htmlTooltip = 'I\'ve been made <b>bold</b>!';
-
-          vm.autoplace = function (context, source) {
-            //return (predictTooltipTop(source) < 0) ?  "bottom": "top";
-            var pos = 'top';
-            if(predictTooltipTop(source) < 0)
-              pos = 'bottom';
-            if(predictTooltipLeft(source) < 0)
-              pos = 'right';
-            return pos;
-          };
-
-            // Predicts tooltip top position
-            // based on the trigger element
-            function predictTooltipTop(el) {
-              var top = el.offsetTop;
-              var height = 40; // asumes ~40px tooltip height
-
-              while(el.offsetParent) {
-                el = el.offsetParent;
-                top += el.offsetTop;
-              }
-              return (top - height) - (window.pageYOffset);
-            }
-
-            // Predicts tooltip top position
-            // based on the trigger element
-            function predictTooltipLeft(el) {
-              var left = el.offsetLeft;
-              var width = el.offsetWidth;
-
-              while(el.offsetParent) {
-                el = el.offsetParent;
-                left += el.offsetLeft;
-              }
-              return (left - width) - (window.pageXOffset);
-            }
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-typeahead.js
- * Provides a simple demo for typeahead
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.bootstrapui')
-        .controller('TypeaheadCtrl', TypeaheadCtrl);
-
-    TypeaheadCtrl.$inject = ['$http'];
-    function TypeaheadCtrl($http) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          vm.selected = undefined;
-          vm.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
-
-          // Any function returning a promise object can be used to load values asynchronously
-          vm.getLocation = function(val) {
-            return $http.get('//maps.googleapis.com/maps/api/geocode/json', {
-              params: {
-                address: val,
-                sensor: false
-              }
-            }).then(function(res){
-              var addresses = [];
-              angular.forEach(res.data.results, function(item){
-                /*jshint -W106*/
-                addresses.push(item.formatted_address);
-              });
-              return addresses;
-            });
-          };
-
-          vm.statesWithFlags = [{'name':'Alabama','flag':'5/5c/Flag_of_Alabama.svg/45px-Flag_of_Alabama.svg.png'},{'name':'Alaska','flag':'e/e6/Flag_of_Alaska.svg/43px-Flag_of_Alaska.svg.png'},{'name':'Arizona','flag':'9/9d/Flag_of_Arizona.svg/45px-Flag_of_Arizona.svg.png'},{'name':'Arkansas','flag':'9/9d/Flag_of_Arkansas.svg/45px-Flag_of_Arkansas.svg.png'},{'name':'California','flag':'0/01/Flag_of_California.svg/45px-Flag_of_California.svg.png'},{'name':'Colorado','flag':'4/46/Flag_of_Colorado.svg/45px-Flag_of_Colorado.svg.png'},{'name':'Connecticut','flag':'9/96/Flag_of_Connecticut.svg/39px-Flag_of_Connecticut.svg.png'},{'name':'Delaware','flag':'c/c6/Flag_of_Delaware.svg/45px-Flag_of_Delaware.svg.png'},{'name':'Florida','flag':'f/f7/Flag_of_Florida.svg/45px-Flag_of_Florida.svg.png'},{'name':'Georgia','flag':'5/54/Flag_of_Georgia_%28U.S._state%29.svg/46px-Flag_of_Georgia_%28U.S._state%29.svg.png'},{'name':'Hawaii','flag':'e/ef/Flag_of_Hawaii.svg/46px-Flag_of_Hawaii.svg.png'},{'name':'Idaho','flag':'a/a4/Flag_of_Idaho.svg/38px-Flag_of_Idaho.svg.png'},{'name':'Illinois','flag':'0/01/Flag_of_Illinois.svg/46px-Flag_of_Illinois.svg.png'},{'name':'Indiana','flag':'a/ac/Flag_of_Indiana.svg/45px-Flag_of_Indiana.svg.png'},{'name':'Iowa','flag':'a/aa/Flag_of_Iowa.svg/44px-Flag_of_Iowa.svg.png'},{'name':'Kansas','flag':'d/da/Flag_of_Kansas.svg/46px-Flag_of_Kansas.svg.png'},{'name':'Kentucky','flag':'8/8d/Flag_of_Kentucky.svg/46px-Flag_of_Kentucky.svg.png'},{'name':'Louisiana','flag':'e/e0/Flag_of_Louisiana.svg/46px-Flag_of_Louisiana.svg.png'},{'name':'Maine','flag':'3/35/Flag_of_Maine.svg/45px-Flag_of_Maine.svg.png'},{'name':'Maryland','flag':'a/a0/Flag_of_Maryland.svg/45px-Flag_of_Maryland.svg.png'},{'name':'Massachusetts','flag':'f/f2/Flag_of_Massachusetts.svg/46px-Flag_of_Massachusetts.svg.png'},{'name':'Michigan','flag':'b/b5/Flag_of_Michigan.svg/45px-Flag_of_Michigan.svg.png'},{'name':'Minnesota','flag':'b/b9/Flag_of_Minnesota.svg/46px-Flag_of_Minnesota.svg.png'},{'name':'Mississippi','flag':'4/42/Flag_of_Mississippi.svg/45px-Flag_of_Mississippi.svg.png'},{'name':'Missouri','flag':'5/5a/Flag_of_Missouri.svg/46px-Flag_of_Missouri.svg.png'},{'name':'Montana','flag':'c/cb/Flag_of_Montana.svg/45px-Flag_of_Montana.svg.png'},{'name':'Nebraska','flag':'4/4d/Flag_of_Nebraska.svg/46px-Flag_of_Nebraska.svg.png'},{'name':'Nevada','flag':'f/f1/Flag_of_Nevada.svg/45px-Flag_of_Nevada.svg.png'},{'name':'New Hampshire','flag':'2/28/Flag_of_New_Hampshire.svg/45px-Flag_of_New_Hampshire.svg.png'},{'name':'New Jersey','flag':'9/92/Flag_of_New_Jersey.svg/45px-Flag_of_New_Jersey.svg.png'},{'name':'New Mexico','flag':'c/c3/Flag_of_New_Mexico.svg/45px-Flag_of_New_Mexico.svg.png'},{'name':'New York','flag':'1/1a/Flag_of_New_York.svg/46px-Flag_of_New_York.svg.png'},{'name':'North Carolina','flag':'b/bb/Flag_of_North_Carolina.svg/45px-Flag_of_North_Carolina.svg.png'},{'name':'North Dakota','flag':'e/ee/Flag_of_North_Dakota.svg/38px-Flag_of_North_Dakota.svg.png'},{'name':'Ohio','flag':'4/4c/Flag_of_Ohio.svg/46px-Flag_of_Ohio.svg.png'},{'name':'Oklahoma','flag':'6/6e/Flag_of_Oklahoma.svg/45px-Flag_of_Oklahoma.svg.png'},{'name':'Oregon','flag':'b/b9/Flag_of_Oregon.svg/46px-Flag_of_Oregon.svg.png'},{'name':'Pennsylvania','flag':'f/f7/Flag_of_Pennsylvania.svg/45px-Flag_of_Pennsylvania.svg.png'},{'name':'Rhode Island','flag':'f/f3/Flag_of_Rhode_Island.svg/32px-Flag_of_Rhode_Island.svg.png'},{'name':'South Carolina','flag':'6/69/Flag_of_South_Carolina.svg/45px-Flag_of_South_Carolina.svg.png'},{'name':'South Dakota','flag':'1/1a/Flag_of_South_Dakota.svg/46px-Flag_of_South_Dakota.svg.png'},{'name':'Tennessee','flag':'9/9e/Flag_of_Tennessee.svg/46px-Flag_of_Tennessee.svg.png'},{'name':'Texas','flag':'f/f7/Flag_of_Texas.svg/45px-Flag_of_Texas.svg.png'},{'name':'Utah','flag':'f/f6/Flag_of_Utah.svg/45px-Flag_of_Utah.svg.png'},{'name':'Vermont','flag':'4/49/Flag_of_Vermont.svg/46px-Flag_of_Vermont.svg.png'},{'name':'Virginia','flag':'4/47/Flag_of_Virginia.svg/44px-Flag_of_Virginia.svg.png'},{'name':'Washington','flag':'5/54/Flag_of_Washington.svg/46px-Flag_of_Washington.svg.png'},{'name':'West Virginia','flag':'2/22/Flag_of_West_Virginia.svg/46px-Flag_of_West_Virginia.svg.png'},{'name':'Wisconsin','flag':'2/22/Flag_of_Wisconsin.svg/45px-Flag_of_Wisconsin.svg.png'},{'name':'Wyoming','flag':'b/bc/Flag_of_Wyoming.svg/43px-Flag_of_Wyoming.svg.png'}];
-
-        }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors')
-        .constant('APP_COLORS', {
-          'primary':                '#5d9cec',
-          'success':                '#27c24c',
-          'info':                   '#23b7e5',
-          'warning':                '#ff902b',
-          'danger':                 '#f05050',
-          'inverse':                '#131e26',
-          'green':                  '#37bc9b',
-          'pink':                   '#f532e5',
-          'purple':                 '#7266ba',
-          'dark':                   '#3a3f51',
-          'yellow':                 '#fad732',
-          'gray-darker':            '#232735',
-          'gray-dark':              '#3a3f51',
-          'gray':                   '#dde6e9',
-          'gray-light':             '#e4eaec',
-          'gray-lighter':           '#edf1f2'
-        })
-        ;
-})();
-/**=========================================================
- * Module: colors.js
- * Services to retrieve global colors
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.colors')
-        .service('Colors', Colors);
-
-    Colors.$inject = ['APP_COLORS'];
-    function Colors(APP_COLORS) {
-        this.byName = byName;
-
-        ////////////////
-
-        function byName(name) {
-          return (APP_COLORS[name] || '#fff');
-        }
-    }
-
-})();
-
-/**=========================================================
- * Module: chartist.js
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.charts')
-        .controller('ChartistController', ChartistController);
-
-    function ChartistController() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          // Line chart
-          // -----------------------------------
-
-          vm.lineData = {
-            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-            series: [
-              [12, 9, 7, 8, 5],
-              [2, 1, 3.5, 7, 3],
-              [1, 3, 4, 5, 6]
-            ]
-          };
-
-          vm.lineOptions = {
-            fullWidth: true,
-            height: 220,
-            chartPadding: {
-              right: 40
-            }
-          };
-
-          // Bar bipolar
-          // -----------------------------------
-
-          vm.barBipolarOptions = {
-            high: 10,
-            low: -10,
-            height: 220,
-            axisX: {
-              labelInterpolationFnc: function(value, index) {
-                return index % 2 === 0 ? value : null;
-              }
-            }
-          };
-
-          vm.barBipolarData = {
-            labels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10'],
-            series: [
-              [1, 2, 4, 8, 6, -2, -1, -4, -6, -2]
-            ]
-          };
-
-
-          // Bar horizontal
-          // -----------------------------------
-
-          vm.barHorizontalData = {
-            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-            series: [
-              [5, 4, 3, 7, 5, 10, 3],
-              [3, 2, 9, 5, 4, 6, 4]
-            ]
-          };
-
-          vm.barHorizontalOptions = {
-            seriesBarDistance: 10,
-            reverseData: true,
-            horizontalBars: true,
-            height: 220,
-            axisY: {
-              offset: 70
-            }
-          };
-
-          // Smil Animations
-          // -----------------------------------
-
-          // Let's put a sequence number aside so we can use it in the event callbacks
-          var seq = 0,
-            delays = 80,
-            durations = 500;
-
-          vm.smilData = {
-            labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-            series: [
-              [12, 9, 7, 8, 5, 4, 6, 2, 3, 3, 4, 6],
-              [4,  5, 3, 7, 3, 5, 5, 3, 4, 4, 5, 5],
-              [5,  3, 4, 5, 6, 3, 3, 4, 5, 6, 3, 4],
-              [3,  4, 5, 6, 7, 6, 4, 5, 6, 7, 6, 3]
-            ]
-          };
-
-          vm.smilOptions = {
-            low: 0,
-            height: 260
-          };
-
-          vm.smilEvents = {
-            created: function() {
-              seq = 0;
-            },
-            draw: function(data) {
-              seq++;
-
-              if(data.type === 'line') {
-                // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
-                data.element.animate({
-                  opacity: {
-                    // The delay when we like to start the animation
-                    begin: seq * delays + 1000,
-                    // Duration of the animation
-                    dur: durations,
-                    // The value where the animation should start
-                    from: 0,
-                    // The value where it should end
-                    to: 1
-                  }
-                });
-              } else if(data.type === 'label' && data.axis === 'x') {
-                data.element.animate({
-                  y: {
-                    begin: seq * delays,
-                    dur: durations,
-                    from: data.y + 100,
-                    to: data.y,
-                    // We can specify an easing function from Chartist.Svg.Easing
-                    easing: 'easeOutQuart'
-                  }
-                });
-              } else if(data.type === 'label' && data.axis === 'y') {
-                data.element.animate({
-                  x: {
-                    begin: seq * delays,
-                    dur: durations,
-                    from: data.x - 100,
-                    to: data.x,
-                    easing: 'easeOutQuart'
-                  }
-                });
-              } else if(data.type === 'point') {
-                data.element.animate({
-                  x1: {
-                    begin: seq * delays,
-                    dur: durations,
-                    from: data.x - 10,
-                    to: data.x,
-                    easing: 'easeOutQuart'
-                  },
-                  x2: {
-                    begin: seq * delays,
-                    dur: durations,
-                    from: data.x - 10,
-                    to: data.x,
-                    easing: 'easeOutQuart'
-                  },
-                  opacity: {
-                    begin: seq * delays,
-                    dur: durations,
-                    from: 0,
-                    to: 1,
-                    easing: 'easeOutQuart'
-                  }
-                });
-              }
-            }
-          };
-
-
-          // SVG PATH animation
-          // -----------------------------------
-
-          vm.pathData = {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-            series: [
-              [1, 5, 2, 5, 4, 3],
-              [2, 3, 4, 8, 1, 2],
-              [5, 4, 3, 2, 1, 0.5]
-            ]
-          };
-
-          vm.pathOptions = {
-            low: 0,
-            showArea: true,
-            showPoint: false,
-            fullWidth: true,
-            height: 260
-          };
-
-          vm.pathEvents = {
-            draw: function(data) {
-              if(data.type === 'line' || data.type === 'area') {
-                data.element.animate({
-                  d: {
-                    begin: 2000 * data.index,
-                    dur: 2000,
-                    from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
-                    to: data.path.clone().stringify(),
-                    easing: Chartist.Svg.Easing.easeOutQuint
-                  }
-                });
-              }
-            }
-          };
-
-        }
-    }
-})();
-
-
-/**=========================================================
- * Module: chart.controller.js
- * Controller for ChartJs
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.charts')
-        .controller('ChartJSController', ChartJSController);
-
-    ChartJSController.$inject = ['Colors'];
-    function ChartJSController(Colors) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          // random values for demo
-          var rFactor = function(){ return Math.round(Math.random()*100); };
-
-          // Line chart
-          // -----------------------------------
-
-          vm.lineData = {
-              labels : ['January','February','March','April','May','June','July'],
-              datasets : [
-                {
-                  label: 'My First dataset',
-                  fillColor : 'rgba(114,102,186,0.2)',
-                  strokeColor : 'rgba(114,102,186,1)',
-                  pointColor : 'rgba(114,102,186,1)',
-                  pointStrokeColor : '#fff',
-                  pointHighlightFill : '#fff',
-                  pointHighlightStroke : 'rgba(114,102,186,1)',
-                  data : [rFactor(),rFactor(),rFactor(),rFactor(),rFactor(),rFactor(),rFactor()]
-                },
-                {
-                  label: 'My Second dataset',
-                  fillColor : 'rgba(35,183,229,0.2)',
-                  strokeColor : 'rgba(35,183,229,1)',
-                  pointColor : 'rgba(35,183,229,1)',
-                  pointStrokeColor : '#fff',
-                  pointHighlightFill : '#fff',
-                  pointHighlightStroke : 'rgba(35,183,229,1)',
-                  data : [rFactor(),rFactor(),rFactor(),rFactor(),rFactor(),rFactor(),rFactor()]
-                }
-              ]
-            };
-
-
-          vm.lineOptions = {
-            scaleShowGridLines : true,
-            scaleGridLineColor : 'rgba(0,0,0,.05)',
-            scaleGridLineWidth : 1,
-            bezierCurve : true,
-            bezierCurveTension : 0.4,
-            pointDot : true,
-            pointDotRadius : 4,
-            pointDotStrokeWidth : 1,
-            pointHitDetectionRadius : 20,
-            datasetStroke : true,
-            datasetStrokeWidth : 2,
-            datasetFill : true,
-          };
-
-
-          // Bar chart
-          // -----------------------------------
-
-          vm.barData = {
-              labels : ['January','February','March','April','May','June','July'],
-              datasets : [
-                {
-                  fillColor : Colors.byName('info'),
-                  strokeColor : Colors.byName('info'),
-                  highlightFill: Colors.byName('info'),
-                  highlightStroke: Colors.byName('info'),
-                  data : [rFactor(),rFactor(),rFactor(),rFactor(),rFactor(),rFactor(),rFactor()]
-                },
-                {
-                  fillColor : Colors.byName('primary'),
-                  strokeColor : Colors.byName('primary'),
-                  highlightFill : Colors.byName('primary'),
-                  highlightStroke : Colors.byName('primary'),
-                  data : [rFactor(),rFactor(),rFactor(),rFactor(),rFactor(),rFactor(),rFactor()]
-                }
-              ]
-          };
-
-          vm.barOptions = {
-            scaleBeginAtZero : true,
-            scaleShowGridLines : true,
-            scaleGridLineColor : 'rgba(0,0,0,.05)',
-            scaleGridLineWidth : 1,
-            barShowStroke : true,
-            barStrokeWidth : 2,
-            barValueSpacing : 5,
-            barDatasetSpacing : 1,
-          };
-
-
-          //  Doughnut chart
-          // -----------------------------------
-
-          vm.doughnutData = [
-                {
-                  value: 300,
-                  color: Colors.byName('purple'),
-                  highlight: Colors.byName('purple'),
-                  label: 'Purple'
-                },
-                {
-                  value: 50,
-                  color: Colors.byName('info'),
-                  highlight: Colors.byName('info'),
-                  label: 'Info'
-                },
-                {
-                  value: 100,
-                  color: Colors.byName('yellow'),
-                  highlight: Colors.byName('yellow'),
-                  label: 'Yellow'
-                }
-              ];
-
-          vm.doughnutOptions = {
-            segmentShowStroke : true,
-            segmentStrokeColor : '#fff',
-            segmentStrokeWidth : 2,
-            percentageInnerCutout : 85,
-            animationSteps : 100,
-            animationEasing : 'easeOutBounce',
-            animateRotate : true,
-            animateScale : false
-          };
-
-          // Pie chart
-          // -----------------------------------
-
-          vm.pieData =[
-                {
-                  value: 300,
-                  color: Colors.byName('purple'),
-                  highlight: Colors.byName('purple'),
-                  label: 'Purple'
-                },
-                {
-                  value: 40,
-                  color: Colors.byName('yellow'),
-                  highlight: Colors.byName('yellow'),
-                  label: 'Yellow'
-                },
-                {
-                  value: 120,
-                  color: Colors.byName('info'),
-                  highlight: Colors.byName('info'),
-                  label: 'Info'
-                }
-              ];
-
-          vm.pieOptions = {
-            segmentShowStroke : true,
-            segmentStrokeColor : '#fff',
-            segmentStrokeWidth : 2,
-            percentageInnerCutout : 0, // Setting this to zero convert a doughnut into a Pie
-            animationSteps : 100,
-            animationEasing : 'easeOutBounce',
-            animateRotate : true,
-            animateScale : false
-          };
-
-          // Polar chart
-          // -----------------------------------
-
-          vm.polarData = [
-                {
-                  value: 300,
-                  color: Colors.byName('pink'),
-                  highlight: Colors.byName('pink'),
-                  label: 'Red'
-                },
-                {
-                  value: 50,
-                  color: Colors.byName('purple'),
-                  highlight: Colors.byName('purple'),
-                  label: 'Green'
-                },
-                {
-                  value: 100,
-                  color: Colors.byName('pink'),
-                  highlight: Colors.byName('pink'),
-                  label: 'Yellow'
-                },
-                {
-                  value: 140,
-                  color: Colors.byName('purple'),
-                  highlight: Colors.byName('purple'),
-                  label: 'Grey'
-                },
-              ];
-
-          vm.polarOptions = {
-            scaleShowLabelBackdrop : true,
-            scaleBackdropColor : 'rgba(255,255,255,0.75)',
-            scaleBeginAtZero : true,
-            scaleBackdropPaddingY : 1,
-            scaleBackdropPaddingX : 1,
-            scaleShowLine : true,
-            segmentShowStroke : true,
-            segmentStrokeColor : '#fff',
-            segmentStrokeWidth : 2,
-            animationSteps : 100,
-            animationEasing : 'easeOutBounce',
-            animateRotate : true,
-            animateScale : false
-          };
-
-
-          // Radar chart
-          // -----------------------------------
-
-          vm.radarData = {
-            labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
-            datasets: [
-              {
-                label: 'My First dataset',
-                fillColor: 'rgba(114,102,186,0.2)',
-                strokeColor: 'rgba(114,102,186,1)',
-                pointColor: 'rgba(114,102,186,1)',
-                pointStrokeColor: '#fff',
-                pointHighlightFill: '#fff',
-                pointHighlightStroke: 'rgba(114,102,186,1)',
-                data: [65,59,90,81,56,55,40]
-              },
-              {
-                label: 'My Second dataset',
-                fillColor: 'rgba(151,187,205,0.2)',
-                strokeColor: 'rgba(151,187,205,1)',
-                pointColor: 'rgba(151,187,205,1)',
-                pointStrokeColor: '#fff',
-                pointHighlightFill: '#fff',
-                pointHighlightStroke: 'rgba(151,187,205,1)',
-                data: [28,48,40,19,96,27,100]
-              }
-            ]
-          };
-
-          vm.radarOptions = {
-            scaleShowLine : true,
-            angleShowLineOut : true,
-            scaleShowLabels : false,
-            scaleBeginAtZero : true,
-            angleLineColor : 'rgba(0,0,0,.1)',
-            angleLineWidth : 1,
-            /*jshint -W109*/
-            pointLabelFontFamily : "'Arial'",
-            pointLabelFontStyle : 'bold',
-            pointLabelFontSize : 10,
-            pointLabelFontColor : '#565656',
-            pointDot : true,
-            pointDotRadius : 3,
-            pointDotStrokeWidth : 1,
-            pointHitDetectionRadius : 20,
-            datasetStroke : true,
-            datasetStrokeWidth : 2,
-            datasetFill : true
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: chart.js
- * Wrapper directive for chartJS.
- * Based on https://gist.github.com/AndreasHeiberg/9837868
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.charts')
-        /* Aliases for various chart types */
-        .directive('linechart',     chartJS('Line')      )
-        .directive('barchart',      chartJS('Bar')       )
-        .directive('radarchart',    chartJS('Radar')     )
-        .directive('polarchart',    chartJS('PolarArea') )
-        .directive('piechart',      chartJS('Pie')       )
-        .directive('doughnutchart', chartJS('Doughnut')  )
-        .directive('donutchart',    chartJS('Doughnut')  )
-        ;
-
-    function chartJS(type) {
-        return function() {
-            return {
-                restrict: 'A',
-                scope: {
-                    data: '=',
-                    options: '=',
-                    id: '@',
-                    width: '=',
-                    height: '=',
-                    resize: '=',
-                    chart: '@',
-                    segments: '@',
-                    responsive: '=',
-                    tooltip: '=',
-                    legend: '='
-                },
-                link: function ($scope, $elem) {
-                    var ctx = $elem[0].getContext('2d');
-                    var autosize = false;
-
-                    $scope.size = function () {
-                        if ($scope.width <= 0) {
-                            $elem.width($elem.parent().width());
-                            ctx.canvas.width = $elem.width();
-                        } else {
-                            ctx.canvas.width = $scope.width || ctx.canvas.width;
-                            autosize = true;
-                        }
-
-                        if($scope.height <= 0){
-                            $elem.height($elem.parent().height());
-                            ctx.canvas.height = ctx.canvas.width / 2;
-                        } else {
-                            ctx.canvas.height = $scope.height || ctx.canvas.height;
-                            autosize = true;
-                        }
-                    };
-
-                    $scope.$watch('data', function (newVal) {
-                        if(chartCreated)
-                            chartCreated.destroy();
-
-                        // if data not defined, exit
-                        if (!newVal) {
-                            return;
-                        }
-                        if ($scope.chart) { type = $scope.chart; }
-
-                        if(autosize){
-                            $scope.size();
-                            chart = new Chart(ctx);
-                        }
-
-                        if($scope.responsive || $scope.resize)
-                            $scope.options.responsive = true;
-
-                        if($scope.responsive !== undefined)
-                            $scope.options.responsive = $scope.responsive;
-
-                        chartCreated = chart[type]($scope.data, $scope.options);
-                        chartCreated.update();
-                        if($scope.legend)
-                            angular.element($elem[0]).parent().after( chartCreated.generateLegend() );
-                    }, true);
-
-                    $scope.$watch('tooltip', function (newVal) {
-                        if (chartCreated)
-                            chartCreated.draw();
-                        if(newVal===undefined || !chartCreated.segments)
-                            return;
-                        if(!isFinite(newVal) || newVal >= chartCreated.segments.length || newVal < 0)
-                            return;
-                        var activeSegment = chartCreated.segments[newVal];
-                        activeSegment.save();
-                        activeSegment.fillColor = activeSegment.highlightColor;
-                        chartCreated.showTooltip([activeSegment]);
-                        activeSegment.restore();
-                    }, true);
-
-                    $scope.size();
-                    var chart = new Chart(ctx);
-                    var chartCreated;
-                }
-            };
-        };
-    }
-})();
-
-
-
-
-
-/**=========================================================
- * Module: classy-loader.js
- * Enable use of classyloader directly from data attributes
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.charts')
-        .directive('classyloader', classyloader);
-
-    classyloader.$inject = ['$timeout', 'Utils', '$window'];
-    function classyloader ($timeout, Utils, $window) {
-        var directive = {
-            link: link,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element) {
-          var $scroller       = $($window),
-              inViewFlagClass = 'js-is-in-view'; // a classname to detect when a chart has been triggered after scroll
-
-          // run after interpolation
-          $timeout(function(){
-
-            var $element = $(element),
-                options  = $element.data();
-
-            // At lease we need a data-percentage attribute
-            if(options) {
-              if( options.triggerInView ) {
-
-                $scroller.scroll(function() {
-                  checkLoaderInVIew($element, options);
-                });
-                // if the element starts already in view
-                checkLoaderInVIew($element, options);
-              }
-              else
-                startLoader($element, options);
-            }
-
-          }, 0);
-
-          function checkLoaderInVIew(element, options) {
-            var offset = -20;
-            if( ! element.hasClass(inViewFlagClass) &&
-                Utils.isInView(element, {topoffset: offset}) ) {
-              startLoader(element, options);
-            }
-          }
-          function startLoader(element, options) {
-            element.ClassyLoader(options).addClass(inViewFlagClass);
-          }
-        }
-    }
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.charts')
-        .service('ChartData', ChartData);
-
-    ChartData.$inject = ['$resource'];
-    function ChartData($resource) {
-        this.load = load;
-
-        ////////////////
-
-        var opts = {
-            get: { method: 'GET', isArray: true }
-          };
-        function load(source) {
-          return $resource(source, {}, opts).get();
-        }
-    }
-})();
-
-/**=========================================================
- * Module: flot-chart.js
- * Setup options and data for flot chart directive
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.charts')
-        .controller('FlotChartController', FlotChartController);
-
-    FlotChartController.$inject = ['$scope', 'ChartData', '$timeout'];
-    function FlotChartController($scope, ChartData, $timeout) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          // BAR
-          // -----------------------------------
-          vm.barData = ChartData.load('server/chart/bar.json');
-          vm.barOptions = {
-              series: {
-                  bars: {
-                      align: 'center',
-                      lineWidth: 0,
-                      show: true,
-                      barWidth: 0.6,
-                      fill: 0.9
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  position: ($scope.app.layout.isRTL ? 'right' : 'left'),
-                  tickColor: '#eee'
-              },
-              shadowSize: 0
-          };
-
-          // BAR STACKED
-          // -----------------------------------
-          vm.barStackeData = ChartData.load('server/chart/barstacked.json');
-          vm.barStackedOptions = {
-              series: {
-                  stack: true,
-                  bars: {
-                      align: 'center',
-                      lineWidth: 0,
-                      show: true,
-                      barWidth: 0.6,
-                      fill: 0.9
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 200, // optional: use it for a clear represetation
-                  position: ($scope.app.layout.isRTL ? 'right' : 'left'),
-                  tickColor: '#eee'
-              },
-              shadowSize: 0
-          };
-
-          // SPLINE
-          // -----------------------------------
-          vm.splineData = ChartData.load('server/chart/spline.json');
-          vm.splineOptions = {
-              series: {
-                  lines: {
-                      show: false
-                  },
-                  points: {
-                      show: true,
-                      radius: 4
-                  },
-                  splines: {
-                      show: true,
-                      tension: 0.4,
-                      lineWidth: 1,
-                      fill: 0.5
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 150, // optional: use it for a clear represetation
-                  tickColor: '#eee',
-                  position: ($scope.app.layout.isRTL ? 'right' : 'left'),
-                  tickFormatter: function (v) {
-                      return v/* + ' visitors'*/;
-                  }
-              },
-              shadowSize: 0
-          };
-
-          // AREA
-          // -----------------------------------
-          vm.areaData = ChartData.load('server/chart/area.json');
-          vm.areaOptions = {
-              series: {
-                  lines: {
-                      show: true,
-                      fill: 0.8
-                  },
-                  points: {
-                      show: true,
-                      radius: 4
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  tickColor: '#eee',
-                  position: ($scope.app.layout.isRTL ? 'right' : 'left'),
-                  tickFormatter: function (v) {
-                      return v + ' visitors';
-                  }
-              },
-              shadowSize: 0
-          };
-
-          // LINE
-          // -----------------------------------
-          vm.lineData = ChartData.load('server/chart/line.json');
-          vm.lineOptions = {
-              series: {
-                  lines: {
-                      show: true,
-                      fill: 0.01
-                  },
-                  points: {
-                      show: true,
-                      radius: 4
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#eee',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  position: ($scope.app.layout.isRTL ? 'right' : 'left'),
-                  tickColor: '#eee'
-              },
-              shadowSize: 0
-          };
-
-          // PIE
-          // -----------------------------------
-          vm.pieData = ChartData.load('server/chart/pie.json');
-          vm.pieOptions = {
-              series: {
-                  pie: {
-                      show: true,
-                      innerRadius: 0,
-                      label: {
-                          show: true,
-                          radius: 0.8,
-                          formatter: function (label, series) {
-                              return '<div class="flot-pie-label">' +
-                              //label + ' : ' +
-                              Math.round(series.percent) +
-                              '%</div>';
-                          },
-                          background: {
-                              opacity: 0.8,
-                              color: '#222'
-                          }
-                      }
-                  }
-              }
-          };
-
-          // DONUT
-          // -----------------------------------
-          vm.donutData = ChartData.load('server/chart/donut.json');
-          vm.donutOptions = {
-              series: {
-                  pie: {
-                      show: true,
-                      innerRadius: 0.5 // This makes the donut shape
-                  }
-              }
-          };
-
-          // REALTIME
-          // -----------------------------------
-          vm.realTimeOptions = {
-              series: {
-                lines: { show: true, fill: true, fillColor:  { colors: ['#a0e0f3', '#23b7e5'] } },
-                shadowSize: 0 // Drawing is faster without shadows
-              },
-              grid: {
-                  show:false,
-                  borderWidth: 0,
-                  minBorderMargin: 20,
-                  labelMargin: 10
-              },
-              xaxis: {
-                tickFormatter: function() {
-                    return '';
-                }
-              },
-              yaxis: {
-                  min: 0,
-                  max: 110
-              },
-              legend: {
-                  show: true
-              },
-              colors: ['#23b7e5']
-          };
-
-          // Generate random data for realtime demo
-          var data = [], totalPoints = 300;
-
-          update();
-
-          function getRandomData() {
-            if (data.length > 0)
-              data = data.slice(1);
-            // Do a random walk
-            while (data.length < totalPoints) {
-              var prev = data.length > 0 ? data[data.length - 1] : 50,
-                y = prev + Math.random() * 10 - 5;
-              if (y < 0) {
-                y = 0;
-              } else if (y > 100) {
-                y = 100;
-              }
-              data.push(y);
-            }
-            // Zip the generated y values with the x values
-            var res = [];
-            for (var i = 0; i < data.length; ++i) {
-              res.push([i, data[i]]);
-            }
-            return [res];
-          }
-          function update() {
-            vm.realTimeData = getRandomData();
-            $timeout(update, 30);
-          }
-          // end random data generation
-
-
-          // PANEL REFRESH EVENTS
-          // -----------------------------------
-
-          $scope.$on('panel-refresh', function(event, id) {
-
-            console.log('Simulating chart refresh during 3s on #'+id);
-
-            // Instead of timeout you can request a chart data
-            $timeout(function(){
-
-              // directive listen for to remove the spinner
-              // after we end up to perform own operations
-              $scope.$broadcast('removeSpinner', id);
-
-              console.log('Refreshed #' + id);
-
-            }, 3000);
-
-          });
-
-
-          // PANEL DISMISS EVENTS
-          // -----------------------------------
-
-          // Before remove panel
-          $scope.$on('panel-remove', function(event, id, deferred){
-
-            console.log('Panel #' + id + ' removing');
-
-            // Here is obligatory to call the resolve() if we pretend to remove the panel finally
-            // Not calling resolve() will NOT remove the panel
-            // It's up to your app to decide if panel should be removed or not
-            deferred.resolve();
-
-          });
-
-          // Panel removed ( only if above was resolved() )
-          $scope.$on('panel-removed', function(event, id){
-
-            console.log('Panel #' + id + ' removed');
-
-          });
-
-        }
-    }
-})();
-
-/**=========================================================
- * Module: flot.js
- * Initializes the Flot chart plugin and handles data refresh
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.charts')
-        .directive('flot', flot);
-
-    flot.$inject = ['$http', '$timeout'];
-    function flot ($http, $timeout) {
-
-        var directive = {
-          restrict: 'EA',
-          template: '<div></div>',
-          scope: {
-            dataset: '=?',
-            options: '=',
-            series: '=',
-            callback: '=',
-            src: '='
-          },
-          link: link
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          var height, plot, plotArea, width;
-          var heightDefault = 220;
-
-          plot = null;
-
-          width = attrs.width || '100%';
-          height = attrs.height || heightDefault;
-
-          plotArea = $(element.children()[0]);
-          plotArea.css({
-            width: width,
-            height: height
-          });
-
-          function init() {
-            var plotObj;
-            if(!scope.dataset || !scope.options) return;
-            plotObj = $.plot(plotArea, scope.dataset, scope.options);
-            scope.$emit('plotReady', plotObj);
-            if (scope.callback) {
-              scope.callback(plotObj, scope);
-            }
-
-            return plotObj;
-          }
-
-          function onDatasetChanged(dataset) {
-            if (plot) {
-              plot.setData(dataset);
-              plot.setupGrid();
-              return plot.draw();
-            } else {
-              plot = init();
-              onSerieToggled(scope.series);
-              return plot;
-            }
-          }
-          scope.$watchCollection('dataset', onDatasetChanged, true);
-
-          function onSerieToggled (series) {
-            if( !plot || !series ) return;
-            var someData = plot.getData();
-            for(var sName in series) {
-              angular.forEach(series[sName], toggleFor(sName));
-            }
-
-            plot.setData(someData);
-            plot.draw();
-
-            function toggleFor(sName) {
-              return function (s, i){
-                if(someData[i] && someData[i][sName])
-                  someData[i][sName].show = s;
-              };
-            }
-          }
-          scope.$watch('series', onSerieToggled, true);
-
-          function onSrcChanged(src) {
-
-            if( src ) {
-
-              $http.get(src)
-                .success(function (data) {
-
-                  $timeout(function(){
-                    scope.dataset = data;
-                  });
-
-              }).error(function(){
-                $.error('Flot chart: Bad request.');
-              });
-
-            }
-          }
-          scope.$watch('src', onSrcChanged);
-
-        }
-    }
-
-
-})();
-
-/**=========================================================
- * Module: morris.js
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.charts')
-        .controller('ChartMorrisController', ChartMorrisController);
-
-    ChartMorrisController.$inject = ['$timeout', 'Colors'];
-    function ChartMorrisController($timeout, Colors) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-         vm.chartdata = [
-              { y: '2006', a: 100, b: 90 },
-              { y: '2007', a: 75,  b: 65 },
-              { y: '2008', a: 50,  b: 40 },
-              { y: '2009', a: 75,  b: 65 },
-              { y: '2010', a: 50,  b: 40 },
-              { y: '2011', a: 75,  b: 65 },
-              { y: '2012', a: 100, b: 90 }
-          ];
-
-          /* test data update
-          $timeout(function(){
-            vm.chartdata[0].a = 50;
-            vm.chartdata[0].b = 50;
-          }, 3000); */
-
-          vm.donutdata = [
-            {label: 'Download Sales', value: 12},
-            {label: 'In-Store Sales',value: 30},
-            {label: 'Mail-Order Sales', value: 20}
-          ];
-
-          vm.donutOptions = {
-            Colors: [ Colors.byName('danger'), Colors.byName('yellow'), Colors.byName('warning') ],
-            resize: true
-          };
-
-          vm.barOptions = {
-            xkey: 'y',
-            ykeys: ['a', 'b'],
-            labels: ['Series A', 'Series B'],
-            xLabelMargin: 2,
-            barColors: [ Colors.byName('info'), Colors.byName('danger') ],
-            resize: true
-          };
-
-          vm.lineOptions = {
-            xkey: 'y',
-            ykeys: ['a', 'b'],
-            labels: ['Serie A', 'Serie B'],
-            lineColors: ['#31C0BE', '#7a92a3'],
-            resize: true
-          };
-
-          vm.areaOptions = {
-            xkey: 'y',
-            ykeys: ['a', 'b'],
-            labels: ['Serie A', 'Serie B'],
-            lineColors: [ Colors.byName('purple'), Colors.byName('info') ],
-            resize: true
-          };
-
-        }
-    }
-})();
-
-/**=========================================================
- * Module: morris.js
- * AngularJS Directives for Morris Charts
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.charts')
-        .directive('morrisBar',   morrisChart('Bar')   )
-        .directive('morrisDonut', morrisChart('Donut') )
-        .directive('morrisLine',  morrisChart('Line')  )
-        .directive('morrisArea',  morrisChart('Area')  );
-
-    function morrisChart(type) {
-      return function () {
-        return {
-          restrict: 'EA',
-          scope: {
-            morrisData: '=',
-            morrisOptions: '='
-          },
-          link: function($scope, element) {
-            // start ready to watch for changes in data
-            $scope.$watch('morrisData', function(newVal) {
-              if (newVal) {
-                $scope.morrisInstance.setData(newVal);
-                $scope.morrisInstance.redraw();
-              }
-            }, true);
-            // the element that contains the chart
-            $scope.morrisOptions.element = element;
-            // If data defined copy to options
-            if($scope.morrisData)
-              $scope.morrisOptions.data = $scope.morrisData;
-            // Init chart
-            $scope.morrisInstance = new Morris[type]($scope.morrisOptions);
-
-          }
-        };
-      };
-    }
-
-})();
-
-/**=========================================================
- * Module: PieChartsController.js
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.charts')
-        .controller('PieChartsController', PieChartsController);
-
-    /*jshint -W069*/
-    PieChartsController.$inject = ['Colors'];
-
-    function PieChartsController(Colors) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          // KNOB Charts
-
-          vm.knobLoaderData1 = 80;
-          vm.knobLoaderOptions1 = {
-              width: '50%', // responsive
-              displayInput: true,
-              fgColor: Colors.byName('info')
-            };
-
-          vm.knobLoaderData2 = 45;
-          vm.knobLoaderOptions2 = {
-              width: '50%', // responsive
-              displayInput: true,
-              fgColor: Colors.byName('purple'),
-              readOnly : true
-            };
-
-          vm.knobLoaderData3 = 30;
-          vm.knobLoaderOptions3 = {
-              width: '50%', // responsive
-              displayInput: true,
-              fgColor: Colors.byName('pink'),
-              displayPrevious : true,
-              thickness : 0.1,
-              lineCap : 'round'
-            };
-
-          vm.knobLoaderData4 = 20;
-          vm.knobLoaderOptions4 = {
-              width: '50%', // responsive
-              displayInput: true,
-              fgColor: Colors.byName('info'),
-              bgColor: Colors.byName('gray'),
-              angleOffset: -125,
-              angleArc: 250
-            };
-
-          // Easy Pie Charts
-
-          vm.piePercent1 = 85;
-          vm.piePercent2 = 45;
-          vm.piePercent3 = 25;
-          vm.piePercent4 = 60;
-
-          vm.pieOptions1 = {
-              animate:{
-                  duration: 800,
-                  enabled: true
-              },
-              barColor: Colors.byName('success'),
-              trackColor: false,
-              scaleColor: false,
-              lineWidth: 10,
-              lineCap: 'circle'
-          };
-
-          vm.pieOptions2= {
-              animate:{
-                  duration: 800,
-                  enabled: true
-              },
-              barColor: Colors.byName('warning'),
-              trackColor: false,
-              scaleColor: false,
-              lineWidth: 4,
-              lineCap: 'circle'
-          };
-
-          vm.pieOptions3 = {
-              animate:{
-                  duration: 800,
-                  enabled: true
-              },
-              barColor: Colors.byName('danger'),
-              trackColor: false,
-              scaleColor: Colors.byName('gray'),
-              lineWidth: 15,
-              lineCap: 'circle'
-          };
-
-          vm.pieOptions4 = {
-              animate:{
-                  duration: 800,
-                  enabled: true
-              },
-              barColor: Colors.byName('danger'),
-              trackColor: Colors.byName('yellow'),
-              scaleColor: Colors.byName('gray-dark'),
-              lineWidth: 15,
-              lineCap: 'circle'
-          };
-
-          vm.randomize = function(type) {
-            if ( type === 'easy') {
-              vm.piePercent1 = random();
-              vm.piePercent2 = random();
-              vm.piePercent3 = random();
-              vm.piePercent4 = random();
-            }
-            if ( type === 'knob') {
-              vm.knobLoaderData1 = random();
-              vm.knobLoaderData2 = random();
-              vm.knobLoaderData3 = random();
-              vm.knobLoaderData4 = random();
-            }
-          }
-
-          function random() { return Math.floor((Math.random() * 100) + 1); }
-
-        }
-    }
-})();
-
-/**=========================================================
- * Module: rickshaw.js
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.charts')
-        .controller('ChartRickshawController', ChartRickshawController);
-
-    function ChartRickshawController() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          vm.renderers = [{
-                  id: 'area',
-                  name: 'Area'
-              }, {
-                  id: 'line',
-                  name: 'Line'
-              }, {
-                  id: 'bar',
-                  name: 'Bar'
-              }, {
-                  id: 'scatterplot',
-                  name: 'Scatterplot'
-              }];
-
-          vm.palettes = [
-              'spectrum14',
-              'spectrum2000',
-              'spectrum2001',
-              'colorwheel',
-              'cool',
-              'classic9',
-              'munin'
-          ];
-
-          vm.rendererChanged = function(id) {
-              vm['options' + id] = {
-                  renderer: vm['renderer' + id].id
-              };
-          };
-
-          vm.paletteChanged = function(id) {
-              vm['features' + id] = {
-                  palette: vm['palette' + id]
-              };
-          };
-
-          vm.changeSeriesData = function(id) {
-              var seriesList = [];
-              for (var i = 0; i < 3; i++) {
-                  var series = {
-                      name: 'Series ' + (i + 1),
-                      data: []
-                  };
-                  for (var j = 0; j < 10; j++) {
-                      series.data.push({x: j, y: Math.random() * 20});
-                  }
-                  seriesList.push(series);
-                  vm['series' + id][i] = series;
-              }
-              //vm['series' + id] = seriesList;
-          };
-
-          vm.series0 = [];
-
-          vm.options0 = {
-            renderer: 'area'
-          };
-
-          vm.renderer0 = vm.renderers[0];
-          vm.palette0 = vm.palettes[0];
-
-          vm.rendererChanged(0);
-          vm.paletteChanged(0);
-          vm.changeSeriesData(0);
-
-          // Graph 2
-
-          var seriesData = [ [], [], [] ];
-          var random = new Rickshaw.Fixtures.RandomData(150);
-
-          for (var i = 0; i < 150; i++) {
-            random.addData(seriesData);
-          }
-
-          vm.series2 = [
-            {
-              color: '#c05020',
-              data: seriesData[0],
-              name: 'New York'
-            }, {
-              color: '#30c020',
-              data: seriesData[1],
-              name: 'London'
-            }, {
-              color: '#6060c0',
-              data: seriesData[2],
-              name: 'Tokyo'
-            }
-          ];
-
-          vm.options2 = {
-            renderer: 'area'
-          };
-
-        }
-    }
-})();
-
-/**=========================================================
- * Module: sparkline.js
- * SparkLines Mini Charts
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.charts')
-        .directive('sparkline', sparkline);
-
-    function sparkline () {
-        var directive = {
-            restrict: 'EA',
-            scope: {
-              'sparkline': '='
-            },
-            controller: Controller
-        };
-        return directive;
-
-    }
-    Controller.$inject = ['$scope', '$element', '$timeout', '$window'];
-    function Controller($scope, $element, $timeout, $window) {
-      var runSL = function(){
-        initSparLine();
-      };
-
-      $timeout(runSL);
-
-      function initSparLine() {
-        var options = $scope.sparkline,
-            data = $element.data();
-
-        if(!options) // if no scope options, try with data attributes
-          options = data;
-        else
-          if(data) // data attributes overrides scope options
-            options = angular.extend({}, options, data);
-
-        options.type = options.type || 'bar'; // default chart is bar
-        options.disableHiddenCheck = true;
-
-        $element.sparkline('html', options);
-
-        if(options.resize) {
-          $($window).resize(function(){
-            $element.sparkline('html', options);
-          });
-        }
-      }
-
-    }
-
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .config(coreConfig);
-
-    coreConfig.$inject = ['$controllerProvider', '$compileProvider', '$filterProvider', '$provide'];
-    function coreConfig($controllerProvider, $compileProvider, $filterProvider, $provide){
-
-      var core = angular.module('app.core');
-      // registering components after bootstrap
-      core.controller = $controllerProvider.register;
-      core.directive  = $compileProvider.directive;
-      core.filter     = $filterProvider.register;
-      core.factory    = $provide.factory;
-      core.service    = $provide.service;
-      core.constant   = $provide.constant;
-      core.value      = $provide.value;
-
-    }
-
-})();
-/**=========================================================
- * Module: constants.js
- * Define constants to inject across the application
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .constant('APP_MEDIAQUERY', {
-          'desktopLG':             1200,
-          'desktop':                992,
-          'tablet':                 768,
-          'mobile':                 480
-        })
-      ;
-
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.core')
-        .run(appRun);
-
-    appRun.$inject = ['$rootScope', '$state', '$stateParams',  '$window', '$templateCache', 'Colors'];
-
-    function appRun($rootScope, $state, $stateParams, $window, $templateCache, Colors) {
-
-      // Set reference to access them from any scope
-      $rootScope.$state = $state;
-      $rootScope.$stateParams = $stateParams;
-      $rootScope.$storage = $window.localStorage;
-
-      // Uncomment this to disable template cache
-      /*$rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-          if (typeof(toState) !== 'undefined'){
-            $templateCache.remove(toState.templateUrl);
-          }
-      });*/
-
-      // Allows to use branding color with interpolation
-      // {{ colorByName('primary') }}
-      $rootScope.colorByName = Colors.byName;
-
-      // cancel click event easily
-      $rootScope.cancel = function($event) {
-        $event.stopPropagation();
-      };
-
-      // Hooks Example
-      // -----------------------------------
-
-      // Hook not found
-      $rootScope.$on('$stateNotFound',
-        function(event, unfoundState/*, fromState, fromParams*/) {
-            console.log(unfoundState.to); // "lazy.state"
-            console.log(unfoundState.toParams); // {a:1, b:2}
-            console.log(unfoundState.options); // {inherit:false} + default options
-        });
-      // Hook error
-      $rootScope.$on('$stateChangeError',
-        function(event, toState, toParams, fromState, fromParams, error){
-          console.log(error);
-        });
-      // Hook success
-      $rootScope.$on('$stateChangeSuccess',
-        function(/*event, toState, toParams, fromState, fromParams*/) {
-          // display new view from top
-          $window.scrollTo(0, 0);
-          // Save the route title
-          $rootScope.currTitle = $state.current.title;
-        });
-
-      // Load a title dynamically
-      $rootScope.currTitle = $state.current.title;
-      $rootScope.pageTitle = function() {
-        var title = $rootScope.app.name + ' - ' + ($rootScope.currTitle || $rootScope.app.description);
-        document.title = title;
-        return title;
-      };
-
-    }
-
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard')
-        .controller('DashboardController', DashboardController);
-
-    DashboardController.$inject = ['$scope', 'ChartData', '$timeout'];
-    function DashboardController($scope, ChartData, $timeout) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          // SPLINE
-          // -----------------------------------
-          vm.splineData = ChartData.load('server/chart/spline.json');
-          vm.splineOptions = {
-              series: {
-                  lines: {
-                      show: false
-                  },
-                  points: {
-                      show: true,
-                      radius: 4
-                  },
-                  splines: {
-                      show: true,
-                      tension: 0.4,
-                      lineWidth: 1,
-                      fill: 0.5
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 150, // optional: use it for a clear represetation
-                  tickColor: '#eee',
-                  position: ($scope.app.layout.isRTL ? 'right' : 'left'),
-                  tickFormatter: function (v) {
-                      return v/* + ' visitors'*/;
-                  }
-              },
-              shadowSize: 0
-          };
-
-
-          // PANEL REFRESH EVENTS
-          // -----------------------------------
-
-          $scope.$on('panel-refresh', function(event, id) {
-
-            console.log('Simulating chart refresh during 3s on #'+id);
-
-            // Instead of timeout you can request a chart data
-            $timeout(function(){
-
-              // directive listen for to remove the spinner
-              // after we end up to perform own operations
-              $scope.$broadcast('removeSpinner', id);
-
-              console.log('Refreshed #' + id);
-
-            }, 3000);
-
-          });
-
-
-          // PANEL DISMISS EVENTS
-          // -----------------------------------
-
-          // Before remove panel
-          $scope.$on('panel-remove', function(event, id, deferred){
-
-            console.log('Panel #' + id + ' removing');
-
-            // Here is obligatory to call the resolve() if we pretend to remove the panel finally
-            // Not calling resolve() will NOT remove the panel
-            // It's up to your app to decide if panel should be removed or not
-            deferred.resolve();
-
-          });
-
-          // Panel removed ( only if above was resolved() )
-          $scope.$on('panel-removed', function(event, id){
-
-            console.log('Panel #' + id + ' removed');
-
-          });
-
-        }
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard')
-        .controller('DashboardV2Controller', DashboardV2Controller);
-
-    DashboardV2Controller.$inject = ['$rootScope', '$scope', '$state'];
-    function DashboardV2Controller($rootScope, $scope, $state) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          // Change layout mode
-          if( $state.includes('app-h') ) {
-            // Setup layout horizontal for demo
-            $rootScope.app.layout.horizontal = true;
-            $scope.$on('$destroy', function(){
-                $rootScope.app.layout.horizontal = false;
-            });
-          }
-          else {
-            $rootScope.app.layout.isCollapsed = true;
-          }
-
-          // BAR STACKED
-          // -----------------------------------
-          vm.barStackedOptions = {
-              series: {
-                  stack: true,
-                  bars: {
-                      align: 'center',
-                      lineWidth: 0,
-                      show: true,
-                      barWidth: 0.6,
-                      fill: 0.9
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 200, // optional: use it for a clear represetation
-                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
-                  tickColor: '#eee'
-              },
-              shadowSize: 0
-          };
-
-          // SPLINE
-          // -----------------------------------
-
-          vm.splineOptions = {
-              series: {
-                  lines: {
-                      show: false
-                  },
-                  points: {
-                      show: true,
-                      radius: 4
-                  },
-                  splines: {
-                      show: true,
-                      tension: 0.4,
-                      lineWidth: 1,
-                      fill: 0.5
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 150, // optional: use it for a clear represetation
-                  tickColor: '#eee',
-                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
-                  tickFormatter: function (v) {
-                      return v/* + ' visitors'*/;
-                  }
-              },
-              shadowSize: 0
-          };
-        }
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard')
-        .controller('DashboardV3Controller', DashboardV3Controller);
-
-    DashboardV3Controller.$inject = ['$rootScope'];
-    function DashboardV3Controller($rootScope) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          // SPLINE
-          // -----------------------------------
-
-          vm.splineOptions = {
-              series: {
-                  lines: {
-                      show: false
-                  },
-                  points: {
-                      show: true,
-                      radius: 4
-                  },
-                  splines: {
-                      show: true,
-                      tension: 0.4,
-                      lineWidth: 1,
-                      fill: 0.5
-                  }
-              },
-              grid: {
-                  borderColor: '#eee',
-                  borderWidth: 1,
-                  hoverable: true,
-                  backgroundColor: '#fcfcfc'
-              },
-              tooltip: true,
-              tooltipOpts: {
-                  content: function (label, x, y) { return x + ' : ' + y; }
-              },
-              xaxis: {
-                  tickColor: '#fcfcfc',
-                  mode: 'categories'
-              },
-              yaxis: {
-                  min: 0,
-                  max: 150, // optional: use it for a clear represetation
-                  tickColor: '#eee',
-                  position: ($rootScope.app.layout.isRTL ? 'right' : 'left'),
-                  tickFormatter: function (v) {
-                      return v/* + ' visitors'*/;
-                  }
-              },
-              shadowSize: 0
-          };
-
-
-          vm.seriesData = {
-            'CA': 11100,   // Canada
-            'DE': 2510,    // Germany
-            'FR': 3710,    // France
-            'AU': 5710,    // Australia
-            'GB': 8310,    // Great Britain
-            'RU': 9310,    // Russia
-            'BR': 6610,    // Brazil
-            'IN': 7810,    // India
-            'CN': 4310,    // China
-            'US': 839,     // USA
-            'SA': 410      // Saudi Arabia
-          };
-
-          vm.markersData = [
-            { latLng:[41.90, 12.45],  name:'Vatican City'          },
-            { latLng:[43.73, 7.41],   name:'Monaco'                },
-            { latLng:[-0.52, 166.93], name:'Nauru'                 },
-            { latLng:[-8.51, 179.21], name:'Tuvalu'                },
-            { latLng:[7.11,171.06],   name:'Marshall Islands'      },
-            { latLng:[17.3,-62.73],   name:'Saint Kitts and Nevis' },
-            { latLng:[3.2,73.22],     name:'Maldives'              },
-            { latLng:[35.88,14.5],    name:'Malta'                 },
-            { latLng:[41.0,-71.06],   name:'New England'           },
-            { latLng:[12.05,-61.75],  name:'Grenada'               },
-            { latLng:[13.16,-59.55],  name:'Barbados'              },
-            { latLng:[17.11,-61.85],  name:'Antigua and Barbuda'   },
-            { latLng:[-4.61,55.45],   name:'Seychelles'            },
-            { latLng:[7.35,134.46],   name:'Palau'                 },
-            { latLng:[42.5,1.51],     name:'Andorra'               }
-          ];
-        }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('AngularCarouselController', AngularCarouselController);
-
-    function AngularCarouselController() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.colors = ['#fc0003', '#f70008', '#f2000d', '#ed0012', '#e80017', '#e3001c', '#de0021', '#d90026', '#d4002b', '#cf0030', '#c90036', '#c4003b', '#bf0040', '#ba0045', '#b5004a', '#b0004f', '#ab0054', '#a60059', '#a1005e', '#9c0063', '#960069', '#91006e', '#8c0073', '#870078', '#82007d', '#7d0082', '#780087', '#73008c', '#6e0091', '#690096', '#63009c', '#5e00a1', '#5900a6', '#5400ab', '#4f00b0', '#4a00b5', '#4500ba', '#4000bf', '#3b00c4', '#3600c9', '#3000cf', '#2b00d4', '#2600d9', '#2100de', '#1c00e3', '#1700e8', '#1200ed', '#0d00f2', '#0800f7', '#0300fc'];
-
-          function getSlide(target, style) {
-              var i = target.length;
-              return {
-                  id: (i + 1),
-                  label: 'slide #' + (i + 1),
-                  img: 'http://lorempixel.com/1200/500/' + style + '/' + ((i + 1) % 10) ,
-                  color: vm.colors[ (i*10) % vm.colors.length],
-                  odd: (i % 2 === 0)
-              };
-          }
-
-          function addSlide(target, style) {
-              target.push(getSlide(target, style));
-          }
-
-          vm.carouselIndex = 3;
-          vm.carouselIndex2 = 0;
-          vm.carouselIndex2 = 1;
-          vm.carouselIndex3 = 5;
-          vm.carouselIndex4 = 5;
-
-          function addSlides(target, style, qty) {
-              for (var i=0; i < qty; i++) {
-                  addSlide(target, style);
-              }
-          }
-
-          // 1st ngRepeat demo
-          vm.slides = [];
-          addSlides(vm.slides, 'sports', 50);
-
-          // 2nd ngRepeat demo
-          vm.slides2 = [];
-          addSlides(vm.slides2, 'sports', 10);
-
-          // 3rd ngRepeat demo
-          vm.slides3 = [];
-          addSlides(vm.slides3, 'people', 50);
-
-          // 4th ngRepeat demo
-          vm.slides4 = [];
-          addSlides(vm.slides4, 'city', 50);
-
-
-          // 5th ngRepeat demo
-          vm.slides6 = [];
-          vm.carouselIndex6 = 0;
-          addSlides(vm.slides6, 'sports', 10);
-          vm.addSlide = function(at) {
-              if(at==='head') {
-                  vm.slides6.unshift(getSlide(vm.slides6, 'people'));
-              } else {
-                  vm.slides6.push(getSlide(vm.slides6, 'people'));
-              }
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-dialog.js
- * Demo for multiple ngDialog Usage
- * - ngDialogProvider for default values not supported
- *   using lazy loader. Include plugin in base.js instead.
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('DialogIntroCtrl', DialogIntroCtrl)
-        .controller('DialogMainCtrl', DialogMainCtrl)
-        .controller('InsideCtrl', InsideCtrl)
-        .controller('SecondModalCtrl', SecondModalCtrl);
-
-    DialogIntroCtrl.$inject = ['$scope', 'ngDialog', 'tpl'];
-    // Called from the route state. 'tpl' is resolved before
-    function DialogIntroCtrl($scope, ngDialog, tpl) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          // share with other controllers
-          $scope.tpl = tpl;
-          // open dialog window
-          ngDialog.open({
-            template: tpl.path,
-            // plain: true,
-            className: 'ngdialog-theme-default'
-          });
-        }
-    }
-
-    DialogMainCtrl.$inject = ['$scope', '$rootScope', 'ngDialog'];
-    // Loads from view
-    function DialogMainCtrl($scope, $rootScope, ngDialog) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $rootScope.jsonData = '{"foo": "bar"}';
-          $rootScope.theme = 'ngdialog-theme-default';
-
-          $scope.directivePreCloseCallback = function (value) {
-            if(confirm('Close it? MainCtrl.Directive. (Value = ' + value + ')')) {
-              return true;
-            }
-            return false;
-          };
-
-          $scope.preCloseCallbackOnScope = function (value) {
-            if(confirm('Close it? MainCtrl.OnScope (Value = ' + value + ')')) {
-              return true;
-            }
-            return false;
-          };
-
-          $scope.open = function () {
-            ngDialog.open({ template: 'firstDialogId', controller: 'InsideCtrl', data: {foo: 'some data'} });
-          };
-
-          $scope.openDefault = function () {
-            ngDialog.open({
-              template: 'firstDialogId',
-              controller: 'InsideCtrl',
-              className: 'ngdialog-theme-default'
-            });
-          };
-
-          $scope.openDefaultWithPreCloseCallbackInlined = function () {
-            ngDialog.open({
-              template: 'firstDialogId',
-              controller: 'InsideCtrl',
-              className: 'ngdialog-theme-default',
-              preCloseCallback: function(value) {
-                if (confirm('Close it?  (Value = ' + value + ')')) {
-                  return true;
-                }
-                return false;
-              }
-            });
-          };
-
-          $scope.openConfirm = function () {
-            ngDialog.openConfirm({
-              template: 'modalDialogId',
-              className: 'ngdialog-theme-default'
-            }).then(function (value) {
-              console.log('Modal promise resolved. Value: ', value);
-            }, function (reason) {
-              console.log('Modal promise rejected. Reason: ', reason);
-            });
-          };
-
-          $scope.openConfirmWithPreCloseCallbackOnScope = function () {
-            ngDialog.openConfirm({
-              template: 'modalDialogId',
-              className: 'ngdialog-theme-default',
-              preCloseCallback: 'preCloseCallbackOnScope',
-              scope: $scope
-            }).then(function (value) {
-              console.log('Modal promise resolved. Value: ', value);
-            }, function (reason) {
-              console.log('Modal promise rejected. Reason: ', reason);
-            });
-          };
-
-          $scope.openConfirmWithPreCloseCallbackInlinedWithNestedConfirm = function () {
-            ngDialog.openConfirm({
-              template: 'dialogWithNestedConfirmDialogId',
-              className: 'ngdialog-theme-default',
-              preCloseCallback: function(/*value*/) {
-
-                var nestedConfirmDialog = ngDialog.openConfirm({
-                  template:
-                      '<p>Are you sure you want to close the parent dialog?</p>' +
-                      '<div>' +
-                        '<button type="button" class="btn btn-default" ng-click="closeThisDialog(0)">No' +
-                        '<button type="button" class="btn btn-primary" ng-click="confirm(1)">Yes' +
-                      '</button></div>',
-                  plain: true,
-                  className: 'ngdialog-theme-default'
-                });
-
-                return nestedConfirmDialog;
-              },
-              scope: $scope
-            })
-            .then(function(value){
-              console.log('resolved:' + value);
-              // Perform the save here
-            }, function(value){
-              console.log('rejected:' + value);
-
-            });
-          };
-
-          $scope.openInlineController = function () {
-            $rootScope.theme = 'ngdialog-theme-default';
-
-            ngDialog.open({
-              template: 'withInlineController',
-              controller: ['$scope', '$timeout', function ($scope, $timeout) {
-                var counter = 0;
-                var timeout;
-                function count() {
-                  $scope.exampleExternalData = 'Counter ' + (counter++);
-                  timeout = $timeout(count, 450);
-                }
-                count();
-                $scope.$on('$destroy', function () {
-                  $timeout.cancel(timeout);
-                });
-              }],
-              className: 'ngdialog-theme-default'
-            });
-          };
-
-          $scope.openTemplate = function () {
-            $scope.value = true;
-
-            ngDialog.open({
-              template: $scope.tpl.path,
-              className: 'ngdialog-theme-default',
-              scope: $scope
-            });
-          };
-
-          $scope.openTemplateNoCache = function () {
-            $scope.value = true;
-
-            ngDialog.open({
-              template: $scope.tpl.path,
-              className: 'ngdialog-theme-default',
-              scope: $scope,
-              cache: false
-            });
-          };
-
-          $scope.openTimed = function () {
-            var dialog = ngDialog.open({
-              template: '<p>Just passing through!</p>',
-              plain: true,
-              closeByDocument: false,
-              closeByEscape: false
-            });
-            setTimeout(function () {
-              dialog.close();
-            }, 2000);
-          };
-
-          $scope.openNotify = function () {
-            var dialog = ngDialog.open({
-              template:
-                '<p>You can do whatever you want when I close, however that happens.</p>' +
-                '<div><button type="button" class="btn btn-primary" ng-click="closeThisDialog(1)">Close Me</button></div>',
-              plain: true
-            });
-            dialog.closePromise.then(function (data) {
-              console.log('ngDialog closed' + (data.value === 1 ? ' using the button' : '') + ' and notified by promise: ' + data.id);
-            });
-          };
-
-          $scope.openWithoutOverlay = function () {
-            ngDialog.open({
-              template: '<h2>Notice that there is no overlay!</h2>',
-              className: 'ngdialog-theme-default',
-              plain: true,
-              overlay: false
-            });
-          };
-
-          $rootScope.$on('ngDialog.opened', function (e, $dialog) {
-            console.log('ngDialog opened: ' + $dialog.attr('id'));
-          });
-
-          $rootScope.$on('ngDialog.closed', function (e, $dialog) {
-            console.log('ngDialog closed: ' + $dialog.attr('id'));
-          });
-
-          $rootScope.$on('ngDialog.closing', function (e, $dialog) {
-            console.log('ngDialog closing: ' + $dialog.attr('id'));
-          });
-        }
-
-    } // DialogMainCtrl
-
-
-    InsideCtrl.$inject = ['$scope', 'ngDialog'];
-    function InsideCtrl($scope, ngDialog) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $scope.dialogModel = {
-            message : 'message from passed scope'
-          };
-          $scope.openSecond = function () {
-            ngDialog.open({
-              template: '<p class="lead m0"><a href="" ng-click="closeSecond()">Close all by click here!</a></h3>',
-              plain: true,
-              closeByEscape: false,
-              controller: 'SecondModalCtrl'
-            });
-          };
-        }
-    }
-
-    SecondModalCtrl.$inject = ['$scope', 'ngDialog'];
-    function SecondModalCtrl($scope, ngDialog) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $scope.closeSecond = function () {
-            ngDialog.close();
-          };
-        }
-
-    }
-
-
-})();
-
-
-
-
-/**=========================================================
- * Module: calendar-ui.js
- * This script handle the calendar demo with draggable
- * events and events creations
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('InfiniteScrollController', InfiniteScrollController)
-        .factory('datasource', datasource);
-
-    function InfiniteScrollController() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.images = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-          vm.loadMore = function() {
-            var last = vm.images[vm.images.length - 1];
-            for(var i = 1; i <= 10; i++) {
-              vm.images.push(last + i);
-            }
-          };
-        }
-    }
-
-    datasource.$inject = ['$log', '$timeout'];
-    function datasource(console, $timeout) {
-
-        var get = function(index, count, success) {
-            return $timeout(function() {
-                var i, result, _i, _ref;
-                result = [];
-                for (i = _i = index, _ref = index + count - 1; index <= _ref ? _i <= _ref : _i >= _ref; i = index <= _ref ? ++_i : --_i) {
-                    result.push('item #' + i);
-                }
-                return success(result);
-            }, 100);
-        };
-        return {
-            get: get
-        };
-    }
-
-})();
-
-/**=========================================================
- * Module: masonry-deck.js
- * Demo for Angular Deck
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('MasonryDeckController', MasonryDeckController)
-        .directive('imageloaded', imageloaded); // required by demo
-
-    MasonryDeckController.$inejct = ['RouteHelpers'];
-    function MasonryDeckController(RouteHelpers) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          vm.basepath = RouteHelpers.basepath;
-
-          vm.photos = [
-              {id: 'photo-1', name: 'Awesome photo', src: 'http://lorempixel.com/400/300/abstract'},
-              {id: 'photo-2', name: 'Great photo', src: 'http://lorempixel.com/450/400/city'},
-              {id: 'photo-3', name: 'Strange photo', src: 'http://lorempixel.com/400/300/people'},
-              {id: 'photo-4', name: 'A photo?', src: 'http://lorempixel.com/400/300/transport'},
-              {id: 'photo-5', name: 'What a photo', src: 'http://lorempixel.com/450/300/fashion'},
-              {id: 'photo-6', name: 'Silly photo', src: 'http://lorempixel.com/400/300/technics'},
-              {id: 'photo-7', name: 'Weird photo', src: 'http://lorempixel.com/410/350/sports'},
-              {id: 'photo-8', name: 'Modern photo', src: 'http://lorempixel.com/400/300/nightlife'},
-              {id: 'photo-9', name: 'Classical photo', src: 'http://lorempixel.com/400/300/nature'},
-              {id: 'photo-10', name: 'Dynamic photo', src: 'http://lorempixel.com/420/300/abstract'},
-              {id: 'photo-11', name: 'Neat photo', src: 'http://lorempixel.com/400/300/sports'},
-              {id: 'photo-12', name: 'Bumpy photo', src: 'http://lorempixel.com/400/300/nightlife'},
-              {id: 'photo-13', name: 'Brilliant photo', src: 'http://lorempixel.com/400/380/nature'},
-              {id: 'photo-14', name: 'Excellent photo', src: 'http://lorempixel.com/480/300/technics'},
-              {id: 'photo-15', name: 'Gorgeous photo', src: 'http://lorempixel.com/400/300/sports'},
-              {id: 'photo-16', name: 'Lovely photo', src: 'http://lorempixel.com/400/300/nightlife'},
-              {id: 'photo-17', name: 'A "wow" photo', src: 'http://lorempixel.com/400/300/nature'},
-              {id: 'photo-18', name: 'Bodacious photo', src: 'http://lorempixel.com/400/300/abstract'}
-          ];
-        }
-    }
-    MasonryDeckController.$inject = ["RouteHelpers"];
-
-    // Add class to img element when source is loaded
-    function imageloaded () {
-        // Copyright(c) 2013 André König <akoenig@posteo.de>
-        // MIT Licensed
-        var directive = {
-            link: link,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          var cssClass = attrs.loadedclass;
-
-          element.bind('load', function () {
-              angular.element(element).addClass(cssClass);
-          });
-        }
-    }
-
-})();
-
-
-
-/**=========================================================
- * Module: access-login.js
- * Demo for login api
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('AbnTestController', AbnTestController);
-
-    AbnTestController.$inject = ['$timeout', '$resource'];
-    function AbnTestController($timeout, $resource) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        /*jshint -W106*/
-        function activate() {
-          vm.my_tree_handler = function(branch) {
-
-            vm.output = 'You selected: ' + branch.label;
-
-            if (branch.data && branch.data.description) {
-              vm.output += '(' + branch.data.description + ')';
-              return vm.output;
-            }
-          };
-
-          // onSelect event handlers
-          var apple_selected = function(branch) {
-            vm.output = 'APPLE! : ' + branch.label;
-            return vm.output;
-          };
-
-          var treedata_avm = [
-            {
-              label: 'Animal',
-              children: [
-                {
-                  label: 'Dog',
-                  data: {
-                    description: 'man\'s best friend'
-                  }
-                }, {
-                  label: 'Cat',
-                  data: {
-                    description: 'Felis catus'
-                  }
-                }, {
-                  label: 'Hippopotamus',
-                  data: {
-                    description: 'hungry, hungry'
-                  }
-                }, {
-                  label: 'Chicken',
-                  children: ['White Leghorn', 'Rhode Island Red', 'Jersey Giant']
-                }
-              ]
-            }, {
-              label: 'Vegetable',
-              data: {
-                definition: 'A plant or part of a plant used as food, typically as accompaniment to meat or fish, such as a cabbage, potato, carrot, or bean.',
-                data_can_contain_anything: true
-              },
-              onSelect: function(branch) {
-                vm.output = 'Vegetable: ' + branch.data.definition;
-                return vm.output;
-              },
-              children: [
-                {
-                  label: 'Oranges'
-                }, {
-                  label: 'Apples',
-                  children: [
-                    {
-                      label: 'Granny Smith',
-                      onSelect: apple_selected
-                    }, {
-                      label: 'Red Delicous',
-                      onSelect: apple_selected
-                    }, {
-                      label: 'Fuji',
-                      onSelect: apple_selected
-                    }
-                  ]
-                }
-              ]
-            }, {
-              label: 'Mineral',
-              children: [
-                {
-                  label: 'Rock',
-                  children: ['Igneous', 'Sedimentary', 'Metamorphic']
-                }, {
-                  label: 'Metal',
-                  children: ['Aluminum', 'Steel', 'Copper']
-                }, {
-                  label: 'Plastic',
-                  children: [
-                    {
-                      label: 'Thermoplastic',
-                      children: ['polyethylene', 'polypropylene', 'polystyrene', ' polyvinyl chloride']
-                    }, {
-                      label: 'Thermosetting Polymer',
-                      children: ['polyester', 'polyurethane', 'vulcanized rubber', 'bakelite', 'urea-formaldehyde']
-                    }
-                  ]
-                }
-              ]
-            }
-          ];
-
-          var treedata_geography = [
-            {
-              label: 'North America',
-              children: [
-                {
-                  label: 'Canada',
-                  children: ['Toronto', 'Vancouver']
-                }, {
-                  label: 'USA',
-                  children: ['New York', 'Los Angeles']
-                }, {
-                  label: 'Mexico',
-                  children: ['Mexico City', 'Guadalajara']
-                }
-              ]
-            }, {
-              label: 'South America',
-              children: [
-                {
-                  label: 'Venezuela',
-                  children: ['Caracas', 'Maracaibo']
-                }, {
-                  label: 'Brazil',
-                  children: ['Sao Paulo', 'Rio de Janeiro']
-                }, {
-                  label: 'Argentina',
-                  children: ['Buenos Aires', 'Cordoba']
-                }
-              ]
-            }
-          ];
-
-          vm.my_data = treedata_avm;
-          vm.try_changing_the_tree_data = function() {
-            if (vm.my_data === treedata_avm) {
-              vm.my_data = treedata_geography;
-            } else {
-              vm.my_data = treedata_avm;
-            }
-            return vm.my_data;
-          };
-
-          var tree;
-          // This is our API control variable
-          vm.my_tree = tree = {};
-          vm.try_async_load = function() {
-
-            vm.my_data = [];
-            vm.doing_async = true;
-
-            // Request tree data via $resource
-            var remoteTree = $resource('server/treedata.json');
-
-            return remoteTree.get(function(res){
-
-              vm.my_data = res.data;
-
-              vm.doing_async = false;
-
-              return tree.expand_all();
-
-            // we must return a promise so the plugin
-            // can watch when it's resolved
-            }).$promise;
-          };
-
-          // Adds a new branch to the tree
-          vm.try_adding_a_branch = function() {
-            var b;
-            b = tree.get_selected_branch();
-            return tree.add_branch(b, {
-              label: 'New Branch',
-              data: {
-                something: 42,
-                'else': 43
-              }
-            });
-          };
-
-        }
-    }
-})();
-
-
-/**=========================================================
- * Module: nestable.js
- * Nestable controller
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('NestableController', NestableController);
-
-    function NestableController() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.items =  [
-            {
-              item: {text: 'a'},
-              children: []
-            },
-            {
-              item: {text: 'b'},
-              children: [
-                {
-                  item: {text: 'c'},
-                  children: []
-                },
-                {
-                  item: {text: 'd'},
-                  children: []
-                }
-              ]
-            },
-            {
-              item: {text: 'e'},
-              children: []
-            },
-            {
-              item: {text: 'f'},
-              children: []
-            }
-          ];
-
-          vm.items2 =  [
-            {
-              item: {text: '1'},
-              children: []
-            },
-            {
-              item: {text: '2'},
-              children: [
-                {
-                  item: {text: '3'},
-                  children: []
-                },
-                {
-                  item: {text: '4'},
-                  children: []
-                }
-              ]
-            },
-            {
-              item: {text: '5'},
-              children: []
-            },
-            {
-              item: {text: '6'},
-              children: []
-            }
-          ];
-
-        }
-    }
-})();
-
-/**=========================================================
- * Module: scroll.js
- * Make a content box scrollable
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .directive('scrollable', scrollable);
-
-    function scrollable () {
-        var directive = {
-            link: link,
-            restrict: 'EA'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          var defaultHeight = 250;
-          element.slimScroll({
-              height: (attrs.height || defaultHeight)
-          });
-        }
-    }
-
-})();
-
-/**=========================================================
- * Module: sortable.js
- * Sortable controller
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('SortableController', SortableController);
-
-    SortableController.$inject = ['$scope'];
-    function SortableController($scope) {
-        // doesn't support controllerAs syntax https://github.com/voidberg/html5sortable/issues/86
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          // Single List
-          $scope.data1 = [
-            { id: 1, name: 'Donald Hoffman' },
-            { id: 2, name: 'Wallace Barrett' },
-            { id: 3, name: 'Marsha Hicks' },
-            { id: 4, name: 'Roland Brown' }
-          ];
-
-          $scope.add = function () {
-            $scope.data1.push({id: $scope.data1.length + 1, name: 'Earl Knight'});
-          };
-
-          $scope.sortableCallback = function (sourceModel, destModel, start, end) {
-            console.log(start + ' -> ' + end);
-          };
-
-          $scope.sortableOptions = {
-              placeholder: '<div class="box-placeholder p0 m0"><div></div></div>',
-              forcePlaceholderSize: true
-          };
-        }
-    }
-
-})();
-
-/**=========================================================
- * Module: sweetalert.js
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('SweetAlertController', SweetAlertController);
-
-    SweetAlertController.$inject = ['SweetAlert'];
-    function SweetAlertController(SweetAlert) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.demo1 = function() {
-            SweetAlert.swal('Here\'s a message');
-          };
-
-          vm.demo2 = function() {
-            SweetAlert.swal('Here\'s a message!', 'It\'s pretty, isn\'t it?');
-          };
-
-          vm.demo3 = function() {
-            SweetAlert.swal('Good job!', 'You clicked the button!', 'success');
-          };
-
-          vm.demo4 = function() {
-            SweetAlert.swal({
-              title: 'Are you sure?',
-              text: 'Your will not be able to recover this imaginary file!',
-              type: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#DD6B55',
-              confirmButtonText: 'Yes, delete it!',
-              closeOnConfirm: false
-            },  function(){
-              SweetAlert.swal('Booyah!');
-            });
-          };
-
-          vm.demo5 = function() {
-            SweetAlert.swal({
-              title: 'Are you sure?',
-              text: 'Your will not be able to recover this imaginary file!',
-              type: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#DD6B55',
-              confirmButtonText: 'Yes, delete it!',
-              cancelButtonText: 'No, cancel plx!',
-              closeOnConfirm: false,
-              closeOnCancel: false
-            }, function(isConfirm){
-              if (isConfirm) {
-                SweetAlert.swal('Deleted!', 'Your imaginary file has been deleted.', 'success');
-              } else {
-                SweetAlert.swal('Cancelled', 'Your imaginary file is safe :)', 'error');
-              }
-            });
-          };
-
-          vm.demo6 = function() {
-            SweetAlert.swal({
-              title: 'Sweet!',
-              text: 'Here\'s a custom image.',
-              imageUrl: 'http://oitozero.com/img/avatar.jpg'
-            });
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: demo-toaster.js
- * Demos for toaster notifications
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('ToasterDemoCtrl', ToasterDemoCtrl);
-
-    ToasterDemoCtrl.$inject = ['toaster'];
-    function ToasterDemoCtrl(toaster) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.toaster = {
-              type:  'success',
-              title: 'Title',
-              text:  'Message'
-          };
-
-          vm.pop = function() {
-            toaster.pop(vm.toaster.type, vm.toaster.title, vm.toaster.text);
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: tour.js
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.elements')
-        .controller('TourCtrl', TourCtrl);
-
-    TourCtrl.$inject = ['$scope'];
-    function TourCtrl($scope) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          // BootstrapTour is not compatible with z-index based layout
-          // so adding position:static for this case makes the browser
-          // to ignore the property
-          var section = angular.element('.wrapper > section');
-          section.css({'position': 'static'});
-          // finally restore on destroy and reuse the value declared in stylesheet
-          $scope.$on('$destroy', function(){
-            section.css({'position': ''});
-          });
-        }
-    }
-})();
-
-/**=========================================================
- * Module: article.js
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.extras')
-        .controller('ArticleController', ArticleController);
-
-    function ArticleController() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.htmlContent = 'Article content...';
-
-          vm.postDemo = {};
-          vm.postDemo.tags = ['coding', 'less'];
-          vm.availableTags = ['coding', 'less', 'sass', 'angularjs', 'node', 'expressJS'];
-          vm.postDemo.categories = ['JAVASCRIPT','WEB'];
-          vm.availableCategories = ['JAVASCRIPT','WEB', 'BOOTSTRAP', 'SERVER', 'HTML5', 'CSS'];
-
-          vm.reviewers = [
-            { name: 'Adam',      email: 'adam@email.com',      age: 10 },
-            { name: 'Amalie',    email: 'amalie@email.com',    age: 12 },
-            { name: 'Wladimir',  email: 'wladimir@email.com',  age: 30 },
-            { name: 'Samantha',  email: 'samantha@email.com',  age: 31 },
-            { name: 'Estefanía', email: 'estefanía@email.com', age: 16 },
-            { name: 'Natasha',   email: 'natasha@email.com',   age: 54 },
-            { name: 'Nicole',    email: 'nicole@email.com',    age: 43 },
-            { name: 'Adrian',    email: 'adrian@email.com',    age: 21 }
-          ];
-
-
-          vm.alerts = [
-            { type: 'info', msg: 'There is an autosaved version of this article that is more recent than the version below. <a href="#" class="text-white">Restore</a>' }
-          ];
-
-          vm.closeAlert = function(index) {
-            vm.alerts.splice(index, 1);
-          };
-        }
-    }
-})();
-
-/**=========================================================
- * Module: calendar-ui.js
- * This script handle the calendar demo with draggable
- * events and events creations
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.extras')
-        .directive('calendar', calendar);
-
-    calendar.$inject = ['$rootScope'];
-    function calendar ($rootScope) {
-        var directive = {
-            link: link,
-            restrict: 'EA'
-        };
-        return directive;
-
-        function link(scope, element) {
-
-          if(!$.fn.fullCalendar) return;
-
-          // The element that will display the calendar
-          var calendar = element;
-
-          var demoEvents = createDemoEvents();
-
-          initExternalEvents(calendar);
-
-          initCalendar(calendar, demoEvents, $rootScope.app.layout.isRTL);
-        }
-    }
-
-
-    // global shared var to know what we are dragging
-    var draggingEvent = null;
-
-
-    /**
-     * ExternalEvent object
-     * @param jQuery Object elements Set of element as jQuery objects
+@charset "UTF-8";
+@import url(//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,400italic);
+    /*!
+     *
+     * Angle - Bootstrap Admin App + AngularJS
+     *
+     * Version: 3.1.0
+     * Author: @themicon_co
+     * Website: http://themicon.co
+     * License: https://wrapbootstrap.com/help/licenses
+     *
      */
-    function ExternalEvent(elements) {
+    /* ========================================================================
 
-        if (!elements) return;
+     [Table of contents]
 
-        elements.each(function() {
-            var $this = $(this);
-            // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
-            // it doesn't need to have a start or end
-            var calendarEventObject = {
-                title: $.trim($this.text()) // use the element's text as the event title
-            };
+     1. Bootstrap reset
+     1.1 bootstrap
+     1.2 bootstrap-reset
 
-            // store the Event Object in the DOM element so we can get to it later
-            $this.data('calendarEventObject', calendarEventObject);
+     2. Typography
+     2.1 typo
 
-            // make the event draggable using jQuery UI
-            $this.draggable({
-                zIndex: 1070,
-                revert: true, // will cause the event to go back to its
-                revertDuration: 0  //  original position after the drag
-            });
+     3. Layout
+     3.1 layout / .wrapper .content-wrapper
+     3.2 top-navbar / .top-navbar
+     3.3 sidebar / .sidebar
+     3.4 offsidebar / .offsidebar
+     3.5 preloader / .preloader
 
-        });
+     4. Components
+     4.1  button-extra
+     4.2  placeholder / .box-placeholder
+     4.3  panels
+     4.4  progress-extra
+     4.5  radial-bar / .radial-bar
+     4.6  user-block / .user-block
+     4.7  circles / .circle
+     4.8  timeline / .timeline
+     4.9  dropdown-extra
+     4.10 row-extra / .row-table .row-flush
+     4.11 half-float / .half-float
+     4.12 masonry-grid / .row-masonry
+     4.13 widget / .widget
+     4.14 typeahead / .typeahead-ctrl
+     4.15 animate
+     4.16 loading-bar
+     4.17 table-grid
+     4.18 todo / .todo
+     4.19 ngwig
+     4.20 ngDialog
+     4.21 nestable
+     4.22 carousel
+     4.23 masonry-grid-deck
+
+     5. Charts
+     5.1 chart-flot / .flot-chart
+     5.2 chart-easypie / .easypie-chart
+
+     6. Form elements
+     6.1 form-elements
+     6.2 form-imgcrop
+     6.3 form-validation
+     6.4 form-wizard
+     6.5 form-tags
+     6.6 uiselect
+     6.7 code-editor
+
+     7. Tables
+     7.1 datatable
+     7.2 table-extras
+     7.3 table-ngtable
+     7.4 table-ng-grid
+     7.5 angular grid
+
+     8. Plugins
+     8.1 plugins
+     8.2 slim-scroll / .slimScrollBar
+     8.3 datepicker / .bootstrap-datetimepicker-widget
+     8.4 alerts / .alerts
+     8.5 notifiy / .notifiy
+     8.6 calendar / .fc-*
+     8.7 spinner / .whirl
+     8.8 gmap / .gmap
+     8.9 vector-map / vector-map
+     8.10 portlets / .portlet
+
+     9. Utilities
+     9.1 utils
+
+     10. Print CSS
+     10.1 print
+
+     11. Settings
+     11.1 settings
+
+     12. Documentation
+     12.1 docs
+
+     ========================================================================== */
+    /* ========================================================================
+     Component: bootstrap-reset.less
+     ========================================================================== */
+    .glyphicon {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translate(0, 0);
+}
+.glyphicon.pull-left {
+    margin-right: 0.3em;
+}
+.glyphicon.pull-right {
+    margin-left: 0.3em;
+}
+.glyphicon.glyphicon-chevron-left:before {
+    content: "\f053";
+}
+.glyphicon.glyphicon-chevron-right:before {
+    content: "\f054";
+}
+.glyphicon.glyphicon-chevron-up:before {
+    content: "\f077";
+}
+.glyphicon.glyphicon-chevron-down:before {
+    content: "\f078";
+}
+.glyphicon.glyphicon-folder-open:before {
+    content: "\f07c";
+}
+[ng\:cloak],
+[ng-cloak],
+    [data-ng-cloak],
+    [x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+    display: none !important;
+}
+*:focus {
+    outline: 0 !important;
+}
+a {
+    outline: none !important;
+}
+a.text-muted:hover,
+a.text-muted:focus {
+    color: #748690;
+}
+[ng-click],
+    [data-ng-click] {
+    cursor: pointer;
+}
+hr {
+    border-top: 1px solid #e4eaec;
+}
+now {
+    display: inline-block;
+}
+
+.angular-google-map-container { height: 400px; }
+
+.navbar-toggle .icon-bar {
+    background-color: #fff;
+}
+.list-group {
+    line-height: 1.3;
+}
+.list-group .list-group-item {
+    padding: 10px;
+}
+.panel > .list-group .list-group-item {
+    border-top: 0;
+}
+.page-header {
+    border-bottom-color: #e4eaec;
+}
+.panel .panel-heading {
+    border-bottom: 0;
+    font-size: 14px;
+}
+.panel .panel-heading a {
+    text-decoration: none !important;
+}
+.panel.panel-default {
+    border-top-width: 3px;
+}
+.well {
+    border: 1px solid #dde6e9;
+}
+.jumbotron {
+    border: 1px solid #dde6e9;
+}
+@media only screen and (min-width: 768px) {
+.jumbotron {
+        padding: 30px 15px;
     }
-
-    /**
-     * Invoke full calendar plugin and attach behavior
-     * @param  jQuery [calElement] The calendar dom element wrapped into jQuery
-     * @param  EventObject [events] An object with the event list to load when the calendar displays
-     */
-    function initCalendar(calElement, events, isRTL) {
-
-        // check to remove elements from the list
-        var removeAfterDrop = $('#remove-after-drop');
-
-        calElement.fullCalendar({
-            isRTL: isRTL,
-            header: {
-                left:   'prev,next today',
-                center: 'title',
-                right:  'month,agendaWeek,agendaDay'
-            },
-            buttonIcons: { // note the space at the beginning
-                prev:    ' fa fa-caret-left',
-                next:    ' fa fa-caret-right'
-            },
-            buttonText: {
-                today: 'today',
-                month: 'month',
-                week:  'week',
-                day:   'day'
-            },
-            editable: true,
-            droppable: true, // this allows things to be dropped onto the calendar
-            drop: function(date, allDay) { // this function is called when something is dropped
-
-                var $this = $(this),
-                    // retrieve the dropped element's stored Event Object
-                    originalEventObject = $this.data('calendarEventObject');
-
-                // if something went wrong, abort
-                if(!originalEventObject) return;
-
-                // clone the object to avoid multiple events with reference to the same object
-                var clonedEventObject = $.extend({}, originalEventObject);
-
-                // assign the reported date
-                clonedEventObject.start = date;
-                clonedEventObject.allDay = allDay;
-                clonedEventObject.backgroundColor = $this.css('background-color');
-                clonedEventObject.borderColor = $this.css('border-color');
-
-                // render the event on the calendar
-                // the last `true` argument determines if the event "sticks"
-                // (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-                calElement.fullCalendar('renderEvent', clonedEventObject, true);
-
-                // if necessary remove the element from the list
-                if(removeAfterDrop.is(':checked')) {
-                  $this.remove();
-                }
-            },
-            eventDragStart: function (event/*, js, ui*/) {
-              draggingEvent = event;
-            },
-            // This array is the events sources
-            events: events
-        });
+}
+.nav-tabs > li > a {
+    font-weight: bold;
+    color: #515253;
+    background-color: #edf1f2;
+    margin: 0;
+    border: 1px solid #dde6e9;
+    border-radius: 0;
+    padding: 10px 20px;
+}
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+    color: inherit;
+    border-bottom-color: #fff;
+}
+.tab-content {
+    padding: 10px 20px;
+    border-style: solid;
+    border-width: 0 1px 1px 1px;
+    border-color: #dde6e9;
+}
+.nav-pills + .tab-content {
+    border: 0;
+    padding: 0;
+}
+.p0 .tab-content {
+    padding: 0 !important;
+}
+.btn {
+    border-radius: 3px;
+    font-size: 13px;
+    border-color: transparent;
+    -webkit-appearance: none;
+    outline: none !important;
+    -webkit-transition: all 0.1s;
+    -o-transition: all 0.1s;
+    transition: all 0.1s;
+}
+.btn.btn-link {
+    box-shadow: none;
+    border: 0;
+}
+.btn.btn-default {
+    border-color: #eaeaea;
+}
+.input-group .btn {
+    font-size: 14px;
+    border-color: #dde6e9;
+}
+.input-group .input-sm + .input-group-btn .btn {
+    font-size: 13px;
+}
+.form-control {
+    box-shadow: 0 0 0 #000 !important;
+}
+.input-sm,
+select.input-sm {
+    height: 31px;
+}
+fieldset,
+    div.dashed fieldset {
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #eee;
+    margin-bottom: 20px;
+}
+fieldset.last-child,
+    fieldset:last-child {
+    border-bottom: 0;
+}
+fieldset .form-group {
+    margin-bottom: 0;
+}
+@media only screen and (max-width: 767px) {
+    input[type="text"],
+        input[type="email"],
+        input[type="search"],
+        input[type="password"] {
+        -webkit-appearance: none;
     }
-
-    /**
-     * Inits the external events panel
-     * @param  jQuery [calElement] The calendar dom element wrapped into jQuery
-     */
-    function initExternalEvents(calElement){
-      // Panel with the external events list
-      var externalEvents = $('.external-events');
-
-      // init the external events in the panel
-      new ExternalEvent(externalEvents.children('div'));
-
-      // External event color is danger-red by default
-      var currColor = '#f6504d';
-      // Color selector button
-      var eventAddBtn = $('.external-event-add-btn');
-      // New external event name input
-      var eventNameInput = $('.external-event-name');
-      // Color switchers
-      var eventColorSelector = $('.external-event-color-selector .circle');
-
-      // Trash events Droparea
-      $('.external-events-trash').droppable({
-        accept:       '.fc-event',
-        activeClass:  'active',
-        hoverClass:   'hovered',
-        tolerance:    'touch',
-        drop: function(event, ui) {
-
-          // You can use this function to send an ajax request
-          // to remove the event from the repository
-
-          if(draggingEvent) {
-            var eid = draggingEvent.id || draggingEvent._id;
-            // Remove the event
-            calElement.fullCalendar('removeEvents', eid);
-            // Remove the dom element
-            ui.draggable.remove();
-            // clear
-            draggingEvent = null;
-          }
-        }
-      });
-
-      eventColorSelector.click(function(e) {
-          e.preventDefault();
-          var $this = $(this);
-
-          // Save color
-          currColor = $this.css('background-color');
-          // De-select all and select the current one
-          eventColorSelector.removeClass('selected');
-          $this.addClass('selected');
-      });
-
-      eventAddBtn.click(function(e) {
-          e.preventDefault();
-
-          // Get event name from input
-          var val = eventNameInput.val();
-          // Dont allow empty values
-          if ($.trim(val) === '') return;
-
-          // Create new event element
-          var newEvent = $('<div/>').css({
-                              'background-color': currColor,
-                              'border-color':     currColor,
-                              'color':            '#fff'
-                          })
-                          .html(val);
-
-          // Prepends to the external events list
-          externalEvents.prepend(newEvent);
-          // Initialize the new event element
-          new ExternalEvent(newEvent);
-          // Clear input
-          eventNameInput.val('');
-      });
+}
+.table > thead > tr > th {
+    border-bottom-width: 1px;
+}
+.table > tbody + tbody {
+    border-bottom-width: 1px;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > thead > tr > td {
+    border-bottom-width: 1px;
+}
+.progress {
+    -webkit-box-shadow: 0 0 0 #000000;
+    box-shadow: 0 0 0 #000000;
+    border-radius: 3px;
+    border: 1px solid #f1f1f1;
+    background-color: #fff;
+}
+.progress .progress-bar {
+    -webkit-box-shadow: 0 0 0 #000000;
+    box-shadow: 0 0 0 #000000;
+}
+.popover {
+    box-shadow: 0 0 0 #000;
+    border-color: #eee;
+    border-bottom: 2px solid #e4eaec;
+    border-radius: 3px;
+}
+.popover .popover-title {
+    border: 0;
+}
+.nav.nav-pills .active > a {
+    background-color: #5d9cec;
+}
+.dropdown-menu {
+    border-radius: 3px;
+}
+.dropdown-header {
+    color: #a1a2a3;
+}
+.navbar-top .navbar-nav > .active > a {
+    color: #999;
+}
+.navbar-top .navbar-nav > .active > a:hover,
+.navbar-top .navbar-nav > .active > a:focus {
+    color: #d1d2d3;
+}
+.navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #666;
+}
+.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+.navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #222;
+}
+.carousel .carousel-indicators {
+    bottom: 0;
+}
+.carousel .carousel-control.left,
+.carousel .carousel-control.right {
+    background-image: none;
+}
+.carousel .carousel-control em {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 5;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+}
+.nav,
+.pagination,
+.carousel,
+.panel-title a {
+    cursor: pointer;
+}
+.nav-tabs.nav-justified > .active > a,
+.nav-tabs.nav-justified > .active > a:hover,
+.nav-tabs.nav-justified > .active > a:focus {
+    border-bottom: 0;
+}
+.modal-backdrop {
+    position: fixed;
+    bottom: 0;
+}
+.topnavbar,
+.navbar,
+.navbar .dropdown-menu {
+    filter: none !important;
+}
+/* ========================================================================
+ Component: typo.less
+ ========================================================================== */
+body {
+    font-family: "Source Sans Pro", sans-serif;
+    color: #656565;
+}
+h1,
+    h2,
+    h3,
+    h4 {
+    font-weight: bold;
+}
+/* ========================================================================
+ Component: layout.less
+ ========================================================================== */
+html {
+    /* @replace rtl */
+    direction: ltr;
+    height: 100%;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+}
+html,
+    body {
+    height: 100%;
+}
+.wrapper {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    overflow-x: hidden;
+}
+.wrapper.ng-leave {
+    display: none;
+}
+.wrapper > .aside {
+    position: absolute;
+    width: 220px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 116;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+    background-color: #ffffff;
+}
+.wrapper > .aside .aside-inner {
+    padding-top: 110px;
+    height: 100%;
+    width: 220px;
+    overflow: hidden;
+}
+.wrapper > .aside > .nav-floating {
+    left: inherit;
+    margin-left: 220px;
+    z-index: 1110;
+    min-width: 190px;
+    overflow: auto;
+}
+.wrapper > .aside .dropdown-backdrop {
+    z-index: -1;
+}
+.wrapper > section {
+    position: relative;
+    height: 100%;
+    margin-left: 0;
+    background-color: #f5f7fa;
+    margin-bottom: 60px !important;
+}
+.wrapper > footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 60px;
+    border-top: 1px solid #e4eaec;
+    padding: 20px;
+    z-index: 109;
+}
+.wrapper > footer > p {
+    margin: 0;
+}
+.content-wrapper {
+    padding: 15px;
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
+    margin-top: -1px;
+}
+.content-wrapper > .unwrap {
+    margin: -15px;
+}
+@media only screen and (min-width: 768px) {
+.content-wrapper > .unwrap {
+        margin: -20px;
     }
-
-    /**
-     * Creates an array of events to display in the first load of the calendar
-     * Wrap into this function a request to a source to get via ajax the stored events
-     * @return Array The array with the events
-     */
-    function createDemoEvents() {
-      // Date for the calendar events (dummy data)
-      var date = new Date();
-      var d = date.getDate(),
-          m = date.getMonth(),
-          y = date.getFullYear();
-
-      return  [
-                {
-                    title: 'All Day Event',
-                    start: new Date(y, m, 1),
-                    backgroundColor: '#f56954', //red
-                    borderColor: '#f56954' //red
-                },
-                {
-                    title: 'Long Event',
-                    start: new Date(y, m, d - 5),
-                    end: new Date(y, m, d - 2),
-                    backgroundColor: '#f39c12', //yellow
-                    borderColor: '#f39c12' //yellow
-                },
-                {
-                    title: 'Meeting',
-                    start: new Date(y, m, d, 10, 30),
-                    allDay: false,
-                    backgroundColor: '#0073b7', //Blue
-                    borderColor: '#0073b7' //Blue
-                },
-                {
-                    title: 'Lunch',
-                    start: new Date(y, m, d, 12, 0),
-                    end: new Date(y, m, d, 14, 0),
-                    allDay: false,
-                    backgroundColor: '#00c0ef', //Info (aqua)
-                    borderColor: '#00c0ef' //Info (aqua)
-                },
-                {
-                    title: 'Birthday Party',
-                    start: new Date(y, m, d + 1, 19, 0),
-                    end: new Date(y, m, d + 1, 22, 30),
-                    allDay: false,
-                    backgroundColor: '#00a65a', //Success (green)
-                    borderColor: '#00a65a' //Success (green)
-                },
-                {
-                    title: 'Open Google',
-                    start: new Date(y, m, 28),
-                    end: new Date(y, m, 29),
-                    url: '//google.com/',
-                    backgroundColor: '#3c8dbc', //Primary (light-blue)
-                    borderColor: '#3c8dbc' //Primary (light-blue)
-                }
-            ];
+}
+.content-wrapper > h3,
+.content-wrapper > .content-heading {
+    font-size: 24px;
+    line-height: 1.1;
+    color: #929292;
+    margin: -15px;
+    margin-bottom: 20px;
+    padding: 15px;
+    font-weight: normal;
+    background-color: #fafbfc;
+    border-bottom: 1px solid #cfdbe2;
+}
+.content-wrapper > h3 > small,
+.content-wrapper > .content-heading > small {
+    display: block;
+    font-size: 12px;
+    color: #909fa7;
+}
+.content-wrapper > button,
+.content-wrapper > .btn {
+    margin: 10px 10px 0 0;
+}
+.content-wrapper .container,
+.content-wrapper .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+@media only screen and (min-width: 768px) {
+.content-wrapper {
+        padding: 20px;
     }
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.extras')
-        .service('LoadTreeService', LoadTreeService);
-
-    LoadTreeService.$inject = ['$resource'];
-    function LoadTreeService($resource) {
-        // Loads the list of files to populate the treeview
-        return $resource('server/editor/filetree.json');
+.content-wrapper > h3,
+.content-wrapper > .content-heading {
+        margin: -20px;
+        margin-bottom: 20px;
+        padding: 20px;
     }
-
-})();
-/**=========================================================
- * Module: code-editor.js
- * Codemirror code editor controller
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.extras')
-        .controller('CodeEditorController', CodeEditorController);
-
-    CodeEditorController.$inject = ['$rootScope', '$scope', '$http', '$ocLazyLoad', 'filetree'];
-    function CodeEditorController($rootScope, $scope, $http, $ocLazyLoad, filetree) {
-        var vm = this;
-
-        layout();
-        activate();
-
-        ////////////////
-        /*jshint -W106*/
-        function layout() {
-          // Setup the layout mode
-          $rootScope.app.useFullLayout = true;
-          $rootScope.app.hiddenFooter = true;
-          $rootScope.app.layout.isCollapsed = true;
-
-          // Restore layout for demo
-          $scope.$on('$destroy', function(){
-              $rootScope.app.useFullLayout = false;
-              $rootScope.app.hiddenFooter = false;
-          });
-
-        }
-
-        function activate() {
-
-          // Set the tree data into the scope
-          vm.filetree_data = filetree;
-
-          // Available themes
-          vm.editorThemes = ['3024-day','3024-night','ambiance-mobile','ambiance','base16-dark','base16-light','blackboard','cobalt','eclipse','elegant','erlang-dark','lesser-dark','mbo','mdn-like','midnight','monokai','neat','neo','night','paraiso-dark','paraiso-light','pastel-on-dark','rubyblue','solarized','the-matrix','tomorrow-night-eighties','twilight','vibrant-ink','xq-dark','xq-light'];
-
-          vm.editorOpts = {
-            mode: 'javascript',
-            lineNumbers: true,
-            matchBrackets: true,
-            theme: 'mbo',
-            viewportMargin: Infinity
-          };
-
-          vm.refreshEditor = 0;
-
-          // Load dinamically the stylesheet for the selected theme
-          // You can use ozLazyLoad to load also the mode js based
-          // on the file extension that is loaded (see handle_filetree)
-          vm.loadTheme = function() {
-            var BASE = 'vendor/codemirror/theme/';
-            $ocLazyLoad.load(BASE + vm.editorOpts.theme + '.css');
-            vm.refreshEditor = !vm.refreshEditor;
-          };
-          // load default theme
-          vm.loadTheme(vm.editorOpts.theme);
-          // Add some initial text
-          vm.code = '// Open a file from the left menu \n' +
-                        '// It will be requested to the server and loaded into the editor\n' +
-                        '// Also try adding a New File from the toolbar\n';
-
-
-          // Tree
-
-          var selectedBranch;
-          vm.handle_filetree = function(branch) {
-
-            selectedBranch = branch;
-
-            var basePath = 'server/editor/';
-            var isFolder = !!branch.children.length;
-
-            console.log('You selected: ' + branch.label + ' - isFolder? ' + isFolder);
-
-            if ( ! isFolder ) {
-
-              $http
-                .get( basePath + branch.path )
-                .success(function(response){
-
-                  console.log('Loaded.. ' + branch.path);
-                  // set the new code into the editor
-                  vm.code = response;
-
-                  vm.editorOpts.mode = detectMode(branch.path);
-                  console.log( 'Mode is: ' + vm.editorOpts.mode);
-
-                });
-            }
-          };
-
-          function detectMode(file) {
-            var ext = file.split('.');
-            ext = ext ? ext[ext.length - 1] : '';
-            switch (ext) {
-              case 'html':  return 'htmlmixed';
-              case 'css':   return 'css';
-              default:      return 'javascript';
-            }
-          }
-
-          var tree;
-          tree = vm.filetree = {};
-
-          // Adds a new branch to the tree
-          vm.new_filetree = function() {
-            var b;
-            b = tree.get_selected_branch();
-
-            // if we select a leaf -> select the parent folder
-            if ( b && b.children.length === 0 ) {
-              b = tree.get_parent_branch(b);
-            }
-
-            return tree.add_branch(b, {
-              'label': 'another.html',
-              'path': 'source/another.html'
-            });
-          };
-        }
+.content-wrapper > button,
+.content-wrapper > .btn {
+        margin: 0;
     }
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.extras')
-        .controller('TodoController', TodoController);
-
-    TodoController.$inject = ['$filter'];
-    function TodoController($filter) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-           vm.items = [
-            {
-              todo: {title: 'Meeting with Mark at 7am.', description: 'Pellentesque convallis mauris eu elit imperdiet quis eleifend quam aliquet. '},
-              complete: true
-            },
-            {
-              todo: {title: 'Call Sonya. Talk about the new project.', description: ''},
-              complete: false
-            },
-            {
-              todo: {title: 'Find a new place for vacations', description: ''},
-              complete: false
-            }
-            ];
-
-          vm.editingTodo = false;
-          vm.todo = {};
-
-          vm.addTodo = function() {
-
-            if( vm.todo.title === '' ) return;
-            if( !vm.todo.description ) vm.todo.description = '';
-
-            if( vm.editingTodo ) {
-              vm.todo = {};
-              vm.editingTodo = false;
-            }
-            else {
-              vm.items.push({todo: angular.copy(vm.todo), complete: false});
-              vm.todo.title = '';
-              vm.todo.description = '';
-            }
-          };
-
-          vm.editTodo = function(index, $event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-            vm.todo = vm.items[index].todo;
-            vm.editingTodo = true;
-          };
-
-          vm.removeTodo = function(index/*, $event*/) {
-            vm.items.splice(index, 1);
-          };
-
-          vm.clearAll = function() {
-            vm.items = [];
-          };
-
-          vm.totalCompleted = function() {
-            return $filter('filter')(vm.items, function(item){
-              return item.complete;
-            }).length;
-          };
-
-          vm.totalPending = function() {
-            return $filter('filter')(vm.items, function(item){
-              return !item.complete;
-            }).length;
-          };
-
-        }
+}
+@media only screen and (min-width: 768px) {
+    body {
+        min-height: 100%;
     }
-})();
-
-/**=========================================================
- * Module: word-cloud.js
- * Controller for jqCloud
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.extras')
-        .controller('WordCloudController', WordCloudController);
-
-    function WordCloudController() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          vm.words = [
-              {
-                text: 'Lorem',
-                weight: 13
-                //link: 'http://themicon.co'
-              }, {
-                text: 'Ipsum',
-                weight: 10.5
-              }, {
-                text: 'Dolor',
-                weight: 9.4
-              }, {
-                text: 'Sit',
-                weight: 8
-              }, {
-                text: 'Amet',
-                weight: 6.2
-              }, {
-                text: 'Consectetur',
-                weight: 5
-              }, {
-                text: 'Adipiscing',
-                weight: 5
-              }, {
-                text: 'Sit',
-                weight: 8
-              }, {
-                text: 'Amet',
-                weight: 6.2
-              }, {
-                text: 'Consectetur',
-                weight: 5
-              }, {
-                text: 'Adipiscing',
-                weight: 5
-              }
-          ];
-        }
+.wrapper > .aside .aside-inner {
+        padding-top: 55px;
     }
-})();
-
-/**=========================================================
- * Module: flatdoc.js
- * Creates the flatdoc markup and initializes the plugin
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.flatdoc')
-        .directive('flatdoc', flatdoc);
-
-    function flatdoc () {
-
-        var directive = {
-            template: '<div role="flatdoc"><div role="flatdoc-menu"></div><div role="flatdoc-content"></div></div>',
-            link: link,
-            restrict: 'EA'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          Flatdoc.run({
-            fetcher: Flatdoc.file(attrs.src)
-          });
-
-          var $root = $('html, body');
-          $(document).on('flatdoc:ready', function() {
-            var docMenu = $('[role="flatdoc-menu"]');
-            docMenu.find('a').on('click', function(e) {
-              e.preventDefault(); e.stopPropagation();
-
-              var $this = $(this);
-
-              docMenu.find('a.active').removeClass('active');
-              $this.addClass('active');
-
-              $root.animate({
-                    scrollTop: $(this.getAttribute('href')).offset().top - ($('.topnavbar').height() + 10)
-                }, 800);
-            });
-
-          });
-        }
+.wrapper > section,
+.wrapper > footer {
+        margin-left: 220px;
     }
-
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.forms')
-        .controller('ColorPickerController', ColorPickerController);
-
-    function ColorPickerController() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-           vm.hexPicker = {
-              color: ''
-            };
-
-            vm.rgbPicker = {
-              color: ''
-            };
-
-            vm.rgbaPicker = {
-              color: ''
-            };
-
-            vm.nonInput = {
-              color: ''
-            };
-
-            vm.resetColor = function() {
-              vm.hexPicker = {
-                color: '#ff0000'
-              };
-            };
-
-            vm.resetRBGColor = function() {
-              vm.rgbPicker = {
-                color: 'rgb(255,255,255)'
-              };
-            };
-
-            vm.resetRBGAColor = function() {
-              vm.rgbaPicker = {
-                color: 'rgb(255,255,255, 0.25)'
-              };
-            };
-
-            vm.resetNonInputColor = function() {
-              vm.nonInput = {
-                color: '#ffffff'
-              };
-            };
-        }
+.wrapper > section.has-sidebar-right {
+        margin-right: 240px;
     }
-})();
-/**=========================================================
- * Module: filestyle.js
- * Initializes the fielstyle plugin
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.forms')
-        .directive('filestyle', filestyle);
-
-    function filestyle () {
-        var directive = {
-            link: link,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element) {
-          var options = element.data();
-
-          // old usage support
-          options.classInput = element.data('classinput') || options.classInput;
-
-          element.filestyle(options);
-        }
+.wrapper > section.has-sidebar-right + .offsidebar {
+        z-index: 1;
     }
-
-})();
-
-/**=========================================================
- * Module: form-imgcrop.js
- * Image crop controller
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.forms')
-        .controller('ImageCropController', ImageCropController);
-
-    ImageCropController.$inject = ['$scope'];
-    function ImageCropController($scope) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.reset = function() {
-            vm.myImage        = '';
-            vm.myCroppedImage = '';
-            vm.imgcropType    = 'square';
-          };
-
-          vm.reset();
-
-          var handleFileSelect=function(evt) {
-            var file=evt.currentTarget.files[0];
-            var reader = new FileReader();
-            reader.onload = function (evt) {
-              $scope.$apply(function(/*$scope*/){
-                vm.myImage=evt.target.result;
-              });
-            };
-            if(file)
-              reader.readAsDataURL(file);
-          };
-
-          angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
-        }
+}
+@media only screen and (max-width: 767px) {
+.wrapper > .aside {
+        margin-left: -220px;
     }
-})();
-
-/**=========================================================
- * Module: FormValidationController
- * Input validation with UI Validate
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.forms')
-        .controller('FormValidationController', FormValidationController);
-
-    function FormValidationController() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.notBlackListed = function(value) {
-            var blacklist = ['some@mail.com','another@email.com'];
-            return blacklist.indexOf(value) === -1;
-          };
-
-          vm.words = function(value) {
-            return value && value.split(' ').length;
-          };
-
-          vm.submitted = false;
-          vm.validateInput = function(name, type) {
-            var input = vm.formValidate[name];
-            return (input.$dirty || vm.submitted) && input.$error[type];
-          };
-
-          // Submit form
-          vm.submitForm = function() {
-            vm.submitted = true;
-            if (vm.formValidate.$valid) {
-              console.log('Submitted!!');
-            } else {
-              console.log('Not valid!!');
-              return false;
-            }
-          };
-        }
+.aside-toggled .wrapper > section,
+.aside-toggled .wrapper > footer {
+        margin-left: 220px;
     }
-})();
-
-/**=========================================================
- * Module: form-wizard.js
- * Handles form wizard plugin and validation
- =========================================================*/
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.forms')
-        .directive('formWizard', formWizard);
-
-    formWizard.$inject = ['$parse'];
-    function formWizard ($parse) {
-        var directive = {
-            link: link,
-            restrict: 'A',
-            scope: true
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          var validate = $parse(attrs.validateSteps)(scope),
-              wiz = new Wizard(attrs.steps, !!validate, element);
-          scope.wizard = wiz.init();
-        }
-
-        function Wizard (quantity, validate, element) {
-
-          var self = this;
-          self.quantity = parseInt(quantity,10);
-          self.validate = validate;
-          self.element = element;
-
-          self.init = function() {
-            self.createsteps(self.quantity);
-            self.go(1); // always start at fist step
-            return self;
-          };
-
-          self.go = function(step) {
-
-            if ( angular.isDefined(self.steps[step]) ) {
-
-              if(self.validate && step !== 1) {
-                var form = $(self.element),
-                    group = form.children().children('div').get(step - 2);
-
-                if (false === form.parsley().validate( group.id )) {
-                  return false;
-                }
-              }
-
-              self.cleanall();
-              self.steps[step] = true;
-            }
-          };
-
-          self.active = function(step) {
-            return !!self.steps[step];
-          };
-
-          self.cleanall = function() {
-            for(var i in self.steps){
-              self.steps[i] = false;
-            }
-          };
-
-          self.createsteps = function(q) {
-            self.steps = [];
-            for(var i = 1; i <= q; i++) self.steps[i] = false;
-          };
-
-        }
+.aside-toggled .wrapper > .aside {
+        margin-left: 0;
     }
-
-
-})();
-
-/**=========================================================
- * Module: form-xeditable.js
- * Form xEditable controller
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.forms')
-        .controller('FormxEditableController', FormxEditableController);
-
-    FormxEditableController.$inject = ['$scope', 'editableOptions', 'editableThemes', '$filter', '$http'];
-    function FormxEditableController($scope, editableOptions, editableThemes, $filter, $http) {
-        var vm = this;
-        vm.title = 'Controller';
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          editableOptions.theme = 'bs3';
-
-          editableThemes.bs3.inputClass = 'input-sm';
-          editableThemes.bs3.buttonsClass = 'btn-sm';
-          editableThemes.bs3.submitTpl = '<button type="submit" class="btn btn-success"><span class="fa fa-check"></span></button>';
-          editableThemes.bs3.cancelTpl = '<button type="button" class="btn btn-default" ng-click="$form.$cancel()">'+
-                                           '<span class="fa fa-times text-muted"></span>'+
-                                         '</button>';
-
-          vm.user = {
-            email: 'email@example.com',
-            tel: '123-45-67',
-            number: 29,
-            range: 10,
-            url: 'http://example.com',
-            search: 'blabla',
-            color: '#6a4415',
-            date: null,
-            time: new Date(),
-            datetime: null,
-            month: null,
-            week: null,
-            desc: 'Sed pharetra euismod dolor, id feugiat ante volutpat eget. '
-          };
-
-          // Local select
-          // -----------------------------------
-
-          vm.user2 = {
-            status: 2
-          };
-
-          vm.statuses = [
-            {value: 1, text: 'status1'},
-            {value: 2, text: 'status2'},
-            {value: 3, text: 'status3'},
-            {value: 4, text: 'status4'}
-          ];
-
-          vm.showStatus = function() {
-            var selected = $filter('filter')(vm.statuses, {value: vm.user2.status});
-            return (vm.user2.status && selected.length) ? selected[0].text : 'Not set';
-          };
-
-          // select remote
-          // -----------------------------------
-
-          vm.user3 = {
-            id: 4,
-            text: 'admin' // original value
-          };
-
-          vm.groups = [];
-
-          vm.loadGroups = function() {
-            return vm.groups.length ? null : $http.get('server/xeditable-groups.json').success(function(data) {
-              vm.groups = data;
-            });
-          };
-
-          $scope.$watch('user3.id', function(newVal, oldVal) {
-            if (newVal !== oldVal) {
-              var selected = $filter('filter')(vm.groups, {id: vm.user3.id});
-              vm.user3.text = selected.length ? selected[0].text : null;
-            }
-          });
-
-          // Typeahead
-          // -----------------------------------
-
-          vm.user4 = {
-            state: 'Arizona'
-          };
-
-          vm.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
-
-        }
+.csstransforms3d .wrapper {
+        -webkit-backface-visibility: hidden;
+        -moz-backface-visibility: hidden;
+        backface-visibility: hidden;
     }
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.forms')
-        .controller('FormDemoCtrl', FormDemoCtrl);
-
-    FormDemoCtrl.$inject = ['$resource'];
-    function FormDemoCtrl($resource) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          // the following allow to request array $resource instead of object (default)
-          var actions = {'get': {method: 'GET', isArray: true}};
-
-          // Tags inputs
-          // -----------------------------------
-          var Cities = $resource('server/cities.json', {}, actions);
-
-          Cities.get(function(data){
-
-              vm.cities = data;
-
-          });
-          // for non ajax form just fill the scope variable
-          // vm.cities = ['Amsterdam','Washington','Sydney','Beijing','Cairo'];
-
-          // Slider demo values
-          vm.slider1 = 5;
-          vm.slider2 = 10;
-          vm.slider3 = 15;
-          vm.slider4 = 20;
-          vm.slider5 = 25;
-          vm.slider6 = 30;
-          vm.slider7 = 10;
-          vm.slider8 = [250,750];
-
-          // Chosen data
-          // -----------------------------------
-
-          var States = $resource('server/chosen-states.json', {},  {'query':    {method:'GET', isArray:true} });
-
-          vm.states = States.query();
-
-
-          vm.alertSubmit = function(){
-            alert('Form submitted!');
-            return false;
-          };
-
-          // Angular wysiwyg
-          // -----------------------------------
-
-          vm.wysiwygContent = '<p> Write something here.. </p>';
-
-          // Text Angular (wysiwyg)
-          // -----------------------------------
-
-          vm.htmlContent = '<h2>Try me!</h2><p>textAngular is a super cool WYSIWYG Text Editor directive for AngularJS</p><p><b>Features:</b></p><ol><li>Automatic Seamless Two-Way-Binding</li><li style="color: blue;">Super Easy <b>Theming</b> Options</li><li>Simple Editor Instance Creation</li><li>Safely Parses Html for Custom Toolbar Icons</li><li>Doesn&apos;t Use an iFrame</li><li>Works with Firefox, Chrome, and IE8+</li></ol><p><a href="https://github.com/fraywing/textAngular">Source</a> </p>';
-
-        }
+.csstransforms3d .wrapper > section,
+.csstransforms3d .wrapper > footer {
+        margin-left: 0;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        -webkit-transition: -webkit-transform 0.3s ease;
+        -moz-transition: -moz-transform 0.3s ease;
+        -o-transition: -o-transform 0.3s ease;
+        transition: transform 0.3s ease;
     }
-})();
-
-/**=========================================================
- * Module: masked,js
- * Initializes the masked inputs
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.forms')
-        .directive('masked', masked);
-
-    function masked () {
-        var directive = {
-            link: link,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element) {
-          var $elem = $(element);
-          if($.fn.inputmask)
-            $elem.inputmask();
-        }
+.csstransforms3d .wrapper > .aside {
+        margin-left: 0;
+        -webkit-transform: translate3d(-220px, 0, 0);
+        transform: translate3d(-220px, 0, 0);
+        -webkit-transition: -webkit-transform 0.3s ease;
+        -moz-transition: -moz-transform 0.3s ease;
+        -o-transition: -o-transform 0.3s ease;
+        transition: transform 0.3s ease;
     }
-
-})();
-
-/**
- * AngularJS default filter with the following expression:
- * "person in people | filter: {name: $select.search, age: $select.search}"
- * performs a AND between 'name: $select.search' and 'age: $select.search'.
- * We want to perform a OR.
- */
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.forms')
-        .filter('propsFilter', propsFilter);
-
-    function propsFilter() {
-        return filterFilter;
-
-        ////////////////
-        function filterFilter(items, props) {
-          var out = [];
-
-          if (angular.isArray(items)) {
-            items.forEach(function(item) {
-              var itemMatches = false;
-
-              var keys = Object.keys(props);
-              for (var i = 0; i < keys.length; i++) {
-                var prop = keys[i];
-                var text = props[prop].toLowerCase();
-                if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
-                  itemMatches = true;
-                  break;
-                }
-              }
-
-              if (itemMatches) {
-                out.push(item);
-              }
-            });
-          } else {
-            // Let the output be the input untouched
-            out = items;
-          }
-
-          return out;
-        }
+.csstransforms3d .aside-toggled .wrapper > section,
+.csstransforms3d .aside-toggled .wrapper > footer {
+        -webkit-transform: translate3d(220px, 0, 0);
+        transform: translate3d(220px, 0, 0);
     }
-
-})();
-/**=========================================================
- * Module: tags-input.js
- * Initializes the tag inputs plugin
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.forms')
-        .directive('tagsinput', tagsinput);
-
-    tagsinput.$inject = ['$timeout'];
-    function tagsinput ($timeout) {
-        var directive = {
-            link: link,
-            require: 'ngModel',
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element, attrs, ngModel) {
-          element.on('itemAdded itemRemoved', function(){
-            // check if view value is not empty and is a string
-            // and update the view from string to an array of tags
-            if(ngModel.$viewValue && ngModel.$viewValue.split) {
-              ngModel.$setViewValue( ngModel.$viewValue.split(',') );
-              ngModel.$render();
-            }
-          });
-
-          $timeout(function(){
-            element.tagsinput();
-          });
-        }
+.csstransforms3d .aside-toggled .wrapper > .aside {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
     }
-
-})();
-
-/**=========================================================
- * Module: uiselect.js
- * uiSelect controller
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.forms')
-        .controller('uiSelectController', uiSelectController);
-
-    uiSelectController.$inject = ['$scope', '$http'];
-    function uiSelectController($scope, $http) {
-        /* jshint validthis:true */
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          vm.disabled = undefined;
-
-          vm.enable = function() {
-            vm.disabled = false;
-          };
-
-          vm.disable = function() {
-            vm.disabled = true;
-          };
-
-          vm.clear = function() {
-            vm.person.selected = undefined;
-            vm.address.selected = undefined;
-            vm.country.selected = undefined;
-          };
-
-          vm.person = {};
-          vm.people = [
-            { name: 'Adam',      email: 'adam@email.com',      age: 10 },
-            { name: 'Amalie',    email: 'amalie@email.com',    age: 12 },
-            { name: 'Wladimir',  email: 'wladimir@email.com',  age: 30 },
-            { name: 'Samantha',  email: 'samantha@email.com',  age: 31 },
-            { name: 'Estefanía', email: 'estefanía@email.com', age: 16 },
-            { name: 'Natasha',   email: 'natasha@email.com',   age: 54 },
-            { name: 'Nicole',    email: 'nicole@email.com',    age: 43 },
-            { name: 'Adrian',    email: 'adrian@email.com',    age: 21 }
-          ];
-
-          vm.address = {};
-          vm.refreshAddresses = function(address) {
-            var params = {address: address, sensor: false};
-            return $http.get(
-              '//maps.googleapis.com/maps/api/geocode/json',
-              {params: params}
-            ).then(function(response) {
-              vm.addresses = response.data.results;
-            });
-          };
-
-          vm.country = {};
-          vm.countries = [ // Taken from https://gist.github.com/unceus/6501985
-            {name: 'Afghanistan', code: 'AF'},
-            {name: 'Åland Islands', code: 'AX'},
-            {name: 'Albania', code: 'AL'},
-            {name: 'Algeria', code: 'DZ'},
-            {name: 'American Samoa', code: 'AS'},
-            {name: 'Andorra', code: 'AD'},
-            {name: 'Angola', code: 'AO'},
-            {name: 'Anguilla', code: 'AI'},
-            {name: 'Antarctica', code: 'AQ'},
-            {name: 'Antigua and Barbuda', code: 'AG'},
-            {name: 'Argentina', code: 'AR'},
-            {name: 'Armenia', code: 'AM'},
-            {name: 'Aruba', code: 'AW'},
-            {name: 'Australia', code: 'AU'},
-            {name: 'Austria', code: 'AT'},
-            {name: 'Azerbaijan', code: 'AZ'},
-            {name: 'Bahamas', code: 'BS'},
-            {name: 'Bahrain', code: 'BH'},
-            {name: 'Bangladesh', code: 'BD'},
-            {name: 'Barbados', code: 'BB'},
-            {name: 'Belarus', code: 'BY'},
-            {name: 'Belgium', code: 'BE'},
-            {name: 'Belize', code: 'BZ'},
-            {name: 'Benin', code: 'BJ'},
-            {name: 'Bermuda', code: 'BM'},
-            {name: 'Bhutan', code: 'BT'},
-            {name: 'Bolivia', code: 'BO'},
-            {name: 'Bosnia and Herzegovina', code: 'BA'},
-            {name: 'Botswana', code: 'BW'},
-            {name: 'Bouvet Island', code: 'BV'},
-            {name: 'Brazil', code: 'BR'},
-            {name: 'British Indian Ocean Territory', code: 'IO'},
-            {name: 'Brunei Darussalam', code: 'BN'},
-            {name: 'Bulgaria', code: 'BG'},
-            {name: 'Burkina Faso', code: 'BF'},
-            {name: 'Burundi', code: 'BI'},
-            {name: 'Cambodia', code: 'KH'},
-            {name: 'Cameroon', code: 'CM'},
-            {name: 'Canada', code: 'CA'},
-            {name: 'Cape Verde', code: 'CV'},
-            {name: 'Cayman Islands', code: 'KY'},
-            {name: 'Central African Republic', code: 'CF'},
-            {name: 'Chad', code: 'TD'},
-            {name: 'Chile', code: 'CL'},
-            {name: 'China', code: 'CN'},
-            {name: 'Christmas Island', code: 'CX'},
-            {name: 'Cocos (Keeling) Islands', code: 'CC'},
-            {name: 'Colombia', code: 'CO'},
-            {name: 'Comoros', code: 'KM'},
-            {name: 'Congo', code: 'CG'},
-            {name: 'Congo, The Democratic Republic of the', code: 'CD'},
-            {name: 'Cook Islands', code: 'CK'},
-            {name: 'Costa Rica', code: 'CR'},
-            {name: 'Cote D\'Ivoire', code: 'CI'},
-            {name: 'Croatia', code: 'HR'},
-            {name: 'Cuba', code: 'CU'},
-            {name: 'Cyprus', code: 'CY'},
-            {name: 'Czech Republic', code: 'CZ'},
-            {name: 'Denmark', code: 'DK'},
-            {name: 'Djibouti', code: 'DJ'},
-            {name: 'Dominica', code: 'DM'},
-            {name: 'Dominican Republic', code: 'DO'},
-            {name: 'Ecuador', code: 'EC'},
-            {name: 'Egypt', code: 'EG'},
-            {name: 'El Salvador', code: 'SV'},
-            {name: 'Equatorial Guinea', code: 'GQ'},
-            {name: 'Eritrea', code: 'ER'},
-            {name: 'Estonia', code: 'EE'},
-            {name: 'Ethiopia', code: 'ET'},
-            {name: 'Falkland Islands (Malvinas)', code: 'FK'},
-            {name: 'Faroe Islands', code: 'FO'},
-            {name: 'Fiji', code: 'FJ'},
-            {name: 'Finland', code: 'FI'},
-            {name: 'France', code: 'FR'},
-            {name: 'French Guiana', code: 'GF'},
-            {name: 'French Polynesia', code: 'PF'},
-            {name: 'French Southern Territories', code: 'TF'},
-            {name: 'Gabon', code: 'GA'},
-            {name: 'Gambia', code: 'GM'},
-            {name: 'Georgia', code: 'GE'},
-            {name: 'Germany', code: 'DE'},
-            {name: 'Ghana', code: 'GH'},
-            {name: 'Gibraltar', code: 'GI'},
-            {name: 'Greece', code: 'GR'},
-            {name: 'Greenland', code: 'GL'},
-            {name: 'Grenada', code: 'GD'},
-            {name: 'Guadeloupe', code: 'GP'},
-            {name: 'Guam', code: 'GU'},
-            {name: 'Guatemala', code: 'GT'},
-            {name: 'Guernsey', code: 'GG'},
-            {name: 'Guinea', code: 'GN'},
-            {name: 'Guinea-Bissau', code: 'GW'},
-            {name: 'Guyana', code: 'GY'},
-            {name: 'Haiti', code: 'HT'},
-            {name: 'Heard Island and Mcdonald Islands', code: 'HM'},
-            {name: 'Holy See (Vatican City State)', code: 'VA'},
-            {name: 'Honduras', code: 'HN'},
-            {name: 'Hong Kong', code: 'HK'},
-            {name: 'Hungary', code: 'HU'},
-            {name: 'Iceland', code: 'IS'},
-            {name: 'India', code: 'IN'},
-            {name: 'Indonesia', code: 'ID'},
-            {name: 'Iran, Islamic Republic Of', code: 'IR'},
-            {name: 'Iraq', code: 'IQ'},
-            {name: 'Ireland', code: 'IE'},
-            {name: 'Isle of Man', code: 'IM'},
-            {name: 'Israel', code: 'IL'},
-            {name: 'Italy', code: 'IT'},
-            {name: 'Jamaica', code: 'JM'},
-            {name: 'Japan', code: 'JP'},
-            {name: 'Jersey', code: 'JE'},
-            {name: 'Jordan', code: 'JO'},
-            {name: 'Kazakhstan', code: 'KZ'},
-            {name: 'Kenya', code: 'KE'},
-            {name: 'Kiribati', code: 'KI'},
-            {name: 'Korea, Democratic People\'s Republic of', code: 'KP'},
-            {name: 'Korea, Republic of', code: 'KR'},
-            {name: 'Kuwait', code: 'KW'},
-            {name: 'Kyrgyzstan', code: 'KG'},
-            {name: 'Lao People\'s Democratic Republic', code: 'LA'},
-            {name: 'Latvia', code: 'LV'},
-            {name: 'Lebanon', code: 'LB'},
-            {name: 'Lesotho', code: 'LS'},
-            {name: 'Liberia', code: 'LR'},
-            {name: 'Libyan Arab Jamahiriya', code: 'LY'},
-            {name: 'Liechtenstein', code: 'LI'},
-            {name: 'Lithuania', code: 'LT'},
-            {name: 'Luxembourg', code: 'LU'},
-            {name: 'Macao', code: 'MO'},
-            {name: 'Macedonia, The Former Yugoslav Republic of', code: 'MK'},
-            {name: 'Madagascar', code: 'MG'},
-            {name: 'Malawi', code: 'MW'},
-            {name: 'Malaysia', code: 'MY'},
-            {name: 'Maldives', code: 'MV'},
-            {name: 'Mali', code: 'ML'},
-            {name: 'Malta', code: 'MT'},
-            {name: 'Marshall Islands', code: 'MH'},
-            {name: 'Martinique', code: 'MQ'},
-            {name: 'Mauritania', code: 'MR'},
-            {name: 'Mauritius', code: 'MU'},
-            {name: 'Mayotte', code: 'YT'},
-            {name: 'Mexico', code: 'MX'},
-            {name: 'Micronesia, Federated States of', code: 'FM'},
-            {name: 'Moldova, Republic of', code: 'MD'},
-            {name: 'Monaco', code: 'MC'},
-            {name: 'Mongolia', code: 'MN'},
-            {name: 'Montserrat', code: 'MS'},
-            {name: 'Morocco', code: 'MA'},
-            {name: 'Mozambique', code: 'MZ'},
-            {name: 'Myanmar', code: 'MM'},
-            {name: 'Namibia', code: 'NA'},
-            {name: 'Nauru', code: 'NR'},
-            {name: 'Nepal', code: 'NP'},
-            {name: 'Netherlands', code: 'NL'},
-            {name: 'Netherlands Antilles', code: 'AN'},
-            {name: 'New Caledonia', code: 'NC'},
-            {name: 'New Zealand', code: 'NZ'},
-            {name: 'Nicaragua', code: 'NI'},
-            {name: 'Niger', code: 'NE'},
-            {name: 'Nigeria', code: 'NG'},
-            {name: 'Niue', code: 'NU'},
-            {name: 'Norfolk Island', code: 'NF'},
-            {name: 'Northern Mariana Islands', code: 'MP'},
-            {name: 'Norway', code: 'NO'},
-            {name: 'Oman', code: 'OM'},
-            {name: 'Pakistan', code: 'PK'},
-            {name: 'Palau', code: 'PW'},
-            {name: 'Palestinian Territory, Occupied', code: 'PS'},
-            {name: 'Panama', code: 'PA'},
-            {name: 'Papua New Guinea', code: 'PG'},
-            {name: 'Paraguay', code: 'PY'},
-            {name: 'Peru', code: 'PE'},
-            {name: 'Philippines', code: 'PH'},
-            {name: 'Pitcairn', code: 'PN'},
-            {name: 'Poland', code: 'PL'},
-            {name: 'Portugal', code: 'PT'},
-            {name: 'Puerto Rico', code: 'PR'},
-            {name: 'Qatar', code: 'QA'},
-            {name: 'Reunion', code: 'RE'},
-            {name: 'Romania', code: 'RO'},
-            {name: 'Russian Federation', code: 'RU'},
-            {name: 'Rwanda', code: 'RW'},
-            {name: 'Saint Helena', code: 'SH'},
-            {name: 'Saint Kitts and Nevis', code: 'KN'},
-            {name: 'Saint Lucia', code: 'LC'},
-            {name: 'Saint Pierre and Miquelon', code: 'PM'},
-            {name: 'Saint Vincent and the Grenadines', code: 'VC'},
-            {name: 'Samoa', code: 'WS'},
-            {name: 'San Marino', code: 'SM'},
-            {name: 'Sao Tome and Principe', code: 'ST'},
-            {name: 'Saudi Arabia', code: 'SA'},
-            {name: 'Senegal', code: 'SN'},
-            {name: 'Serbia and Montenegro', code: 'CS'},
-            {name: 'Seychelles', code: 'SC'},
-            {name: 'Sierra Leone', code: 'SL'},
-            {name: 'Singapore', code: 'SG'},
-            {name: 'Slovakia', code: 'SK'},
-            {name: 'Slovenia', code: 'SI'},
-            {name: 'Solomon Islands', code: 'SB'},
-            {name: 'Somalia', code: 'SO'},
-            {name: 'South Africa', code: 'ZA'},
-            {name: 'South Georgia and the South Sandwich Islands', code: 'GS'},
-            {name: 'Spain', code: 'ES'},
-            {name: 'Sri Lanka', code: 'LK'},
-            {name: 'Sudan', code: 'SD'},
-            {name: 'Suriname', code: 'SR'},
-            {name: 'Svalbard and Jan Mayen', code: 'SJ'},
-            {name: 'Swaziland', code: 'SZ'},
-            {name: 'Sweden', code: 'SE'},
-            {name: 'Switzerland', code: 'CH'},
-            {name: 'Syrian Arab Republic', code: 'SY'},
-            {name: 'Taiwan, Province of China', code: 'TW'},
-            {name: 'Tajikistan', code: 'TJ'},
-            {name: 'Tanzania, United Republic of', code: 'TZ'},
-            {name: 'Thailand', code: 'TH'},
-            {name: 'Timor-Leste', code: 'TL'},
-            {name: 'Togo', code: 'TG'},
-            {name: 'Tokelau', code: 'TK'},
-            {name: 'Tonga', code: 'TO'},
-            {name: 'Trinidad and Tobago', code: 'TT'},
-            {name: 'Tunisia', code: 'TN'},
-            {name: 'Turkey', code: 'TR'},
-            {name: 'Turkmenistan', code: 'TM'},
-            {name: 'Turks and Caicos Islands', code: 'TC'},
-            {name: 'Tuvalu', code: 'TV'},
-            {name: 'Uganda', code: 'UG'},
-            {name: 'Ukraine', code: 'UA'},
-            {name: 'United Arab Emirates', code: 'AE'},
-            {name: 'United Kingdom', code: 'GB'},
-            {name: 'United States', code: 'US'},
-            {name: 'United States Minor Outlying Islands', code: 'UM'},
-            {name: 'Uruguay', code: 'UY'},
-            {name: 'Uzbekistan', code: 'UZ'},
-            {name: 'Vanuatu', code: 'VU'},
-            {name: 'Venezuela', code: 'VE'},
-            {name: 'Vietnam', code: 'VN'},
-            {name: 'Virgin Islands, British', code: 'VG'},
-            {name: 'Virgin Islands, U.S.', code: 'VI'},
-            {name: 'Wallis and Futuna', code: 'WF'},
-            {name: 'Western Sahara', code: 'EH'},
-            {name: 'Yemen', code: 'YE'},
-            {name: 'Zambia', code: 'ZM'},
-            {name: 'Zimbabwe', code: 'ZW'}
-          ];
-
-
-          // Multiple
-          vm.someGroupFn = function (item){
-
-            if (item.name[0] >= 'A' && item.name[0] <= 'M')
-                return 'From A - M';
-
-            if (item.name[0] >= 'N' && item.name[0] <= 'Z')
-                return 'From N - Z';
-
-          };
-
-          vm.counter = 0;
-          vm.someFunction = function (item, model){
-            vm.counter++;
-            vm.eventResult = {item: item, model: model};
-          };
-
-          vm.availableColors = ['Red','Green','Blue','Yellow','Magenta','Maroon','Umbra','Turquoise'];
-
-          vm.multipleDemo = {};
-          vm.multipleDemo.colors = ['Blue','Red'];
-          vm.multipleDemo.selectedPeople = [vm.people[5], vm.people[4]];
-          vm.multipleDemo.selectedPeopleWithGroupBy = [vm.people[8], vm.people[6]];
-          vm.multipleDemo.selectedPeopleSimple = ['samantha@email.com','wladimir@email.com'];
-        }
+}
+@media only screen and (max-width: 767px) {
+.aside-collapsed .wrapper > .aside {
+        margin-left: -70px;
     }
-
-})();
-
-/**=========================================================
- * Module: upload.js
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.forms')
-        .controller('FileUploadController', FileUploadController);
-
-    FileUploadController.$inject = ['FileUploader'];
-    function FileUploadController(FileUploader) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          var uploader = vm.uploader = new FileUploader({
-              url: 'server/upload.php'
-          });
-
-          // FILTERS
-
-          uploader.filters.push({
-              name: 'customFilter',
-              fn: function(/*item, options*/) {
-                  return this.queue.length < 10;
-              }
-          });
-
-          // CALLBACKS
-
-          uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/, filter, options) {
-              console.info('onWhenAddingFileFailed', item, filter, options);
-          };
-          uploader.onAfterAddingFile = function(fileItem) {
-              console.info('onAfterAddingFile', fileItem);
-          };
-          uploader.onAfterAddingAll = function(addedFileItems) {
-              console.info('onAfterAddingAll', addedFileItems);
-          };
-          uploader.onBeforeUploadItem = function(item) {
-              console.info('onBeforeUploadItem', item);
-          };
-          uploader.onProgressItem = function(fileItem, progress) {
-              console.info('onProgressItem', fileItem, progress);
-          };
-          uploader.onProgressAll = function(progress) {
-              console.info('onProgressAll', progress);
-          };
-          uploader.onSuccessItem = function(fileItem, response, status, headers) {
-              console.info('onSuccessItem', fileItem, response, status, headers);
-          };
-          uploader.onErrorItem = function(fileItem, response, status, headers) {
-              console.info('onErrorItem', fileItem, response, status, headers);
-          };
-          uploader.onCancelItem = function(fileItem, response, status, headers) {
-              console.info('onCancelItem', fileItem, response, status, headers);
-          };
-          uploader.onCompleteItem = function(fileItem, response, status, headers) {
-              console.info('onCompleteItem', fileItem, response, status, headers);
-          };
-          uploader.onCompleteAll = function() {
-              console.info('onCompleteAll');
-          };
-
-          console.info('uploader', uploader);
-        }
+.aside-collapsed.aside-toggled .wrapper > section,
+.aside-collapsed.aside-toggled .wrapper > footer {
+        margin-left: 70px;
     }
-})();
-
-/**=========================================================
- * Module: validate-form.js
- * Initializes the validation plugin Parsley
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.forms')
-        .directive('validateForm', validateForm);
-
-    function validateForm () {
-        var directive = {
-            link: link,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element) {
-          var $elem = $(element);
-          if($.fn.parsley)
-            $elem.parsley();
-        }
+.aside-collapsed.aside-toggled .wrapper > .aside {
+        margin-left: 0;
     }
-
-})();
-
-/**=========================================================
- * Module: skycons.js
- * Include any animated weather icon from Skycons
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.icons')
-        .directive('skycon', skycon);
-
-    function skycon () {
-
-        var directive = {
-            link: link,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          var skycons = new Skycons({'color': (attrs.color || 'white')});
-
-          element.html('<canvas width="' + attrs.width + '" height="' + attrs.height + '"></canvas>');
-
-          skycons.add(element.children()[0], attrs.skycon);
-
-          skycons.play();
-        }
+.csstransforms3d .aside-collapsed .wrapper {
+        -webkit-backface-visibility: hidden;
+        -moz-backface-visibility: hidden;
+        backface-visibility: hidden;
     }
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.lazyload')
-        .config(lazyloadConfig);
-
-    lazyloadConfig.$inject = ['$ocLazyLoadProvider', 'APP_REQUIRES'];
-    function lazyloadConfig($ocLazyLoadProvider, APP_REQUIRES){
-
-      // Lazy Load modules configuration
-      $ocLazyLoadProvider.config({
-        debug: false,
-        events: true,
-        modules: APP_REQUIRES.modules
-      });
-
+.csstransforms3d .aside-collapsed .wrapper > section,
+.csstransforms3d .aside-collapsed .wrapper > footer {
+        margin-left: 0;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        -webkit-transition: -webkit-transform 0.3s ease;
+        -moz-transition: -moz-transform 0.3s ease;
+        -o-transition: -o-transform 0.3s ease;
+        transition: transform 0.3s ease;
     }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.lazyload')
-        .constant('APP_REQUIRES', {
-          // jQuery based and standalone scripts
-          scripts: {
-            'whirl':              ['vendor/whirl/dist/whirl.css'],
-            'classyloader':       ['vendor/jquery-classyloader/js/jquery.classyloader.min.js'],
-            'animo':              ['vendor/animo.js/animo.js'],
-            'fastclick':          ['vendor/fastclick/lib/fastclick.js'],
-            'modernizr':          ['vendor/modernizr/modernizr.js'],
-            'animate':            ['vendor/animate.css/animate.min.css'],
-            'skycons':            ['vendor/skycons/skycons.js'],
-            'icons':              ['vendor/fontawesome/css/font-awesome.min.css',
-                                   'vendor/simple-line-icons/css/simple-line-icons.css'],
-            'weather-icons':      ['vendor/weather-icons/css/weather-icons.min.css'],
-            'sparklines':         ['app/vendor/sparklines/jquery.sparkline.min.js'],
-            'wysiwyg':            ['vendor/bootstrap-wysiwyg/bootstrap-wysiwyg.js',
-                                   'vendor/bootstrap-wysiwyg/external/jquery.hotkeys.js'],
-            'slimscroll':         ['vendor/slimScroll/jquery.slimscroll.min.js'],
-            'screenfull':         ['vendor/screenfull/dist/screenfull.js'],
-            'vector-map':         ['vendor/ika.jvectormap/jquery-jvectormap-1.2.2.min.js',
-                                   'vendor/ika.jvectormap/jquery-jvectormap-1.2.2.css'],
-            'vector-map-maps':    ['vendor/ika.jvectormap/jquery-jvectormap-world-mill-en.js',
-                                   'vendor/ika.jvectormap/jquery-jvectormap-us-mill-en.js'],
-            'loadGoogleMapsJS':   ['app/vendor/gmap/load-google-maps.js'],
-            'flot-chart':         ['vendor/Flot/jquery.flot.js'],
-            'flot-chart-plugins': ['vendor/flot.tooltip/js/jquery.flot.tooltip.min.js',
-                                   'vendor/Flot/jquery.flot.resize.js',
-                                   'vendor/Flot/jquery.flot.pie.js',
-                                   'vendor/Flot/jquery.flot.time.js',
-                                   'vendor/Flot/jquery.flot.categories.js',
-                                   'vendor/flot-spline/js/jquery.flot.spline.min.js'],
-                                  // jquery core and widgets
-            'jquery-ui':          ['vendor/jquery-ui/ui/core.js',
-                                   'vendor/jquery-ui/ui/widget.js'],
-                                   // loads only jquery required modules and touch support
-            'jquery-ui-widgets':  ['vendor/jquery-ui/ui/core.js',
-                                   'vendor/jquery-ui/ui/widget.js',
-                                   'vendor/jquery-ui/ui/mouse.js',
-                                   'vendor/jquery-ui/ui/draggable.js',
-                                   'vendor/jquery-ui/ui/droppable.js',
-                                   'vendor/jquery-ui/ui/sortable.js',
-                                   'vendor/jqueryui-touch-punch/jquery.ui.touch-punch.min.js'],
-            'moment' :            ['vendor/moment/min/moment-with-locales.min.js'],
-            'inputmask':          ['vendor/jquery.inputmask/dist/jquery.inputmask.bundle.min.js'],
-            'flatdoc':            ['vendor/flatdoc/flatdoc.js'],
-            'codemirror':         ['vendor/codemirror/lib/codemirror.js',
-                                   'vendor/codemirror/lib/codemirror.css'],
-            // modes for common web files
-            'codemirror-modes-web': ['vendor/codemirror/mode/javascript/javascript.js',
-                                     'vendor/codemirror/mode/xml/xml.js',
-                                     'vendor/codemirror/mode/htmlmixed/htmlmixed.js',
-                                     'vendor/codemirror/mode/css/css.js'],
-            'taginput' :          ['vendor/bootstrap-tagsinput/dist/bootstrap-tagsinput.css',
-                                   'vendor/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js'],
-            'filestyle':          ['vendor/bootstrap-filestyle/src/bootstrap-filestyle.js'],
-            'parsley':            ['vendor/parsleyjs/dist/parsley.min.js'],
-            'fullcalendar':       ['vendor/fullcalendar/dist/fullcalendar.min.js',
-                                   'vendor/fullcalendar/dist/fullcalendar.css'],
-            'gcal':               ['vendor/fullcalendar/dist/gcal.js'],
-            'chartjs':            ['vendor/Chart.js/Chart.js'],
-            'morris':             ['vendor/raphael/raphael.js',
-                                   'vendor/morris.js/morris.js',
-                                   'vendor/morris.js/morris.css'],
-            'loaders.css':          ['vendor/loaders.css/loaders.css'],
-            'spinkit':              ['vendor/spinkit/css/spinkit.css']
-          },
-          // Angular based script (use the right module name)
-          modules: [
-            {name: 'toaster',                   files: ['vendor/angularjs-toaster/toaster.js',
-                                                       'vendor/angularjs-toaster/toaster.css']},
-            {name: 'localytics.directives',     files: ['vendor/chosen_v1.2.0/chosen.jquery.min.js',
-                                                       'vendor/chosen_v1.2.0/chosen.min.css',
-                                                       'vendor/angular-chosen-localytics/chosen.js']},
-            {name: 'ngDialog',                  files: ['vendor/ngDialog/js/ngDialog.min.js',
-                                                       'vendor/ngDialog/css/ngDialog.min.css',
-                                                       'vendor/ngDialog/css/ngDialog-theme-default.min.css'] },
-            {name: 'ngWig',                     files: ['vendor/ngWig/dist/ng-wig.min.js'] },
-            {name: 'ngTable',                   files: ['vendor/ng-table/dist/ng-table.min.js',
-                                                        'vendor/ng-table/dist/ng-table.min.css']},
-            {name: 'ngTableExport',             files: ['vendor/ng-table-export/ng-table-export.js']},
-            {name: 'angularBootstrapNavTree',   files: ['vendor/angular-bootstrap-nav-tree/dist/abn_tree_directive.js',
-                                                        'vendor/angular-bootstrap-nav-tree/dist/abn_tree.css']},
-            {name: 'htmlSortable',              files: ['vendor/html.sortable/dist/html.sortable.js',
-                                                        'vendor/html.sortable/dist/html.sortable.angular.js']},
-            {name: 'xeditable',                 files: ['vendor/angular-xeditable/dist/js/xeditable.js',
-                                                        'vendor/angular-xeditable/dist/css/xeditable.css']},
-            {name: 'angularFileUpload',         files: ['vendor/angular-file-upload/angular-file-upload.js']},
-            {name: 'ngImgCrop',                 files: ['vendor/ng-img-crop/compile/unminified/ng-img-crop.js',
-                                                        'vendor/ng-img-crop/compile/unminified/ng-img-crop.css']},
-            {name: 'ui.select',                 files: ['vendor/angular-ui-select/dist/select.js',
-                                                        'vendor/angular-ui-select/dist/select.css']},
-            {name: 'ui.codemirror',             files: ['vendor/angular-ui-codemirror/ui-codemirror.js']},
-            {name: 'angular-carousel',          files: ['vendor/angular-carousel/dist/angular-carousel.css',
-                                                        'vendor/angular-carousel/dist/angular-carousel.js']},
-            {name: 'ngGrid',                    files: ['vendor/ng-grid/build/ng-grid.min.js',
-                                                        'vendor/ng-grid/ng-grid.css' ]},
-            {name: 'infinite-scroll',           files: ['vendor/ngInfiniteScroll/build/ng-infinite-scroll.js']},
-            {name: 'ui.bootstrap-slider',       files: ['vendor/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js',
-                                                        'vendor/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css',
-                                                        'vendor/angular-bootstrap-slider/slider.js']},
-            {name: 'ui.grid',                   files: ['vendor/angular-ui-grid/ui-grid.min.css',
-                                                        'vendor/angular-ui-grid/ui-grid.min.js']},
-            {name: 'textAngular',               files: ['vendor/textAngular/dist/textAngular.css',
-                                                        'vendor/textAngular/dist/textAngular-rangy.min.js',
-                                                        'vendor/textAngular/dist/textAngular-sanitize.js',
-                                                        'vendor/textAngular/src/globals.js',
-                                                        'vendor/textAngular/src/factories.js',
-                                                        'vendor/textAngular/src/DOM.js',
-                                                        'vendor/textAngular/src/validators.js',
-                                                        'vendor/textAngular/src/taBind.js',
-                                                        'vendor/textAngular/src/main.js',
-                                                        'vendor/textAngular/dist/textAngularSetup.js'
-                                                        ], serie: true},
-            {name: 'angular-rickshaw',          files: ['vendor/d3/d3.min.js',
-                                                        'vendor/rickshaw/rickshaw.js',
-                                                        'vendor/rickshaw/rickshaw.min.css',
-                                                        'vendor/angular-rickshaw/rickshaw.js'], serie: true},
-            {name: 'angular-chartist',          files: ['vendor/chartist/dist/chartist.min.css',
-                                                        'vendor/chartist/dist/chartist.js',
-                                                        'vendor/angular-chartist.js/dist/angular-chartist.js'], serie: true},
-            {name: 'ui.map',                    files: ['vendor/angular-ui-map/ui-map.js']},
-            {name: 'datatables',                files: ['vendor/datatables/media/css/jquery.dataTables.css',
-                                                        'vendor/datatables/media/js/jquery.dataTables.js',
-                                                        'vendor/angular-datatables/dist/angular-datatables.js'], serie: true},
-            {name: 'angular-jqcloud',           files: ['vendor/jqcloud2/dist/jqcloud.css',
-                                                        'vendor/jqcloud2/dist/jqcloud.js',
-                                                        'vendor/angular-jqcloud/angular-jqcloud.js']},
-            {name: 'angularGrid',               files: ['vendor/ag-grid/dist/angular-grid.css',
-                                                        'vendor/ag-grid/dist/angular-grid.js',
-                                                        'vendor/ag-grid/dist/theme-dark.css',
-                                                        'vendor/ag-grid/dist/theme-fresh.css']},
-            {name: 'ng-nestable',               files: ['vendor/ng-nestable/src/angular-nestable.js',
-                                                        'vendor/nestable/jquery.nestable.js']},
-            {name: 'akoenig.deckgrid',          files: ['vendor/angular-deckgrid/angular-deckgrid.js']},
-            {name: 'oitozero.ngSweetAlert',     files: ['vendor/sweetalert/dist/sweetalert.css',
-                                                        'vendor/sweetalert/dist/sweetalert.min.js',
-                                                        'vendor/angular-sweetalert/SweetAlert.js']},
-            {name: 'bm.bsTour',                 files: ['vendor/bootstrap-tour/build/css/bootstrap-tour.css',
-                                                        'vendor/bootstrap-tour/build/js/bootstrap-tour-standalone.js',
-                                                        'vendor/angular-bootstrap-tour/dist/angular-bootstrap-tour.js'], serie: true},
-            {name: 'ui.knob',                   files: ['vendor/angular-knob/src/angular-knob.js',
-                                                        'vendor/jquery-knob/dist/jquery.knob.min.js']},
-            {name: 'easypiechart',              files: ['vendor/jquery.easy-pie-chart/dist/angular.easypiechart.min.js']},
-            {name: 'colorpicker.module',        files: ['vendor/angular-bootstrap-colorpicker/css/colorpicker.css',
-                                                        'vendor/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js']}
-          ]
-        })
-        ;
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .config(loadingbarConfig)
-        ;
-    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
-    function loadingbarConfig(cfpLoadingBarProvider){
-      cfpLoadingBarProvider.includeBar = true;
-      cfpLoadingBarProvider.includeSpinner = false;
-      cfpLoadingBarProvider.latencyThreshold = 500;
-      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
+.csstransforms3d .aside-collapsed .wrapper > .aside {
+        margin-left: 0;
+        -webkit-transform: translate3d(-70px, 0, 0);
+        transform: translate3d(-70px, 0, 0);
+        -webkit-transition: -webkit-transform 0.3s ease;
+        -moz-transition: -moz-transform 0.3s ease;
+        -o-transition: -o-transform 0.3s ease;
+        transition: transform 0.3s ease;
     }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .run(loadingbarRun)
-        ;
-    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
-    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
-
-      // Loading bar transition
-      // -----------------------------------
-      var thBar;
-      $rootScope.$on('$stateChangeStart', function() {
-          if($('.wrapper > section').length) // check if bar container exists
-            thBar = $timeout(function() {
-              cfpLoadingBar.start();
-            }, 0); // sets a latency Threshold
-      });
-      $rootScope.$on('$stateChangeSuccess', function(event) {
-          event.targetScope.$watch('$viewContentLoaded', function () {
-            $timeout.cancel(thBar);
-            cfpLoadingBar.complete();
-          });
-      });
-
+.csstransforms3d .aside-collapsed.aside-toggled .wrapper > section,
+.csstransforms3d .aside-collapsed.aside-toggled .wrapper > footer {
+        -webkit-transform: translate3d(70px, 0, 0);
+        transform: translate3d(70px, 0, 0);
     }
-
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.locale')
-        .config(localeConfig)
-        ;
-    localeConfig.$inject = ['tmhDynamicLocaleProvider'];
-    function localeConfig(tmhDynamicLocaleProvider){
-
-      tmhDynamicLocaleProvider.localeLocationPattern('vendor/angular-i18n/angular-locale_{{locale}}.js');
-      // tmhDynamicLocaleProvider.useStorage('$cookieStore');
-
+.csstransforms3d .aside-collapsed.aside-toggled .wrapper > .aside {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
     }
-})();
-/**=========================================================
- * Module: locale.js
- * Demo for locale settings
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.locale')
-        .controller('LocalizationController', LocalizationController);
-
-    LocalizationController.$inject = ['$rootScope', 'tmhDynamicLocale', '$locale'];
-    function LocalizationController($rootScope, tmhDynamicLocale, $locale) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $rootScope.availableLocales = {
-            'en': 'English',
-            'es': 'Spanish',
-            'de': 'German',
-            'fr': 'French',
-            'ar': 'Arabic',
-            'ja': 'Japanese',
-            'ko': 'Korean',
-            'zh': 'Chinese'};
-
-          $rootScope.model = {selectedLocale: 'en'};
-
-          $rootScope.$locale = $locale;
-
-          $rootScope.changeLocale = tmhDynamicLocale.set;
-        }
+}
+.aside-collapsed {
+    overflow-y: auto;
+}
+.aside-collapsed .wrapper > .aside,
+.aside-collapsed .wrapper > .aside > .aside-inner {
+    width: 70px;
+}
+.aside-collapsed .wrapper > .aside > .nav-floating {
+    margin-left: 70px;
+}
+@media only screen and (min-width: 768px) {
+.aside-collapsed .wrapper > section,
+.aside-collapsed .wrapper > footer {
+        margin-left: 70px;
     }
-})();
-
-/**=========================================================
- * Module: demo-pagination.js
- * Provides a simple demo for pagination
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.mailbox')
-        .controller('MailboxController', MailboxController);
-
-    function MailboxController() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.folders = [
-            {name: 'Inbox',   folder: 'inbox',   alert: 42, icon: 'fa-inbox' },
-            {name: 'Starred', folder: 'starred', alert: 10, icon: 'fa-star' },
-            {name: 'Sent',    folder: 'sent',    alert: 0,  icon: 'fa-paper-plane-o' },
-            {name: 'Draft',   folder: 'draft',   alert: 5,  icon: 'fa-edit' },
-            {name: 'Trash',   folder: 'trash',   alert: 0,  icon: 'fa-trash'}
-          ];
-
-          vm.labels = [
-            {name: 'Red',     color: 'danger'},
-            {name: 'Pink',    color: 'pink'},
-            {name: 'Blue',    color: 'info'},
-            {name: 'Yellow',  color: 'warning'}
-          ];
-
-          vm.mail = {
-            cc: false,
-            bcc: false
-          };
-          // Mailbox editr initial content
-          vm.content = '<p>Type something..</p>';
-        }
+}
+@media (max-width: 1140px) {
+.layout-fixed.aside-toggled,
+.layout-fixed.offsidebar-open {
+        overflow-y: hidden;
     }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.mailbox')
-        .controller('MailFolderController', MailFolderController);
-
-    MailFolderController.$inject = ['mails', '$stateParams'];
-    function MailFolderController(mails, $stateParams) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          vm.folder = {};
-          // no filter for inbox
-          vm.folder.folder = $stateParams.folder === 'inbox' ? '' : $stateParams.folder;
-
-          mails.all().then(function(mails){
-            vm.mails = mails;
-          });
-        }
+}
+.layout-fixed .wrapper {
+    /* only applied to sidebar */
+}
+.layout-fixed .wrapper .topnavbar-wrapper {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 121;
+}
+.layout-fixed .wrapper > aside {
+    position: fixed;
+}
+.layout-fixed .wrapper > .aside {
+    /* safari fix */
+    height: 1px;
+    min-height: 100%;
+    /* ios blanks space fix */
+}
+.layout-fixed .wrapper > .aside > .aside-inner {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+}
+.layout-fixed .wrapper > section {
+    margin-top: 114px;
+}
+@media only screen and (min-width: 768px) {
+.layout-fixed .wrapper > section {
+        margin-top: 55px;
     }
-})();
-
-// A RESTful factory for retrieving mails from json file
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.mailbox')
-        .factory('mails', mails);
-
-    mails.$inject = ['$http'];
-    function mails($http) {
-        var service = {
-            all: all,
-            get: get
-        };
-        return service;
-
-        ////////////////
-
-        function readMails() {
-          var path = 'server/mails.json';
-          return $http.get(path).then(function (resp) {
-            return resp.data.mails;
-          });
-        }
-
-        function all() {
-          return readMails();
-        }
-
-        function get(id) {
-          return readMails().then(function(mails){
-            for (var i = 0; i < mails.length; i++) {
-              if (+mails[i].id === +id) return mails[i];
-            }
-            return null;
-          });
-        }
+}
+/* IE10+ hack: safari fix breaks ie so we need to target ie only to restore */
+_:-ms-lang(x),
+.layout-fixed .wrapper > .aside > .aside-inner {
+    position: static !important;
+}
+@media only screen and (min-width: 992px) {
+.layout-boxed {
+        overflow: auto !important;
     }
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.mailbox')
-        .controller('MailViewController', MailViewController);
-
-    MailViewController.$inject = ['mails', '$stateParams'];
-    function MailViewController(mails, $stateParams) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          mails.get($stateParams.mid).then(function(mail){
-            vm.mail = mail;
-          });
-        }
+.layout-boxed .wrapper {
+        margin: 0 auto;
+        overflow: hidden;
+        box-shadow: 0 0 13px rgba(0, 0, 0, 0.25);
     }
-})();
-
-/**=========================================================
- * Module: modals.js
- * Provides a simple way to implement bootstrap modals from templates
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.maps')
-        .controller('ModalGmapController', ModalGmapController);
-
-    ModalGmapController.$inject = ['$modal'];
-    function ModalGmapController($modal) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          vm.open = function (size) {
-
-            //var modalInstance =
-            $modal.open({
-              templateUrl: '/myModalContent.html',
-              controller: ModalInstanceCtrl,
-              size: size
-            });
-          };
-
-          // Please note that $modalInstance represents a modal window (instance) dependency.
-          // It is not the same as the $modal service used above.
-
-          ModalInstanceCtrl.$inject = ['$scope', '$modalInstance', '$timeout'];
-          function ModalInstanceCtrl($scope, $modalInstance, $timeout) {
-
-            $modalInstance.opened.then(function () {
-              var position = new google.maps.LatLng(33.790807, -117.835734);
-
-              $scope.mapOptionsModal = {
-                zoom: 14,
-                center: position,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-              };
-
-              // we use timeout to wait maps to be ready before add a markers
-              $timeout(function(){
-                // 1. Add a marker at the position it was initialized
-                new google.maps.Marker({
-                  map: $scope.myMapModal,
-                  position: position
-                });
-                // 2. Trigger a resize so the map is redrawed
-                google.maps.event.trigger($scope.myMapModal, 'resize');
-                // 3. Move to the center if it is misaligned
-                $scope.myMapModal.panTo(position);
-              });
-
-            });
-
-            $scope.ok = function () {
-              $modalInstance.close('closed');
-            };
-
-            $scope.cancel = function () {
-              $modalInstance.dismiss('cancel');
-            };
-
-          }
-
-        }
+.layout-boxed .wrapper .offsidebar {
+        position: absolute !important;
     }
-
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.maps')
-        .controller('GMapController', GMapController);
-
-    GMapController.$inject = ['$timeout'];
-    function GMapController($timeout) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          var position = [
-              new google.maps.LatLng(33.790807, -117.835734),
-              new google.maps.LatLng(33.790807, -117.835734),
-              new google.maps.LatLng(33.790807, -117.835734),
-              new google.maps.LatLng(33.790807, -117.835734),
-              new google.maps.LatLng(33.787453, -117.835858)
-            ];
-
-          vm.addMarker = addMarker;
-          // we use timeout to wait maps to be ready before add a markers
-          $timeout(function(){
-            addMarker(vm.myMap1, position[0]);
-            addMarker(vm.myMap2, position[1]);
-            addMarker(vm.myMap3, position[2]);
-            addMarker(vm.myMap5, position[3]);
-          });
-
-          vm.mapOptions1 = {
-            zoom: 14,
-            center: position[0],
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            scrollwheel: false
-          };
-
-          vm.mapOptions2 = {
-            zoom: 19,
-            center: position[1],
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
-
-          vm.mapOptions3 = {
-            zoom: 14,
-            center: position[2],
-            mapTypeId: google.maps.MapTypeId.SATELLITE
-          };
-
-          vm.mapOptions4 = {
-            zoom: 14,
-            center: position[3],
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
-
-          // for multiple markers
-          $timeout(function(){
-            addMarker(vm.myMap4, position[3]);
-            addMarker(vm.myMap4, position[4]);
-          });
-
-          // custom map style
-          var MapStyles = [{'featureType':'water','stylers':[{'visibility':'on'},{'color':'#bdd1f9'}]},{'featureType':'all','elementType':'labels.text.fill','stylers':[{'color':'#334165'}]},{featureType:'landscape',stylers:[{color:'#e9ebf1'}]},{featureType:'road.highway',elementType:'geometry',stylers:[{color:'#c5c6c6'}]},{featureType:'road.arterial',elementType:'geometry',stylers:[{color:'#fff'}]},{featureType:'road.local',elementType:'geometry',stylers:[{color:'#fff'}]},{featureType:'transit',elementType:'geometry',stylers:[{color:'#d8dbe0'}]},{featureType:'poi',elementType:'geometry',stylers:[{color:'#cfd5e0'}]},{featureType:'administrative',stylers:[{visibility:'on'},{lightness:33}]},{featureType:'poi.park',elementType:'labels',stylers:[{visibility:'on'},{lightness:20}]},{featureType:'road',stylers:[{color:'#d8dbe0',lightness:20}]}];
-          vm.mapOptions5 = {
-            zoom: 14,
-            center: position[3],
-            styles: MapStyles,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            scrollwheel: false
-          };
-
-          ///////////////
-
-          function addMarker(map, position) {
-            return new google.maps.Marker({
-              map: map,
-              position: position
-            });
-          }
-
-        }
+.layout-boxed .wrapper > .aside {
+        left: inherit;
     }
-})();
-
-/**=========================================================
- * Module: vector-map.js.js
- * Init jQuery Vector Map plugin
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.maps')
-        .directive('vectorMap', vectorMap);
-
-    vectorMap.$inject = ['VectorMap'];
-    function vectorMap (VectorMap) {
-        var directive = {
-            link: link,
-            restrict: 'EA',
-            scope: {
-              seriesData: '=',
-              markersData: '='
-            }
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-
-          var defaultColors = {
-              markerColor:  '#23b7e5',      // the marker points
-              bgColor:      'transparent',      // the background
-              scaleColors:  ['#878c9a'],    // the color of the region in the serie
-              regionFill:   '#bbbec6'       // the base region color
-          };
-
-          var mapHeight   = attrs.height || '300',
-              options     = {
-                markerColor:  attrs.markerColor  || defaultColors.markerColor,
-                bgColor:      attrs.bgColor      || defaultColors.bgColor,
-                scale:        attrs.scale        || 1,
-                scaleColors:  attrs.scaleColors  || defaultColors.scaleColors,
-                regionFill:   attrs.regionFill   || defaultColors.regionFill,
-                mapName:      attrs.mapName      || 'world_mill_en'
-              };
-
-          element.css('height', mapHeight);
-
-          VectorMap.init( element , options, scope.seriesData, scope.markersData);
-        }
+.layout-boxed .wrapper,
+.layout-boxed .wrapper .topnavbar-wrapper {
+        width: 970px;
     }
-
-})();
-
-/**=========================================================
- * Module: vector-map.js
- * Services to initialize vector map plugin
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.maps')
-        .service('VectorMap', VectorMap);
-
-    function VectorMap() {
-        this.init = init;
-
-        ////////////////
-
-        function init($element, opts, series, markers) {
-          $element.vectorMap({
-            map:             opts.mapName,
-            backgroundColor: opts.bgColor,
-            zoomMin:         1,
-            zoomMax:         8,
-            zoomOnScroll:    false,
-            regionStyle: {
-              initial: {
-                'fill':           opts.regionFill,
-                'fill-opacity':   1,
-                'stroke':         'none',
-                'stroke-width':   1.5,
-                'stroke-opacity': 1
-              },
-              hover: {
-                'fill-opacity': 0.8
-              },
-              selected: {
-                fill: 'blue'
-              },
-              selectedHover: {
-              }
-            },
-            focusOn:{ x:0.4, y:0.6, scale: opts.scale},
-            markerStyle: {
-              initial: {
-                fill: opts.markerColor,
-                stroke: opts.markerColor
-              }
-            },
-            onRegionLabelShow: function(e, el, code) {
-              if ( series && series[code] )
-                el.html(el.html() + ': ' + series[code] + ' visitors');
-            },
-            markers: markers,
-            series: {
-                regions: [{
-                    values: series,
-                    scale: opts.scaleColors,
-                    normalizeFunction: 'polynomial'
-                }]
-            },
-          });
-        }
+.layout-boxed.layout-fixed .wrapper > .aside > .aside-inner {
+        left: inherit;
     }
-})();
-
-/**=========================================================
- * Module: vmaps,js
- * jVector Maps support
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.maps')
-        .controller('VectorMapController', VectorMapController);
-
-    function VectorMapController() {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.seriesData = {
-            'CA': 11100,   // Canada
-            'DE': 2510,    // Germany
-            'FR': 3710,    // France
-            'AU': 5710,    // Australia
-            'GB': 8310,    // Great Britain
-            'RU': 9310,    // Russia
-            'BR': 6610,    // Brazil
-            'IN': 7810,    // India
-            'CN': 4310,    // China
-            'US': 839,     // USA
-            'SA': 410      // Saudi Arabia
-          };
-
-          vm.markersData = [
-            { latLng:[41.90, 12.45],  name:'Vatican City'          },
-            { latLng:[43.73, 7.41],   name:'Monaco'                },
-            { latLng:[-0.52, 166.93], name:'Nauru'                 },
-            { latLng:[-8.51, 179.21], name:'Tuvalu'                },
-            { latLng:[7.11,171.06],   name:'Marshall Islands'      },
-            { latLng:[17.3,-62.73],   name:'Saint Kitts and Nevis' },
-            { latLng:[3.2,73.22],     name:'Maldives'              },
-            { latLng:[35.88,14.5],    name:'Malta'                 },
-            { latLng:[41.0,-71.06],   name:'New England'           },
-            { latLng:[12.05,-61.75],  name:'Grenada'               },
-            { latLng:[13.16,-59.55],  name:'Barbados'              },
-            { latLng:[17.11,-61.85],  name:'Antigua and Barbuda'   },
-            { latLng:[-4.61,55.45],   name:'Seychelles'            },
-            { latLng:[7.35,134.46],   name:'Palau'                 },
-            { latLng:[42.5,1.51],     name:'Andorra'               }
-          ];
-        }
+}
+@media only screen and (min-width: 1200px) {
+.layout-boxed .wrapper,
+.layout-boxed .wrapper .topnavbar-wrapper {
+        width: 1140px;
     }
-})();
-
-/**=========================================================
- * Module: navbar-search.js
- * Navbar search toggler * Auto dismiss on ESC key
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .directive('searchOpen', searchOpen)
-        .directive('searchDismiss', searchDismiss);
-
-    //
-    // directives definition
-    //
-
-    function searchOpen () {
-        var directive = {
-            controller: searchOpenController,
-            restrict: 'A'
-        };
-        return directive;
-
+}
+/* ========================================================================
+ Component: layout-extra.less
+ ========================================================================== */
+.hidden-footer .wrapper > footer {
+    display: none;
+}
+.hidden-footer .wrapper > section {
+    margin-bottom: 0 !important;
+}
+.layout-fs .wrapper > section {
+    position: absolute;
+    top: 114px;
+    left: 0;
+    right: 0;
+    bottom: 60px;
+    height: auto;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+@media only screen and (min-width: 480px) {
+.layout-fs .wrapper > section {
+        overflow: hidden;
     }
-
-    function searchDismiss () {
-        var directive = {
-            controller: searchDismissController,
-            restrict: 'A'
-        };
-        return directive;
-
+}
+@media only screen and (min-width: 768px) {
+.layout-fs .wrapper > section {
+        top: 55px;
     }
-
-    //
-    // Contrller definition
-    //
-
-    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchOpenController ($scope, $element, NavSearch) {
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.toggle);
+}
+.layout-fs .wrapper > section > .content-wrapper {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+}
+.layout-fs.hidden-footer .wrapper > section {
+    bottom: 0;
+}
+.d-table,
+.d-table-fixed {
+    display: table;
+    width: 100%;
+    height: 100%;
+    min-height: 240px;
+    border-spacing: 0;
+}
+.d-table-fixed {
+    table-layout: fixed;
+}
+.d-row {
+    display: table-row;
+    height: 100%;
+}
+.d-cell,
+.d-cell-wrapper {
+    position: relative;
+    display: table-cell;
+    height: 100%;
+    width: 100%;
+    vertical-align: top;
+    overflow: auto;
+}
+.d-cell-wrapper {
+    display: block;
+}
+.d-cell-wrapper .d-cell-inner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+@media only screen and (max-width: 767px) {
+.d-table-fixed {
+        display: block;
     }
-
-    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchDismissController ($scope, $element, NavSearch) {
-
-      var inputSelector = '.navbar-form input[type="text"]';
-
-      $(inputSelector)
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('keyup', function(e) {
-          if (e.keyCode === 27) // ESC
-            NavSearch.dismiss();
-        });
-
-      // click anywhere closes the search
-      $(document).on('click', NavSearch.dismiss);
-      // dismissable options
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.dismiss);
+.d-table-fixed > .d-cell {
+        display: block;
+        width: auto;
+        height: auto;
     }
-
-})();
-
-
-/**=========================================================
- * Module: nav-search.js
- * Services to share navbar search functions
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .service('NavSearch', NavSearch);
-
-    function NavSearch() {
-        this.toggle = toggle;
-        this.dismiss = dismiss;
-
-        ////////////////
-
-        var navbarFormSelector = 'form.navbar-form';
-
-        function toggle() {
-          var navbarForm = $(navbarFormSelector);
-
-          navbarForm.toggleClass('open');
-
-          var isOpen = navbarForm.hasClass('open');
-
-          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
-        }
-
-        function dismiss() {
-          $(navbarFormSelector)
-            .removeClass('open') // Close control
-            .find('input[type="text"]').blur() // remove focus
-            .val('') // Empty input
-            ;
-        }
+}
+/* Target Firefox only */
+@-moz-document url-prefix() {
+.d-table,
+.d-table-desktop {
+        height: 240px;
+        min-height: 100%;
     }
-})();
-
-/**=========================================================
- * Module: demo-notify.js
- * Provides a simple demo for notify
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.notify')
-        .controller('NotifyDemoCtrl', NotifyDemoCtrl);
-
-    NotifyDemoCtrl.$inject = ['Notify', '$timeout'];
-    function NotifyDemoCtrl(Notify, $timeout) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          vm.msgHtml = '<em class="fa fa-check"></em> Message with icon..';
-
-          vm.notifyMsg = 'Some messages here..';
-          vm.notifyOpts = {
-            status: 'danger',
-            pos: 'bottom-center'
-          };
-
-          // Service usage example
-          $timeout(function(){
-
-            Notify.alert(
-                'This is a custom message from notify..',
-                {status: 'success'}
-            );
-
-          }, 500);
-        }
+.d-cell-inner {
+        overflow: auto;
     }
-})();
-
-/**=========================================================
- * Module: notify.js
- * Directive for notify plugin
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.notify')
-        .directive('notify', notify);
-
-    notify.$inject = ['$window', 'Notify'];
-    function notify ($window, Notify) {
-
-        var directive = {
-            link: link,
-            restrict: 'A',
-            scope: {
-              options: '=',
-              message: '='
-            }
-        };
-        return directive;
-
-        function link(scope, element) {
-
-          element.on('click', function (e) {
-            e.preventDefault();
-            Notify.alert(scope.message, scope.options);
-          });
-        }
-
+}
+.fh {
+    height: 100% !important;
+}
+.fw {
+    width: 100% !important;
+}
+.scroll {
+    overflow: auto;
+}
+.scroll-y {
+    overflow-y: auto;
+}
+.scroll-y {
+    overflow-y: auto;
+}
+.layout-h .wrapper > section {
+    max-width: 1140px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.layout-h .wrapper > section > .content-wrapper > h3 {
+    display: none;
+}
+.layout-h .wrapper > section {
+    margin-top: 0;
+}
+.layout-h .wrapper > .offsidebar {
+    margin-top: 55px;
+}
+.layout-h .wrapper > footer {
+    margin: 0;
+}
+.layout-h.layout-fixed .wrapper > section,
+.layout-h.layout-fixed .wrapper > .offsidebar {
+    margin-top: 55px;
+}
+.aside-float .wrapper {
+    box-shadow: 0 0 0 #000;
+}
+.aside-float .wrapper > footer {
+    border: 0;
+}
+.aside-float .wrapper > .aside {
+    padding: 15px 0;
+    background: transparent;
+}
+.aside-float .wrapper > .aside > .aside-inner {
+    height: 100%;
+    top: 15px;
+    bottom: 15px;
+    left: inherit;
+}
+.aside-float .wrapper > .aside .sidebar {
+    border: 1px solid #e4eaec;
+}
+.aside-float .wrapper > .aside .sidebar:after {
+    display: none;
+}
+@media only screen and (min-width: 768px) {
+.aside-float .wrapper > section {
+        padding-left: 15px;
     }
-
-})();
-
-
-/**=========================================================
- * Module: notify.js
- * Create a notifications that fade out automatically.
- * Based on Notify addon from UIKit (http://getuikit.com/docs/addons_notify.html)
- =========================================================*/
-
-(function() {
-    'use strict';
-    angular
-        .module('app.notify')
-        .service('Notify', Notify);
-
-    Notify.$inject = ['$timeout'];
-    function Notify($timeout) {
-
-        this.alert = notifyAlert;
-
-        ////////////////
-
-        function notifyAlert(msg, opts) {
-            if ( msg ) {
-                $timeout(function(){
-                    $.notify(msg, opts || {});
-                });
-            }
-        }
+.aside-float .wrapper > footer {
+        left: 15px;
     }
-
-})();
-
-/**
- * Notify Addon definition as jQuery plugin
- * Adapted version to work with Bootstrap classes
- * More information http://getuikit.com/docs/addons_notify.html
- */
-(function($){
-    'use strict';
-    var containers = {},
-        messages   = {},
-        notify     =  function(options){
-            if ($.type(options) === 'string') {
-                options = { message: options };
-            }
-            if (arguments[1]) {
-                options = $.extend(options, $.type(arguments[1]) === 'string' ? {status:arguments[1]} : arguments[1]);
-            }
-            return (new Message(options)).show();
-        },
-        closeAll  = function(group, instantly){
-            var id;
-            if(group) {
-                for(id in messages) { if(group===messages[id].group) messages[id].close(instantly); }
-            } else {
-                for(id in messages) { messages[id].close(instantly); }
-            }
-        };
-    var Message = function(options){
-        // var $this = this;
-        this.options = $.extend({}, Message.defaults, options);
-        this.uuid    = 'ID'+(new Date().getTime())+'RAND'+(Math.ceil(Math.random() * 100000));
-        this.element = $([
-            // @geedmo: alert-dismissable enables bs close icon
-            '<div class="uk-notify-message alert-dismissable">',
-                '<a class="close">&times;</a>',
-                '<div>'+this.options.message+'</div>',
-            '</div>'
-        ].join('')).data('notifyMessage', this);
-        // status
-        if (this.options.status) {
-            this.element.addClass('alert alert-'+this.options.status);
-            this.currentstatus = this.options.status;
-        }
-        this.group = this.options.group;
-        messages[this.uuid] = this;
-        if(!containers[this.options.pos]) {
-            containers[this.options.pos] = $('<div class="uk-notify uk-notify-'+this.options.pos+'"></div>').appendTo('body').on('click', '.uk-notify-message', function(){
-                $(this).data('notifyMessage').close();
-            });
-        }
-    };
-    $.extend(Message.prototype, {
-        uuid: false,
-        element: false,
-        timout: false,
-        currentstatus: '',
-        group: false,
-        show: function() {
-            if (this.element.is(':visible')) return;
-            var $this = this;
-            containers[this.options.pos].show().prepend(this.element);
-            var marginbottom = parseInt(this.element.css('margin-bottom'), 10);
-            this.element.css({'opacity':0, 'margin-top': -1*this.element.outerHeight(), 'margin-bottom':0}).animate({'opacity':1, 'margin-top': 0, 'margin-bottom':marginbottom}, function(){
-                if ($this.options.timeout) {
-                    var closefn = function(){ $this.close(); };
-                    $this.timeout = setTimeout(closefn, $this.options.timeout);
-                    $this.element.hover(
-                        function() { clearTimeout($this.timeout); },
-                        function() { $this.timeout = setTimeout(closefn, $this.options.timeout);  }
-                    );
-                }
-            });
-            return this;
-        },
-        close: function(instantly) {
-            var $this    = this,
-                finalize = function(){
-                    $this.element.remove();
-                    if(!containers[$this.options.pos].children().length) {
-                        containers[$this.options.pos].hide();
-                    }
-                    delete messages[$this.uuid];
-                };
-            if(this.timeout) clearTimeout(this.timeout);
-            if(instantly) {
-                finalize();
-            } else {
-                this.element.animate({'opacity':0, 'margin-top': -1* this.element.outerHeight(), 'margin-bottom':0}, function(){
-                    finalize();
-                });
-            }
-        },
-        content: function(html){
-            var container = this.element.find('>div');
-            if(!html) {
-                return container.html();
-            }
-            container.html(html);
-            return this;
-        },
-        status: function(status) {
-            if(!status) {
-                return this.currentstatus;
-            }
-            this.element.removeClass('alert alert-'+this.currentstatus).addClass('alert alert-'+status);
-            this.currentstatus = status;
-            return this;
-        }
-    });
-    Message.defaults = {
-        message: '',
-        status: 'normal',
-        timeout: 5000,
-        group: null,
-        pos: 'top-center'
-    };
-
-    $.notify          = notify;
-    $.notify.message  = Message;
-    $.notify.closeAll = closeAll;
-
-    return notify;
-}(jQuery));
-
-/**=========================================================
- * Module: access-login.js
- * Demo for login api
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.pages')
-        .controller('LoginFormController', LoginFormController);
-
-    LoginFormController.$inject = ['$http', '$state'];
-    function LoginFormController($http, $state) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          // bind here all data from the form
-          vm.account = {};
-          // place the message if something goes wrong
-          vm.authMsg = '';
-
-          vm.login = function() {
-            vm.authMsg = '';
-
-            if(vm.loginForm.$valid) {
-
-              $http
-                .post('api/account/login', {email: vm.account.email, password: vm.account.password})
-                .then(function(response) {
-                  // assumes if ok, response is an object with some data, if not, a string with error
-                  // customize according to your api
-                  if ( !response.account ) {
-                    vm.authMsg = 'Incorrect credentials.';
-                  }else{
-                    $state.go('app.dashboard');
-                  }
-                }, function() {
-                  vm.authMsg = 'Server Request Error';
-                });
-            }
-            else {
-              // set as dirty if the user click directly to login so we show the validation messages
-              /*jshint -W106*/
-              vm.loginForm.account_email.$dirty = true;
-              vm.loginForm.account_password.$dirty = true;
-            }
-          };
-        }
+}
+.aside-float .wrapper .content-wrapper {
+    border: 0;
+}
+.aside-float .wrapper .content-wrapper > h3,
+.aside-float .wrapper .content-wrapper > .content-heading {
+    padding-top: 30px;
+    border: 0;
+    background-color: transparent;
+}
+.aside-float .wrapper .content-wrapper > .unwrap {
+    margin: 0 !important;
+}
+.aside-float.aside-toggled .wrapper > .aside {
+    -webkit-transition-delay: 0.05s;
+    transition-delay: 0.05s;
+}
+.aside-float.aside-toggled .wrapper > .aside > .aside-inner {
+    margin-left: 15px;
+}
+.aside-float.aside-toggled .wrapper > section {
+    padding-left: 15px;
+}
+.aside-float.aside-toggled .wrapper > footer {
+    left: 15px;
+}
+@media only screen and (min-width: 768px) {
+.aside-float.aside-collapsed .topnavbar .navbar-header {
+        width: 100px;
     }
-})();
-
-/**=========================================================
- * Module: access-register.js
- * Demo for register account api
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.pages')
-        .controller('RegisterFormController', RegisterFormController);
-
-    RegisterFormController.$inject = ['$http', '$state'];
-    function RegisterFormController($http, $state) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          // bind here all data from the form
-          vm.account = {};
-          // place the message if something goes wrong
-          vm.authMsg = '';
-
-          vm.register = function() {
-            vm.authMsg = '';
-
-            if(vm.registerForm.$valid) {
-
-              $http
-                .post('api/account/register', {email: vm.account.email, password: vm.account.password})
-                .then(function(response) {
-                  // assumes if ok, response is an object with some data, if not, a string with error
-                  // customize according to your api
-                  if ( !response.account ) {
-                    vm.authMsg = response;
-                  }else{
-                    $state.go('app.dashboard');
-                  }
-                }, function() {
-                  vm.authMsg = 'Server Request Error';
-                });
-            }
-            else {
-              // set as dirty if the user click directly to login so we show the validation messages
-              /*jshint -W106*/
-              vm.registerForm.account_email.$dirty = true;
-              vm.registerForm.account_password.$dirty = true;
-              vm.registerForm.account_agreed.$dirty = true;
-
-            }
-          };
-        }
+.aside-float.layout-fs .wrapper > section > .content-wrapper {
+        padding: 0 0 0 20px;
     }
-})();
-
-/**=========================================================
- * Collapse panels * [panel-collapse]
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.panels')
-        .directive('panelCollapse', panelCollapse);
-
-    function panelCollapse () {
-        var directive = {
-            controller: Controller,
-            restrict: 'A',
-            scope: false
-        };
-        return directive;
+.aside-float .wrapper > .aside > .aside-inner {
+        margin-left: 15px;
     }
-
-    Controller.$inject = ['$scope', '$element', '$timeout', '$localStorage'];
-    function Controller ($scope, $element, $timeout, $localStorage) {
-      var storageKeyName = 'panelState';
-
-      // Prepare the panel to be collapsible
-      var $elem   = $($element),
-          parent  = $elem.closest('.panel'), // find the first parent panel
-          panelId = parent.attr('id');
-
-      // Load the saved state if exists
-      var currentState = loadPanelState( panelId );
-      if ( typeof currentState !== 'undefined') {
-        $timeout(function(){
-            $scope[panelId] = currentState; },
-          10);
-      }
-
-      // bind events to switch icons
-      $element.bind('click', function(e) {
-        e.preventDefault();
-        savePanelState( panelId, !$scope[panelId] );
-
-      });
-
-      // Controller helpers
-      function savePanelState(id, state) {
-        if(!id) return false;
-        var data = angular.fromJson($localStorage[storageKeyName]);
-        if(!data) { data = {}; }
-        data[id] = state;
-        $localStorage[storageKeyName] = angular.toJson(data);
-      }
-      function loadPanelState(id) {
-        if(!id) return false;
-        var data = angular.fromJson($localStorage[storageKeyName]);
-        if(data) {
-          return data[id];
-        }
-      }
+}
+@media only screen and (min-width: 992px) {
+.aside-float.layout-boxed .wrapper > .aside > .aside-inner {
+        margin-left: 0;
     }
-
-})();
-
-/**=========================================================
- * Dismiss panels * [panel-dismiss]
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.panels')
-        .directive('panelDismiss', panelDismiss);
-
-    function panelDismiss () {
-
-        var directive = {
-            controller: Controller,
-            restrict: 'A'
-        };
-        return directive;
-
+.aside-float.layout-boxed .wrapper > section {
+        padding-left: 0;
     }
-
-    Controller.$inject = ['$scope', '$element', '$q', 'Utils'];
-    function Controller ($scope, $element, $q, Utils) {
-      var removeEvent   = 'panel-remove',
-          removedEvent  = 'panel-removed';
-
-      $element.on('click', function (e) {
-        e.preventDefault();
-
-        // find the first parent panel
-        var parent = $(this).closest('.panel');
-
-        removeElement();
-
-        function removeElement() {
-          var deferred = $q.defer();
-          var promise = deferred.promise;
-
-          // Communicate event destroying panel
-          $scope.$emit(removeEvent, parent.attr('id'), deferred);
-          promise.then(destroyMiddleware);
-        }
-
-        // Run the animation before destroy the panel
-        function destroyMiddleware() {
-          if(Utils.support.animation) {
-            parent.animo({animation: 'bounceOut'}, destroyPanel);
-          }
-          else destroyPanel();
-        }
-
-        function destroyPanel() {
-
-          var col = parent.parent();
-          parent.remove();
-          // remove the parent if it is a row and is empty and not a sortable (portlet)
-          col
-            .filter(function() {
-            var el = $(this);
-            return (el.is('[class*="col-"]:not(.sortable)') && el.children('*').length === 0);
-          }).remove();
-
-          // Communicate event destroyed panel
-          $scope.$emit(removedEvent, parent.attr('id'));
-
-        }
-
-      });
+}
+.aside-float.aside-toggled.layout-fs .wrapper > section > .content-wrapper {
+    padding: 0 0 0 20px;
+}
+/* ========================================================================
+ Component: layout-animation.less
+ ========================================================================== */
+.wrapper > .aside {
+    -webkit-transition: width .2s cubic-bezier(0.35, 0, 0.25, 1), translate .2s cubic-bezier(0.35, 0, 0.25, 1);
+    -o-transition: width .2s cubic-bezier(0.35, 0, 0.25, 1), translate .2s cubic-bezier(0.35, 0, 0.25, 1);
+    transition: width .2s cubic-bezier(0.35, 0, 0.25, 1), translate .2s cubic-bezier(0.35, 0, 0.25, 1);
+}
+.aside-inner,
+.navbar-header,
+.sidebar > .nav > li {
+    -webkit-transition: width 0.2s cubic-bezier(0.35, 0, 0.25, 1);
+    -o-transition: width 0.2s cubic-bezier(0.35, 0, 0.25, 1);
+    transition: width 0.2s cubic-bezier(0.35, 0, 0.25, 1);
+}
+.wrapper > section {
+    -webkit-transition: margin-left 0.2s cubic-bezier(0.35, 0, 0.25, 1);
+    -o-transition: margin-left 0.2s cubic-bezier(0.35, 0, 0.25, 1);
+    transition: margin-left 0.2s cubic-bezier(0.35, 0, 0.25, 1);
+}
+.sidebar > .nav .label {
+    -webkit-animation: fadeInRight 1s;
+    -o-animation: fadeInRight 1s;
+    animation: fadeInRight 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+.aside-collapsed .sidebar > .nav .label {
+    -webkit-animation: fadeIn 1s;
+    -o-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+.sidebar .nav > li > a {
+    -webkit-animation: fadeInLeft 0.5s;
+    -o-animation: fadeInLeft 0.5s;
+    animation: fadeInLeft 0.5s;
+}
+.sidebar > .nav > .nav-heading,
+.sidebar > .nav > li > a > span,
+.navbar-brand .brand-logo {
+    -webkit-animation: fadeIn 1s;
+    -o-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+.sidebar li > a,
+.sidebar li > .nav-item,
+.sidebar > .nav > .nav-heading {
+    white-space: nowrap;
+}
+.aside-collapsed .user-block-picture {
+    -webkit-transition: width 0.2s cubic-bezier(0.35, 0, 0.25, 1);
+    -o-transition: width 0.2s cubic-bezier(0.35, 0, 0.25, 1);
+    transition: width 0.2s cubic-bezier(0.35, 0, 0.25, 1);
+}
+.aside-collapsed .user-block {
+    -webkit-transition: padding 0.2s cubic-bezier(0.35, 0, 0.25, 1);
+    -o-transition: padding 0.2s cubic-bezier(0.35, 0, 0.25, 1);
+    transition: padding 0.2s cubic-bezier(0.35, 0, 0.25, 1);
+}
+/* ========================================================================
+ Component: top-navbar.less
+ ========================================================================== */
+.topnavbar {
+    -webkit-backface-visibility: hidden;
+    /* fixes chrome jump */
+    margin-bottom: 0;
+    border-radius: 0;
+    background-color: #fff;
+    z-index: 1050;
+    border: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+@media only screen and (min-width: 768px) {
+.topnavbar .navbar-header {
+        width: 220px;
+        text-align: center;
     }
-})();
-
-
-
-/**=========================================================
- * Refresh panels
- * [panel-refresh] * [data-spinner="standard"]
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.panels')
-        .directive('panelRefresh', panelRefresh);
-
-    function panelRefresh () {
-        var directive = {
-            controller: Controller,
-            restrict: 'A',
-            scope: false
-        };
-        return directive;
-
+.topnavbar .navbar-header .navbar-brand {
+        width: 100%;
     }
-
-    Controller.$inject = ['$scope', '$element'];
-    function Controller ($scope, $element) {
-      var refreshEvent   = 'panel-refresh',
-          whirlClass     = 'whirl',
-          defaultSpinner = 'standard';
-
-      // catch clicks to toggle panel refresh
-      $element.on('click', function (e) {
-        e.preventDefault();
-
-        var $this   = $(this),
-            panel   = $this.parents('.panel').eq(0),
-            spinner = $this.data('spinner') || defaultSpinner
-            ;
-
-        // start showing the spinner
-        panel.addClass(whirlClass + ' ' + spinner);
-
-        // Emit event when refresh clicked
-        $scope.$emit(refreshEvent, panel.attr('id'));
-
-      });
-
-      // listen to remove spinner
-      $scope.$on('removeSpinner', removeSpinner);
-
-      // method to clear the spinner when done
-      function removeSpinner (ev, id) {
-        if (!id) return;
-        var newid = id.charAt(0) === '#' ? id : ('#'+id);
-        angular
-          .element(newid)
-          .removeClass(whirlClass);
-      }
+}
+.topnavbar {
+    position: relative;
+}
+.topnavbar .navbar-header {
+    background-color: transparent;
+    background-image: -webkit-linear-gradient(left, #23b7e5 0%, #51c6ea 100%);
+    background-image: -o-linear-gradient(left, #23b7e5 0%, #51c6ea 100%);
+    background-image: linear-gradient(to right, #23b7e5 0%, #51c6ea 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff23b7e5', endColorstr='#ff51c6ea', GradientType=1);
+}
+@media only screen and (min-width: 768px) {
+.topnavbar .navbar-header {
+        background-image: none;
     }
-})();
-
-
-
-/**=========================================================
- * Module panel-tools.js
- * Directive tools to control panels.
- * Allows collapse, refresh and dismiss (remove)
- * Saves panel state in browser storage
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.panels')
-        .directive('paneltool', paneltool);
-
-    paneltool.$inject = ['$compile', '$timeout'];
-    function paneltool ($compile, $timeout) {
-        var directive = {
-            link: link,
-            restrict: 'E',
-            scope: false
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-
-          var templates = {
-            /* jshint multistr: true */
-            collapse:'<a href="#" panel-collapse="" tooltip="Collapse Panel" ng-click="{{panelId}} = !{{panelId}}"> \
-                        <em ng-show="{{panelId}}" class="fa fa-plus"></em> \
-                        <em ng-show="!{{panelId}}" class="fa fa-minus"></em> \
-                      </a>',
-            dismiss: '<a href="#" panel-dismiss="" tooltip="Close Panel">\
-                       <em class="fa fa-times"></em>\
-                     </a>',
-            refresh: '<a href="#" panel-refresh="" data-spinner="{{spinner}}" tooltip="Refresh Panel">\
-                       <em class="fa fa-refresh"></em>\
-                     </a>'
-          };
-
-          var tools = scope.panelTools || attrs;
-
-          $timeout(function() {
-            element.html(getTemplate(element, tools )).show();
-            $compile(element.contents())(scope);
-
-            element.addClass('pull-right');
-          });
-
-          function getTemplate( elem, attrs ){
-            var temp = '';
-            attrs = attrs || {};
-            if(attrs.toolCollapse)
-              temp += templates.collapse.replace(/{{panelId}}/g, (elem.parent().parent().attr('id')) );
-            if(attrs.toolDismiss)
-              temp += templates.dismiss;
-            if(attrs.toolRefresh)
-              temp += templates.refresh.replace(/{{spinner}}/g, attrs.toolRefresh);
-            return temp;
-          }
-        }// link
+}
+.topnavbar .navbar-header {
+    position: relative;
+    z-index: 11;
+}
+.topnavbar .navbar-header .navbar-brand {
+    padding: 0;
+}
+.topnavbar .navbar-header .brand-logo > img,
+.topnavbar .navbar-header .brand-logo-collapsed > img {
+    margin: 0 auto;
+}
+.topnavbar .navbar-header .brand-logo {
+    display: block;
+    padding: 10px 15px;
+}
+.topnavbar .navbar-header .brand-logo-collapsed {
+    display: none;
+    padding: 6px 15px;
+}
+.topnavbar .navbar-nav > li > a,
+.topnavbar .navbar-nav > .open > a {
+    color: #23b7e5;
+}
+.topnavbar .navbar-nav > li > a:hover,
+.topnavbar .navbar-nav > .open > a:hover,
+.topnavbar .navbar-nav > li > a:focus,
+.topnavbar .navbar-nav > .open > a:focus {
+    color: #117391;
+}
+.topnavbar .navbar-nav > .active > a,
+.topnavbar .navbar-nav > .open > a,
+.topnavbar .navbar-nav > .active > a:hover,
+.topnavbar .navbar-nav > .open > a:hover,
+.topnavbar .navbar-nav > .active > a:focus,
+.topnavbar .navbar-nav > .open > a:focus {
+    background-color: transparent;
+}
+.topnavbar .navbar-nav > li > [data-toggle='navbar-search'] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 20;
+    font-size: 16px;
+    line-height: 55px;
+    color: #fff;
+    padding-top: 0;
+    padding-bottom: 0;
+    -webkit-transition: color 0.3s ease;
+    -o-transition: color 0.3s ease;
+    transition: color 0.3s ease;
+}
+@media only screen and (min-width: 768px) {
+.topnavbar .navbar-nav > li > [data-toggle='navbar-search'] {
+        color: #ffffff;
     }
-
-})();
-
-/**=========================================================
- * Module: demo-panels.js
- * Provides a simple demo for panel actions
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.panels')
-        .controller('PanelsCtrl', PanelsCtrl);
-
-    PanelsCtrl.$inject = ['$scope', '$timeout'];
-    function PanelsCtrl($scope, $timeout) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          // PANEL COLLAPSE EVENTS
-          // -----------------------------------
-
-          // We can use panel id name for the boolean flag to [un]collapse the panel
-          $scope.$watch('panelDemo1',function(newVal){
-
-              console.log('panelDemo1 collapsed: ' + newVal);
-
-          });
-
-
-          // PANEL DISMISS EVENTS
-          // -----------------------------------
-
-          // Before remove panel
-          $scope.$on('panel-remove', function(event, id, deferred){
-
-            console.log('Panel #' + id + ' removing');
-
-            // Here is obligatory to call the resolve() if we pretend to remove the panel finally
-            // Not calling resolve() will NOT remove the panel
-            // It's up to your app to decide if panel should be removed or not
-            deferred.resolve();
-
-          });
-
-          // Panel removed ( only if above was resolved() )
-          $scope.$on('panel-removed', function(event, id){
-
-            console.log('Panel #' + id + ' removed');
-
-          });
-
-
-          // PANEL REFRESH EVENTS
-          // -----------------------------------
-
-          $scope.$on('panel-refresh', function(event, id) {
-            var secs = 3;
-
-            console.log('Refreshing during ' + secs +'s #'+id);
-
-            $timeout(function(){
-              // directive listen for to remove the spinner
-              // after we end up to perform own operations
-              $scope.$broadcast('removeSpinner', id);
-
-              console.log('Refreshed #' + id);
-
-            }, 3000);
-
-          });
-
-          // PANELS VIA NG-REPEAT
-          // -----------------------------------
-
-          $scope.panels = [
-            {
-              id: 'panelRepeat1',
-              title: 'Panel Title 1',
-              body: 'Nulla eget lorem leo, sit amet elementum lorem. '
-            },
-            {
-              id: 'panelRepeat2',
-              title: 'Panel Title 2',
-              body: 'Nulla eget lorem leo, sit amet elementum lorem. '
-            },
-            {
-              id: 'panelRepeat3',
-              title: 'Panel Title 3',
-              body: 'Nulla eget lorem leo, sit amet elementum lorem. '
-            }
-          ];
-        }
-
-    } //PanelsCtrl
-
-})();
-
-
-/**=========================================================
- * Drag and drop any panel based on jQueryUI portlets
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.panels')
-        .directive('portlet', portlet);
-
-    portlet.$inject = ['$timeout', '$localStorage'];
-    function portlet ($timeout, $localStorage) {
-      var storageKeyName = 'portletState';
-
-      return {
-        restrict: 'A',
-        link: link
-      };
-
-      /////////////
-
-      function link(scope, element) {
-
-        // not compatible with jquery sortable
-        if(!$.fn.sortable) return;
-
-        element.sortable({
-          connectWith:          '[portlet]', // same like directive
-          items:                'div.panel',
-          handle:               '.portlet-handler',
-          opacity:              0.7,
-          placeholder:          'portlet box-placeholder',
-          cancel:               '.portlet-cancel',
-          forcePlaceholderSize: true,
-          iframeFix:            false,
-          tolerance:            'pointer',
-          helper:               'original',
-          revert:               200,
-          forceHelperSize:      true,
-          update:               savePortletOrder,
-          create:               loadPortletOrder
-        });
-
-      }
-
-
-      function savePortletOrder(event/*, ui*/) {
-        var self = event.target;
-        var data = angular.fromJson($localStorage[storageKeyName]);
-
-        if(!data) { data = {}; }
-
-        data[self.id] = $(self).sortable('toArray');
-
-        if(data) {
-          $timeout(function() {
-            $localStorage[storageKeyName] = angular.toJson(data);
-          });
-        }
-      }
-
-      function loadPortletOrder(event) {
-        var self = event.target;
-        var data = angular.fromJson($localStorage[storageKeyName]);
-
-        if(data) {
-
-          var porletId = self.id,
-              panels   = data[porletId];
-
-          if(panels) {
-            var portlet = $('#'+porletId);
-
-            $.each(panels, function(index, value) {
-               $('#'+value).appendTo(portlet);
-            });
-          }
-
-        }
-      }
-
+}
+@media only screen and (max-width: 767px) {
+.sidebar-toggle {
+        position: absolute !important;
+        top: 5px;
+        right: 0;
+        z-index: 3001;
     }
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.preloader')
-        .directive('preloader', preloader);
-
-    preloader.$inject = ['$animate', '$timeout', '$q'];
-    function preloader ($animate, $timeout, $q) {
-
-        var directive = {
-            restrict: 'EAC',
-            template:
-              '<div class="preloader-progress">' +
-                  '<div class="preloader-progress-bar" ' +
-                       'ng-style="{width: loadCounter + \'%\'}"></div>' +
-              '</div>'
-            ,
-            link: link
-        };
-        return directive;
-
-        ///////
-
-        function link(scope, el) {
-
-          scope.loadCounter = 0;
-
-          var counter  = 0,
-              timeout;
-
-          // disables scrollbar
-          angular.element('body').css('overflow', 'hidden');
-          // ensure class is present for styling
-          el.addClass('preloader');
-
-          appReady().then(endCounter);
-
-          timeout = $timeout(startCounter);
-
-          ///////
-
-          function startCounter() {
-
-            var remaining = 100 - counter;
-            counter = counter + (0.015 * Math.pow(1 - Math.sqrt(remaining), 2));
-
-            scope.loadCounter = parseInt(counter, 10);
-
-            timeout = $timeout(startCounter, 20);
-          }
-
-          function endCounter() {
-
-            $timeout.cancel(timeout);
-
-            scope.loadCounter = 100;
-
-            $timeout(function(){
-              // animate preloader hiding
-              $animate.addClass(el, 'preloader-hidden');
-              // retore scrollbar
-              angular.element('body').css('overflow', '');
-            }, 300);
-          }
-
-          function appReady() {
-            var deferred = $q.defer();
-            var viewsLoaded = 0;
-            // if this doesn't sync with the real app ready
-            // a custom event must be used instead
-            var off = scope.$on('$viewContentLoaded', function () {
-              viewsLoaded ++;
-              // we know there are at least two views to be loaded
-              // before the app is ready (1-index.html 2-app*.html)
-              if ( viewsLoaded === 2) {
-                // with resolve this fires only once
-                $timeout(function(){
-                  deferred.resolve();
-                }, 3000);
-
-                off();
-              }
-
-            });
-
-            return deferred.promise;
-          }
-
-        } //link
+.sidebar-toggle > em {
+        color: white;
     }
-
-})();
-/**=========================================================
- * Module: helpers.js
- * Provides helper functions for routes definition
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.routes')
-        .provider('RouteHelpers', RouteHelpersProvider)
-        ;
-
-    RouteHelpersProvider.$inject = ['APP_REQUIRES'];
-    function RouteHelpersProvider(APP_REQUIRES) {
-
-      /* jshint validthis:true */
-      return {
-        // provider access level
-        basepath: basepath,
-        resolveFor: resolveFor,
-        // controller access level
-        $get: function() {
-          return {
-            basepath: basepath,
-            resolveFor: resolveFor
-          };
-        }
-      };
-
-      // Set here the base of the relative path
-      // for all app views
-      function basepath(uri) {
-        return 'app/views/' + uri;
-      }
-
-      // Generates a resolve object by passing script names
-      // previously configured in constant.APP_REQUIRES
-      function resolveFor() {
-        var _args = arguments;
-        return {
-          deps: ['$ocLazyLoad','$q', function ($ocLL, $q) {
-            // Creates a promise chain for each argument
-            var promise = $q.when(1); // empty promise
-            for(var i=0, len=_args.length; i < len; i ++){
-              promise = andThen(_args[i]);
-            }
-            return promise;
-
-            // creates promise to chain dynamically
-            function andThen(_arg) {
-              // also support a function that returns a promise
-              if(typeof _arg === 'function')
-                  return promise.then(_arg);
-              else
-                  return promise.then(function() {
-                    // if is a module, pass the name. If not, pass the array
-                    var whatToLoad = getRequired(_arg);
-                    // simple error check
-                    if(!whatToLoad) return $.error('Route resolve: Bad resource name [' + _arg + ']');
-                    // finally, return a promise
-                    return $ocLL.load( whatToLoad );
-                  });
-            }
-            // check and returns required data
-            // analyze module items with the form [name: '', files: []]
-            // and also simple array of script files (for not angular js)
-            function getRequired(name) {
-              if (APP_REQUIRES.modules)
-                  for(var m in APP_REQUIRES.modules)
-                      if(APP_REQUIRES.modules[m].name && APP_REQUIRES.modules[m].name === name)
-                          return APP_REQUIRES.modules[m];
-              return APP_REQUIRES.scripts && APP_REQUIRES.scripts[name];
-            }
-
-          }]};
-      } // resolveFor
-
+}
+.nav-wrapper {
+    padding: 0 15px;
+    background-color: transparent;
+}
+.nav-wrapper .nav.navbar-nav {
+    float: left;
+}
+.nav-wrapper .nav.navbar-nav.navbar-right {
+    float: right;
+}
+.nav-wrapper .nav > li {
+    position: static;
+    float: left;
+}
+.nav-wrapper .navbar-nav .open .dropdown-menu {
+    position: absolute;
+    background-color: #ffffff;
+    left: 0px;
+    right: 0px;
+    border-top: 1px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
+}
+.topnavbar .navbar-form {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    height: 55px;
+    z-index: 9001;
+    -webkit-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    border: 0;
+    border-bottom: 1px solid #e1e2e3;
+}
+.topnavbar .navbar-form .form-group {
+    height: 100%;
+    width: 100%;
+}
+.topnavbar .navbar-form .form-control {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+    width: 100%;
+}
+.topnavbar .navbar-form.open {
+    top: 0;
+}
+.topnavbar .navbar-form .has-feedback .form-control-feedback {
+    height: 30px;
+    cursor: pointer;
+    top: 50%;
+    margin-top: -15px;
+    line-height: 30px;
+    margin-right: 10px;
+    color: #c1c2c3;
+    font-size: 1.5em;
+    pointer-events: auto;
+}
+@media only screen and (min-width: 768px) {
+.topnavbar .navbar-form {
+        left: 220px;
     }
-
-
-})();
-
-
-/**=========================================================
- * Module: config.js
- * App routes and resources configuration
- =========================================================*/
+}
+@media only screen and (min-width: 768px) {
+.topnavbar {
+        border: 0;
+        background-color: #23b7e5;
+        background-image: -webkit-linear-gradient(left, #23b7e5 0%, #51c6ea 100%);
+        background-image: -o-linear-gradient(left, #23b7e5 0%, #51c6ea 100%);
+        background-image: linear-gradient(to right, #23b7e5 0%, #51c6ea 100%);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff23b7e5', endColorstr='#ff51c6ea', GradientType=1);
+    }
+.topnavbar .navbar-header {
+        background-image: none;
+        background-repeat: no-repeat;
+        filter: none;
+    }
+.topnavbar .navbar-nav > a {
+        box-shadow: 0 0 0 #000 inset;
+        -webkit-transition: all 0.2s;
+        -o-transition: all 0.2s;
+        transition: all 0.2s;
+    }
+.topnavbar .navbar-nav > .open > a,
+.topnavbar .navbar-nav > .open > a:hover,
+.topnavbar .navbar-nav > .open > a:focus {
+        box-shadow: 0 -3px 0 #19a5d1 inset;
+        -webkit-transition: all 0.2s;
+        -o-transition: all 0.2s;
+        transition: all 0.2s;
+    }
+.topnavbar .navbar-nav > li > a,
+.topnavbar .navbar-nav > .open > a {
+        color: #ffffff;
+    }
+.topnavbar .navbar-nav > li > a:hover,
+.topnavbar .navbar-nav > .open > a:hover,
+.topnavbar .navbar-nav > li > a:focus,
+.topnavbar .navbar-nav > .open > a:focus {
+        color: #117391;
+    }
+.topnavbar .navbar-nav > li > [data-toggle='navbar-search'] {
+        position: static;
+    }
+.nav-wrapper {
+        position: relative;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+        z-index: 10;
+    }
+.nav-wrapper:before,
+.nav-wrapper:after {
+        content: " ";
+        display: table;
+    }
+.nav-wrapper:after {
+        clear: both;
+    }
+.nav-wrapper .nav > li {
+        position: relative;
+    }
+.nav-wrapper .navbar-nav .open .dropdown-menu {
+        left: auto;
+        right: auto;
+    }
+.nav-wrapper .navbar-nav.navbar-right .open .dropdown-menu {
+        left: auto;
+        right: 0;
+    }
+}
+@media only screen and (min-width: 768px) {
+.aside-collapsed .topnavbar .navbar-header .brand-logo {
+        display: none;
+    }
+.aside-collapsed .topnavbar .navbar-header .brand-logo-collapsed {
+        display: block;
+    }
+.aside-collapsed .topnavbar .navbar-header {
+        width: 70px;
+    }
+.aside-collapsed .topnavbar .navbar-form {
+        left: 70px;
+    }
+}
+/* ========================================================================
+ Component: sidebar.less
+ ========================================================================== */
+.sidebar {
+    height: 100%;
+    padding-bottom: 20px;
+    background-color: #ffffff;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+.sidebar:after {
+    content: "";
+    background: rgba(0, 0, 0, 0.15);
+    position: absolute;
+    display: block;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 1px;
+    -webkit-transform: translateZ(0px);
+}
+.sidebar .nav-heading {
+    padding: 12px 15px;
+    color: #919da8;
+    font-size: 13px;
+    letter-spacing: .035em;
+    pointer-events: none;
+    cursor: default;
+}
+.sidebar > .nav {
+    position: relative;
+}
+.sidebar > .nav > .nav-heading:first-child {
+    padding-top: 20px;
+}
+.sidebar > .nav > li {
+    border-left: 3px solid transparent;
+    -webkit-transition: border-left-color 0.4s ease;
+    -o-transition: border-left-color 0.4s ease;
+    transition: border-left-color 0.4s ease;
+}
+.sidebar > .nav > li > a,
+.sidebar > .nav > li > .nav-item {
+    padding: 12px 24px;
+    color: #515253;
+    letter-spacing: .025em;
+    font-weight: normal;
+}
+.sidebar > .nav > li > a:focus,
+.sidebar > .nav > li > .nav-item:focus,
+.sidebar > .nav > li > a:hover,
+.sidebar > .nav > li > .nav-item:hover {
+    text-decoration: none;
+    outline: none;
+    color: #23b7e5;
+}
+.sidebar > .nav > li > a > em,
+.sidebar > .nav > li > .nav-item > em {
+    width: 2em;
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    color: inherits;
+}
+.sidebar > .nav > li.active,
+.sidebar > .nav > li.open,
+.sidebar > .nav > li.active > a,
+.sidebar > .nav > li.open > a,
+.sidebar > .nav > li.active .nav,
+.sidebar > .nav > li.open .nav {
+    background-color: #fcfcfc;
+    color: #23b7e5;
+}
+.sidebar > .nav > li.active > a > em,
+.sidebar > .nav > li.open > a > em {
+    color: #23b7e5;
+}
+.sidebar > .nav > li.active {
+    border-left-color: #23b7e5;
+}
+.sidebar > .nav .label {
+    display: block;
+}
+@media only screen and (min-width: 1025px) {
+.sidebar:not(.show-scrollbar) {
+        margin-right: -17px;
+        overflow-y: scroll;
+    }
+}
+.sidebar-subnav {
+    background-color: #ffffff;
+}
+.sidebar-subnav > .sidebar-subnav-header {
+    color: #515253;
+    display: none;
+    padding: 10px 20px;
+    font-weight: bold;
+}
+.sidebar-subnav > li {
+    border-left: 0 !important;
+}
+.sidebar-subnav > li > a,
+.sidebar-subnav > li > .nav-item {
+    display: block;
+    position: relative;
+    padding: 10px 20px;
+    padding-left: 53px;
+    font-weight: normal;
+    background-color: transparent !important;
+    color: #515253;
+}
+.sidebar-subnav > li > a:focus,
+.sidebar-subnav > li > .nav-item:focus,
+.sidebar-subnav > li > a:hover,
+.sidebar-subnav > li > .nav-item:hover {
+    color: #23b7e5;
+}
+.sidebar-subnav > li > a > em,
+.sidebar-subnav > li > .nav-item > em {
+    display: inline-block;
+    width: 2em;
+    margin: 0 0 0 -2em;
+}
+.sidebar-subnav > li.active > a,
+.sidebar-subnav > li.active > .nav-item {
+    color: #23b7e5;
+}
+.sidebar-subnav > li.active > a:after,
+.sidebar-subnav > li.active > .nav-item:after {
+    border-color: #23b7e5;
+    background-color: #23b7e5;
+}
+.sidebar-subnav > li .nav > li {
+    padding-left: 5px;
+}
+.sidebar-subnav.nav-floating {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    margin-left: -1px;
+}
+.sidebar-subnav.nav-floating,
+.sidebar-subnav.nav-floating .collapse {
+    height: auto !important;
+    display: block !important;
+    visibility: visible !important;
+}
+.sidebar-subnav.nav-floating > .sidebar-subnav-header {
+    display: block;
+}
+.sidebar-subnav.nav-floating li > a {
+    padding-left: 20px;
+}
+.sidebar-subnav.nav-floating li > a em {
+    margin-left: 0;
+}
+@media only screen and (min-width: 768px) {
+.sidebar > .nav .label {
+        margin: 2px 0 0 0;
+    }
+}
+.aside-collapsed .sidebar {
+    overflow-x: hidden;
+}
+.aside-collapsed .sidebar > .nav .nav,
+.aside-collapsed .sidebar > .nav > .nav-heading,
+.aside-collapsed .sidebar > .nav > li > a > span {
+    display: none !important;
+}
+.aside-collapsed .sidebar > .nav > li {
+    width: 68px;
+}
+.aside-collapsed .sidebar > .nav > li > a,
+.aside-collapsed .sidebar > .nav > li > .nav-item {
+    text-indent: -3px;
+    padding: 20px 0;
+    text-align: center;
+}
+.aside-collapsed .sidebar > .nav > li > a > em,
+.aside-collapsed .sidebar > .nav > li > .nav-item > em {
+    font-size: 1.6em;
+    width: auto;
+}
+.aside-collapsed .sidebar > .nav > li > a:focus,
+.aside-collapsed .sidebar > .nav > li > .nav-item:focus {
+    background-color: transparent;
+}
+.aside-collapsed .sidebar > .nav > li > a:focus > em,
+.aside-collapsed .sidebar > .nav > li > .nav-item:focus > em {
+    color: inherit;
+}
+.aside-collapsed .sidebar .nav .label {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    text-indent: 0;
+}
+/* ========================================================================
+ Component: offsidebar.less
+ ========================================================================== */
+.offsidebar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 235px;
+    margin-top: 114px;
+    border-left: 1px solid #cccccc;
+    background-color: #ffffff;
+    color: #515253;
+    z-index: 116;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.offsidebar > nav {
+    min-height: 100%;
+    overflow: hidden;
+    -webkit-transform: translateZ(0px);
+}
+.offsidebar .progress {
+    border: 0;
+}
+.offsidebar .nav > li > a:hover,
+.offsidebar .nav > li > a:focus {
+    background-color: rgba(0, 0, 0, 0.025);
+}
+.offsidebar .tab-content {
+    padding: 0;
+    border: 0;
+}
+.offsidebar .nav-tabs.nav-justified > li > a,
+.offsidebar .nav-tabs.nav-justified > li > a:hover,
+.offsidebar .nav-tabs.nav-justified > li > a:focus {
+    background-color: transparent;
+    border: 0;
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 0;
+    color: #909fa7;
+}
+.offsidebar .nav-tabs.nav-justified > li.active > a {
+    color: #5d9cec;
+}
+@media only screen and (min-width: 768px) {
+.offsidebar {
+        margin-top: 55px;
+    }
+}
+.offsidebar-open .offsidebar {
+    overflow-y: auto;
+}
+@media only screen and (min-width: 768px) {
+.offsidebar-open {
+        overflow-y: auto;
+    }
+}
+.no-csstransforms3d .offsidebar {
+    right: -235px;
+}
+.no-csstransforms3d .offsidebar-open .offsidebar {
+    right: 0;
+}
+/* Transformation ready devices*/
+.csstransforms3d .offsidebar {
+    -webkit-transform: translate3d(235px, 0, 0);
+    transform: translate3d(235px, 0, 0);
+}
+.csstransforms3d .offsidebar-open .offsidebar {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+/* ========================================================================
+ Component: preloader.less
+ ========================================================================== */
+/*@noflip*/
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #23b7e5;
+    background-image: -webkit-linear-gradient(90deg, #23b7e5 10%, #19a9d5 90%);
+    /* Chrome 10+, Saf5.1+ */
+    background-image: -moz-linear-gradient(90deg, #23b7e5 10%, #19a9d5 90%);
+    /* FF3.6+ */
+    background-image: -ms-linear-gradient(90deg, #23b7e5 10%, #19a9d5 90%);
+    /* IE10 */
+    background-image: -o-linear-gradient(90deg, #23b7e5 10%, #19a9d5 90%);
+    /* Opera 11.10+ */
+    background-image: linear-gradient(90deg, #23b7e5 10%, #19a9d5 90%);
+    /* W3C */
+    z-index: 9999;
+    -webkit-transition: opacity 0.65s;
+    -o-transition: opacity 0.65s;
+    transition: opacity 0.65s;
+}
+/*@noflip*/
+.preloader-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100px;
+    height: 30px;
+    margin: auto;
+    overflow: auto;
+    background-image: url(../img/preloader/preloader.empty.png);
+    background-size: 100px 30px;
+}
+/*@noflip*/
+.preloader-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    min-width: 10px;
+    background-image: url(../img/preloader/preloader.full.png);
+    background-size: 100px 30px;
+}
+.preloader-hidden {
+    display: none;
+}
+.preloader-hidden-add {
+    opacity: 1;
+    display: block;
+}
+.preloader-hidden-add .preloader-progress {
+    -webkit-transition: -webkit-transform 0.4s ease;
+    -moz-transition: -moz-transform 0.4s ease;
+    -o-transition: -o-transform 0.4s ease;
+    transition: transform 0.4s ease;
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    -o-transform: scale(0);
+    transform: scale(0);
+}
+.preloader-hidden-add-active {
+    opacity: 0;
+}
+/* ========================================================================
+ Component: breadcrumbs.less
+ ========================================================================== */
+.breadcrumb a {
+    color: #000;
+}
+.breadcrumb {
+    font-weight: normal;
+    border-radius: 0;
+    color: #909fa7;
+    padding: 10px 20px;
+    background-color: transparent;
+    padding: 10px 15px;
+}
+h3 + .breadcrumb,
+.content-heading + .breadcrumb {
+    margin: -25px -25px 20px -20px;
+    background-color: #fafbfc;
+    border-top: 1px solid #cfdbe2;
+    border-bottom: 1px solid #cfdbe2;
+}
+h3 > .breadcrumb,
+.content-heading > .breadcrumb {
+    background: transparent;
+    font-size: 13px;
+    border: 0;
+    padding: 10px 10px 0 0;
+    margin-bottom: 0;
+}
+h3 > .breadcrumb.pull-right,
+.content-heading > .breadcrumb.pull-right {
+    margin: -2px 0 0;
+}
+/* ========================================================================
+ Component: loading-bar.less
+ ========================================================================== */
 /*
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.routes')
-        .config(routesConfig);
-
-    routesConfig.$inject = ['$stateProvider', '$locationProvider', '$urlRouterProvider', 'RouteHelpersProvider'];
-    function routesConfig($stateProvider, $locationProvider, $urlRouterProvider, helper){
-
-        // Set the following to true to enable the HTML5 Mode
-        // You may have to set <base> tag in index and a routing configuration in your server
-        $locationProvider.html5Mode(false);
-
-        // defaults to dashboard
-        $urlRouterProvider.otherwise('/app/dashboard');
-
-        //
-        // Application Routes
-        // -----------------------------------
-        $stateProvider
-          .state('app', {
-              url: '/app',
-              abstract: true,
-              templateUrl: helper.basepath('app.html'),
-              resolve: helper.resolveFor('fastclick', 'modernizr', 'icons', 'screenfull', 'animo', 'sparklines', 'slimscroll', 'classyloader', 'toaster', 'whirl')
-          })
-          .state('app.dashboard', {
-              url: '/dashboard',
-              title: 'Dashboard',
-              templateUrl: helper.basepath('dashboard.html'),
-              resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'weather-icons')
-          })
-          .state('app.dashboard_v2', {
-              url: '/dashboard_v2',
-              title: 'Dashboard v2',
-              templateUrl: helper.basepath('dashboard_v2.html'),
-              controller: 'DashboardV2Controller',
-              controllerAs: 'dash2',
-              resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
-          })
-          .state('app.dashboard_v3', {
-              url: '/dashboard_v3',
-              title: 'Dashboard v3',
-              controller: 'DashboardV3Controller',
-              controllerAs: 'dash3',
-              templateUrl: helper.basepath('dashboard_v3.html'),
-              resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'vector-map', 'vector-map-maps')
-          })
-          .state('app.widgets', {
-              url: '/widgets',
-              title: 'Widgets',
-              templateUrl: helper.basepath('widgets.html'),
-              resolve: helper.resolveFor('loadGoogleMapsJS', function() { return loadGoogleMaps(); }, 'ui.map')
-          })
-          .state('app.buttons', {
-              url: '/buttons',
-              title: 'Buttons',
-              templateUrl: helper.basepath('buttons.html')
-          })
-          .state('app.colors', {
-              url: '/colors',
-              title: 'Colors',
-              templateUrl: helper.basepath('colors.html')
-          })
-          .state('app.localization', {
-              url: '/localization',
-              title: 'Localization',
-              templateUrl: helper.basepath('localization.html')
-          })
-          .state('app.infinite-scroll', {
-              url: '/infinite-scroll',
-              title: 'Infinite Scroll',
-              templateUrl: helper.basepath('infinite-scroll.html'),
-              resolve: helper.resolveFor('infinite-scroll')
-          })
-          .state('app.navtree', {
-              url: '/navtree',
-              title: 'Nav Tree',
-              templateUrl: helper.basepath('nav-tree.html'),
-              resolve: helper.resolveFor('angularBootstrapNavTree')
-          })
-          .state('app.nestable', {
-              url: '/nestable',
-              title: 'Nestable',
-              templateUrl: helper.basepath('nestable.html'),
-              resolve: helper.resolveFor('ng-nestable')
-          })
-          .state('app.sortable', {
-              url: '/sortable',
-              title: 'Sortable',
-              templateUrl: helper.basepath('sortable.html'),
-              resolve: helper.resolveFor('htmlSortable')
-          })
-          .state('app.notifications', {
-              url: '/notifications',
-              title: 'Notifications',
-              templateUrl: helper.basepath('notifications.html')
-          })
-          .state('app.carousel', {
-              url: '/carousel',
-              title: 'Carousel',
-              templateUrl: helper.basepath('carousel.html'),
-              resolve: helper.resolveFor('angular-carousel')
-          })
-          .state('app.ngdialog', {
-              url: '/ngdialog',
-              title: 'ngDialog',
-              templateUrl: helper.basepath('ngdialog.html'),
-              resolve: angular.extend(helper.resolveFor('ngDialog'),{
-                tpl: function() { return { path: helper.basepath('ngdialog-template.html') }; }
-              }),
-              controller: 'DialogIntroCtrl'
-          })
-          .state('app.sweetalert', {
-            url: '/sweetalert',
-            title: 'SweetAlert',
-            templateUrl: helper.basepath('sweetalert.html'),
-            resolve: helper.resolveFor('oitozero.ngSweetAlert')
-          })
-          .state('app.tour', {
-            url: '/tour',
-            title: 'Tour',
-            templateUrl: helper.basepath('tour.html'),
-            resolve: helper.resolveFor('bm.bsTour')
-          })
-          .state('app.interaction', {
-              url: '/interaction',
-              title: 'Interaction',
-              templateUrl: helper.basepath('interaction.html')
-          })
-          .state('app.spinners', {
-              url: '/spinners',
-              title: 'Spinners',
-              templateUrl: helper.basepath('spinners.html'),
-              resolve: helper.resolveFor('loaders.css', 'spinkit')
-          })
-          .state('app.dropdown-animations', {
-              url: '/dropdown-animations',
-              title: 'Dropdown Animations',
-              templateUrl: helper.basepath('dropdown-animations.html')
-          })
-          .state('app.panels', {
-              url: '/panels',
-              title: 'Panels',
-              templateUrl: helper.basepath('panels.html')
-          })
-          .state('app.portlets', {
-              url: '/portlets',
-              title: 'Portlets',
-              templateUrl: helper.basepath('portlets.html'),
-              resolve: helper.resolveFor('jquery-ui', 'jquery-ui-widgets')
-          })
-          .state('app.maps-google', {
-              url: '/maps-google',
-              title: 'Maps Google',
-              templateUrl: helper.basepath('maps-google.html'),
-              resolve: helper.resolveFor('loadGoogleMapsJS', function() { return loadGoogleMaps(); }, 'ui.map')
-          })
-          .state('app.maps-vector', {
-              url: '/maps-vector',
-              title: 'Maps Vector',
-              templateUrl: helper.basepath('maps-vector.html'),
-              controller: 'VectorMapController',
-              controllerAs: 'vmap',
-              resolve: helper.resolveFor('vector-map', 'vector-map-maps')
-          })
-          .state('app.grid', {
-              url: '/grid',
-              title: 'Grid',
-              templateUrl: helper.basepath('grid.html')
-          })
-          .state('app.grid-masonry', {
-              url: '/grid-masonry',
-              title: 'Grid Masonry',
-              templateUrl: helper.basepath('grid-masonry.html')
-          })
-          .state('app.grid-masonry-deck', {
-              url: '/grid-masonry-deck',
-              title: 'Grid Masonry',
-              templateUrl: helper.basepath('grid-masonry-deck.html'),
-              resolve: helper.resolveFor('spinkit', 'akoenig.deckgrid')
-          })
-          .state('app.typo', {
-              url: '/typo',
-              title: 'Typo',
-              templateUrl: helper.basepath('typo.html')
-          })
-          .state('app.icons-font', {
-              url: '/icons-font',
-              title: 'Icons Font',
-              templateUrl: helper.basepath('icons-font.html'),
-              resolve: helper.resolveFor('icons')
-          })
-          .state('app.icons-weather', {
-              url: '/icons-weather',
-              title: 'Icons Weather',
-              templateUrl: helper.basepath('icons-weather.html'),
-              resolve: helper.resolveFor('weather-icons', 'skycons')
-          })
-          .state('app.form-standard', {
-              url: '/form-standard',
-              title: 'Form Standard',
-              templateUrl: helper.basepath('form-standard.html')
-          })
-          .state('app.form-extended', {
-              url: '/form-extended',
-              title: 'Form Extended',
-              templateUrl: helper.basepath('form-extended.html'),
-              resolve: helper.resolveFor('colorpicker.module', 'codemirror', 'moment', 'taginput','inputmask','localytics.directives', 'ui.bootstrap-slider', 'ngWig', 'filestyle', 'textAngular')
-          })
-          .state('app.form-validation', {
-              url: '/form-validation',
-              title: 'Form Validation',
-              templateUrl: helper.basepath('form-validation.html'),
-              resolve: helper.resolveFor('ui.select', 'taginput','inputmask','localytics.directives')
-          })
-          .state('app.form-parsley', {
-              url: '/form-parsley',
-              title: 'Form Validation - Parsley',
-              templateUrl: helper.basepath('form-parsley.html'),
-              resolve: helper.resolveFor('parsley')
-          })
-          .state('app.form-wizard', {
-              url: '/form-wizard',
-              title: 'Form Wizard',
-              templateUrl: helper.basepath('form-wizard.html'),
-              resolve: helper.resolveFor('parsley')
-          })
-          .state('app.form-upload', {
-              url: '/form-upload',
-              title: 'Form upload',
-              templateUrl: helper.basepath('form-upload.html'),
-              resolve: helper.resolveFor('angularFileUpload', 'filestyle')
-          })
-          .state('app.form-xeditable', {
-              url: '/form-xeditable',
-              templateUrl: helper.basepath('form-xeditable.html'),
-              resolve: helper.resolveFor('xeditable')
-          })
-          .state('app.form-imagecrop', {
-              url: '/form-imagecrop',
-              templateUrl: helper.basepath('form-imagecrop.html'),
-              resolve: helper.resolveFor('ngImgCrop', 'filestyle')
-          })
-          .state('app.form-uiselect', {
-              url: '/form-uiselect',
-              templateUrl: helper.basepath('form-uiselect.html'),
-              controller: 'uiSelectController',
-              controllerAs: 'uisel',
-              resolve: helper.resolveFor('ui.select')
-          })
-          .state('app.chart-flot', {
-              url: '/chart-flot',
-              title: 'Chart Flot',
-              templateUrl: helper.basepath('chart-flot.html'),
-              resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
-          })
-          .state('app.chart-radial', {
-              url: '/chart-radial',
-              title: 'Chart Radial',
-              templateUrl: helper.basepath('chart-radial.html'),
-              resolve: helper.resolveFor('classyloader', 'ui.knob', 'easypiechart')
-          })
-          .state('app.chart-js', {
-              url: '/chart-js',
-              title: 'Chart JS',
-              templateUrl: helper.basepath('chart-js.html'),
-              resolve: helper.resolveFor('chartjs')
-          })
-          .state('app.chart-rickshaw', {
-              url: '/chart-rickshaw',
-              title: 'Chart Rickshaw',
-              templateUrl: helper.basepath('chart-rickshaw.html'),
-              resolve: helper.resolveFor('angular-rickshaw')
-          })
-          .state('app.chart-morris', {
-              url: '/chart-morris',
-              title: 'Chart Morris',
-              templateUrl: helper.basepath('chart-morris.html'),
-              resolve: helper.resolveFor('morris')
-          })
-          .state('app.chart-chartist', {
-              url: '/chart-chartist',
-              title: 'Chart Chartist',
-              templateUrl: helper.basepath('chart-chartist.html'),
-              resolve: helper.resolveFor('angular-chartist')
-          })
-          .state('app.table-standard', {
-              url: '/table-standard',
-              title: 'Table Standard',
-              templateUrl: helper.basepath('table-standard.html')
-          })
-          .state('app.table-extended', {
-              url: '/table-extended',
-              title: 'Table Extended',
-              templateUrl: helper.basepath('table-extended.html')
-          })
-          .state('app.table-datatable', {
-              url: '/table-datatable',
-              title: 'Table Datatable',
-              templateUrl: helper.basepath('table-datatable.html'),
-              resolve: helper.resolveFor('datatables')
-          })
-          .state('app.table-xeditable', {
-              url: '/table-xeditable',
-              templateUrl: helper.basepath('table-xeditable.html'),
-              resolve: helper.resolveFor('xeditable')
-          })
-          .state('app.table-ngtable', {
-              url: '/table-ngtable',
-              templateUrl: helper.basepath('table-ngtable.html'),
-              resolve: helper.resolveFor('ngTable', 'ngTableExport')
-          })
-          .state('app.table-nggrid', {
-              url: '/table-nggrid',
-              templateUrl: helper.basepath('table-ng-grid.html'),
-              resolve: helper.resolveFor('ngGrid')
-          })
-          .state('app.table-uigrid', {
-              url: '/table-uigrid',
-              templateUrl: helper.basepath('table-uigrid.html'),
-              resolve: helper.resolveFor('ui.grid')
-          })
-          .state('app.table-angulargrid', {
-              url: '/table-angulargrid',
-              templateUrl: helper.basepath('table-angulargrid.html'),
-              resolve: helper.resolveFor('angularGrid')
-          })
-          .state('app.timeline', {
-              url: '/timeline',
-              title: 'Timeline',
-              templateUrl: helper.basepath('timeline.html')
-          })
-          .state('app.calendar', {
-              url: '/calendar',
-              title: 'Calendar',
-              templateUrl: helper.basepath('calendar.html'),
-              resolve: helper.resolveFor('jquery-ui', 'jquery-ui-widgets', 'moment', 'fullcalendar')
-          })
-          .state('app.invoice', {
-              url: '/invoice',
-              title: 'Invoice',
-              templateUrl: helper.basepath('invoice.html')
-          })
-          .state('app.search', {
-              url: '/search',
-              title: 'Search',
-              templateUrl: helper.basepath('search.html'),
-              resolve: helper.resolveFor('moment', 'localytics.directives', 'ui.bootstrap-slider')
-          })
-          .state('app.todo', {
-              url: '/todo',
-              title: 'Todo List',
-              templateUrl: helper.basepath('todo.html'),
-              controller: 'TodoController',
-              controllerAs: 'todo'
-          })
-          .state('app.profile', {
-              url: '/profile',
-              title: 'Profile',
-              templateUrl: helper.basepath('profile.html'),
-              resolve: helper.resolveFor('loadGoogleMapsJS', function() { return loadGoogleMaps(); }, 'ui.map')
-          })
-          .state('app.code-editor', {
-              url: '/code-editor',
-              templateUrl: helper.basepath('code-editor.html'),
-              controller: 'CodeEditorController',
-              controllerAs: 'coder',
-              resolve: {
-                  deps: helper.resolveFor('codemirror', 'ui.codemirror', 'codemirror-modes-web', 'angularBootstrapNavTree').deps,
-                  filetree: ['LoadTreeService', function (LoadTreeService) {
-                      return LoadTreeService.get().$promise.then(function (res) {
-                          return res.data;
-                      });
-                  }]
-              }
-          })
-          .state('app.template', {
-              url: '/template',
-              title: 'Blank Template',
-              templateUrl: helper.basepath('template.html')
-          })
-          .state('app.documentation', {
-              url: '/documentation',
-              title: 'Documentation',
-              templateUrl: helper.basepath('documentation.html'),
-              resolve: helper.resolveFor('flatdoc')
-          })
-          // Forum
-          // -----------------------------------
-          .state('app.forum', {
-              url: '/forum',
-              title: 'Forum',
-              templateUrl: helper.basepath('forum.html')
-          })
-          .state('app.forum-topics', {
-              url: '/forum/topics/:catid',
-              title: 'Forum Topics',
-              templateUrl: helper.basepath('forum-topics.html')
-          })
-          .state('app.forum-discussion', {
-              url: '/forum/discussion/:topid',
-              title: 'Forum Discussion',
-              templateUrl: helper.basepath('forum-discussion.html')
-          })
-          // Blog
-          // -----------------------------------
-          .state('app.blog', {
-              url: '/blog',
-              title: 'Blog',
-              templateUrl: helper.basepath('blog.html'),
-              resolve: helper.resolveFor('angular-jqcloud')
-          })
-          .state('app.blog-post', {
-              url: '/post',
-              title: 'Post',
-              templateUrl: helper.basepath('blog-post.html'),
-              resolve: helper.resolveFor('angular-jqcloud')
-          })
-          .state('app.articles', {
-              url: '/articles',
-              title: 'Articles',
-              templateUrl: helper.basepath('blog-articles.html'),
-              resolve: helper.resolveFor('datatables')
-          })
-          .state('app.article-view', {
-              url: '/article/:id',
-              title: 'Article View',
-              templateUrl: helper.basepath('blog-article-view.html'),
-              resolve: helper.resolveFor('ui.select', 'textAngular')
-          })
-          // eCommerce
-          // -----------------------------------
-          .state('app.orders', {
-              url: '/orders',
-              title: 'Orders',
-              templateUrl: helper.basepath('ecommerce-orders.html'),
-              resolve: helper.resolveFor('datatables')
-          })
-          .state('app.order-view', {
-              url: '/order-view',
-              title: 'Order View',
-              templateUrl: helper.basepath('ecommerce-order-view.html')
-          })
-          .state('app.products', {
-              url: '/products',
-              title: 'Products',
-              templateUrl: helper.basepath('ecommerce-products.html'),
-              resolve: helper.resolveFor('datatables')
-          })
-          .state('app.product-view', {
-              url: '/product/:id',
-              title: 'Product View',
-              templateUrl: helper.basepath('ecommerce-product-view.html')
-          })
-          // Mailbox
-          // -----------------------------------
-          .state('app.mailbox', {
-              url: '/mailbox',
-              title: 'Mailbox',
-              abstract: true,
-              templateUrl: helper.basepath('mailbox.html')
-          })
-          .state('app.mailbox.folder', {
-              url: '/folder/:folder',
-              title: 'Mailbox',
-              templateUrl: helper.basepath('mailbox-inbox.html')
-          })
-          .state('app.mailbox.view', {
-              url : '/{mid:[0-9]{1,4}}',
-              title: 'View mail',
-              templateUrl: helper.basepath('mailbox-view.html'),
-              resolve: helper.resolveFor('ngWig')
-          })
-          .state('app.mailbox.compose', {
-              url: '/compose',
-              title: 'Mailbox',
-              templateUrl: helper.basepath('mailbox-compose.html'),
-              resolve: helper.resolveFor('ngWig')
-          })
-          //
-          // Multiple level example
-          // -----------------------------------
-          .state('app.multilevel', {
-              url: '/multilevel',
-              title: 'Multilevel',
-              template: '<h3>Multilevel Views</h3>' + '<div class="lead ba p">View @ Top Level ' + '<div ui-view=""></div> </div>'
-          })
-          .state('app.multilevel.level1', {
-              url: '/level1',
-              title: 'Multilevel - Level1',
-              template: '<div class="lead ba p">View @ Level 1' + '<div ui-view=""></div> </div>'
-          })
-          .state('app.multilevel.level1.item', {
-              url: '/item',
-              title: 'Multilevel - Level1',
-              template: '<div class="lead ba p"> Menu item @ Level 1</div>'
-          })
-          .state('app.multilevel.level1.level2', {
-              url: '/level2',
-              title: 'Multilevel - Level2',
-              template: '<div class="lead ba p">View @ Level 2'  + '<div ui-view=""></div> </div>'
-          })
-          .state('app.multilevel.level1.level2.level3', {
-              url: '/level3',
-              title: 'Multilevel - Level3',
-              template: '<div class="lead ba p">View @ Level 3' + '<div ui-view=""></div> </div>'
-          })
-          .state('app.multilevel.level1.level2.level3.item', {
-              url: '/item',
-              title: 'Multilevel - Level3 Item',
-              template: '<div class="lead ba p"> Menu item @ Level 3</div>'
-          })
-          //
-          // Single Page Routes
-          // -----------------------------------
-          .state('page', {
-              url: '/page',
-              templateUrl: 'app/pages/page.html',
-              resolve: helper.resolveFor('modernizr', 'icons'),
-              controller: ['$rootScope', function($rootScope) {
-                  $rootScope.app.layout.isBoxed = false;
-              }]
-          })
-          .state('page.login', {
-              url: '/login',
-              title: 'Login',
-              templateUrl: 'app/pages/login.html'
-          })
-          .state('page.register', {
-              url: '/register',
-              title: 'Register',
-              templateUrl: 'app/pages/register.html'
-          })
-          .state('page.recover', {
-              url: '/recover',
-              title: 'Recover',
-              templateUrl: 'app/pages/recover.html'
-          })
-          .state('page.lock', {
-              url: '/lock',
-              title: 'Lock',
-              templateUrl: 'app/pages/lock.html'
-          })
-          .state('page.404', {
-              url: '/404',
-              title: 'Not Found',
-              templateUrl: 'app/pages/404.html'
-          })
-          //
-          // Horizontal layout
-          // -----------------------------------
-          .state('app-h', {
-              url: '/app-h',
-              abstract: true,
-              templateUrl: helper.basepath( 'app-h.html' ),
-              resolve: helper.resolveFor('fastclick', 'modernizr', 'icons', 'screenfull', 'animo', 'sparklines', 'slimscroll', 'classyloader', 'toaster', 'whirl')
-          })
-          .state('app-h.dashboard_v2', {
-              url: '/dashboard_v2',
-              title: 'Dashboard v2',
-              templateUrl: helper.basepath('dashboard_v2.html'),
-              controller: 'DashboardV2Controller',
-              controllerAs: 'dash2',
-              resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
-          })
-          //
-          // CUSTOM RESOLVES
-          //   Add your own resolves properties
-          //   following this object extend
-          //   method
-          // -----------------------------------
-          // .state('app.someroute', {
-          //   url: '/some_url',
-          //   templateUrl: 'path_to_template.html',
-          //   controller: 'someController',
-          //   resolve: angular.extend(
-          //     helper.resolveFor(), {
-          //     // YOUR RESOLVES GO HERE
-          //     }
-          //   )
-          // })
-          ;
-
-    } // routesConfig
-
-})();
-
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.settings')
-        .run(settingsRun);
-
-    settingsRun.$inject = ['$rootScope', '$localStorage'];
-
-    function settingsRun($rootScope, $localStorage){
-
-      // Global Settings
-      // -----------------------------------
-      $rootScope.app = {
-        name: 'Angle',
-        description: 'Angular Bootstrap Admin Template',
-        year: ((new Date()).getFullYear()),
-        layout: {
-          isFixed: true,
-          isCollapsed: false,
-          isBoxed: false,
-          isRTL: false,
-          horizontal: false,
-          isFloat: false,
-          asideHover: false,
-          theme: null
-        },
-        useFullLayout: false,
-        hiddenFooter: false,
-        offsidebarOpen: false,
-        asideToggled: false,
-        viewAnimation: 'ng-fadeInUp'
-      };
-
-      // Setup the layout mode
-      $rootScope.app.layout.horizontal = ( $rootScope.$stateParams.layout === 'app-h') ;
-
-      // Restore layout settings
-      if( angular.isDefined($localStorage.layout) )
-        $rootScope.app.layout = $localStorage.layout;
-      else
-        $localStorage.layout = $rootScope.app.layout;
-
-      $rootScope.$watch('app.layout', function () {
-        $localStorage.layout = $rootScope.app.layout;
-      }, true);
-
-      // Close submenu when sidebar change from collapsed to normal
-      $rootScope.$watch('app.layout.isCollapsed', function(newValue) {
-        if( newValue === false )
-          $rootScope.$broadcast('closeSidebarMenu');
-      });
-
-    }
-
-})();
+ * angular-loading-bar v0.6.0 * https://chieffancypants.github.io/angular-loading-bar
+ * Copyright (c) 2014 Wes Cruver * License: MIT
  */
-
-/**=========================================================
- * Module: sidebar-menu.js
- * Handle sidebar collapsible elements
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sidebar')
-        .controller('SidebarController', SidebarController);
-
-    SidebarController.$inject = ['$rootScope', '$scope', '$state', 'SidebarLoader', 'Utils'];
-    function SidebarController($rootScope, $scope, $state, SidebarLoader,  Utils) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          var collapseList = [];
-
-          // demo: when switch from collapse to hover, close all items
-          $rootScope.$watch('app.layout.asideHover', function(oldVal, newVal){
-            if ( newVal === false && oldVal === true) {
-              closeAllBut(-1);
-            }
-          });
-
-
-          // Load menu from json file
-          // -----------------------------------
-
-          SidebarLoader.getMenu(sidebarReady);
-
-          function sidebarReady(items) {
-            $scope.menuItems = items;
-          }
-
-          // Handle sidebar and collapse items
-          // ----------------------------------
-
-          $scope.getMenuItemPropClasses = function(item) {
-            return (item.heading ? 'nav-heading' : '') +
-                   (isActive(item) ? ' active' : '') ;
-          };
-
-          $scope.addCollapse = function($index, item) {
-            collapseList[$index] = $rootScope.app.layout.asideHover ? true : !isActive(item);
-          };
-
-          $scope.isCollapse = function($index) {
-            return (collapseList[$index]);
-          };
-
-          $scope.toggleCollapse = function($index, isParentItem) {
-
-            // collapsed sidebar doesn't toggle drodopwn
-            if( Utils.isSidebarCollapsed() || $rootScope.app.layout.asideHover ) return true;
-
-            // make sure the item index exists
-            if( angular.isDefined( collapseList[$index] ) ) {
-              if ( ! $scope.lastEventFromChild ) {
-                collapseList[$index] = !collapseList[$index];
-                closeAllBut($index);
-              }
-            }
-            else if ( isParentItem ) {
-              closeAllBut(-1);
-            }
-
-            $scope.lastEventFromChild = isChild($index);
-
-            return true;
-
-          };
-
-          // Controller helpers
-          // -----------------------------------
-
-            // Check item and children active state
-            function isActive(item) {
-
-              if(!item) return;
-
-              if( !item.sref || item.sref === '#') {
-                var foundActive = false;
-                angular.forEach(item.submenu, function(value) {
-                  if(isActive(value)) foundActive = true;
-                });
-                return foundActive;
-              }
-              else
-                return $state.is(item.sref) || $state.includes(item.sref);
-            }
-
-            function closeAllBut(index) {
-              index += '';
-              for(var i in collapseList) {
-                if(index < 0 || index.indexOf(i) < 0)
-                  collapseList[i] = true;
-              }
-            }
-
-            function isChild($index) {
-              /*jshint -W018*/
-              return (typeof $index === 'string') && !($index.indexOf('-') < 0);
-            }
-
-        } // activate
+#loading-bar {
+    position: absolute;
+    z-index: 90002;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+}
+/* Make clicks pass-through */
+#loading-bar,
+#loading-bar-spinner {
+    pointer-events: none;
+    -webkit-pointer-events: none;
+    -webkit-transition: 350ms linear all;
+    -moz-transition: 350ms linear all;
+    -o-transition: 350ms linear all;
+    transition: 350ms linear all;
+}
+#loading-bar.ng-enter,
+#loading-bar.ng-leave.ng-leave-active,
+#loading-bar-spinner.ng-enter,
+#loading-bar-spinner.ng-leave.ng-leave-active {
+    opacity: 0;
+}
+#loading-bar.ng-enter.ng-enter-active,
+#loading-bar.ng-leave,
+#loading-bar-spinner.ng-enter.ng-enter-active,
+#loading-bar-spinner.ng-leave {
+    opacity: 1;
+}
+#loading-bar .bar {
+    height: 100%;
+    width: 100%;
+    -webkit-transition: width 350ms;
+    -moz-transition: width 350ms;
+    -o-transition: width 350ms;
+    transition: width 350ms;
+    background: #23b7e5;
+    border-bottom-right-radius: 1px;
+    border-top-right-radius: 1px;
+}
+/* Fancy blur effect */
+#loading-bar .peg {
+    position: absolute;
+    width: 70px;
+    right: 0;
+    top: 0;
+    height: 2px;
+    opacity: .45;
+    -moz-box-shadow: #23b7e5 1px 0 6px 1px;
+    -ms-box-shadow: #23b7e5 1px 0 6px 1px;
+    -webkit-box-shadow: #23b7e5 1px 0 6px 1px;
+    box-shadow: #23b7e5 1px 0 6px 1px;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
+}
+#loading-bar-spinner {
+    display: block;
+    position: fixed;
+    z-index: 90002;
+    top: 10px;
+    left: 10px;
+}
+#loading-bar-spinner .spinner-icon {
+    width: 14px;
+    height: 14px;
+    border: solid 2px transparent;
+    border-top-color: #23b7e5;
+    border-left-color: #23b7e5;
+    border-radius: 10px;
+    -webkit-animation: loading-bar-spinner 400ms linear infinite;
+    -moz-animation: loading-bar-spinner 400ms linear infinite;
+    -ms-animation: loading-bar-spinner 400ms linear infinite;
+    -o-animation: loading-bar-spinner 400ms linear infinite;
+    animation: loading-bar-spinner 400ms linear infinite;
+}
+@-webkit-keyframes loading-bar-spinner {
+    0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+}
+    100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+}
+}
+@-moz-keyframes loading-bar-spinner {
+    0% {
+    -moz-transform: rotate(0deg);
+    transform: rotate(0deg);
+}
+    100% {
+    -moz-transform: rotate(360deg);
+    transform: rotate(360deg);
+}
+}
+@-o-keyframes loading-bar-spinner {
+    0% {
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+}
+    100% {
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+}
+}
+@-ms-keyframes loading-bar-spinner {
+    0% {
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+}
+    100% {
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+}
+}
+@keyframes loading-bar-spinner {
+    0% {
+        transform: rotate(0deg);
+}
+    100% {
+        transform: rotate(360deg);
+}
+}
+/* ========================================================================
+ Component: animate.less
+ ========================================================================== */
+[ui-view].ng-leave {
+    display: none !important;
+}
+[ui-view].ng-leave.ng-fluid {
+    display: block !important;
+}
+.ng-fluid.ng-animate {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.ng-fadeIn.ng-enter {
+    -webkit-animation: fadeIn 0.5s;
+    -o-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
+}
+.ng-fadeIn.ng-leave {
+    -webkit-animation: fadeOut 0.5s;
+    -o-animation: fadeOut 0.5s;
+    animation: fadeOut 0.5s;
+}
+.ng-fadeInUp.ng-enter {
+    -webkit-animation: fadeInUp 0.5s;
+    -o-animation: fadeInUp 0.5s;
+    animation: fadeInUp 0.5s;
+}
+.ng-fadeInUp.ng-leave {
+    -webkit-animation: fadeOutDown 0.5s;
+    -o-animation: fadeOutDown 0.5s;
+    animation: fadeOutDown 0.5s;
+}
+.ng-fadeInDown.ng-enter {
+    -webkit-animation: fadeInDown 0.5s;
+    -o-animation: fadeInDown 0.5s;
+    animation: fadeInDown 0.5s;
+}
+.ng-fadeInDown.ng-leave {
+    -webkit-animation: fadeOutUp 0.5s;
+    -o-animation: fadeOutUp 0.5s;
+    animation: fadeOutUp 0.5s;
+}
+.ng-fadeInRight.ng-enter {
+    -webkit-animation: fadeInRight 0.5s;
+    -o-animation: fadeInRight 0.5s;
+    animation: fadeInRight 0.5s;
+}
+.ng-fadeInRight.ng-leave {
+    -webkit-animation: fadeOutLeft 0.5s;
+    -o-animation: fadeOutLeft 0.5s;
+    animation: fadeOutLeft 0.5s;
+}
+.ng-fadeInLeft.ng-enter {
+    -webkit-animation: fadeInLeft 0.5s;
+    -o-animation: fadeInLeft 0.5s;
+    animation: fadeInLeft 0.5s;
+}
+.ng-fadeInLeft.ng-leave {
+    -webkit-animation: fadeOutRight 0.5s;
+    -o-animation: fadeOutRight 0.5s;
+    animation: fadeOutRight 0.5s;
+}
+.ng-fadeInUpBig.ng-enter {
+    -webkit-animation: fadeInDownBig 0.5s;
+    -o-animation: fadeInDownBig 0.5s;
+    animation: fadeInDownBig 0.5s;
+}
+.ng-fadeInUpBig.ng-leave {
+    -webkit-animation: fadeOutDownBig 0.5s;
+    -o-animation: fadeOutDownBig 0.5s;
+    animation: fadeOutDownBig 0.5s;
+}
+.ng-fadeInDownBig.ng-enter {
+    -webkit-animation: fadeInUpBig 0.5s;
+    -o-animation: fadeInUpBig 0.5s;
+    animation: fadeInUpBig 0.5s;
+}
+.ng-fadeInDownBig.ng-leave {
+    -webkit-animation: fadeOutUpBig 0.5s;
+    -o-animation: fadeOutUpBig 0.5s;
+    animation: fadeOutUpBig 0.5s;
+}
+.ng-fadeInRightBig.ng-enter {
+    -webkit-animation: fadeInRightBig 0.5s;
+    -o-animation: fadeInRightBig 0.5s;
+    animation: fadeInRightBig 0.5s;
+}
+.ng-fadeInRightBig.ng-leave {
+    -webkit-animation: fadeOutLeftBig 0.5s;
+    -o-animation: fadeOutLeftBig 0.5s;
+    animation: fadeOutLeftBig 0.5s;
+}
+.ng-fadeInLeftBig.ng-enter {
+    -webkit-animation: fadeInLeftBig 0.5s;
+    -o-animation: fadeInLeftBig 0.5s;
+    animation: fadeInLeftBig 0.5s;
+}
+.ng-fadeInLeftBig.ng-leave {
+    -webkit-animation: fadeOutRightBig 0.5s;
+    -o-animation: fadeOutRightBig 0.5s;
+    animation: fadeOutRightBig 0.5s;
+}
+.ng-zoomBackDown.ng-enter {
+    -webkit-animation: fadeInDown 1s cubic-bezier(0.23, 1, 0.32, 1);
+    -o-animation: fadeInDown 1s cubic-bezier(0.23, 1, 0.32, 1);
+    animation: fadeInDown 1s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.ng-zoomBackDown.ng-leave {
+    -webkit-animation: zoomBack 1s cubic-bezier(0.23, 1, 0.32, 1);
+    -o-animation: zoomBack 1s cubic-bezier(0.23, 1, 0.32, 1);
+    animation: zoomBack 1s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+.animated.infinite {
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+}
+.animated.hinge {
+    -webkit-animation-duration: 2s;
+    animation-duration: 2s;
+}
+@-webkit-keyframes bounce {
+    0%,
+    20%,
+    53%,
+    80%,
+    100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+    40%,
+    43% {
+    -webkit-transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    -webkit-transform: translate3d(0, -30px, 0);
+    transform: translate3d(0, -30px, 0);
+}
+    70% {
+    -webkit-transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    -webkit-transform: translate3d(0, -15px, 0);
+    transform: translate3d(0, -15px, 0);
+}
+    90% {
+    -webkit-transform: translate3d(0, -4px, 0);
+    transform: translate3d(0, -4px, 0);
+}
+}
+@keyframes bounce {
+    0%,
+    20%,
+    53%,
+    80%,
+    100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    -webkit-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+    40%,
+    43% {
+    -webkit-transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    -webkit-transform: translate3d(0, -30px, 0);
+    -ms-transform: translate3d(0, -30px, 0);
+    transform: translate3d(0, -30px, 0);
+}
+    70% {
+    -webkit-transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transition-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    -webkit-transform: translate3d(0, -15px, 0);
+    -ms-transform: translate3d(0, -15px, 0);
+    transform: translate3d(0, -15px, 0);
+}
+    90% {
+    -webkit-transform: translate3d(0, -4px, 0);
+    -ms-transform: translate3d(0, -4px, 0);
+    transform: translate3d(0, -4px, 0);
+}
+}
+.bounce {
+    -webkit-animation-name: bounce;
+    animation-name: bounce;
+    -webkit-transform-origin: center bottom;
+    -ms-transform-origin: center bottom;
+    transform-origin: center bottom;
+}
+@-webkit-keyframes flash {
+    0%,
+    50%,
+    100% {
+        opacity: 1;
+}
+    25%,
+    75% {
+        opacity: 0;
+}
+}
+@keyframes flash {
+    0%,
+    50%,
+    100% {
+        opacity: 1;
+}
+    25%,
+    75% {
+        opacity: 0;
+}
+}
+.flash {
+    -webkit-animation-name: flash;
+    animation-name: flash;
+}
+/* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
+@-webkit-keyframes pulse {
+    0% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+    50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+}
+    100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+}
+@keyframes pulse {
+    0% {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+    50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    -ms-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+}
+    100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+}
+.pulse {
+    -webkit-animation-name: pulse;
+    animation-name: pulse;
+}
+@-webkit-keyframes rubberBand {
+    0% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+    30% {
+    -webkit-transform: scale3d(1.25, 0.75, 1);
+    transform: scale3d(1.25, 0.75, 1);
+}
+    40% {
+    -webkit-transform: scale3d(0.75, 1.25, 1);
+    transform: scale3d(0.75, 1.25, 1);
+}
+    50% {
+    -webkit-transform: scale3d(1.15, 0.85, 1);
+    transform: scale3d(1.15, 0.85, 1);
+}
+    65% {
+    -webkit-transform: scale3d(0.95, 1.05, 1);
+    transform: scale3d(0.95, 1.05, 1);
+}
+    75% {
+    -webkit-transform: scale3d(1.05, 0.95, 1);
+    transform: scale3d(1.05, 0.95, 1);
+}
+    100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+}
+@keyframes rubberBand {
+    0% {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+    30% {
+    -webkit-transform: scale3d(1.25, 0.75, 1);
+    -ms-transform: scale3d(1.25, 0.75, 1);
+    transform: scale3d(1.25, 0.75, 1);
+}
+    40% {
+    -webkit-transform: scale3d(0.75, 1.25, 1);
+    -ms-transform: scale3d(0.75, 1.25, 1);
+    transform: scale3d(0.75, 1.25, 1);
+}
+    50% {
+    -webkit-transform: scale3d(1.15, 0.85, 1);
+    -ms-transform: scale3d(1.15, 0.85, 1);
+    transform: scale3d(1.15, 0.85, 1);
+}
+    65% {
+    -webkit-transform: scale3d(0.95, 1.05, 1);
+    -ms-transform: scale3d(0.95, 1.05, 1);
+    transform: scale3d(0.95, 1.05, 1);
+}
+    75% {
+    -webkit-transform: scale3d(1.05, 0.95, 1);
+    -ms-transform: scale3d(1.05, 0.95, 1);
+    transform: scale3d(1.05, 0.95, 1);
+}
+    100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+}
+.rubberBand {
+    -webkit-animation-name: rubberBand;
+    animation-name: rubberBand;
+}
+@-webkit-keyframes shake {
+    0%,
+    100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+}
+    20%,
+    40%,
+    60%,
+    80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+}
+}
+@keyframes shake {
+    0%,
+    100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    -ms-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+}
+    20%,
+    40%,
+    60%,
+    80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    -ms-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+}
+}
+.shake {
+    -webkit-animation-name: shake;
+    animation-name: shake;
+}
+@-webkit-keyframes swing {
+    20% {
+    -webkit-transform: rotate3d(0, 0, 1, 15deg);
+    transform: rotate3d(0, 0, 1, 15deg);
+}
+    40% {
+    -webkit-transform: rotate3d(0, 0, 1, -10deg);
+    transform: rotate3d(0, 0, 1, -10deg);
+}
+    60% {
+    -webkit-transform: rotate3d(0, 0, 1, 5deg);
+    transform: rotate3d(0, 0, 1, 5deg);
+}
+    80% {
+    -webkit-transform: rotate3d(0, 0, 1, -5deg);
+    transform: rotate3d(0, 0, 1, -5deg);
+}
+    100% {
+    -webkit-transform: rotate3d(0, 0, 1, 0deg);
+    transform: rotate3d(0, 0, 1, 0deg);
+}
+}
+@keyframes swing {
+    20% {
+    -webkit-transform: rotate3d(0, 0, 1, 15deg);
+    -ms-transform: rotate3d(0, 0, 1, 15deg);
+    transform: rotate3d(0, 0, 1, 15deg);
+}
+    40% {
+    -webkit-transform: rotate3d(0, 0, 1, -10deg);
+    -ms-transform: rotate3d(0, 0, 1, -10deg);
+    transform: rotate3d(0, 0, 1, -10deg);
+}
+    60% {
+    -webkit-transform: rotate3d(0, 0, 1, 5deg);
+    -ms-transform: rotate3d(0, 0, 1, 5deg);
+    transform: rotate3d(0, 0, 1, 5deg);
+}
+    80% {
+    -webkit-transform: rotate3d(0, 0, 1, -5deg);
+    -ms-transform: rotate3d(0, 0, 1, -5deg);
+    transform: rotate3d(0, 0, 1, -5deg);
+}
+    100% {
+    -webkit-transform: rotate3d(0, 0, 1, 0deg);
+    -ms-transform: rotate3d(0, 0, 1, 0deg);
+    transform: rotate3d(0, 0, 1, 0deg);
+}
+}
+.swing {
+    -webkit-transform-origin: top center;
+    -ms-transform-origin: top center;
+    transform-origin: top center;
+    -webkit-animation-name: swing;
+    animation-name: swing;
+}
+@-webkit-keyframes tada {
+    0% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+    10%,
+    20% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+}
+    30%,
+    50%,
+    70%,
+    90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+}
+    40%,
+    60%,
+    80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+}
+    100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+}
+@keyframes tada {
+    0% {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+    10%,
+    20% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+    -ms-transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+}
+    30%,
+    50%,
+    70%,
+    90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    -ms-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+}
+    40%,
+    60%,
+    80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    -ms-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+}
+    100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+}
+.tada {
+    -webkit-animation-name: tada;
+    animation-name: tada;
+}
+/* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
+@-webkit-keyframes wobble {
+    0% {
+    -webkit-transform: none;
+    transform: none;
+}
+    15% {
+    -webkit-transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);
+    transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);
+}
+    30% {
+    -webkit-transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);
+    transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);
+}
+    45% {
+    -webkit-transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);
+    transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);
+}
+    60% {
+    -webkit-transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);
+    transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);
+}
+    75% {
+    -webkit-transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);
+    transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);
+}
+    100% {
+    -webkit-transform: none;
+    transform: none;
+}
+}
+@keyframes wobble {
+    0% {
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+    15% {
+    -webkit-transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);
+    -ms-transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);
+    transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);
+}
+    30% {
+    -webkit-transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);
+    -ms-transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);
+    transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);
+}
+    45% {
+    -webkit-transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);
+    -ms-transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);
+    transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);
+}
+    60% {
+    -webkit-transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);
+    -ms-transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);
+    transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);
+}
+    75% {
+    -webkit-transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);
+    -ms-transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);
+    transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);
+}
+    100% {
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+}
+.wobble {
+    -webkit-animation-name: wobble;
+    animation-name: wobble;
+}
+@-webkit-keyframes bounceIn {
+    0%,
+    20%,
+    40%,
+    60%,
+    80%,
+    100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+    0% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+}
+    20% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1);
+    transform: scale3d(1.1, 1.1, 1.1);
+}
+    40% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9);
+    transform: scale3d(0.9, 0.9, 0.9);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: scale3d(1.03, 1.03, 1.03);
+    transform: scale3d(1.03, 1.03, 1.03);
+}
+    80% {
+    -webkit-transform: scale3d(0.97, 0.97, 0.97);
+    transform: scale3d(0.97, 0.97, 0.97);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+}
+@keyframes bounceIn {
+    0%,
+    20%,
+    40%,
+    60%,
+    80%,
+    100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+    0% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    -ms-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+}
+    20% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1);
+    -ms-transform: scale3d(1.1, 1.1, 1.1);
+    transform: scale3d(1.1, 1.1, 1.1);
+}
+    40% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9);
+    -ms-transform: scale3d(0.9, 0.9, 0.9);
+    transform: scale3d(0.9, 0.9, 0.9);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: scale3d(1.03, 1.03, 1.03);
+    -ms-transform: scale3d(1.03, 1.03, 1.03);
+    transform: scale3d(1.03, 1.03, 1.03);
+}
+    80% {
+    -webkit-transform: scale3d(0.97, 0.97, 0.97);
+    -ms-transform: scale3d(0.97, 0.97, 0.97);
+    transform: scale3d(0.97, 0.97, 0.97);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+}
+}
+.bounceIn {
+    -webkit-animation-name: bounceIn;
+    animation-name: bounceIn;
+    -webkit-animation-duration: .75s;
+    animation-duration: .75s;
+}
+@-webkit-keyframes bounceInDown {
+    0%,
+    60%,
+    75%,
+    90%,
+    100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, -3000px, 0);
+    transform: translate3d(0, -3000px, 0);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: translate3d(0, 25px, 0);
+    transform: translate3d(0, 25px, 0);
+}
+    75% {
+    -webkit-transform: translate3d(0, -10px, 0);
+    transform: translate3d(0, -10px, 0);
+}
+    90% {
+    -webkit-transform: translate3d(0, 5px, 0);
+    transform: translate3d(0, 5px, 0);
+}
+    100% {
+    -webkit-transform: none;
+    transform: none;
+}
+}
+@keyframes bounceInDown {
+    0%,
+    60%,
+    75%,
+    90%,
+    100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, -3000px, 0);
+    -ms-transform: translate3d(0, -3000px, 0);
+    transform: translate3d(0, -3000px, 0);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: translate3d(0, 25px, 0);
+    -ms-transform: translate3d(0, 25px, 0);
+    transform: translate3d(0, 25px, 0);
+}
+    75% {
+    -webkit-transform: translate3d(0, -10px, 0);
+    -ms-transform: translate3d(0, -10px, 0);
+    transform: translate3d(0, -10px, 0);
+}
+    90% {
+    -webkit-transform: translate3d(0, 5px, 0);
+    -ms-transform: translate3d(0, 5px, 0);
+    transform: translate3d(0, 5px, 0);
+}
+    100% {
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+}
+.bounceInDown {
+    -webkit-animation-name: bounceInDown;
+    animation-name: bounceInDown;
+}
+@-webkit-keyframes bounceInLeft {
+    0%,
+    60%,
+    75%,
+    90%,
+    100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(-3000px, 0, 0);
+    transform: translate3d(-3000px, 0, 0);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: translate3d(25px, 0, 0);
+    transform: translate3d(25px, 0, 0);
+}
+    75% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+}
+    90% {
+    -webkit-transform: translate3d(5px, 0, 0);
+    transform: translate3d(5px, 0, 0);
+}
+    100% {
+    -webkit-transform: none;
+    transform: none;
+}
+}
+@keyframes bounceInLeft {
+    0%,
+    60%,
+    75%,
+    90%,
+    100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(-3000px, 0, 0);
+    -ms-transform: translate3d(-3000px, 0, 0);
+    transform: translate3d(-3000px, 0, 0);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: translate3d(25px, 0, 0);
+    -ms-transform: translate3d(25px, 0, 0);
+    transform: translate3d(25px, 0, 0);
+}
+    75% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    -ms-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+}
+    90% {
+    -webkit-transform: translate3d(5px, 0, 0);
+    -ms-transform: translate3d(5px, 0, 0);
+    transform: translate3d(5px, 0, 0);
+}
+    100% {
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+}
+.bounceInLeft {
+    -webkit-animation-name: bounceInLeft;
+    animation-name: bounceInLeft;
+}
+@-webkit-keyframes bounceInRight {
+    0%,
+    60%,
+    75%,
+    90%,
+    100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(3000px, 0, 0);
+    transform: translate3d(3000px, 0, 0);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: translate3d(-25px, 0, 0);
+    transform: translate3d(-25px, 0, 0);
+}
+    75% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+}
+    90% {
+    -webkit-transform: translate3d(-5px, 0, 0);
+    transform: translate3d(-5px, 0, 0);
+}
+    100% {
+    -webkit-transform: none;
+    transform: none;
+}
+}
+@keyframes bounceInRight {
+    0%,
+    60%,
+    75%,
+    90%,
+    100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(3000px, 0, 0);
+    -ms-transform: translate3d(3000px, 0, 0);
+    transform: translate3d(3000px, 0, 0);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: translate3d(-25px, 0, 0);
+    -ms-transform: translate3d(-25px, 0, 0);
+    transform: translate3d(-25px, 0, 0);
+}
+    75% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    -ms-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+}
+    90% {
+    -webkit-transform: translate3d(-5px, 0, 0);
+    -ms-transform: translate3d(-5px, 0, 0);
+    transform: translate3d(-5px, 0, 0);
+}
+    100% {
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+}
+.bounceInRight {
+    -webkit-animation-name: bounceInRight;
+    animation-name: bounceInRight;
+}
+@-webkit-keyframes bounceInUp {
+    0%,
+    60%,
+    75%,
+    90%,
+    100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, 3000px, 0);
+    transform: translate3d(0, 3000px, 0);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: translate3d(0, -20px, 0);
+    transform: translate3d(0, -20px, 0);
+}
+    75% {
+    -webkit-transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 10px, 0);
+}
+    90% {
+    -webkit-transform: translate3d(0, -5px, 0);
+    transform: translate3d(0, -5px, 0);
+}
+    100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+}
+@keyframes bounceInUp {
+    0%,
+    60%,
+    75%,
+    90%,
+    100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, 3000px, 0);
+    -ms-transform: translate3d(0, 3000px, 0);
+    transform: translate3d(0, 3000px, 0);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: translate3d(0, -20px, 0);
+    -ms-transform: translate3d(0, -20px, 0);
+    transform: translate3d(0, -20px, 0);
+}
+    75% {
+    -webkit-transform: translate3d(0, 10px, 0);
+    -ms-transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 10px, 0);
+}
+    90% {
+    -webkit-transform: translate3d(0, -5px, 0);
+    -ms-transform: translate3d(0, -5px, 0);
+    transform: translate3d(0, -5px, 0);
+}
+    100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+}
+.bounceInUp {
+    -webkit-animation-name: bounceInUp;
+    animation-name: bounceInUp;
+}
+@-webkit-keyframes bounceOut {
+    20% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9);
+    transform: scale3d(0.9, 0.9, 0.9);
+}
+    50%,
+    55% {
+        opacity: 1;
+    -webkit-transform: scale3d(1.1, 1.1, 1.1);
+    transform: scale3d(1.1, 1.1, 1.1);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+}
+}
+@keyframes bounceOut {
+    20% {
+    -webkit-transform: scale3d(0.9, 0.9, 0.9);
+    -ms-transform: scale3d(0.9, 0.9, 0.9);
+    transform: scale3d(0.9, 0.9, 0.9);
+}
+    50%,
+    55% {
+        opacity: 1;
+    -webkit-transform: scale3d(1.1, 1.1, 1.1);
+    -ms-transform: scale3d(1.1, 1.1, 1.1);
+    transform: scale3d(1.1, 1.1, 1.1);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    -ms-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+}
+}
+.bounceOut {
+    -webkit-animation-name: bounceOut;
+    animation-name: bounceOut;
+    -webkit-animation-duration: .75s;
+    animation-duration: .75s;
+}
+@-webkit-keyframes bounceOutDown {
+    20% {
+    -webkit-transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 10px, 0);
+}
+    40%,
+    45% {
+        opacity: 1;
+    -webkit-transform: translate3d(0, -20px, 0);
+    transform: translate3d(0, -20px, 0);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, 2000px, 0);
+    transform: translate3d(0, 2000px, 0);
+}
+}
+@keyframes bounceOutDown {
+    20% {
+    -webkit-transform: translate3d(0, 10px, 0);
+    -ms-transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 10px, 0);
+}
+    40%,
+    45% {
+        opacity: 1;
+    -webkit-transform: translate3d(0, -20px, 0);
+    -ms-transform: translate3d(0, -20px, 0);
+    transform: translate3d(0, -20px, 0);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, 2000px, 0);
+    -ms-transform: translate3d(0, 2000px, 0);
+    transform: translate3d(0, 2000px, 0);
+}
+}
+.bounceOutDown {
+    -webkit-animation-name: bounceOutDown;
+    animation-name: bounceOutDown;
+}
+@-webkit-keyframes bounceOutLeft {
+    20% {
+        opacity: 1;
+    -webkit-transform: translate3d(20px, 0, 0);
+    transform: translate3d(20px, 0, 0);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(-2000px, 0, 0);
+    transform: translate3d(-2000px, 0, 0);
+}
+}
+@keyframes bounceOutLeft {
+    20% {
+        opacity: 1;
+    -webkit-transform: translate3d(20px, 0, 0);
+    -ms-transform: translate3d(20px, 0, 0);
+    transform: translate3d(20px, 0, 0);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(-2000px, 0, 0);
+    -ms-transform: translate3d(-2000px, 0, 0);
+    transform: translate3d(-2000px, 0, 0);
+}
+}
+.bounceOutLeft {
+    -webkit-animation-name: bounceOutLeft;
+    animation-name: bounceOutLeft;
+}
+@-webkit-keyframes bounceOutRight {
+    20% {
+        opacity: 1;
+    -webkit-transform: translate3d(-20px, 0, 0);
+    transform: translate3d(-20px, 0, 0);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(2000px, 0, 0);
+    transform: translate3d(2000px, 0, 0);
+}
+}
+@keyframes bounceOutRight {
+    20% {
+        opacity: 1;
+    -webkit-transform: translate3d(-20px, 0, 0);
+    -ms-transform: translate3d(-20px, 0, 0);
+    transform: translate3d(-20px, 0, 0);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(2000px, 0, 0);
+    -ms-transform: translate3d(2000px, 0, 0);
+    transform: translate3d(2000px, 0, 0);
+}
+}
+.bounceOutRight {
+    -webkit-animation-name: bounceOutRight;
+    animation-name: bounceOutRight;
+}
+@-webkit-keyframes bounceOutUp {
+    20% {
+    -webkit-transform: translate3d(0, -10px, 0);
+    transform: translate3d(0, -10px, 0);
+}
+    40%,
+    45% {
+        opacity: 1;
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, -2000px, 0);
+    transform: translate3d(0, -2000px, 0);
+}
+}
+@keyframes bounceOutUp {
+    20% {
+    -webkit-transform: translate3d(0, -10px, 0);
+    -ms-transform: translate3d(0, -10px, 0);
+    transform: translate3d(0, -10px, 0);
+}
+    40%,
+    45% {
+        opacity: 1;
+    -webkit-transform: translate3d(0, 20px, 0);
+    -ms-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, -2000px, 0);
+    -ms-transform: translate3d(0, -2000px, 0);
+    transform: translate3d(0, -2000px, 0);
+}
+}
+.bounceOutUp {
+    -webkit-animation-name: bounceOutUp;
+    animation-name: bounceOutUp;
+}
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0;
+}
+    100% {
+        opacity: 1;
+}
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+}
+    100% {
+        opacity: 1;
+}
+}
+.fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+}
+@-webkit-keyframes fadeInDown {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, -18px, 0);
+    transform: translate3d(0, -18px, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+}
+}
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, -18px, 0);
+    -ms-transform: translate3d(0, -18px, 0);
+    transform: translate3d(0, -18px, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+}
+.fadeInDown {
+    -webkit-animation-name: fadeInDown;
+    animation-name: fadeInDown;
+}
+@-webkit-keyframes fadeInDownBig {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, -2000px, 0);
+    transform: translate3d(0, -2000px, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+}
+}
+@keyframes fadeInDownBig {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, -2000px, 0);
+    -ms-transform: translate3d(0, -2000px, 0);
+    transform: translate3d(0, -2000px, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+}
+.fadeInDownBig {
+    -webkit-animation-name: fadeInDownBig;
+    animation-name: fadeInDownBig;
+}
+@-webkit-keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(-18px, 0, 0);
+    transform: translate3d(-18px, 0, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+}
+}
+@keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(-18px, 0, 0);
+    -ms-transform: translate3d(-18px, 0, 0);
+    transform: translate3d(-18px, 0, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+}
+.fadeInLeft {
+    -webkit-animation-name: fadeInLeft;
+    animation-name: fadeInLeft;
+}
+@-webkit-keyframes fadeInLeftBig {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(-2000px, 0, 0);
+    transform: translate3d(-2000px, 0, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+}
+}
+@keyframes fadeInLeftBig {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(-2000px, 0, 0);
+    -ms-transform: translate3d(-2000px, 0, 0);
+    transform: translate3d(-2000px, 0, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+}
+.fadeInLeftBig {
+    -webkit-animation-name: fadeInLeftBig;
+    animation-name: fadeInLeftBig;
+}
+@-webkit-keyframes fadeInRight {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(18px, 0, 0);
+    transform: translate3d(18px, 0, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+}
+}
+@keyframes fadeInRight {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(18px, 0, 0);
+    -ms-transform: translate3d(18px, 0, 0);
+    transform: translate3d(18px, 0, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+}
+.fadeInRight {
+    -webkit-animation-name: fadeInRight;
+    animation-name: fadeInRight;
+}
+@-webkit-keyframes fadeInRightBig {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(2000px, 0, 0);
+    transform: translate3d(2000px, 0, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+}
+}
+@keyframes fadeInRightBig {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(2000px, 0, 0);
+    -ms-transform: translate3d(2000px, 0, 0);
+    transform: translate3d(2000px, 0, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+}
+.fadeInRightBig {
+    -webkit-animation-name: fadeInRightBig;
+    animation-name: fadeInRightBig;
+}
+@-webkit-keyframes fadeInUp {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, 18px, 0);
+    transform: translate3d(0, 18px, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+}
+}
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, 18px, 0);
+    -ms-transform: translate3d(0, 18px, 0);
+    transform: translate3d(0, 18px, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+}
+.fadeInUp {
+    -webkit-animation-name: fadeInUp;
+    animation-name: fadeInUp;
+}
+@-webkit-keyframes fadeInUpBig {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, 2000px, 0);
+    transform: translate3d(0, 2000px, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+}
+}
+@keyframes fadeInUpBig {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, 2000px, 0);
+    -ms-transform: translate3d(0, 2000px, 0);
+    transform: translate3d(0, 2000px, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+}
+.fadeInUpBig {
+    -webkit-animation-name: fadeInUpBig;
+    animation-name: fadeInUpBig;
+}
+@-webkit-keyframes fadeOut {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+}
+}
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+}
+}
+.fadeOut {
+    -webkit-animation-name: fadeOut;
+    animation-name: fadeOut;
+}
+@-webkit-keyframes fadeOutDown {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, 18px, 0);
+    transform: translate3d(0, 18px, 0);
+}
+}
+@keyframes fadeOutDown {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, 18px, 0);
+    -ms-transform: translate3d(0, 18px, 0);
+    transform: translate3d(0, 18px, 0);
+}
+}
+.fadeOutDown {
+    -webkit-animation-name: fadeOutDown;
+    animation-name: fadeOutDown;
+}
+@-webkit-keyframes fadeOutDownBig {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, 2000px, 0);
+    transform: translate3d(0, 2000px, 0);
+}
+}
+@keyframes fadeOutDownBig {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, 2000px, 0);
+    -ms-transform: translate3d(0, 2000px, 0);
+    transform: translate3d(0, 2000px, 0);
+}
+}
+.fadeOutDownBig {
+    -webkit-animation-name: fadeOutDownBig;
+    animation-name: fadeOutDownBig;
+}
+@-webkit-keyframes fadeOutLeft {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(-18px, 0, 0);
+    transform: translate3d(-18px, 0, 0);
+}
+}
+@keyframes fadeOutLeft {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(-18px, 0, 0);
+    -ms-transform: translate3d(-18px, 0, 0);
+    transform: translate3d(-18px, 0, 0);
+}
+}
+.fadeOutLeft {
+    -webkit-animation-name: fadeOutLeft;
+    animation-name: fadeOutLeft;
+}
+@-webkit-keyframes fadeOutLeftBig {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(-2000px, 0, 0);
+    transform: translate3d(-2000px, 0, 0);
+}
+}
+@keyframes fadeOutLeftBig {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(-2000px, 0, 0);
+    -ms-transform: translate3d(-2000px, 0, 0);
+    transform: translate3d(-2000px, 0, 0);
+}
+}
+.fadeOutLeftBig {
+    -webkit-animation-name: fadeOutLeftBig;
+    animation-name: fadeOutLeftBig;
+}
+@-webkit-keyframes fadeOutRight {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(18px, 0, 0);
+    transform: translate3d(18px, 0, 0);
+}
+}
+@keyframes fadeOutRight {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(18px, 0, 0);
+    -ms-transform: translate3d(18px, 0, 0);
+    transform: translate3d(18px, 0, 0);
+}
+}
+.fadeOutRight {
+    -webkit-animation-name: fadeOutRight;
+    animation-name: fadeOutRight;
+}
+@-webkit-keyframes fadeOutRightBig {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(2000px, 0, 0);
+    transform: translate3d(2000px, 0, 0);
+}
+}
+@keyframes fadeOutRightBig {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(2000px, 0, 0);
+    -ms-transform: translate3d(2000px, 0, 0);
+    transform: translate3d(2000px, 0, 0);
+}
+}
+.fadeOutRightBig {
+    -webkit-animation-name: fadeOutRightBig;
+    animation-name: fadeOutRightBig;
+}
+@-webkit-keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, -18px, 0);
+    transform: translate3d(0, -18px, 0);
+}
+}
+@keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, -18px, 0);
+    -ms-transform: translate3d(0, -18px, 0);
+    transform: translate3d(0, -18px, 0);
+}
+}
+.fadeOutUp {
+    -webkit-animation-name: fadeOutUp;
+    animation-name: fadeOutUp;
+}
+@-webkit-keyframes fadeOutUpBig {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, -2000px, 0);
+    transform: translate3d(0, -2000px, 0);
+}
+}
+@keyframes fadeOutUpBig {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, -2000px, 0);
+    -ms-transform: translate3d(0, -2000px, 0);
+    transform: translate3d(0, -2000px, 0);
+}
+}
+.fadeOutUpBig {
+    -webkit-animation-name: fadeOutUpBig;
+    animation-name: fadeOutUpBig;
+}
+@-webkit-keyframes flip {
+    0% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -360deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, -360deg);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+}
+    40% {
+    -webkit-transform: perspective(400px) translate3d(0, 0, 150px) rotate3d(0, 1, 0, -190deg);
+    transform: perspective(400px) translate3d(0, 0, 150px) rotate3d(0, 1, 0, -190deg);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+}
+    50% {
+    -webkit-transform: perspective(400px) translate3d(0, 0, 150px) rotate3d(0, 1, 0, -170deg);
+    transform: perspective(400px) translate3d(0, 0, 150px) rotate3d(0, 1, 0, -170deg);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+}
+    80% {
+    -webkit-transform: perspective(400px) scale3d(0.95, 0.95, 0.95);
+    transform: perspective(400px) scale3d(0.95, 0.95, 0.95);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+}
+    100% {
+    -webkit-transform: perspective(400px);
+    transform: perspective(400px);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+}
+}
+@keyframes flip {
+    0% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -360deg);
+    -ms-transform: perspective(400px) rotate3d(0, 1, 0, -360deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, -360deg);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+}
+    40% {
+    -webkit-transform: perspective(400px) translate3d(0, 0, 150px) rotate3d(0, 1, 0, -190deg);
+    -ms-transform: perspective(400px) translate3d(0, 0, 150px) rotate3d(0, 1, 0, -190deg);
+    transform: perspective(400px) translate3d(0, 0, 150px) rotate3d(0, 1, 0, -190deg);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+}
+    50% {
+    -webkit-transform: perspective(400px) translate3d(0, 0, 150px) rotate3d(0, 1, 0, -170deg);
+    -ms-transform: perspective(400px) translate3d(0, 0, 150px) rotate3d(0, 1, 0, -170deg);
+    transform: perspective(400px) translate3d(0, 0, 150px) rotate3d(0, 1, 0, -170deg);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+}
+    80% {
+    -webkit-transform: perspective(400px) scale3d(0.95, 0.95, 0.95);
+    -ms-transform: perspective(400px) scale3d(0.95, 0.95, 0.95);
+    transform: perspective(400px) scale3d(0.95, 0.95, 0.95);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+}
+    100% {
+    -webkit-transform: perspective(400px);
+    -ms-transform: perspective(400px);
+    transform: perspective(400px);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+}
+}
+.animated.flip {
+    -webkit-backface-visibility: visible;
+    -ms-backface-visibility: visible;
+    backface-visibility: visible;
+    -webkit-animation-name: flip;
+    animation-name: flip;
+}
+@-webkit-keyframes flipInX {
+    0% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    opacity: 0;
+}
+    40% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+}
+    60% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    opacity: 1;
+}
+    80% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+}
+    100% {
+    -webkit-transform: perspective(400px);
+    transform: perspective(400px);
+}
+}
+@keyframes flipInX {
+    0% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    -ms-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    opacity: 0;
+}
+    40% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    -ms-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+}
+    60% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    -ms-transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    opacity: 1;
+}
+    80% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+    -ms-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+}
+    100% {
+    -webkit-transform: perspective(400px);
+    -ms-transform: perspective(400px);
+    transform: perspective(400px);
+}
+}
+.flipInX {
+    -webkit-backface-visibility: visible !important;
+    -ms-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+    -webkit-animation-name: flipInX;
+    animation-name: flipInX;
+}
+@-webkit-keyframes flipInY {
+    0% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    opacity: 0;
+}
+    40% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+}
+    60% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+    opacity: 1;
+}
+    80% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+}
+    100% {
+    -webkit-transform: perspective(400px);
+    transform: perspective(400px);
+}
+}
+@keyframes flipInY {
+    0% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    -ms-transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    opacity: 0;
+}
+    40% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+    -ms-transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+    -webkit-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+}
+    60% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+    -ms-transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+    opacity: 1;
+}
+    80% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+    -ms-transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+}
+    100% {
+    -webkit-transform: perspective(400px);
+    -ms-transform: perspective(400px);
+    transform: perspective(400px);
+}
+}
+.flipInY {
+    -webkit-backface-visibility: visible !important;
+    -ms-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+    -webkit-animation-name: flipInY;
+    animation-name: flipInY;
+}
+@-webkit-keyframes flipOutX {
+    0% {
+    -webkit-transform: perspective(400px);
+    transform: perspective(400px);
+}
+    30% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    opacity: 1;
+}
+    100% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    opacity: 0;
+}
+}
+@keyframes flipOutX {
+    0% {
+    -webkit-transform: perspective(400px);
+    -ms-transform: perspective(400px);
+    transform: perspective(400px);
+}
+    30% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    -ms-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    opacity: 1;
+}
+    100% {
+    -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    -ms-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    opacity: 0;
+}
+}
+.flipOutX {
+    -webkit-animation-name: flipOutX;
+    animation-name: flipOutX;
+    -webkit-animation-duration: .75s;
+    animation-duration: .75s;
+    -webkit-backface-visibility: visible !important;
+    -ms-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+}
+@-webkit-keyframes flipOutY {
+    0% {
+    -webkit-transform: perspective(400px);
+    transform: perspective(400px);
+}
+    30% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -15deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, -15deg);
+    opacity: 1;
+}
+    100% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    opacity: 0;
+}
+}
+@keyframes flipOutY {
+    0% {
+    -webkit-transform: perspective(400px);
+    -ms-transform: perspective(400px);
+    transform: perspective(400px);
+}
+    30% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, -15deg);
+    -ms-transform: perspective(400px) rotate3d(0, 1, 0, -15deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, -15deg);
+    opacity: 1;
+}
+    100% {
+    -webkit-transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    -ms-transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    opacity: 0;
+}
+}
+.flipOutY {
+    -webkit-backface-visibility: visible !important;
+    -ms-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+    -webkit-animation-name: flipOutY;
+    animation-name: flipOutY;
+    -webkit-animation-duration: .75s;
+    animation-duration: .75s;
+}
+@-webkit-keyframes lightSpeedIn {
+    0% {
+    -webkit-transform: translate3d(18px, 0, 0) skewX(-30deg);
+    transform: translate3d(18px, 0, 0) skewX(-30deg);
+    opacity: 0;
+}
+    60% {
+    -webkit-transform: skewX(20deg);
+    transform: skewX(20deg);
+    opacity: 1;
+}
+    80% {
+    -webkit-transform: skewX(-5deg);
+    transform: skewX(-5deg);
+    opacity: 1;
+}
+    100% {
+    -webkit-transform: none;
+    transform: none;
+    opacity: 1;
+}
+}
+@keyframes lightSpeedIn {
+    0% {
+    -webkit-transform: translate3d(18px, 0, 0) skewX(-30deg);
+    -ms-transform: translate3d(18px, 0, 0) skewX(-30deg);
+    transform: translate3d(18px, 0, 0) skewX(-30deg);
+    opacity: 0;
+}
+    60% {
+    -webkit-transform: skewX(20deg);
+    -ms-transform: skewX(20deg);
+    transform: skewX(20deg);
+    opacity: 1;
+}
+    80% {
+    -webkit-transform: skewX(-5deg);
+    -ms-transform: skewX(-5deg);
+    transform: skewX(-5deg);
+    opacity: 1;
+}
+    100% {
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+    opacity: 1;
+}
+}
+.lightSpeedIn {
+    -webkit-animation-name: lightSpeedIn;
+    animation-name: lightSpeedIn;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+}
+@-webkit-keyframes lightSpeedOut {
+    0% {
+        opacity: 1;
+}
+    100% {
+    -webkit-transform: translate3d(18px, 0, 0) skewX(30deg);
+    transform: translate3d(18px, 0, 0) skewX(30deg);
+    opacity: 0;
+}
+}
+@keyframes lightSpeedOut {
+    0% {
+        opacity: 1;
+}
+    100% {
+    -webkit-transform: translate3d(18px, 0, 0) skewX(30deg);
+    -ms-transform: translate3d(18px, 0, 0) skewX(30deg);
+    transform: translate3d(18px, 0, 0) skewX(30deg);
+    opacity: 0;
+}
+}
+.lightSpeedOut {
+    -webkit-animation-name: lightSpeedOut;
+    animation-name: lightSpeedOut;
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+}
+@-webkit-keyframes rotateIn {
+    0% {
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    -webkit-transform: rotate3d(0, 0, 1, -200deg);
+    transform: rotate3d(0, 0, 1, -200deg);
+    opacity: 0;
+}
+    100% {
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    -webkit-transform: none;
+    transform: none;
+    opacity: 1;
+}
+}
+@keyframes rotateIn {
+    0% {
+    -webkit-transform-origin: center;
+    -ms-transform-origin: center;
+    transform-origin: center;
+    -webkit-transform: rotate3d(0, 0, 1, -200deg);
+    -ms-transform: rotate3d(0, 0, 1, -200deg);
+    transform: rotate3d(0, 0, 1, -200deg);
+    opacity: 0;
+}
+    100% {
+    -webkit-transform-origin: center;
+    -ms-transform-origin: center;
+    transform-origin: center;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+    opacity: 1;
+}
+}
+.rotateIn {
+    -webkit-animation-name: rotateIn;
+    animation-name: rotateIn;
+}
+@-webkit-keyframes rotateInDownLeft {
+    0% {
+    -webkit-transform-origin: left bottom;
+    transform-origin: left bottom;
+    -webkit-transform: rotate3d(0, 0, 1, -45deg);
+    transform: rotate3d(0, 0, 1, -45deg);
+    opacity: 0;
+}
+    100% {
+    -webkit-transform-origin: left bottom;
+    transform-origin: left bottom;
+    -webkit-transform: none;
+    transform: none;
+    opacity: 1;
+}
+}
+@keyframes rotateInDownLeft {
+    0% {
+    -webkit-transform-origin: left bottom;
+    -ms-transform-origin: left bottom;
+    transform-origin: left bottom;
+    -webkit-transform: rotate3d(0, 0, 1, -45deg);
+    -ms-transform: rotate3d(0, 0, 1, -45deg);
+    transform: rotate3d(0, 0, 1, -45deg);
+    opacity: 0;
+}
+    100% {
+    -webkit-transform-origin: left bottom;
+    -ms-transform-origin: left bottom;
+    transform-origin: left bottom;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+    opacity: 1;
+}
+}
+.rotateInDownLeft {
+    -webkit-animation-name: rotateInDownLeft;
+    animation-name: rotateInDownLeft;
+}
+@-webkit-keyframes rotateInDownRight {
+    0% {
+    -webkit-transform-origin: right bottom;
+    transform-origin: right bottom;
+    -webkit-transform: rotate3d(0, 0, 1, 45deg);
+    transform: rotate3d(0, 0, 1, 45deg);
+    opacity: 0;
+}
+    100% {
+    -webkit-transform-origin: right bottom;
+    transform-origin: right bottom;
+    -webkit-transform: none;
+    transform: none;
+    opacity: 1;
+}
+}
+@keyframes rotateInDownRight {
+    0% {
+    -webkit-transform-origin: right bottom;
+    -ms-transform-origin: right bottom;
+    transform-origin: right bottom;
+    -webkit-transform: rotate3d(0, 0, 1, 45deg);
+    -ms-transform: rotate3d(0, 0, 1, 45deg);
+    transform: rotate3d(0, 0, 1, 45deg);
+    opacity: 0;
+}
+    100% {
+    -webkit-transform-origin: right bottom;
+    -ms-transform-origin: right bottom;
+    transform-origin: right bottom;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+    opacity: 1;
+}
+}
+.rotateInDownRight {
+    -webkit-animation-name: rotateInDownRight;
+    animation-name: rotateInDownRight;
+}
+@-webkit-keyframes rotateInUpLeft {
+    0% {
+    -webkit-transform-origin: left bottom;
+    transform-origin: left bottom;
+    -webkit-transform: rotate3d(0, 0, 1, 45deg);
+    transform: rotate3d(0, 0, 1, 45deg);
+    opacity: 0;
+}
+    100% {
+    -webkit-transform-origin: left bottom;
+    transform-origin: left bottom;
+    -webkit-transform: none;
+    transform: none;
+    opacity: 1;
+}
+}
+@keyframes rotateInUpLeft {
+    0% {
+    -webkit-transform-origin: left bottom;
+    -ms-transform-origin: left bottom;
+    transform-origin: left bottom;
+    -webkit-transform: rotate3d(0, 0, 1, 45deg);
+    -ms-transform: rotate3d(0, 0, 1, 45deg);
+    transform: rotate3d(0, 0, 1, 45deg);
+    opacity: 0;
+}
+    100% {
+    -webkit-transform-origin: left bottom;
+    -ms-transform-origin: left bottom;
+    transform-origin: left bottom;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+    opacity: 1;
+}
+}
+.rotateInUpLeft {
+    -webkit-animation-name: rotateInUpLeft;
+    animation-name: rotateInUpLeft;
+}
+@-webkit-keyframes rotateInUpRight {
+    0% {
+    -webkit-transform-origin: right bottom;
+    transform-origin: right bottom;
+    -webkit-transform: rotate3d(0, 0, 1, -90deg);
+    transform: rotate3d(0, 0, 1, -90deg);
+    opacity: 0;
+}
+    100% {
+    -webkit-transform-origin: right bottom;
+    transform-origin: right bottom;
+    -webkit-transform: none;
+    transform: none;
+    opacity: 1;
+}
+}
+@keyframes rotateInUpRight {
+    0% {
+    -webkit-transform-origin: right bottom;
+    -ms-transform-origin: right bottom;
+    transform-origin: right bottom;
+    -webkit-transform: rotate3d(0, 0, 1, -90deg);
+    -ms-transform: rotate3d(0, 0, 1, -90deg);
+    transform: rotate3d(0, 0, 1, -90deg);
+    opacity: 0;
+}
+    100% {
+    -webkit-transform-origin: right bottom;
+    -ms-transform-origin: right bottom;
+    transform-origin: right bottom;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+    opacity: 1;
+}
+}
+.rotateInUpRight {
+    -webkit-animation-name: rotateInUpRight;
+    animation-name: rotateInUpRight;
+}
+@-webkit-keyframes rotateOut {
+    0% {
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    opacity: 1;
+}
+    100% {
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    -webkit-transform: rotate3d(0, 0, 1, 200deg);
+    transform: rotate3d(0, 0, 1, 200deg);
+    opacity: 0;
+}
+}
+@keyframes rotateOut {
+    0% {
+    -webkit-transform-origin: center;
+    -ms-transform-origin: center;
+    transform-origin: center;
+    opacity: 1;
+}
+    100% {
+    -webkit-transform-origin: center;
+    -ms-transform-origin: center;
+    transform-origin: center;
+    -webkit-transform: rotate3d(0, 0, 1, 200deg);
+    -ms-transform: rotate3d(0, 0, 1, 200deg);
+    transform: rotate3d(0, 0, 1, 200deg);
+    opacity: 0;
+}
+}
+.rotateOut {
+    -webkit-animation-name: rotateOut;
+    animation-name: rotateOut;
+}
+@-webkit-keyframes rotateOutDownLeft {
+    0% {
+    -webkit-transform-origin: left bottom;
+    transform-origin: left bottom;
+    opacity: 1;
+}
+    100% {
+    -webkit-transform-origin: left bottom;
+    transform-origin: left bottom;
+    -webkit-transform: rotate(0, 0, 1, 45deg);
+    transform: rotate(0, 0, 1, 45deg);
+    opacity: 0;
+}
+}
+@keyframes rotateOutDownLeft {
+    0% {
+    -webkit-transform-origin: left bottom;
+    -ms-transform-origin: left bottom;
+    transform-origin: left bottom;
+    opacity: 1;
+}
+    100% {
+    -webkit-transform-origin: left bottom;
+    -ms-transform-origin: left bottom;
+    transform-origin: left bottom;
+    -webkit-transform: rotate(0, 0, 1, 45deg);
+    -ms-transform: rotate(0, 0, 1, 45deg);
+    transform: rotate(0, 0, 1, 45deg);
+    opacity: 0;
+}
+}
+.rotateOutDownLeft {
+    -webkit-animation-name: rotateOutDownLeft;
+    animation-name: rotateOutDownLeft;
+}
+@-webkit-keyframes rotateOutDownRight {
+    0% {
+    -webkit-transform-origin: right bottom;
+    transform-origin: right bottom;
+    opacity: 1;
+}
+    100% {
+    -webkit-transform-origin: right bottom;
+    transform-origin: right bottom;
+    -webkit-transform: rotate3d(0, 0, 1, -45deg);
+    transform: rotate3d(0, 0, 1, -45deg);
+    opacity: 0;
+}
+}
+@keyframes rotateOutDownRight {
+    0% {
+    -webkit-transform-origin: right bottom;
+    -ms-transform-origin: right bottom;
+    transform-origin: right bottom;
+    opacity: 1;
+}
+    100% {
+    -webkit-transform-origin: right bottom;
+    -ms-transform-origin: right bottom;
+    transform-origin: right bottom;
+    -webkit-transform: rotate3d(0, 0, 1, -45deg);
+    -ms-transform: rotate3d(0, 0, 1, -45deg);
+    transform: rotate3d(0, 0, 1, -45deg);
+    opacity: 0;
+}
+}
+.rotateOutDownRight {
+    -webkit-animation-name: rotateOutDownRight;
+    animation-name: rotateOutDownRight;
+}
+@-webkit-keyframes rotateOutUpLeft {
+    0% {
+    -webkit-transform-origin: left bottom;
+    transform-origin: left bottom;
+    opacity: 1;
+}
+    100% {
+    -webkit-transform-origin: left bottom;
+    transform-origin: left bottom;
+    -webkit-transform: rotate3d(0, 0, 1, -45deg);
+    transform: rotate3d(0, 0, 1, -45deg);
+    opacity: 0;
+}
+}
+@keyframes rotateOutUpLeft {
+    0% {
+    -webkit-transform-origin: left bottom;
+    -ms-transform-origin: left bottom;
+    transform-origin: left bottom;
+    opacity: 1;
+}
+    100% {
+    -webkit-transform-origin: left bottom;
+    -ms-transform-origin: left bottom;
+    transform-origin: left bottom;
+    -webkit-transform: rotate3d(0, 0, 1, -45deg);
+    -ms-transform: rotate3d(0, 0, 1, -45deg);
+    transform: rotate3d(0, 0, 1, -45deg);
+    opacity: 0;
+}
+}
+.rotateOutUpLeft {
+    -webkit-animation-name: rotateOutUpLeft;
+    animation-name: rotateOutUpLeft;
+}
+@-webkit-keyframes rotateOutUpRight {
+    0% {
+    -webkit-transform-origin: right bottom;
+    transform-origin: right bottom;
+    opacity: 1;
+}
+    100% {
+    -webkit-transform-origin: right bottom;
+    transform-origin: right bottom;
+    -webkit-transform: rotate3d(0, 0, 1, 90deg);
+    transform: rotate3d(0, 0, 1, 90deg);
+    opacity: 0;
+}
+}
+@keyframes rotateOutUpRight {
+    0% {
+    -webkit-transform-origin: right bottom;
+    -ms-transform-origin: right bottom;
+    transform-origin: right bottom;
+    opacity: 1;
+}
+    100% {
+    -webkit-transform-origin: right bottom;
+    -ms-transform-origin: right bottom;
+    transform-origin: right bottom;
+    -webkit-transform: rotate3d(0, 0, 1, 90deg);
+    -ms-transform: rotate3d(0, 0, 1, 90deg);
+    transform: rotate3d(0, 0, 1, 90deg);
+    opacity: 0;
+}
+}
+.rotateOutUpRight {
+    -webkit-animation-name: rotateOutUpRight;
+    animation-name: rotateOutUpRight;
+}
+@-webkit-keyframes hinge {
+    0% {
+    -webkit-transform-origin: top left;
+    transform-origin: top left;
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+}
+    20%,
+    60% {
+    -webkit-transform: rotate3d(0, 0, 1, 80deg);
+    transform: rotate3d(0, 0, 1, 80deg);
+    -webkit-transform-origin: top left;
+    transform-origin: top left;
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+}
+    40%,
+    80% {
+    -webkit-transform: rotate3d(0, 0, 1, 60deg);
+    transform: rotate3d(0, 0, 1, 60deg);
+    -webkit-transform-origin: top left;
+    transform-origin: top left;
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+    opacity: 1;
+}
+    100% {
+    -webkit-transform: translate3d(0, 700px, 0);
+    transform: translate3d(0, 700px, 0);
+    opacity: 0;
+}
+}
+@keyframes hinge {
+    0% {
+    -webkit-transform-origin: top left;
+    -ms-transform-origin: top left;
+    transform-origin: top left;
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+}
+    20%,
+    60% {
+    -webkit-transform: rotate3d(0, 0, 1, 80deg);
+    -ms-transform: rotate3d(0, 0, 1, 80deg);
+    transform: rotate3d(0, 0, 1, 80deg);
+    -webkit-transform-origin: top left;
+    -ms-transform-origin: top left;
+    transform-origin: top left;
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+}
+    40%,
+    80% {
+    -webkit-transform: rotate3d(0, 0, 1, 60deg);
+    -ms-transform: rotate3d(0, 0, 1, 60deg);
+    transform: rotate3d(0, 0, 1, 60deg);
+    -webkit-transform-origin: top left;
+    -ms-transform-origin: top left;
+    transform-origin: top left;
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+    opacity: 1;
+}
+    100% {
+    -webkit-transform: translate3d(0, 700px, 0);
+    -ms-transform: translate3d(0, 700px, 0);
+    transform: translate3d(0, 700px, 0);
+    opacity: 0;
+}
+}
+.hinge {
+    -webkit-animation-name: hinge;
+    animation-name: hinge;
+}
+/* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
+@-webkit-keyframes rollIn {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(-18px, 0, 0) rotate3d(0, 0, 1, -120deg);
+    transform: translate3d(-18px, 0, 0) rotate3d(0, 0, 1, -120deg);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+}
+}
+@keyframes rollIn {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(-18px, 0, 0) rotate3d(0, 0, 1, -120deg);
+    -ms-transform: translate3d(-18px, 0, 0) rotate3d(0, 0, 1, -120deg);
+    transform: translate3d(-18px, 0, 0) rotate3d(0, 0, 1, -120deg);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+}
+.rollIn {
+    -webkit-animation-name: rollIn;
+    animation-name: rollIn;
+}
+/* originally authored by Nick Pettit - https://github.com/nickpettit/glide */
+@-webkit-keyframes rollOut {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(18px, 0, 0) rotate3d(0, 0, 1, 120deg);
+    transform: translate3d(18px, 0, 0) rotate3d(0, 0, 1, 120deg);
+}
+}
+@keyframes rollOut {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(18px, 0, 0) rotate3d(0, 0, 1, 120deg);
+    -ms-transform: translate3d(18px, 0, 0) rotate3d(0, 0, 1, 120deg);
+    transform: translate3d(18px, 0, 0) rotate3d(0, 0, 1, 120deg);
+}
+}
+.rollOut {
+    -webkit-animation-name: rollOut;
+    animation-name: rollOut;
+}
+@-webkit-keyframes zoomIn {
+    0% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+}
+    50% {
+        opacity: 1;
+}
+}
+@keyframes zoomIn {
+    0% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    -ms-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+}
+    50% {
+        opacity: 1;
+}
+}
+.zoomIn {
+    -webkit-animation-name: zoomIn;
+    animation-name: zoomIn;
+}
+@-webkit-keyframes zoomInDown {
+    0% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+}
+}
+@keyframes zoomInDown {
+    0% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+    -ms-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -1000px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+    -ms-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+}
+}
+.zoomInDown {
+    -webkit-animation-name: zoomInDown;
+    animation-name: zoomInDown;
+}
+@-webkit-keyframes zoomInLeft {
+    0% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(-1000px, 0, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(-1000px, 0, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(10px, 0, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(10px, 0, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+}
+}
+@keyframes zoomInLeft {
+    0% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(-1000px, 0, 0);
+    -ms-transform: scale3d(0.1, 0.1, 0.1) translate3d(-1000px, 0, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(-1000px, 0, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(10px, 0, 0);
+    -ms-transform: scale3d(0.475, 0.475, 0.475) translate3d(10px, 0, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(10px, 0, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+}
+}
+.zoomInLeft {
+    -webkit-animation-name: zoomInLeft;
+    animation-name: zoomInLeft;
+}
+@-webkit-keyframes zoomInRight {
+    0% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(1000px, 0, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(1000px, 0, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(-10px, 0, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(-10px, 0, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+}
+}
+@keyframes zoomInRight {
+    0% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(1000px, 0, 0);
+    -ms-transform: scale3d(0.1, 0.1, 0.1) translate3d(1000px, 0, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(1000px, 0, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(-10px, 0, 0);
+    -ms-transform: scale3d(0.475, 0.475, 0.475) translate3d(-10px, 0, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(-10px, 0, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+}
+}
+.zoomInRight {
+    -webkit-animation-name: zoomInRight;
+    animation-name: zoomInRight;
+}
+@-webkit-keyframes zoomInUp {
+    0% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+}
+}
+@keyframes zoomInUp {
+    0% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);
+    -ms-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 1000px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+    60% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    -ms-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+}
+}
+.zoomInUp {
+    -webkit-animation-name: zoomInUp;
+    animation-name: zoomInUp;
+}
+@-webkit-keyframes zoomOut {
+    0% {
+        opacity: 1;
+}
+    50% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+}
+    100% {
+        opacity: 0;
+}
+}
+@keyframes zoomOut {
+    0% {
+        opacity: 1;
+}
+    50% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    -ms-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+}
+    100% {
+        opacity: 0;
+}
+}
+.zoomOut {
+    -webkit-animation-name: zoomOut;
+    animation-name: zoomOut;
+}
+@-webkit-keyframes zoomOutDown {
+    40% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 2000px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 2000px, 0);
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom;
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+}
+}
+@keyframes zoomOutDown {
+    40% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    -ms-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, -60px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 2000px, 0);
+    -ms-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 2000px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, 2000px, 0);
+    -webkit-transform-origin: center bottom;
+    -ms-transform-origin: center bottom;
+    transform-origin: center bottom;
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+}
+}
+.zoomOutDown {
+    -webkit-animation-name: zoomOutDown;
+    animation-name: zoomOutDown;
+}
+@-webkit-keyframes zoomOutLeft {
+    40% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(42px, 0, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(42px, 0, 0);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: scale(0.1) translate3d(-2000px, 0, 0);
+    transform: scale(0.1) translate3d(-2000px, 0, 0);
+    -webkit-transform-origin: left center;
+    transform-origin: left center;
+}
+}
+@keyframes zoomOutLeft {
+    40% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(42px, 0, 0);
+    -ms-transform: scale3d(0.475, 0.475, 0.475) translate3d(42px, 0, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(42px, 0, 0);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: scale(0.1) translate3d(-2000px, 0, 0);
+    -ms-transform: scale(0.1) translate3d(-2000px, 0, 0);
+    transform: scale(0.1) translate3d(-2000px, 0, 0);
+    -webkit-transform-origin: left center;
+    -ms-transform-origin: left center;
+    transform-origin: left center;
+}
+}
+.zoomOutLeft {
+    -webkit-animation-name: zoomOutLeft;
+    animation-name: zoomOutLeft;
+}
+@-webkit-keyframes zoomOutRight {
+    40% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(-42px, 0, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(-42px, 0, 0);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: scale(0.1) translate3d(2000px, 0, 0);
+    transform: scale(0.1) translate3d(2000px, 0, 0);
+    -webkit-transform-origin: right center;
+    transform-origin: right center;
+}
+}
+@keyframes zoomOutRight {
+    40% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(-42px, 0, 0);
+    -ms-transform: scale3d(0.475, 0.475, 0.475) translate3d(-42px, 0, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(-42px, 0, 0);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: scale(0.1) translate3d(2000px, 0, 0);
+    -ms-transform: scale(0.1) translate3d(2000px, 0, 0);
+    transform: scale(0.1) translate3d(2000px, 0, 0);
+    -webkit-transform-origin: right center;
+    -ms-transform-origin: right center;
+    transform-origin: right center;
+}
+}
+.zoomOutRight {
+    -webkit-animation-name: zoomOutRight;
+    animation-name: zoomOutRight;
+}
+@-webkit-keyframes zoomOutUp {
+    40% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -2000px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -2000px, 0);
+    -webkit-transform-origin: center bottom;
+    transform-origin: center bottom;
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+}
+}
+@keyframes zoomOutUp {
+    40% {
+        opacity: 1;
+    -webkit-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+    -ms-transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+    transform: scale3d(0.475, 0.475, 0.475) translate3d(0, 60px, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -2000px, 0);
+    -ms-transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -2000px, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(0, -2000px, 0);
+    -webkit-transform-origin: center bottom;
+    -ms-transform-origin: center bottom;
+    transform-origin: center bottom;
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+}
+}
+.zoomOutUp {
+    -webkit-animation-name: zoomOutUp;
+    animation-name: zoomOutUp;
+}
+@-webkit-keyframes fadeOutUpShort {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, -20px, 0);
+    transform: translate3d(0, -20px, 0);
+}
+}
+@keyframes fadeOutUpShort {
+    0% {
+        opacity: 1;
+}
+    100% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, -20px, 0);
+    -ms-transform: translate3d(0, -20px, 0);
+    transform: translate3d(0, -20px, 0);
+}
+}
+.fadeOutUpShort {
+    -webkit-animation-name: fadeOutUpShort;
+    animation-name: fadeOutUpShort;
+}
+@-webkit-keyframes fadeInUpShort {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+}
+}
+@keyframes fadeInUpShort {
+    0% {
+        opacity: 0;
+    -webkit-transform: translate3d(0, 20px, 0);
+    -ms-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
+}
+    100% {
+        opacity: 1;
+    -webkit-transform: none;
+    -ms-transform: none;
+    transform: none;
+}
+}
+.fadeInUpShort {
+    -webkit-animation-name: fadeInUpShort;
+    animation-name: fadeInUpShort;
+}
+@-webkit-keyframes zoomInShort {
+    0% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.95, 0.95, 0.95);
+    transform: scale3d(0.95, 0.95, 0.95);
+}
+    50% {
+        opacity: 1;
+}
+}
+@keyframes zoomInShort {
+    0% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.95, 0.95, 0.95);
+    -ms-transform: scale3d(0.95, 0.95, 0.95);
+    transform: scale3d(0.95, 0.95, 0.95);
+}
+    50% {
+        opacity: 1;
+}
+}
+.zoomInShort {
+    -webkit-animation-name: zoomInShort;
+    animation-name: zoomInShort;
+}
+@-webkit-keyframes zoomBack {
+    0% {
+        opacity: 1;
+}
+    50% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.5, 0.5, 0.5);
+    transform: scale3d(0.5, 0.5, 0.5);
+}
+    100% {
+        opacity: 0;
+}
+}
+@keyframes zoomBack {
+    0% {
+        opacity: 1;
+}
+    50% {
+        opacity: 0;
+    -webkit-transform: scale3d(0.5, 0.5, 0.5);
+    -ms-transform: scale3d(0.5, 0.5, 0.5);
+    transform: scale3d(0.5, 0.5, 0.5);
+}
+    100% {
+        opacity: 0;
+}
+}
+.zoomBack {
+    -webkit-animation-name: zoomBack;
+    animation-name: zoomBack;
+}
+/* ========================================================================
+ Component: button-extra.less
+ ========================================================================== */
+.btn-inverse {
+    color: #ffffff;
+    background-color: #131e26;
+    border-color: #131e26;
+}
+.btn-inverse:focus,
+.btn-inverse.focus {
+    color: #ffffff;
+    background-color: #0c1318;
+    border-color: #05090b;
+}
+.btn-inverse:hover {
+    color: #ffffff;
+    background-color: #0c1318;
+    border-color: #05090b;
+}
+.btn-inverse:active,
+.btn-inverse.active,
+.open > .dropdown-toggle.btn-inverse {
+    color: #ffffff;
+    background-color: #0c1318;
+    border-color: #05090b;
+}
+.btn-inverse:active:hover,
+.btn-inverse.active:hover,
+.open > .dropdown-toggle.btn-inverse:hover,
+.btn-inverse:active:focus,
+.btn-inverse.active:focus,
+.open > .dropdown-toggle.btn-inverse:focus,
+.btn-inverse:active.focus,
+.btn-inverse.active.focus,
+.open > .dropdown-toggle.btn-inverse.focus {
+    color: #ffffff;
+    background-color: #0c1318;
+    border-color: #05090b;
+}
+.btn-inverse:active,
+.btn-inverse.active,
+.open > .dropdown-toggle.btn-inverse {
+    background-image: none;
+}
+.btn-inverse.disabled,
+.btn-inverse[disabled],
+fieldset[disabled] .btn-inverse,
+.btn-inverse.disabled:hover,
+.btn-inverse[disabled]:hover,
+fieldset[disabled] .btn-inverse:hover,
+.btn-inverse.disabled:focus,
+.btn-inverse[disabled]:focus,
+fieldset[disabled] .btn-inverse:focus,
+.btn-inverse.disabled.focus,
+.btn-inverse[disabled].focus,
+fieldset[disabled] .btn-inverse.focus,
+.btn-inverse.disabled:active,
+.btn-inverse[disabled]:active,
+fieldset[disabled] .btn-inverse:active,
+.btn-inverse.disabled.active,
+.btn-inverse[disabled].active,
+fieldset[disabled] .btn-inverse.active {
+    background-color: #131e26;
+    border-color: #131e26;
+}
+.btn-inverse .badge {
+    color: #131e26;
+    background-color: #ffffff;
+}
+.btn-green {
+    color: #ffffff;
+    background-color: #37bc9b;
+    border-color: transparent;
+}
+.btn-green:focus,
+.btn-green.focus {
+    color: #ffffff;
+    background-color: #32ac8e;
+    border-color: rgba(0, 0, 0, 0);
+}
+.btn-green:hover {
+    color: #ffffff;
+    background-color: #32ac8e;
+    border-color: rgba(0, 0, 0, 0);
+}
+.btn-green:active,
+.btn-green.active,
+.open > .dropdown-toggle.btn-green {
+    color: #ffffff;
+    background-color: #32ac8e;
+    border-color: rgba(0, 0, 0, 0);
+}
+.btn-green:active:hover,
+.btn-green.active:hover,
+.open > .dropdown-toggle.btn-green:hover,
+.btn-green:active:focus,
+.btn-green.active:focus,
+.open > .dropdown-toggle.btn-green:focus,
+.btn-green:active.focus,
+.btn-green.active.focus,
+.open > .dropdown-toggle.btn-green.focus {
+    color: #ffffff;
+    background-color: #32ac8e;
+    border-color: rgba(0, 0, 0, 0);
+}
+.btn-green:active,
+.btn-green.active,
+.open > .dropdown-toggle.btn-green {
+    background-image: none;
+}
+.btn-green.disabled,
+.btn-green[disabled],
+fieldset[disabled] .btn-green,
+.btn-green.disabled:hover,
+.btn-green[disabled]:hover,
+fieldset[disabled] .btn-green:hover,
+.btn-green.disabled:focus,
+.btn-green[disabled]:focus,
+fieldset[disabled] .btn-green:focus,
+.btn-green.disabled.focus,
+.btn-green[disabled].focus,
+fieldset[disabled] .btn-green.focus,
+.btn-green.disabled:active,
+.btn-green[disabled]:active,
+fieldset[disabled] .btn-green:active,
+.btn-green.disabled.active,
+.btn-green[disabled].active,
+fieldset[disabled] .btn-green.active {
+    background-color: #37bc9b;
+    border-color: transparent;
+}
+.btn-green .badge {
+    color: #37bc9b;
+    background-color: #ffffff;
+}
+.btn-purple {
+    color: #ffffff;
+    background-color: #7266ba;
+    border-color: transparent;
+}
+.btn-purple:focus,
+.btn-purple.focus {
+    color: #ffffff;
+    background-color: #6558b4;
+    border-color: rgba(0, 0, 0, 0);
+}
+.btn-purple:hover {
+    color: #ffffff;
+    background-color: #6558b4;
+    border-color: rgba(0, 0, 0, 0);
+}
+.btn-purple:active,
+.btn-purple.active,
+.open > .dropdown-toggle.btn-purple {
+    color: #ffffff;
+    background-color: #6558b4;
+    border-color: rgba(0, 0, 0, 0);
+}
+.btn-purple:active:hover,
+.btn-purple.active:hover,
+.open > .dropdown-toggle.btn-purple:hover,
+.btn-purple:active:focus,
+.btn-purple.active:focus,
+.open > .dropdown-toggle.btn-purple:focus,
+.btn-purple:active.focus,
+.btn-purple.active.focus,
+.open > .dropdown-toggle.btn-purple.focus {
+    color: #ffffff;
+    background-color: #6558b4;
+    border-color: rgba(0, 0, 0, 0);
+}
+.btn-purple:active,
+.btn-purple.active,
+.open > .dropdown-toggle.btn-purple {
+    background-image: none;
+}
+.btn-purple.disabled,
+.btn-purple[disabled],
+fieldset[disabled] .btn-purple,
+.btn-purple.disabled:hover,
+.btn-purple[disabled]:hover,
+fieldset[disabled] .btn-purple:hover,
+.btn-purple.disabled:focus,
+.btn-purple[disabled]:focus,
+fieldset[disabled] .btn-purple:focus,
+.btn-purple.disabled.focus,
+.btn-purple[disabled].focus,
+fieldset[disabled] .btn-purple.focus,
+.btn-purple.disabled:active,
+.btn-purple[disabled]:active,
+fieldset[disabled] .btn-purple:active,
+.btn-purple.disabled.active,
+.btn-purple[disabled].active,
+fieldset[disabled] .btn-purple.active {
+    background-color: #7266ba;
+    border-color: transparent;
+}
+.btn-purple .badge {
+    color: #7266ba;
+    background-color: #ffffff;
+}
+.btn-pink {
+    color: #ffffff;
+    background-color: #f532e5;
+    border-color: transparent;
+}
+.btn-pink:focus,
+.btn-pink.focus {
+    color: #ffffff;
+    background-color: #f41fe3;
+    border-color: rgba(0, 0, 0, 0);
+}
+.btn-pink:hover {
+    color: #ffffff;
+    background-color: #f41fe3;
+    border-color: rgba(0, 0, 0, 0);
+}
+.btn-pink:active,
+.btn-pink.active,
+.open > .dropdown-toggle.btn-pink {
+    color: #ffffff;
+    background-color: #f41fe3;
+    border-color: rgba(0, 0, 0, 0);
+}
+.btn-pink:active:hover,
+.btn-pink.active:hover,
+.open > .dropdown-toggle.btn-pink:hover,
+.btn-pink:active:focus,
+.btn-pink.active:focus,
+.open > .dropdown-toggle.btn-pink:focus,
+.btn-pink:active.focus,
+.btn-pink.active.focus,
+.open > .dropdown-toggle.btn-pink.focus {
+    color: #ffffff;
+    background-color: #f41fe3;
+    border-color: rgba(0, 0, 0, 0);
+}
+.btn-pink:active,
+.btn-pink.active,
+.open > .dropdown-toggle.btn-pink {
+    background-image: none;
+}
+.btn-pink.disabled,
+.btn-pink[disabled],
+fieldset[disabled] .btn-pink,
+.btn-pink.disabled:hover,
+.btn-pink[disabled]:hover,
+fieldset[disabled] .btn-pink:hover,
+.btn-pink.disabled:focus,
+.btn-pink[disabled]:focus,
+fieldset[disabled] .btn-pink:focus,
+.btn-pink.disabled.focus,
+.btn-pink[disabled].focus,
+fieldset[disabled] .btn-pink.focus,
+.btn-pink.disabled:active,
+.btn-pink[disabled]:active,
+fieldset[disabled] .btn-pink:active,
+.btn-pink.disabled.active,
+.btn-pink[disabled].active,
+fieldset[disabled] .btn-pink.active {
+    background-color: #f532e5;
+    border-color: transparent;
+}
+.btn-pink .badge {
+    color: #f532e5;
+    background-color: #ffffff;
+}
+.btn-outline {
+    background-color: transparent;
+    border-color: #fff;
+}
+.btn-outline:hover,
+.btn-outline:focus {
+    background-color: #fff;
+    color: #5d9cec;
+}
+.btn-flat {
+    border-bottom-width: 1px;
+    border-radius: 0;
+    box-shadow: 0 0 0 #000;
+}
+.btn-xl {
+    padding: 20px 16px;
+    font-size: 18px;
+}
+.btn-square {
+    border-radius: 0;
+}
+.btn-pill-left,
+.btn-oval {
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    padding-left: 18px;
+}
+.btn-pill-right,
+.btn-oval {
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    padding-right: 18px;
+}
+.btn-labeled {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.btn-label {
+    position: relative;
+    background: transparent;
+    background: rgba(0, 0, 0, 0.05);
+    display: inline-block;
+    padding: 6px 16px;
+    left: -16px;
+    border-radius: 3px 0 0 3px;
+}
+.btn-label.btn-label-right {
+    left: auto;
+    right: -16px;
+    border-radius: 0 3px 3px 0;
+}
+.btn-lg .btn-label {
+    padding: 10px 20px;
+    left: -20px;
+    border-radius: 5px 0 0 5px;
+}
+.btn-lg .btn-label.btn-label-right {
+    left: auto;
+    right: -20px;
+    border-radius: 0 5px 5px 0;
+}
+.btn-sm .btn-label {
+    padding: 5px 10px;
+    left: -10px;
+    border-radius: 2px 0 0 2px;
+}
+.btn-sm .btn-label.btn-label-right {
+    left: auto;
+    right: -10px;
+    border-radius: 0 2px 2px 0;
+}
+.btn-xs .btn-label {
+    padding: 1px 5px;
+    left: -5px;
+    border-radius: 2px 0 0 2px;
+}
+.btn-xs .btn-label.btn-label-right {
+    left: auto;
+    right: -5px;
+    border-radius: 0 2px 2px 0;
+}
+.btn-fw {
+    min-width: 80px;
+}
+.btn-fw.btn-sm {
+    min-width: 40px;
+}
+.btn-fw.btn-md {
+    min-width: 60px;
+}
+.btn-fw.btn-lg {
+    min-width: 140px;
+}
+.btn-circle {
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 35px;
+    border-radius: 500px;
+    padding: 0;
+    border: 0;
+}
+.btn-circle > * {
+    line-height: inherit !important;
+}
+.btn-circle.btn-lg {
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+    line-height: 50px;
+}
+/* ========================================================================
+ Component: placeholder.less
+ ========================================================================== */
+.box-placeholder {
+    margin-bottom: 15px;
+    padding: 20px;
+    border: 1px dashed #dddddd;
+    background: #fafafa;
+    color: #444444;
+}
+.box-placeholder > :last-child {
+    margin-bottom: 0;
+}
+.box-placeholder-lg {
+    padding-top: 80px;
+    padding-bottom: 80px;
+}
+/* ========================================================================
+ Component: panels.less
+ ========================================================================== */
+.panel .table {
+    margin-bottom: 0;
+    border: 0;
+}
+.panel.panel-transparent {
+    border: 0;
+    background-color: transparent;
+    box-shadow: 0 0 0 #000;
+}
+.panel.panel-transparent .panel-heading,
+.panel.panel-transparent .panel-body {
+    background-color: transparent;
+    padding-left: 0;
+    padding-right: 0;
+}
+.panel-flat {
+    margin: 0 !important;
+    border: 0;
+}
+.panel-group .panel-flat {
+    box-shadow: 0 0 0 #000;
+}
+.panel-group .panel-flat:first-child {
+    border-radius: 4px 4px 0 0;
+}
+.panel-group .panel-flat:last-child {
+    border-radius: 0 0 4px 4px;
+}
+.panel-heading paneltool > a {
+    display: inline-block;
+    color: #fff;
+    width: 2em;
+    text-align: center;
+}
+.panel-default .panel-heading paneltool > a {
+    color: #c1c2c3;
+}
+.panel-heading > .label.pull-right {
+    margin-top: 3px;
+}
+.panel-heading > .label.pull-right + .label.pull-right {
+    margin-right: 10px;
+}
+.panel-heading.panel-heading-collapsed {
+    border-radius: 3px;
+}
+.panel-footer .pagination {
+    margin: 0;
+}
+.panel-footer .radial-bar {
+    margin-bottom: 0;
+}
+.panel-footer p {
+    margin-bottom: 0;
+}
+.panel-heading-active {
+    background-color: #27c24c !important;
+    font-weight: bold;
+    font-size: 16px;
+}
+.panel-heading-active > a {
+    padding: 15px 0;
+    color: #fff !important;
+    -webkit-transition: padding 0.5s ease;
+    -o-transition: padding 0.5s ease;
+    transition: padding 0.5s ease;
+}
+.panel-heading-active + .panel-collapse:after {
+    content: "";
+    display: block;
+    width: 60%;
+    margin: 0 auto;
+    height: 0;
+    border-bottom: 1px solid #e1e2e3;
+}
+.panel-inverse {
+    border-color: #cfdbe2;
+}
+.panel-inverse > .panel-heading {
+    color: #ffffff;
+    background-color: #131e26;
+    border-color: #131e26;
+}
+.panel-inverse > .panel-heading + .panel-collapse > .panel-body {
+    border-top-color: #cfdbe2;
+}
+.panel-inverse > .panel-heading .badge {
+    color: #131e26;
+    background-color: #ffffff;
+}
+.panel-inverse > .panel-footer + .panel-collapse > .panel-body {
+    border-bottom-color: #cfdbe2;
+}
+.panel-green {
+    border-color: #cfdbe2;
+}
+.panel-green > .panel-heading {
+    color: #ffffff;
+    background-color: #37bc9b;
+    border-color: #37bc9b;
+}
+.panel-green > .panel-heading + .panel-collapse > .panel-body {
+    border-top-color: #cfdbe2;
+}
+.panel-green > .panel-heading .badge {
+    color: #37bc9b;
+    background-color: #ffffff;
+}
+.panel-green > .panel-footer + .panel-collapse > .panel-body {
+    border-bottom-color: #cfdbe2;
+}
+.panel-pink {
+    border-color: #cfdbe2;
+}
+.panel-pink > .panel-heading {
+    color: #ffffff;
+    background-color: #f532e5;
+    border-color: #f532e5;
+}
+.panel-pink > .panel-heading + .panel-collapse > .panel-body {
+    border-top-color: #cfdbe2;
+}
+.panel-pink > .panel-heading .badge {
+    color: #f532e5;
+    background-color: #ffffff;
+}
+.panel-pink > .panel-footer + .panel-collapse > .panel-body {
+    border-bottom-color: #cfdbe2;
+}
+.panel-purple {
+    border-color: #cfdbe2;
+}
+.panel-purple > .panel-heading {
+    color: #ffffff;
+    background-color: #7266ba;
+    border-color: #7266ba;
+}
+.panel-purple > .panel-heading + .panel-collapse > .panel-body {
+    border-top-color: #cfdbe2;
+}
+.panel-purple > .panel-heading .badge {
+    color: #7266ba;
+    background-color: #ffffff;
+}
+.panel-purple > .panel-footer + .panel-collapse > .panel-body {
+    border-bottom-color: #cfdbe2;
+}
+.panel-dark {
+    border-color: #cfdbe2;
+}
+.panel-dark > .panel-heading {
+    color: #ffffff;
+    background-color: #3a3f51;
+    border-color: #3a3f51;
+}
+.panel-dark > .panel-heading + .panel-collapse > .panel-body {
+    border-top-color: #cfdbe2;
+}
+.panel-dark > .panel-heading .badge {
+    color: #3a3f51;
+    background-color: #ffffff;
+}
+.panel-dark > .panel-footer + .panel-collapse > .panel-body {
+    border-bottom-color: #cfdbe2;
+}
+/* ========================================================================
+ Component: progress-extra.less
+ ========================================================================== */
+.progress-sm {
+    height: 15px;
+}
+.progress-xs {
+    height: 8px;
+}
+.progress-bar-purple {
+    background-color: #7266ba;
+}
+.progress-striped .progress-bar-purple {
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+}
+.progress-bar-inverse {
+    background-color: #131e26;
+}
+.progress-striped .progress-bar-inverse {
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+}
+.progress-bar-green {
+    background-color: #37bc9b;
+}
+.progress-striped .progress-bar-green {
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+}
+.progress-bar-pink {
+    background-color: #f532e5;
+}
+.progress-striped .progress-bar-pink {
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+}
+.progress-0 {
+    width: 0%;
+}
+.progress-10 {
+    width: 10%;
+}
+.progress-20 {
+    width: 20%;
+}
+.progress-30 {
+    width: 30%;
+}
+.progress-40 {
+    width: 40%;
+}
+.progress-50 {
+    width: 50%;
+}
+.progress-60 {
+    width: 60%;
+}
+.progress-70 {
+    width: 70%;
+}
+.progress-80 {
+    width: 80%;
+}
+.progress-90 {
+    width: 90%;
+}
+.progress-100 {
+    width: 100%;
+}
+/* ========================================================================
+ Component: radial-bar.less
+ ========================================================================== */
+/* -------------------------------------
+ * Bar container
+ * ------------------------------------- */
+.radial-bar {
+    position: relative;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 50%;
+    border: 2px solid #fafafa;
+    background-color: transparent;
+    margin-bottom: 20px;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    width: 80px;
+    height: 80px;
+    font-size: 18px;
+}
+.radial-bar:after,
+.radial-bar > img {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    text-align: center;
+    font-weight: bold;
+    color: #a1a2a3;
+}
+.radial-bar:after {
+    content: attr(data-label);
+    background-color: #ffffff;
+    z-index: 101;
+}
+.radial-bar > img {
+    z-index: 102;
+}
+.radial-bar:after,
+.radial-bar > img {
+    width: 56px;
+    height: 56px;
+    margin-left: 12px;
+    margin-top: 12px;
+    line-height: 56px;
+}
+.radial-bar.radial-bar-0 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(90deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-5 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(108deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-10 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(126deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-15 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(144deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-20 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(162deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-25 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(180deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-30 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(198deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-35 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(216deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-40 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(234deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-45 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(252deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-50 {
+    background-image: linear-gradient(270deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-55 {
+    background-image: linear-gradient(288deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-60 {
+    background-image: linear-gradient(306deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-65 {
+    background-image: linear-gradient(324deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-70 {
+    background-image: linear-gradient(342deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-75 {
+    background-image: linear-gradient(360deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-80 {
+    background-image: linear-gradient(378deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-85 {
+    background-image: linear-gradient(396deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-90 {
+    background-image: linear-gradient(414deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-95 {
+    background-image: linear-gradient(432deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar.radial-bar-100 {
+    background-image: linear-gradient(450deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-0 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(90deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-5 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(108deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-10 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(126deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-15 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(144deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-20 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(162deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-25 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(180deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-30 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(198deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-35 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(216deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-40 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(234deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-45 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(252deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-50 {
+    background-image: linear-gradient(270deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-55 {
+    background-image: linear-gradient(288deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-60 {
+    background-image: linear-gradient(306deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-65 {
+    background-image: linear-gradient(324deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-70 {
+    background-image: linear-gradient(342deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-75 {
+    background-image: linear-gradient(360deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-80 {
+    background-image: linear-gradient(378deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-85 {
+    background-image: linear-gradient(396deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-90 {
+    background-image: linear-gradient(414deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-95 {
+    background-image: linear-gradient(432deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-primary.radial-bar-100 {
+    background-image: linear-gradient(450deg, #5d9cec 50%, transparent 50%, transparent), linear-gradient(270deg, #5d9cec 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-0 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(90deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-5 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(108deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-10 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(126deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-15 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(144deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-20 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(162deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-25 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(180deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-30 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(198deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-35 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(216deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-40 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(234deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-45 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(252deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-50 {
+    background-image: linear-gradient(270deg, #27c24c 50%, transparent 50%, transparent), linear-gradient(270deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-55 {
+    background-image: linear-gradient(288deg, #27c24c 50%, transparent 50%, transparent), linear-gradient(270deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-60 {
+    background-image: linear-gradient(306deg, #27c24c 50%, transparent 50%, transparent), linear-gradient(270deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-65 {
+    background-image: linear-gradient(324deg, #27c24c 50%, transparent 50%, transparent), linear-gradient(270deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-70 {
+    background-image: linear-gradient(342deg, #27c24c 50%, transparent 50%, transparent), linear-gradient(270deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-75 {
+    background-image: linear-gradient(360deg, #27c24c 50%, transparent 50%, transparent), linear-gradient(270deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-80 {
+    background-image: linear-gradient(378deg, #27c24c 50%, transparent 50%, transparent), linear-gradient(270deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-85 {
+    background-image: linear-gradient(396deg, #27c24c 50%, transparent 50%, transparent), linear-gradient(270deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-90 {
+    background-image: linear-gradient(414deg, #27c24c 50%, transparent 50%, transparent), linear-gradient(270deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-95 {
+    background-image: linear-gradient(432deg, #27c24c 50%, transparent 50%, transparent), linear-gradient(270deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-success.radial-bar-100 {
+    background-image: linear-gradient(450deg, #27c24c 50%, transparent 50%, transparent), linear-gradient(270deg, #27c24c 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-0 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(90deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-5 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(108deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-10 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(126deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-15 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(144deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-20 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(162deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-25 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(180deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-30 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(198deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-35 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(216deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-40 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(234deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-45 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(252deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-50 {
+    background-image: linear-gradient(270deg, #23b7e5 50%, transparent 50%, transparent), linear-gradient(270deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-55 {
+    background-image: linear-gradient(288deg, #23b7e5 50%, transparent 50%, transparent), linear-gradient(270deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-60 {
+    background-image: linear-gradient(306deg, #23b7e5 50%, transparent 50%, transparent), linear-gradient(270deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-65 {
+    background-image: linear-gradient(324deg, #23b7e5 50%, transparent 50%, transparent), linear-gradient(270deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-70 {
+    background-image: linear-gradient(342deg, #23b7e5 50%, transparent 50%, transparent), linear-gradient(270deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-75 {
+    background-image: linear-gradient(360deg, #23b7e5 50%, transparent 50%, transparent), linear-gradient(270deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-80 {
+    background-image: linear-gradient(378deg, #23b7e5 50%, transparent 50%, transparent), linear-gradient(270deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-85 {
+    background-image: linear-gradient(396deg, #23b7e5 50%, transparent 50%, transparent), linear-gradient(270deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-90 {
+    background-image: linear-gradient(414deg, #23b7e5 50%, transparent 50%, transparent), linear-gradient(270deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-95 {
+    background-image: linear-gradient(432deg, #23b7e5 50%, transparent 50%, transparent), linear-gradient(270deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-info.radial-bar-100 {
+    background-image: linear-gradient(450deg, #23b7e5 50%, transparent 50%, transparent), linear-gradient(270deg, #23b7e5 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-0 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(90deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-5 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(108deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-10 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(126deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-15 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(144deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-20 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(162deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-25 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(180deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-30 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(198deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-35 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(216deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-40 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(234deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-45 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(252deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-50 {
+    background-image: linear-gradient(270deg, #ff902b 50%, transparent 50%, transparent), linear-gradient(270deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-55 {
+    background-image: linear-gradient(288deg, #ff902b 50%, transparent 50%, transparent), linear-gradient(270deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-60 {
+    background-image: linear-gradient(306deg, #ff902b 50%, transparent 50%, transparent), linear-gradient(270deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-65 {
+    background-image: linear-gradient(324deg, #ff902b 50%, transparent 50%, transparent), linear-gradient(270deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-70 {
+    background-image: linear-gradient(342deg, #ff902b 50%, transparent 50%, transparent), linear-gradient(270deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-75 {
+    background-image: linear-gradient(360deg, #ff902b 50%, transparent 50%, transparent), linear-gradient(270deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-80 {
+    background-image: linear-gradient(378deg, #ff902b 50%, transparent 50%, transparent), linear-gradient(270deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-85 {
+    background-image: linear-gradient(396deg, #ff902b 50%, transparent 50%, transparent), linear-gradient(270deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-90 {
+    background-image: linear-gradient(414deg, #ff902b 50%, transparent 50%, transparent), linear-gradient(270deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-95 {
+    background-image: linear-gradient(432deg, #ff902b 50%, transparent 50%, transparent), linear-gradient(270deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-warning.radial-bar-100 {
+    background-image: linear-gradient(450deg, #ff902b 50%, transparent 50%, transparent), linear-gradient(270deg, #ff902b 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-0 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(90deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-5 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(108deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-10 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(126deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-15 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(144deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-20 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(162deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-25 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(180deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-30 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(198deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-35 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(216deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-40 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(234deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-45 {
+    background-image: linear-gradient(90deg, #fafafa 50%, transparent 50%, transparent), linear-gradient(252deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-50 {
+    background-image: linear-gradient(270deg, #f05050 50%, transparent 50%, transparent), linear-gradient(270deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-55 {
+    background-image: linear-gradient(288deg, #f05050 50%, transparent 50%, transparent), linear-gradient(270deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-60 {
+    background-image: linear-gradient(306deg, #f05050 50%, transparent 50%, transparent), linear-gradient(270deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-65 {
+    background-image: linear-gradient(324deg, #f05050 50%, transparent 50%, transparent), linear-gradient(270deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-70 {
+    background-image: linear-gradient(342deg, #f05050 50%, transparent 50%, transparent), linear-gradient(270deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-75 {
+    background-image: linear-gradient(360deg, #f05050 50%, transparent 50%, transparent), linear-gradient(270deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-80 {
+    background-image: linear-gradient(378deg, #f05050 50%, transparent 50%, transparent), linear-gradient(270deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-85 {
+    background-image: linear-gradient(396deg, #f05050 50%, transparent 50%, transparent), linear-gradient(270deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-90 {
+    background-image: linear-gradient(414deg, #f05050 50%, transparent 50%, transparent), linear-gradient(270deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-95 {
+    background-image: linear-gradient(432deg, #f05050 50%, transparent 50%, transparent), linear-gradient(270deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-danger.radial-bar-100 {
+    background-image: linear-gradient(450deg, #f05050 50%, transparent 50%, transparent), linear-gradient(270deg, #f05050 50%, #fafafa 50%, #fafafa);
+}
+.radial-bar-lg {
+    width: 100px;
+    height: 100px;
+    font-size: 22px;
+}
+.radial-bar-lg:after,
+.radial-bar-lg > img {
+    width: 70px;
+    height: 70px;
+    margin-left: 15px;
+    margin-top: 15px;
+    line-height: 70px;
+}
+.radial-bar-sm {
+    width: 50px;
+    height: 50px;
+    font-size: 12px;
+}
+.radial-bar-sm:after,
+.radial-bar-sm > img {
+    width: 35px;
+    height: 35px;
+    margin-left: 7.5px;
+    margin-top: 7.5px;
+    line-height: 35px;
+}
+.radial-bar-xs {
+    width: 30px;
+    height: 30px;
+    font-size: 8px;
+}
+.radial-bar-xs:after,
+.radial-bar-xs > img {
+    width: 21px;
+    height: 21px;
+    margin-left: 4.5px;
+    margin-top: 4.5px;
+    line-height: 21px;
+}
+x:-o-prefocus,
+.radial-bar {
+    background-clip: content-box;
+}
+/* ========================================================================
+ Component: user-block.less
+ ========================================================================== */
+.has-user-block {
+    display: block;
+    overflow: hidden;
+    border: 0 !important;
+    width: 100% !important;
+}
+.user-block {
+    position: relative;
+    padding: 25px 0 10px;
+    cursor: pointer;
+}
+.user-block:before,
+.user-block:after {
+    content: " ";
+    display: table;
+}
+.user-block:after {
+    clear: both;
+}
+.user-block > .user-block-picture {
+    position: relative;
+    width: 60px;
+    margin: 0 auto;
+}
+.user-block > .user-block-picture > img {
+    max-width: 100%;
+    height: auto;
+}
+.user-block .user-block-info {
+    padding-top: 15px;
+    text-align: center;
+    white-space: nowrap;
+}
+.user-block .user-block-info .user-block-name,
+.user-block .user-block-info .user-block-role {
+    display: block;
+}
+.user-block .user-block-info .user-block-name {
+    color: #7D848F;
+}
+.user-block .user-block-info .user-block-role {
+    font-size: 12px;
+    color: #aaa;
+}
+.user-block-status {
+    position: relative;
+}
+.user-block-status > .circle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: 2px solid #fff;
+}
+.aside-collapsed .user-block {
+    padding: 15px 0 14px;
+    margin: 0;
+    text-align: center;
+}
+.aside-collapsed .user-block > .user-block-picture {
+    float: none;
+    margin: 0  auto;
+    width: 50px;
+}
+.aside-collapsed .user-block > .user-block-picture > .user-block-status {
+    display: block;
+}
+.aside-collapsed .user-block .user-block-info {
+    display: none;
+}
+/* ========================================================================
+ Component: circles.less
+ ========================================================================== */
+.circle {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 500px;
+    margin: 0 .5em;
+    background-color: #ddd;
+    vertical-align: baseline;
+    border: 2px solid transparent;
+}
+.circle.text-left {
+    margin-left: 0;
+}
+.circle.text-right {
+    margin-right: 0;
+}
+.circle-primary {
+    background-color: #5d9cec;
+}
+.circle-success {
+    background-color: #27c24c;
+}
+.circle-info {
+    background-color: #23b7e5;
+}
+.circle-warning {
+    background-color: #ff902b;
+}
+.circle-danger {
+    background-color: #f05050;
+}
+.circle-green {
+    background-color: #37bc9b;
+}
+.circle-pink {
+    background-color: #f532e5;
+}
+.circle-inverse {
+    background-color: #131e26;
+}
+.circle-purple {
+    background-color: #7266ba;
+}
+.circle-sm {
+    width: 5px;
+    height: 5px;
+}
+.circle-lg {
+    width: 11px;
+    height: 11px;
+}
+.circle-xl {
+    width: 18px;
+    height: 18px;
+}
+.circle-outline {
+    background-color: transparent;
+}
+.circle-outline.circle-primary {
+    border: 1px solid #5d9cec;
+}
+.circle-outline.circle-success {
+    border: 1px solid #27c24c;
+}
+.circle-outline.circle-info {
+    border: 1px solid #23b7e5;
+}
+.circle-outline.circle-warning {
+    border: 1px solid #ff902b;
+}
+.circle-outline.circle-danger {
+    border: 1px solid #f05050;
+}
+/* ========================================================================
+ Component: timeline.less
+ ========================================================================== */
+.timeline,
+.timeline-alt {
+    list-style: none;
+    padding: 0 0 20px;
+    position: relative;
+    z-index: 0;
+}
+.timeline:before,
+.timeline-alt:before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    content: " ";
+    width: 1px;
+    background-color: #d1d2d3;
+    left: 18px;
+}
+.timeline .timeline-end,
+.timeline-alt .timeline-end {
+    float: none;
+    clear: both;
+}
+.timeline .popover.left > .arrow:after,
+.timeline-alt .popover.left > .arrow:after {
+    border-left-color: #fff;
+}
+.timeline .popover.right > .arrow:after,
+.timeline-alt .popover.right > .arrow:after {
+    border-right-color: #fff;
+}
+.timeline .popover.left > .popover-title + .arrow:after,
+.timeline-alt .popover.left > .popover-title + .arrow:after {
+    border-left-color: #fafafa;
+}
+.timeline .popover.right > .popover-title + .arrow:after,
+.timeline-alt .popover.right > .popover-title + .arrow:after {
+    border-right-color: #fafafa;
+}
+.timeline > li,
+.timeline-alt > li {
+    margin-bottom: 20px;
+}
+.timeline > li:before,
+.timeline-alt > li:before,
+.timeline > li:after,
+.timeline-alt > li:after {
+    content: " ";
+    display: table;
+}
+.timeline > li:after,
+.timeline-alt > li:after {
+    clear: both;
+}
+.timeline > li.timeline-separator,
+.timeline-alt > li.timeline-separator {
+    position: relative;
+    float: none;
+    clear: both;
+    margin: 0 auto;
+    padding: 40px 0;
+}
+.timeline > li.timeline-separator:first-child,
+.timeline-alt > li.timeline-separator:first-child {
+    padding-top: 0;
+}
+.timeline > li.timeline-separator:before,
+.timeline-alt > li.timeline-separator:before {
+    content: attr(data-datetime);
+    display: inline-block;
+    width: 120px;
+    text-align: center;
+    padding: 0 20px;
+    line-height: 30px;
+    background-color: #b6c5da;
+    color: #fff;
+}
+.timeline > li > .timeline-panel,
+.timeline-alt > li > .timeline-panel {
+    margin-left: 60px;
+}
+.timeline > li > .timeline-panel .popover,
+.timeline-alt > li > .timeline-panel .popover {
+    position: relative;
+    display: block;
+    margin: 0;
+    width: 100%;
+    max-width: none;
+}
+.timeline > li > .timeline-panel .popover .arrow,
+.timeline-alt > li > .timeline-panel .popover .arrow {
+    top: 18px;
+    display: none;
+}
+.timeline > li > .timeline-panel .popover .popover-content .popover-title,
+.timeline-alt > li > .timeline-panel .popover .popover-content .popover-title {
+    background-color: transparent;
+    border: 0;
+    padding-left: 0;
+    padding-top: 0;
+}
+.timeline > li > .timeline-date,
+.timeline-alt > li > .timeline-date {
+    margin: -20px 0 0;
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    font-size: 13px;
+}
+.timeline > li > .timeline-date > time:after,
+.timeline-alt > li > .timeline-date > time:after {
+    content: attr(datetime);
+}
+.timeline > li > .timeline-badge,
+.timeline-alt > li > .timeline-badge {
+    position: absolute;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 500px;
+    line-height: 36px;
+    font-size: 1em;
+    text-align: center;
+    color: #fff;
+    background-color: #999;
+    z-index: 100;
+}
+.timeline > li > .timeline-badge.primary,
+.timeline-alt > li > .timeline-badge.primary {
+    background-color: #5d9cec;
+}
+.timeline > li > .timeline-badge.success,
+.timeline-alt > li > .timeline-badge.success {
+    background-color: #27c24c;
+}
+.timeline > li > .timeline-badge.warning,
+.timeline-alt > li > .timeline-badge.warning {
+    background-color: #ff902b;
+}
+.timeline > li > .timeline-badge.danger,
+.timeline-alt > li > .timeline-badge.danger {
+    background-color: #f05050;
+}
+.timeline > li > .timeline-badge.info,
+.timeline-alt > li > .timeline-badge.info {
+    background-color: #23b7e5;
+}
+.timeline > li > .timeline-badge.inverse,
+.timeline-alt > li > .timeline-badge.inverse {
+    background-color: #131e26;
+}
+.timeline > li > .timeline-badge.green,
+.timeline-alt > li > .timeline-badge.green {
+    background-color: #37bc9b;
+}
+.timeline > li > .timeline-badge.pink,
+.timeline-alt > li > .timeline-badge.pink {
+    background-color: #f532e5;
+}
+.timeline > li > .timeline-badge.purple,
+.timeline-alt > li > .timeline-badge.purple {
+    background-color: #7266ba;
+}
+.timeline > li > .timeline-badge.dark,
+.timeline-alt > li > .timeline-badge.dark {
+    background-color: #3a3f51;
+}
+.timeline > li > .timeline-badge.yellow,
+.timeline-alt > li > .timeline-badge.yellow {
+    background-color: #fad732;
+}
+.timeline-alt .popover .arrow {
+    display: block !important;
+}
+.timeline-title {
+    margin-top: 0;
+    color: inherit;
+}
+.timeline-body > p,
+.timeline-body > ul {
+    margin-bottom: 0;
+}
+.timeline-body > p + p {
+    margin-top: 5px;
+}
+@media only screen and (min-width: 992px) {
+.timeline:before {
+        left: 50%;
+        margin-left: 18px;
     }
-
-})();
-
-/**=========================================================
- * Module: sidebar.js
- * Wraps the sidebar and handles collapsed state
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sidebar')
-        .directive('sidebar', sidebar);
-
-    sidebar.$inject = ['$rootScope', '$timeout', '$window', 'Utils'];
-    function sidebar ($rootScope, $timeout, $window, Utils) {
-        var $win = angular.element($window);
-        var directive = {
-            // bindToController: true,
-            // controller: Controller,
-            // controllerAs: 'vm',
-            link: link,
-            restrict: 'EA',
-            template: '<nav class="sidebar" ng-transclude></nav>',
-            transclude: true,
-            replace: true
-            // scope: {}
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-
-          var currentState = $rootScope.$state.current.name;
-          var $sidebar = element;
-
-          var eventName = Utils.isTouch() ? 'click' : 'mouseenter' ;
-          var subNav = $();
-
-          $sidebar.on( eventName, '.nav > li', function() {
-
-            if( Utils.isSidebarCollapsed() || $rootScope.app.layout.asideHover ) {
-
-              subNav.trigger('mouseleave');
-              subNav = toggleMenuItem( $(this), $sidebar);
-
-              // Used to detect click and touch events outside the sidebar
-              sidebarAddBackdrop();
-
-            }
-
-          });
-
-          scope.$on('closeSidebarMenu', function() {
-            removeFloatingNav();
-          });
-
-          // Normalize state when resize to mobile
-          $win.on('resize', function() {
-            if( ! Utils.isMobile() )
-          	asideToggleOff();
-          });
-
-          // Adjustment on route changes
-          $rootScope.$on('$stateChangeStart', function(event, toState) {
-            currentState = toState.name;
-            // Hide sidebar automatically on mobile
-            asideToggleOff();
-
-            $rootScope.$broadcast('closeSidebarMenu');
-          });
-
-      	  // Autoclose when click outside the sidebar
-          if ( angular.isDefined(attrs.sidebarAnyclickClose) ) {
-
-            var wrapper = $('.wrapper');
-            var sbclickEvent = 'click.sidebar';
-
-            $rootScope.$watch('app.asideToggled', watchExternalClicks);
-
-          }
-
-          //////
-
-          function watchExternalClicks(newVal) {
-            // if sidebar becomes visible
-            if ( newVal === true ) {
-              $timeout(function(){ // render after current digest cycle
-                wrapper.on(sbclickEvent, function(e){
-                  // if not child of sidebar
-                  if( ! $(e.target).parents('.aside').length ) {
-                    asideToggleOff();
-                  }
-                });
-              });
-            }
-            else {
-              // dettach event
-              wrapper.off(sbclickEvent);
-            }
-          }
-
-          function asideToggleOff() {
-            $rootScope.app.asideToggled = false;
-            if(!scope.$$phase) scope.$apply(); // anti-pattern but sometimes necessary
-      	  }
-        }
-
-        ///////
-
-        function sidebarAddBackdrop() {
-          var $backdrop = $('<div/>', { 'class': 'dropdown-backdrop'} );
-          $backdrop.insertAfter('.aside-inner').on('click mouseenter', function () {
-            removeFloatingNav();
-          });
-        }
-
-        // Open the collapse sidebar submenu items when on touch devices
-        // - desktop only opens on hover
-        function toggleTouchItem($element){
-          $element
-            .siblings('li')
-            .removeClass('open')
-            .end()
-            .toggleClass('open');
-        }
-
-        // Handles hover to open items under collapsed menu
-        // -----------------------------------
-        function toggleMenuItem($listItem, $sidebar) {
-
-          removeFloatingNav();
-
-          var ul = $listItem.children('ul');
-
-          if( !ul.length ) return $();
-          if( $listItem.hasClass('open') ) {
-            toggleTouchItem($listItem);
-            return $();
-          }
-
-          var $aside = $('.aside');
-          var $asideInner = $('.aside-inner'); // for top offset calculation
-          // float aside uses extra padding on aside
-          var mar = parseInt( $asideInner.css('padding-top'), 0) + parseInt( $aside.css('padding-top'), 0);
-          var subNav = ul.clone().appendTo( $aside );
-
-          toggleTouchItem($listItem);
-
-          var itemTop = ($listItem.position().top + mar) - $sidebar.scrollTop();
-          var vwHeight = $win.height();
-
-          subNav
-            .addClass('nav-floating')
-            .css({
-              position: $rootScope.app.layout.isFixed ? 'fixed' : 'absolute',
-              top:      itemTop,
-              bottom:   (subNav.outerHeight(true) + itemTop > vwHeight) ? 0 : 'auto'
-            });
-
-          subNav.on('mouseleave', function() {
-            toggleTouchItem($listItem);
-            subNav.remove();
-          });
-
-          return subNav;
-        }
-
-        function removeFloatingNav() {
-          $('.dropdown-backdrop').remove();
-          $('.sidebar-subnav.nav-floating').remove();
-          $('.sidebar li.open').removeClass('open');
-        }
+.timeline > li {
+        float: left;
+        clear: left;
+        width: 45%;
     }
-
-
-})();
-
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sidebar')
-        .service('SidebarLoader', SidebarLoader);
-
-    SidebarLoader.$inject = ['$http'];
-    function SidebarLoader($http) {
-        this.getMenu = getMenu;
-
-        ////////////////
-
-        function getMenu(onReady, onError) {
-          var menuJson = 'server/sidebar-menu.json',
-              menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
-
-          onError = onError || function() { alert('Failure loading menu'); };
-
-          $http
-            .get(menuURL)
-            .success(onReady)
-            .error(onError);
-        }
+.timeline > li.timeline-inverted {
+        float: right;
+        clear: right;
+        margin-top: 50px;
     }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.sidebar')
-        .controller('UserBlockController', UserBlockController);
-
-    UserBlockController.$inject = ['$rootScope'];
-    function UserBlockController($rootScope) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $rootScope.user = {
-            name:     'John',
-            job:      'ng-developer',
-            picture:  'app/img/user/02.jpg'
-          };
-
-          // Hides/show user avatar on sidebar
-          $rootScope.toggleUserBlock = function(){
-            $rootScope.$broadcast('toggleUserBlock');
-          };
-
-          $rootScope.userBlockVisible = true;
-
-          $rootScope.$on('toggleUserBlock', function(/*event, args*/) {
-
-            $rootScope.userBlockVisible = ! $rootScope.userBlockVisible;
-
-          });
-        }
+.timeline > li.timeline-separator {
+        text-align: center;
     }
-})();
-
-/**=========================================================
- * Module: angular-grid.js
- * Example for Angular Grid
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.tables')
-        .controller('AngularGridController', AngularGridController);
-
-    AngularGridController.$inject = ['$http'];
-    function AngularGridController($http) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-            // Basic
-            var columnDefs = [
-                {displayName: 'Athlete', field: 'athlete', width: 150},
-                {displayName: 'Age', field: 'age', width: 90},
-                {displayName: 'Country', field: 'country', width: 120},
-                {displayName: 'Year', field: 'year', width: 90},
-                {displayName: 'Date', field: 'date', width: 110},
-                {displayName: 'Sport', field: 'sport', width: 110},
-                {displayName: 'Gold', field: 'gold', width: 100},
-                {displayName: 'Silver', field: 'silver', width: 100},
-                {displayName: 'Bronze', field: 'bronze', width: 100},
-                {displayName: 'Total', field: 'total', width: 100}
-            ];
-
-            vm.gridOptions = {
-                columnDefs: columnDefs,
-                rowData: null,
-                ready: function(api){
-                  api.sizeColumnsToFit();
-                }
-            };
-
-            // Filter Example
-            var irishAthletes = ['John Joe Nevin','Katie Taylor','Paddy Barnes','Kenny Egan','Darren Sutherland', 'Margaret Thatcher', 'Tony Blair', 'Ronald Regan', 'Barack Obama'];
-
-            var columnDefsFilter = [
-                {displayName: 'Athlete', field: 'athlete', width: 150, filter: 'set',
-                    filterParams: { cellHeight: 20, values: irishAthletes} },
-                {displayName: 'Age', field: 'age', width: 90, filter: 'number'},
-                {displayName: 'Country', field: 'country', width: 120},
-                {displayName: 'Year', field: 'year', width: 90},
-                {displayName: 'Date', field: 'date', width: 110},
-                {displayName: 'Sport', field: 'sport', width: 110},
-                {displayName: 'Gold', field: 'gold', width: 100, filter: 'number'},
-                {displayName: 'Silver', field: 'silver', width: 100, filter: 'number'},
-                {displayName: 'Bronze', field: 'bronze', width: 100, filter: 'number'},
-                {displayName: 'Total', field: 'total', width: 100, filter: 'number'}
-            ];
-
-            vm.gridOptions1 = {
-                columnDefs: columnDefsFilter,
-                rowData: null,
-                enableFilter: true,
-                ready: function(api){
-                  api.sizeColumnsToFit();
-                }
-
-            };
-
-
-            // Pinning Example
-
-            vm.gridOptions2 = {
-                columnDefs: columnDefs,
-                rowData: null,
-                pinnedColumnCount: 2,
-                ready: function(api){
-                  api.sizeColumnsToFit();
-                }
-            };
-
-            //-----------------------------
-            // Get the data from SERVER
-            //-----------------------------
-
-            $http.get('server/ag-owinners.json')
-                .then(function(res){
-                    // basic
-                    vm.gridOptions.rowData = res.data;
-                    vm.gridOptions.api.onNewRows();
-                    // filter
-                    vm.gridOptions1.rowData = res.data;
-                    vm.gridOptions1.api.onNewRows();
-                    // pinning
-                    vm.gridOptions2.rowData = res.data;
-                    vm.gridOptions2.api.onNewRows();
-                });
-
-        }
+.timeline > li.timeline-separator:before {
+        margin-left: 36px;
     }
-})();
-
-/**=========================================================
- * Module: datatable,js
- * Angular Datatable controller
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.tables')
-        .controller('DataTableController', DataTableController);
-
-    DataTableController.$inject = ['$resource', 'DTOptionsBuilder', 'DTColumnDefBuilder'];
-    function DataTableController($resource, DTOptionsBuilder, DTColumnDefBuilder) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          // Ajax
-
-          $resource('server/datatable.json').query().$promise.then(function(persons) {
-             vm.persons = persons;
-          });
-
-          // Changing data
-
-          vm.heroes = [{
-              'id': 860,
-              'firstName': 'Superman',
-              'lastName': 'Yoda'
-            }, {
-              'id': 870,
-              'firstName': 'Ace',
-              'lastName': 'Ventura'
-            }, {
-              'id': 590,
-              'firstName': 'Flash',
-              'lastName': 'Gordon'
-            }, {
-              'id': 803,
-              'firstName': 'Luke',
-              'lastName': 'Skywalker'
-            }
-          ];
-
-          vm.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('full_numbers');
-          vm.dtColumnDefs = [
-              DTColumnDefBuilder.newColumnDef(0),
-              DTColumnDefBuilder.newColumnDef(1),
-              DTColumnDefBuilder.newColumnDef(2),
-              DTColumnDefBuilder.newColumnDef(3).notSortable()
-          ];
-          vm.person2Add = _buildPerson2Add(1);
-          vm.addPerson = addPerson;
-          vm.modifyPerson = modifyPerson;
-          vm.removePerson = removePerson;
-
-          function _buildPerson2Add(id) {
-              return {
-                  id: id,
-                  firstName: 'Foo' + id,
-                  lastName: 'Bar' + id
-              };
-          }
-          function addPerson() {
-              vm.heroes.push(angular.copy(vm.person2Add));
-              vm.person2Add = _buildPerson2Add(vm.person2Add.id + 1);
-          }
-          function modifyPerson(index) {
-              vm.heroes.splice(index, 1, angular.copy(vm.person2Add));
-              vm.person2Add = _buildPerson2Add(vm.person2Add.id + 1);
-          }
-          function removePerson(index) {
-              vm.heroes.splice(index, 1);
-          }
-
-        }
+.timeline > li > .timeline-badge {
+        left: 50%;
+        margin-left: 0;
     }
-})();
-
-/**=========================================================
- * Module: ng-grid.js
- * ngGrid demo
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.tables')
-        .controller('NGGridController', NGGridController);
-
-    NGGridController.$inject = ['$scope', '$http', '$timeout'];
-    function NGGridController($scope, $http, $timeout) {
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          $scope.filterOptions = {
-              filterText: '',
-              useExternalFilter: true
-          };
-          $scope.totalServerItems = 0;
-          $scope.pagingOptions = {
-              pageSizes:   [250, 500, 1000],  // page size options
-              pageSize:    250,              // default page size
-              currentPage: 1                 // initial page
-          };
-
-          $scope.gridOptions = {
-              data:             'myData',
-              enablePaging:     true,
-              showFooter:       true,
-              rowHeight:        36,
-              headerRowHeight:  38,
-              totalServerItems: 'totalServerItems',
-              pagingOptions:    $scope.pagingOptions,
-              filterOptions:    $scope.filterOptions
-          };
-
-          $scope.setPagingData = function(data, page, pageSize){
-              // calc for pager
-              var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
-              // Store data from server
-              $scope.myData = pagedData;
-              // Update server side data length
-              $scope.totalServerItems = data.length;
-
-              if (!$scope.$$phase) {
-                  $scope.$apply();
-              }
-
-          };
-
-          $scope.getPagedDataAsync = function (pageSize, page, searchText) {
-            var ngGridResourcePath = 'server/ng-grid-data.json';
-
-            $timeout(function () {
-
-                if (searchText) {
-                    var ft = searchText.toLowerCase();
-                    $http.get(ngGridResourcePath).success(function (largeLoad) {
-                        var data = largeLoad.filter(function(item) {
-                            return JSON.stringify(item).toLowerCase().indexOf(ft) !== -1;
-                        });
-                        $scope.setPagingData(data,page,pageSize);
-                    });
-                } else {
-                    $http.get(ngGridResourcePath).success(function (largeLoad) {
-                        $scope.setPagingData(largeLoad,page,pageSize);
-                    });
-                }
-            }, 100);
-          };
-
-
-          $scope.$watch('pagingOptions', function (newVal, oldVal) {
-              if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
-                $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-              }
-          }, true);
-          $scope.$watch('filterOptions', function (newVal, oldVal) {
-              if (newVal !== oldVal) {
-                $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-              }
-          }, true);
-
-          $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
-        }
+.timeline > li > .timeline-date {
+        float: none;
+        position: absolute;
+        width: 40%;
+        left: 50%;
+        top: 18px;
+        margin-left: 54px;
+        margin-top: -10px;
     }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.tables')
-        .service('ngTableDataService', ngTableDataService);
-
-    function ngTableDataService() {
-        /* jshint validthis:true */
-        var self = this;
-        this.cache = null;
-        this.getData = getData;
-
-        ////////////////
-
-        function getData($defer, params, api) {
-          // if no cache, request data and filter
-          if ( ! self.cache ) {
-            if ( api ) {
-              api.get(function(data){
-                self.cache = data;
-                filterdata($defer, params);
-              });
-            }
-          }
-          else {
-            filterdata($defer, params);
-          }
-
-          function filterdata($defer, params) {
-            var from = (params.page() - 1) * params.count();
-            var to = params.page() * params.count();
-            var filteredData = self.cache.result.slice(from, to);
-
-            params.total(self.cache.total);
-            $defer.resolve(filteredData);
-          }
-
-        }
+.timeline > li > .timeline-panel {
+        margin: 0;
     }
-})();
-
-/**=========================================================
- * Module: NGTableCtrl.js
- * Controller for ngTables
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.tables')
-        .controller('NGTableCtrl', NGTableCtrl);
-    /*jshint -W055 */
-    NGTableCtrl.$inject = ['$filter', 'ngTableParams', '$resource', '$timeout', 'ngTableDataService'];
-    function NGTableCtrl($filter, ngTableParams, $resource, $timeout, ngTableDataService) {
-        var vm = this;
-        vm.title = 'Controller';
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          var data = [
-              {name: 'Moroni',  age: 50, money: -10   },
-              {name: 'Tiancum', age: 43, money: 120   },
-              {name: 'Jacob',   age: 27, money: 5.5   },
-              {name: 'Nephi',   age: 29, money: -54   },
-              {name: 'Enos',    age: 34, money: 110   },
-              {name: 'Tiancum', age: 43, money: 1000  },
-              {name: 'Jacob',   age: 27, money: -201  },
-              {name: 'Nephi',   age: 29, money: 100   },
-              {name: 'Enos',    age: 34, money: -52.5 },
-              {name: 'Tiancum', age: 43, money: 52.1  },
-              {name: 'Jacob',   age: 27, money: 110   },
-              {name: 'Nephi',   age: 29, money: -55   },
-              {name: 'Enos',    age: 34, money: 551   },
-              {name: 'Tiancum', age: 43, money: -1410 },
-              {name: 'Jacob',   age: 27, money: 410   },
-              {name: 'Nephi',   age: 29, money: 100   },
-              {name: 'Enos',    age: 34, money: -100  }
-          ];
-
-          // SELECT ROWS
-          // -----------------------------------
-
-          vm.data = data;
-
-          vm.tableParams3 = new ngTableParams({
-              page: 1,            // show first page
-              count: 10          // count per page
-          }, {
-              total: data.length, // length of data
-              getData: function ($defer, params) {
-                  // use build-in angular filter
-                  var filteredData = params.filter() ?
-                          $filter('filter')(data, params.filter()) :
-                          data;
-                  var orderedData = params.sorting() ?
-                          $filter('orderBy')(filteredData, params.orderBy()) :
-                          data;
-
-                  params.total(orderedData.length); // set total for recalc pagination
-                  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-              }
-          });
-
-          vm.changeSelection = function(user) {
-            console.info(user);
-          };
-
-          // EXPORT CSV
-          // -----------------------------------
-
-          var data4 = [{name: 'Moroni', age: 50},
-              {name: 'Tiancum', age: 43},
-              {name: 'Jacob', age: 27},
-              {name: 'Nephi', age: 29},
-              {name: 'Enos', age: 34},
-              {name: 'Tiancum', age: 43},
-              {name: 'Jacob', age: 27},
-              {name: 'Nephi', age: 29},
-              {name: 'Enos', age: 34},
-              {name: 'Tiancum', age: 43},
-              {name: 'Jacob', age: 27},
-              {name: 'Nephi', age: 29},
-              {name: 'Enos', age: 34},
-              {name: 'Tiancum', age: 43},
-              {name: 'Jacob', age: 27},
-              {name: 'Nephi', age: 29},
-              {name: 'Enos', age: 34}];
-
-          vm.tableParams4 = new ngTableParams({
-              page: 1,            // show first page
-              count: 10           // count per page
-          }, {
-              total: data4.length, // length of data4
-              getData: function($defer, params) {
-                  $defer.resolve(data4.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-              }
-          });
-
-
-          // SORTING
-          // -----------------------------------
-
-
-
-          vm.tableParams = new ngTableParams({
-              page: 1,            // show first page
-              count: 10,          // count per page
-              sorting: {
-                  name: 'asc'     // initial sorting
-              }
-          }, {
-              total: data.length, // length of data
-              getData: function($defer, params) {
-                  // use build-in angular filter
-                  var orderedData = params.sorting() ?
-                          $filter('orderBy')(data, params.orderBy()) :
-                          data;
-
-                  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-              }
-          });
-
-          // FILTERS
-          // -----------------------------------
-
-          vm.tableParams2 = new ngTableParams({
-              page: 1,            // show first page
-              count: 10,          // count per page
-              filter: {
-                  name: '',
-                  age: ''
-                  // name: 'M'       // initial filter
-              }
-          }, {
-              total: data.length, // length of data
-              getData: function($defer, params) {
-                  // use build-in angular filter
-                  var orderedData = params.filter() ?
-                         $filter('filter')(data, params.filter()) :
-                         data;
-
-                  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-                  params.total(orderedData.length); // set total for recalc pagination
-                  $defer.resolve(vm.users);
-              }
-          });
-
-          // AJAX
-
-          var Api = $resource('server/table-data.json');
-
-          vm.tableParams5 = new ngTableParams({
-              page: 1,            // show first page
-              count: 10           // count per page
-          }, {
-              total: 0,           // length of data
-              counts: [],         // hide page counts control
-              getData: function($defer, params) {
-
-                  // Service using cache to avoid mutiple requests
-                  ngTableDataService.getData( $defer, params, Api);
-
-                  /* direct ajax request to api (perform result pagination on the server)
-                  Api.get(params.url(), function(data) {
-                      $timeout(function() {
-                          // update table params
-                          params.total(data.total);
-                          // set new data
-                          $defer.resolve(data.result);
-                      }, 500);
-                  });
-                  */
-              }
-          });
-        }
+.timeline > li > .timeline-panel:before {
+        border-left-width: 15px;
+        border-right-width: 0;
+        top: 26px;
+        right: -15px;
+        left: auto;
     }
-})();
-
-
-
-/**=========================================================
- * Module: demo-buttons.js
- * Provides a simple demo for buttons actions
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.tables')
-        .controller('TablexEditableController', TablexEditableController);
-
-    TablexEditableController.$inject = ['$filter', '$http', 'editableOptions', 'editableThemes','$q'];
-    function TablexEditableController($filter, $http, editableOptions, editableThemes, $q) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          // editable row
-          // -----------------------------------
-          vm.users = [
-            {id: 1, name: 'awesome user1', status: 2, group: 4, groupName: 'admin'},
-            {id: 2, name: 'awesome user2', status: undefined, group: 3, groupName: 'vip'},
-            {id: 3, name: 'awesome user3', status: 2, group: null}
-          ];
-
-          vm.statuses = [
-            {value: 1, text: 'status1'},
-            {value: 2, text: 'status2'},
-            {value: 3, text: 'status3'},
-            {value: 4, text: 'status4'}
-          ];
-
-          vm.groups = [];
-          vm.loadGroups = function() {
-            return vm.groups.length ? null : $http.get('server/xeditable-groups.json').success(function(data) {
-              vm.groups = data;
-            });
-          };
-
-          vm.showGroup = function(user) {
-            if(user.group && vm.groups.length) {
-              var selected = $filter('filter')(vm.groups, {id: user.group});
-              return selected.length ? selected[0].text : 'Not set';
-            } else {
-              return user.groupName || 'Not set';
-            }
-          };
-
-          vm.showStatus = function(user) {
-            var selected = [];
-            if(user.status) {
-              selected = $filter('filter')(vm.statuses, {value: user.status});
-            }
-            return selected.length ? selected[0].text : 'Not set';
-          };
-
-          vm.checkName = function(data, id) {
-            if (id === 2 && data !== 'awesome') {
-              return 'Username 2 should be `awesome`';
-            }
-          };
-
-          vm.saveUser = function(data, id) {
-            //vm.user not updated yet
-            angular.extend(data, {id: id});
-            console.log('Saving user: ' + id);
-            // return $http.post('/saveUser', data);
-          };
-
-          // remove user
-          vm.removeUser = function(index) {
-            vm.users.splice(index, 1);
-          };
-
-          // add user
-          vm.addUser = function() {
-            vm.inserted = {
-              id: vm.users.length+1,
-              name: '',
-              status: null,
-              group: null,
-              isNew: true
-            };
-            vm.users.push(vm.inserted);
-          };
-
-          // editable column
-          // -----------------------------------
-
-
-          vm.saveColumn = function(column) {
-            var results = [];
-            angular.forEach(vm.users, function(/*user*/) {
-              // results.push($http.post('/saveColumn', {column: column, value: user[column], id: user.id}));
-              console.log('Saving column: ' + column);
-            });
-            return $q.all(results);
-          };
-
-          // editable table
-          // -----------------------------------
-
-          // filter users to show
-          vm.filterUser = function(user) {
-            return user.isDeleted !== true;
-          };
-
-          // mark user as deleted
-          vm.deleteUser = function(id) {
-            var filtered = $filter('filter')(vm.users, {id: id});
-            if (filtered.length) {
-              filtered[0].isDeleted = true;
-            }
-          };
-
-          // cancel all changes
-          vm.cancel = function() {
-            for (var i = vm.users.length; i--;) {
-              var user = vm.users[i];
-              // undelete
-              if (user.isDeleted) {
-                delete user.isDeleted;
-              }
-              // remove new
-              if (user.isNew) {
-                vm.users.splice(i, 1);
-              }
-            }
-          };
-
-          // save edits
-          vm.saveTable = function() {
-            var results = [];
-            for (var i = vm.users.length; i--;) {
-              var user = vm.users[i];
-              // actually delete user
-              if (user.isDeleted) {
-                vm.users.splice(i, 1);
-              }
-              // mark as not new
-              if (user.isNew) {
-                user.isNew = false;
-              }
-
-              // send on server
-              // results.push($http.post('/saveUser', user));
-              console.log('Saving Table...');
-            }
-
-            return $q.all(results);
-          };
-
-        }
+.timeline > li > .timeline-panel:after {
+        border-left-width: 14px;
+        border-right-width: 0;
+        top: 27px;
+        right: -14px;
+        left: auto;
     }
-})();
-
-/**=========================================================
- * Module: UIGridController
-  =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.tables')
-        .controller('UIGridController', UIGridController);
-
-    UIGridController.$inject = ['uiGridConstants', '$http'];
-    function UIGridController(uiGridConstants, $http) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-
-          // Basic example
-          // -----------------------------------
-
-          vm.gridOptions = {
-            rowHeight: 34,
-            data: [
-              {
-                  'name': 'Wilder Gonzales',
-                  'gender': 'male',
-                  'company': 'Geekko'
-              },
-              {
-                  'name': 'Georgina Schultz',
-                  'gender': 'female',
-                  'company': 'Suretech'
-              },
-              {
-                  'name': 'Carroll Buchanan',
-                  'gender': 'male',
-                  'company': 'Ecosys'
-              },
-              {
-                  'name': 'Valarie Atkinson',
-                  'gender': 'female',
-                  'company': 'Hopeli'
-              },
-              {
-                  'name': 'Schroeder Mathews',
-                  'gender': 'male',
-                  'company': 'Polarium'
-              },
-              {
-                  'name': 'Ethel Price',
-                  'gender': 'female',
-                  'company': 'Enersol'
-              },
-              {
-                  'name': 'Claudine Neal',
-                  'gender': 'female',
-                  'company': 'Sealoud'
-              },
-              {
-                  'name': 'Beryl Rice',
-                  'gender': 'female',
-                  'company': 'Velity'
-              },
-              {
-                  'name': 'Lynda Mendoza',
-                  'gender': 'female',
-                  'company': 'Dogspa'
-              },
-              {
-                  'name': 'Sarah Massey',
-                  'gender': 'female',
-                  'company': 'Bisba'
-              },
-              {
-                  'name': 'Robles Boyle',
-                  'gender': 'male',
-                  'company': 'Comtract'
-              },
-              {
-                  'name': 'Evans Hickman',
-                  'gender': 'male',
-                  'company': 'Parleynet'
-              },
-              {
-                  'name': 'Dawson Barber',
-                  'gender': 'male',
-                  'company': 'Dymi'
-              },
-              {
-                  'name': 'Bruce Strong',
-                  'gender': 'male',
-                  'company': 'Xyqag'
-              },
-              {
-                  'name': 'Nellie Whitfield',
-                  'gender': 'female',
-                  'company': 'Exospace'
-              },
-              {
-                  'name': 'Jackson Macias',
-                  'gender': 'male',
-                  'company': 'Aquamate'
-              },
-              {
-                  'name': 'Pena Pena',
-                  'gender': 'male',
-                  'company': 'Quarx'
-              },
-              {
-                  'name': 'Lelia Gates',
-                  'gender': 'female',
-                  'company': 'Proxsoft'
-              },
-              {
-                  'name': 'Letitia Vasquez',
-                  'gender': 'female',
-                  'company': 'Slumberia'
-              },
-              {
-                  'name': 'Trevino Moreno',
-                  'gender': 'male',
-                  'company': 'Conjurica'
-              }
-            ]
-          };
-
-          // Complex example
-          // -----------------------------------
-
-          var data = [];
-
-          vm.gridOptionsComplex = {
-              showGridFooter: true,
-              showColumnFooter: true,
-              enableFiltering: true,
-              columnDefs: [
-                  { field: 'name', width: '13%' },
-                  { field: 'address.street',aggregationType: uiGridConstants.aggregationTypes.sum, width: '13%' },
-                  { field: 'age', aggregationType: uiGridConstants.aggregationTypes.avg, aggregationHideLabel: true, width: '13%' },
-                  { name: 'ageMin', field: 'age', aggregationType: uiGridConstants.aggregationTypes.min, width: '13%', displayName: 'Age for min' },
-                  { name: 'ageMax', field: 'age', aggregationType: uiGridConstants.aggregationTypes.max, width: '13%', displayName: 'Age for max' },
-                  { name: 'customCellTemplate',
-                    field: 'age',
-                    width: '14%',
-                    footerCellTemplate: '<div class="ui-grid-cell-contents bg-info text-center">Custom HTML</div>'
-                  },
-                  { name: 'registered', field: 'registered', width: '20%', cellFilter: 'date', footerCellFilter: 'date', aggregationType: uiGridConstants.aggregationTypes.max }
-              ],
-              data: data,
-              onRegisterApi: function(gridApi) {
-                vm.gridApi = gridApi;
-              }
-          };
-
-          $http.get('server/uigrid-complex.json')
-            .success(function(data) {
-              data.forEach( function(row) {
-                row.registered = Date.parse(row.registered);
-              });
-              vm.gridOptionsComplex.data = data;
-            });
-
-
-           vm.gridOptions1 = {
-              paginationPageSizes: [25, 50, 75],
-              paginationPageSize: 25,
-              columnDefs: [
-                { name: 'name' },
-                { name: 'gender' },
-                { name: 'company' }
-              ]
-            };
-
-            $http.get('server/uigrid-100.json')
-            .success(function (data) {
-              vm.gridOptions1.data = data;
-            });
-
-        }
+.timeline > li > .timeline-panel .popover .arrow {
+        display: block;
     }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .config(translateConfig)
-        ;
-    translateConfig.$inject = ['$translateProvider'];
-    function translateConfig($translateProvider){
-
-      $translateProvider.useStaticFilesLoader({
-          prefix : 'app/i18n/',
-          suffix : '.json'
-      });
-
-      $translateProvider.preferredLanguage('en');
-      $translateProvider.useLocalStorage();
-      $translateProvider.usePostCompiling(true);
-      $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
-
+.timeline > li.timeline-inverted > .timeline-panel {
+        padding-left: 36px;
     }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.translate')
-        .run(translateRun)
-        ;
-    translateRun.$inject = ['$rootScope', '$translate'];
-
-    function translateRun($rootScope, $translate){
-
-      // Internationalization
-      // ----------------------
-
-      $rootScope.language = {
-        // Handles language dropdown
-        listIsOpen: false,
-        // list of available languages
-        available: {
-          'en':       'English',
-          'es_AR':    'Español'
-        },
-        // display always the current ui language
-        init: function () {
-          var proposedLanguage = $translate.proposedLanguage() || $translate.use();
-          var preferredLanguage = $translate.preferredLanguage(); // we know we have set a preferred one in app.config
-          $rootScope.language.selected = $rootScope.language.available[ (proposedLanguage || preferredLanguage) ];
-        },
-        set: function (localeId) {
-          // Set the new idiom
-          $translate.use(localeId);
-          // save a reference for the current language
-          $rootScope.language.selected = $rootScope.language.available[localeId];
-          // finally toggle dropdown
-          $rootScope.language.listIsOpen = ! $rootScope.language.listIsOpen;
-        }
-      };
-
-      $rootScope.language.init();
-
+.timeline > li.timeline-inverted .timeline-date {
+        left: auto;
+        right: 50%;
+        width: auto;
+        margin-left: 0;
+        margin-right: 36px;
     }
-})();
-/**=========================================================
- * Module: animate-enabled.js
- * Enable or disables ngAnimate for element with directive
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.utils')
-        .directive('animateEnabled', animateEnabled);
-
-    animateEnabled.$inject = ['$animate'];
-    function animateEnabled ($animate) {
-        var directive = {
-            link: link,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          scope.$watch(function () {
-            return scope.$eval(attrs.animateEnabled, scope);
-          }, function (newValue) {
-            $animate.enabled(!!newValue, element);
-          });
-        }
+}
+/* ========================================================================
+ Component: dropdown-extras.less
+ ========================================================================== */
+.dropdown-lg > .dropdown-menu {
+    min-width: 200px;
+}
+.dropdown-list > .dropdown-menu {
+    padding: 0;
+    min-width: 220px;
+}
+.dropdown-list .list-group {
+    margin: 0;
+}
+.dropdown-list .list-group-item {
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+}
+.dropdown-list .list-group-item:first-child {
+    border-top: 0;
+}
+.dropdown-list .list-group-item:last-child {
+    border-bottom: 0;
+}
+.dropdown > a {
+    position: relative;
+}
+.dropdown > a > .label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 2px 5px;
+}
+@media only screen and (min-width: 768px) {
+.dropdown > a > .label {
+        top: 10px;
     }
-
-})();
-
-/**=========================================================
- * Module: browser.js
- * Browser detection
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.utils')
-        .service('Browser', Browser);
-
-    Browser.$inject = ['$window'];
-    function Browser($window) {
-      return $window.jQBrowser;
+}
+.dropdown-menu-header {
+    padding: 10px 15px;
+    background-color: #fafafa;
+    border-bottom: 1px solid #e1e1e1;
+}
+/* ========================================================================
+ Component: row-extra.less
+ ========================================================================== */
+.container-sm {
+    max-width: 750px;
+    width: auto;
+}
+.container-md {
+    max-width: 970px;
+    width: auto;
+}
+.container-lg {
+    max-width: 1170px;
+    width: auto;
+}
+.row-table {
+    display: table;
+    table-layout: fixed;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+.row-table > [class*="col-"] {
+    display: table-cell;
+    float: none;
+    table-layout: fixed;
+    vertical-align: middle;
+}
+.row-flush > [class*="col-"] {
+    padding-left: 0;
+    padding-right: 0;
+}
+/* ========================================================================
+ Component: half-float.less
+ ========================================================================== */
+.half-float {
+    position: relative;
+    margin-bottom: 65px;
+}
+.half-float .half-float-bottom,
+.half-float .half-float-top {
+    position: absolute;
+    left: 50%;
+    bottom: -60px;
+    width: 120px;
+    height: 120px;
+    margin-left: -60px;
+    z-index: 2;
+}
+.half-float .half-float-top {
+    bottom: auto;
+    top: -60px;
+}
+.half-float + * {
+    margin-top: -55px;
+padding-top: 65px;
+}
+/* ========================================================================
+ Component: masonry-grid.less
+ ========================================================================== */
+.row-masonry {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+.row-masonry > .col-masonry {
+    display: inline-block;
+    width: 100%;
+    min-height: 1em;
+    margin-bottom: 15px;
+}
+/* Columns definition by devices */
+@media only screen and (min-width: 480px) {
+.row-masonry-sm-1 {
+        -moz-column-count: 1;
+        -webkit-column-count: 1;
+        column-count: 1;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 1;
+        -webkit-columns: 1;
+        columns: 1;
     }
-
-})();
-
-/**=========================================================
- * Module: clear-storage.js
- * Removes a key from the browser storage via element click
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.utils')
-        .directive('resetKey', resetKey);
-
-    resetKey.$inject = ['$state', '$localStorage'];
-    function resetKey ($state, $localStorage) {
-        var directive = {
-            link: link,
-            restrict: 'A',
-            scope: {
-              resetKey: '@'
-            }
-        };
-        return directive;
-
-        function link(scope, element) {
-          element.on('click', function (e) {
-              e.preventDefault();
-
-              if(scope.resetKey) {
-                delete $localStorage[scope.resetKey];
-                $state.go($state.current, {}, {reload: true});
-              }
-              else {
-                $.error('No storage key specified for reset.');
-              }
-          });
-        }
+.no-csscolumns .row-masonry-sm-1 {
+        text-align: justify;
     }
-
-})();
-
-/**=========================================================
- * Module: fullscreen.js
- * Toggle the fullscreen mode on/off
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.utils')
-        .directive('toggleFullscreen', toggleFullscreen);
-
-    toggleFullscreen.$inject = ['Browser'];
-    function toggleFullscreen (Browser) {
-        var directive = {
-            link: link,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element) {
-          // Not supported under IE
-          if( Browser.msie ) {
-            element.addClass('hide');
-          }
-          else {
-            element.on('click', function (e) {
-                e.preventDefault();
-
-                if (screenfull.enabled) {
-
-                  screenfull.toggle();
-
-                  // Switch icon indicator
-                  if(screenfull.isFullscreen)
-                    $(this).children('em').removeClass('fa-expand').addClass('fa-compress');
-                  else
-                    $(this).children('em').removeClass('fa-compress').addClass('fa-expand');
-
-                } else {
-                  $.error('Fullscreen not enabled');
-                }
-
-            });
-          }
-        }
+.no-csscolumns .row-masonry-sm-1:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
     }
-
-
-})();
-
-/**=========================================================
- * Module: load-css.js
- * Request and load into the current page a css file
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.utils')
-        .directive('loadCss', loadCss);
-
-    function loadCss () {
-        var directive = {
-            link: link,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          element.on('click', function (e) {
-              if(element.is('a')) e.preventDefault();
-              var uri = attrs.loadCss,
-                  link;
-
-              if(uri) {
-                link = createLink(uri);
-                if ( !link ) {
-                  $.error('Error creating stylesheet link element.');
-                }
-              }
-              else {
-                $.error('No stylesheet location defined.');
-              }
-
-          });
-        }
-
-        function createLink(uri) {
-          var linkId = 'autoloaded-stylesheet',
-              oldLink = $('#'+linkId).attr('id', linkId + '-old');
-
-          $('head').append($('<link/>').attr({
-            'id':   linkId,
-            'rel':  'stylesheet',
-            'href': uri
-          }));
-
-          if( oldLink.length ) {
-            oldLink.remove();
-          }
-
-          return $('#'+linkId);
-        }
+.no-csscolumns .row-masonry-sm-1 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 99%;
     }
-
-})();
-
-/**=========================================================
- * Module: now.js
- * Provides a simple way to display the current time formatted
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.utils')
-        .directive('now', now);
-
-    now.$inject = ['dateFilter', '$interval'];
-    function now (dateFilter, $interval) {
-        var directive = {
-            link: link,
-            restrict: 'EA'
-        };
-        return directive;
-
-        function link(scope, element, attrs) {
-          var format = attrs.format;
-
-          function updateTime() {
-            var dt = dateFilter(new Date(), format);
-            element.text(dt);
-          }
-
-          updateTime();
-          var intervalPromise = $interval(updateTime, 1000);
-
-          scope.$on('$destroy', function(){
-            $interval.cancel(intervalPromise);
-          });
-
-        }
+.row-masonry-sm-2 {
+        -moz-column-count: 2;
+        -webkit-column-count: 2;
+        column-count: 2;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 2;
+        -webkit-columns: 2;
+        columns: 2;
     }
-
-})();
-
-/**=========================================================
- * Module: table-checkall.js
- * Tables check all checkbox
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.utils')
-        .directive('checkAll', checkAll);
-
-    function checkAll () {
-        var directive = {
-            link: link,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element) {
-          element.on('change', function() {
-            var $this = $(this),
-                index= $this.index() + 1,
-                checkbox = $this.find('input[type="checkbox"]'),
-                table = $this.parents('table');
-            // Make sure to affect only the correct checkbox column
-            table.find('tbody > tr > td:nth-child('+index+') input[type="checkbox"]')
-              .prop('checked', checkbox[0].checked);
-
-          });
-        }
+.no-csscolumns .row-masonry-sm-2 {
+        text-align: justify;
     }
-
-})();
-
-/**=========================================================
- * Module: trigger-resize.js
- * Triggers a window resize event from any element
- =========================================================*/
-(function() {
-    'use strict';
-
-    angular
-        .module('app.utils')
-        .directive('triggerResize', triggerResize);
-
-    triggerResize.$inject = ['$window', '$timeout'];
-    function triggerResize ($window, $timeout) {
-        var directive = {
-            link: link,
-            restrict: 'A'
-        };
-        return directive;
-
-        function link(scope, element) {
-          element.on('click', function(){
-            $timeout(function(){
-              $window.dispatchEvent(new Event('resize'));
-            });
-          });
-        }
+.no-csscolumns .row-masonry-sm-2:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
     }
-
-})();
-
-/**=========================================================
- * Module: utils.js
- * Utility library to use across the theme
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.utils')
-        .service('Utils', Utils);
-
-    Utils.$inject = ['$window', 'APP_MEDIAQUERY'];
-    function Utils($window, APP_MEDIAQUERY) {
-
-        var $html = angular.element('html'),
-            $win  = angular.element($window),
-            $body = angular.element('body');
-
-        return {
-          // DETECTION
-          support: {
-            transition: (function() {
-                    var transitionEnd = (function() {
-
-                        var element = document.body || document.documentElement,
-                            transEndEventNames = {
-                                WebkitTransition: 'webkitTransitionEnd',
-                                MozTransition: 'transitionend',
-                                OTransition: 'oTransitionEnd otransitionend',
-                                transition: 'transitionend'
-                            }, name;
-
-                        for (name in transEndEventNames) {
-                            if (element.style[name] !== undefined) return transEndEventNames[name];
-                        }
-                    }());
-
-                    return transitionEnd && { end: transitionEnd };
-                })(),
-            animation: (function() {
-
-                var animationEnd = (function() {
-
-                    var element = document.body || document.documentElement,
-                        animEndEventNames = {
-                            WebkitAnimation: 'webkitAnimationEnd',
-                            MozAnimation: 'animationend',
-                            OAnimation: 'oAnimationEnd oanimationend',
-                            animation: 'animationend'
-                        }, name;
-
-                    for (name in animEndEventNames) {
-                        if (element.style[name] !== undefined) return animEndEventNames[name];
-                    }
-                }());
-
-                return animationEnd && { end: animationEnd };
-            })(),
-            requestAnimationFrame: window.requestAnimationFrame ||
-                                   window.webkitRequestAnimationFrame ||
-                                   window.mozRequestAnimationFrame ||
-                                   window.msRequestAnimationFrame ||
-                                   window.oRequestAnimationFrame ||
-                                   function(callback){ window.setTimeout(callback, 1000/60); },
-            /*jshint -W069*/
-            touch: (
-                ('ontouchstart' in window && navigator.userAgent.toLowerCase().match(/mobile|tablet/)) ||
-                (window.DocumentTouch && document instanceof window.DocumentTouch)  ||
-                (window.navigator['msPointerEnabled'] && window.navigator['msMaxTouchPoints'] > 0) || //IE 10
-                (window.navigator['pointerEnabled'] && window.navigator['maxTouchPoints'] > 0) || //IE >=11
-                false
-            ),
-            mutationobserver: (window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver || null)
-          },
-          // UTILITIES
-          isInView: function(element, options) {
-              /*jshint -W106*/
-              var $element = $(element);
-
-              if (!$element.is(':visible')) {
-                  return false;
-              }
-
-              var window_left = $win.scrollLeft(),
-                  window_top  = $win.scrollTop(),
-                  offset      = $element.offset(),
-                  left        = offset.left,
-                  top         = offset.top;
-
-              options = $.extend({topoffset:0, leftoffset:0}, options);
-
-              if (top + $element.height() >= window_top && top - options.topoffset <= window_top + $win.height() &&
-                  left + $element.width() >= window_left && left - options.leftoffset <= window_left + $win.width()) {
-                return true;
-              } else {
-                return false;
-              }
-          },
-
-          langdirection: $html.attr('dir') === 'rtl' ? 'right' : 'left',
-
-          isTouch: function () {
-            return $html.hasClass('touch');
-          },
-
-          isSidebarCollapsed: function () {
-            return $body.hasClass('aside-collapsed');
-          },
-
-          isSidebarToggled: function () {
-            return $body.hasClass('aside-toggled');
-          },
-
-          isMobile: function () {
-            return $win.width() < APP_MEDIAQUERY.tablet;
-          }
-
-        };
+.no-csscolumns .row-masonry-sm-2 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 49%;
     }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('custom', [
-            // request the the entire framework
-            'angle',
-            // or just modules
-            'app.core',
-            'app.sidebar'
-            /*...*/
-        ]);
-})();
-
-// To run this code, edit file index.html or index.jade and change
-// html data-ng-app attribute from angle to myAppName
-// ----------------------------------------------------------------------
-
-(function() {
-    'use strict';
-
-    angular
-        .module('custom')
-        .controller('Controller', Controller);
-
-    Controller.$inject = ['$log'];
-    function Controller($log) {
-        // for controllerAs syntax
-        // var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          $log.log('I\'m a line from custom.js');
-        }
+.row-masonry-sm-3 {
+        -moz-column-count: 3;
+        -webkit-column-count: 3;
+        column-count: 3;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 3;
+        -webkit-columns: 3;
+        columns: 3;
     }
-})();
+.no-csscolumns .row-masonry-sm-3 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-sm-3:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-sm-3 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 32%;
+    }
+.row-masonry-sm-4 {
+        -moz-column-count: 4;
+        -webkit-column-count: 4;
+        column-count: 4;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 4;
+        -webkit-columns: 4;
+        columns: 4;
+    }
+.no-csscolumns .row-masonry-sm-4 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-sm-4:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-sm-4 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 24%;
+    }
+.row-masonry-sm-5 {
+        -moz-column-count: 5;
+        -webkit-column-count: 5;
+        column-count: 5;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 5;
+        -webkit-columns: 5;
+        columns: 5;
+    }
+.no-csscolumns .row-masonry-sm-5 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-sm-5:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-sm-5 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 19%;
+    }
+.row-masonry-sm-6 {
+        -moz-column-count: 6;
+        -webkit-column-count: 6;
+        column-count: 6;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 6;
+        -webkit-columns: 6;
+        columns: 6;
+    }
+.no-csscolumns .row-masonry-sm-6 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-sm-6:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-sm-6 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 15%;
+    }
+.row-masonry-sm-7 {
+        -moz-column-count: 7;
+        -webkit-column-count: 7;
+        column-count: 7;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 7;
+        -webkit-columns: 7;
+        columns: 7;
+    }
+.no-csscolumns .row-masonry-sm-7 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-sm-7:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-sm-7 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 13%;
+    }
+.row-masonry-sm-8 {
+        -moz-column-count: 8;
+        -webkit-column-count: 8;
+        column-count: 8;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 8;
+        -webkit-columns: 8;
+        columns: 8;
+    }
+.no-csscolumns .row-masonry-sm-8 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-sm-8:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-sm-8 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 11%;
+    }
+.row-masonry-sm-9 {
+        -moz-column-count: 9;
+        -webkit-column-count: 9;
+        column-count: 9;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 9;
+        -webkit-columns: 9;
+        columns: 9;
+    }
+.no-csscolumns .row-masonry-sm-9 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-sm-9:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-sm-9 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 10%;
+    }
+.row-masonry-sm-10 {
+        -moz-column-count: 10;
+        -webkit-column-count: 10;
+        column-count: 10;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 10;
+        -webkit-columns: 10;
+        columns: 10;
+    }
+.no-csscolumns .row-masonry-sm-10 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-sm-10:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-sm-10 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 9%;
+    }
+.row-masonry-sm-11 {
+        -moz-column-count: 11;
+        -webkit-column-count: 11;
+        column-count: 11;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 11;
+        -webkit-columns: 11;
+        columns: 11;
+    }
+.no-csscolumns .row-masonry-sm-11 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-sm-11:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-sm-11 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 8%;
+    }
+.row-masonry-sm-12 {
+        -moz-column-count: 12;
+        -webkit-column-count: 12;
+        column-count: 12;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 12;
+        -webkit-columns: 12;
+        columns: 12;
+    }
+.no-csscolumns .row-masonry-sm-12 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-sm-12:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-sm-12 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 7%;
+    }
+}
+@media only screen and (min-width: 768px) {
+.row-masonry-md-1 {
+        -moz-column-count: 1;
+        -webkit-column-count: 1;
+        column-count: 1;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 1;
+        -webkit-columns: 1;
+        columns: 1;
+    }
+.no-csscolumns .row-masonry-md-1 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-md-1:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-md-1 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 99%;
+    }
+.row-masonry-md-2 {
+        -moz-column-count: 2;
+        -webkit-column-count: 2;
+        column-count: 2;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 2;
+        -webkit-columns: 2;
+        columns: 2;
+    }
+.no-csscolumns .row-masonry-md-2 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-md-2:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-md-2 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 49%;
+    }
+.row-masonry-md-3 {
+        -moz-column-count: 3;
+        -webkit-column-count: 3;
+        column-count: 3;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 3;
+        -webkit-columns: 3;
+        columns: 3;
+    }
+.no-csscolumns .row-masonry-md-3 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-md-3:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-md-3 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 32%;
+    }
+.row-masonry-md-4 {
+        -moz-column-count: 4;
+        -webkit-column-count: 4;
+        column-count: 4;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 4;
+        -webkit-columns: 4;
+        columns: 4;
+    }
+.no-csscolumns .row-masonry-md-4 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-md-4:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-md-4 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 24%;
+    }
+.row-masonry-md-5 {
+        -moz-column-count: 5;
+        -webkit-column-count: 5;
+        column-count: 5;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 5;
+        -webkit-columns: 5;
+        columns: 5;
+    }
+.no-csscolumns .row-masonry-md-5 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-md-5:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-md-5 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 19%;
+    }
+.row-masonry-md-6 {
+        -moz-column-count: 6;
+        -webkit-column-count: 6;
+        column-count: 6;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 6;
+        -webkit-columns: 6;
+        columns: 6;
+    }
+.no-csscolumns .row-masonry-md-6 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-md-6:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-md-6 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 15%;
+    }
+.row-masonry-md-7 {
+        -moz-column-count: 7;
+        -webkit-column-count: 7;
+        column-count: 7;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 7;
+        -webkit-columns: 7;
+        columns: 7;
+    }
+.no-csscolumns .row-masonry-md-7 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-md-7:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-md-7 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 13%;
+    }
+.row-masonry-md-8 {
+        -moz-column-count: 8;
+        -webkit-column-count: 8;
+        column-count: 8;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 8;
+        -webkit-columns: 8;
+        columns: 8;
+    }
+.no-csscolumns .row-masonry-md-8 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-md-8:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-md-8 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 11%;
+    }
+.row-masonry-md-9 {
+        -moz-column-count: 9;
+        -webkit-column-count: 9;
+        column-count: 9;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 9;
+        -webkit-columns: 9;
+        columns: 9;
+    }
+.no-csscolumns .row-masonry-md-9 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-md-9:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-md-9 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 10%;
+    }
+.row-masonry-md-10 {
+        -moz-column-count: 10;
+        -webkit-column-count: 10;
+        column-count: 10;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 10;
+        -webkit-columns: 10;
+        columns: 10;
+    }
+.no-csscolumns .row-masonry-md-10 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-md-10:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-md-10 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 9%;
+    }
+.row-masonry-md-11 {
+        -moz-column-count: 11;
+        -webkit-column-count: 11;
+        column-count: 11;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 11;
+        -webkit-columns: 11;
+        columns: 11;
+    }
+.no-csscolumns .row-masonry-md-11 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-md-11:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-md-11 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 8%;
+    }
+.row-masonry-md-12 {
+        -moz-column-count: 12;
+        -webkit-column-count: 12;
+        column-count: 12;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 12;
+        -webkit-columns: 12;
+        columns: 12;
+    }
+.no-csscolumns .row-masonry-md-12 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-md-12:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-md-12 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 7%;
+    }
+}
+@media only screen and (min-width: 992px) {
+.row-masonry-lg-1 {
+        -moz-column-count: 1;
+        -webkit-column-count: 1;
+        column-count: 1;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 1;
+        -webkit-columns: 1;
+        columns: 1;
+    }
+.no-csscolumns .row-masonry-lg-1 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-lg-1:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-lg-1 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 99%;
+    }
+.row-masonry-lg-2 {
+        -moz-column-count: 2;
+        -webkit-column-count: 2;
+        column-count: 2;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 2;
+        -webkit-columns: 2;
+        columns: 2;
+    }
+.no-csscolumns .row-masonry-lg-2 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-lg-2:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-lg-2 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 49%;
+    }
+.row-masonry-lg-3 {
+        -moz-column-count: 3;
+        -webkit-column-count: 3;
+        column-count: 3;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 3;
+        -webkit-columns: 3;
+        columns: 3;
+    }
+.no-csscolumns .row-masonry-lg-3 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-lg-3:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-lg-3 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 32%;
+    }
+.row-masonry-lg-4 {
+        -moz-column-count: 4;
+        -webkit-column-count: 4;
+        column-count: 4;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 4;
+        -webkit-columns: 4;
+        columns: 4;
+    }
+.no-csscolumns .row-masonry-lg-4 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-lg-4:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-lg-4 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 24%;
+    }
+.row-masonry-lg-5 {
+        -moz-column-count: 5;
+        -webkit-column-count: 5;
+        column-count: 5;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 5;
+        -webkit-columns: 5;
+        columns: 5;
+    }
+.no-csscolumns .row-masonry-lg-5 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-lg-5:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-lg-5 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 19%;
+    }
+.row-masonry-lg-6 {
+        -moz-column-count: 6;
+        -webkit-column-count: 6;
+        column-count: 6;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 6;
+        -webkit-columns: 6;
+        columns: 6;
+    }
+.no-csscolumns .row-masonry-lg-6 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-lg-6:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-lg-6 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 15%;
+    }
+.row-masonry-lg-7 {
+        -moz-column-count: 7;
+        -webkit-column-count: 7;
+        column-count: 7;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 7;
+        -webkit-columns: 7;
+        columns: 7;
+    }
+.no-csscolumns .row-masonry-lg-7 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-lg-7:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-lg-7 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 13%;
+    }
+.row-masonry-lg-8 {
+        -moz-column-count: 8;
+        -webkit-column-count: 8;
+        column-count: 8;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 8;
+        -webkit-columns: 8;
+        columns: 8;
+    }
+.no-csscolumns .row-masonry-lg-8 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-lg-8:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-lg-8 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 11%;
+    }
+.row-masonry-lg-9 {
+        -moz-column-count: 9;
+        -webkit-column-count: 9;
+        column-count: 9;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 9;
+        -webkit-columns: 9;
+        columns: 9;
+    }
+.no-csscolumns .row-masonry-lg-9 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-lg-9:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-lg-9 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 10%;
+    }
+.row-masonry-lg-10 {
+        -moz-column-count: 10;
+        -webkit-column-count: 10;
+        column-count: 10;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 10;
+        -webkit-columns: 10;
+        columns: 10;
+    }
+.no-csscolumns .row-masonry-lg-10 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-lg-10:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-lg-10 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 9%;
+    }
+.row-masonry-lg-11 {
+        -moz-column-count: 11;
+        -webkit-column-count: 11;
+        column-count: 11;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 11;
+        -webkit-columns: 11;
+        columns: 11;
+    }
+.no-csscolumns .row-masonry-lg-11 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-lg-11:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-lg-11 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 8%;
+    }
+.row-masonry-lg-12 {
+        -moz-column-count: 12;
+        -webkit-column-count: 12;
+        column-count: 12;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 12;
+        -webkit-columns: 12;
+        columns: 12;
+    }
+.no-csscolumns .row-masonry-lg-12 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-lg-12:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-lg-12 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 7%;
+    }
+}
+@media only screen and (min-width: 1200px) {
+.row-masonry-xl-1 {
+        -moz-column-count: 1;
+        -webkit-column-count: 1;
+        column-count: 1;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 1;
+        -webkit-columns: 1;
+        columns: 1;
+    }
+.no-csscolumns .row-masonry-xl-1 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-xl-1:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-xl-1 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 99%;
+    }
+.row-masonry-xl-2 {
+        -moz-column-count: 2;
+        -webkit-column-count: 2;
+        column-count: 2;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 2;
+        -webkit-columns: 2;
+        columns: 2;
+    }
+.no-csscolumns .row-masonry-xl-2 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-xl-2:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-xl-2 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 49%;
+    }
+.row-masonry-xl-3 {
+        -moz-column-count: 3;
+        -webkit-column-count: 3;
+        column-count: 3;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 3;
+        -webkit-columns: 3;
+        columns: 3;
+    }
+.no-csscolumns .row-masonry-xl-3 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-xl-3:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-xl-3 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 32%;
+    }
+.row-masonry-xl-4 {
+        -moz-column-count: 4;
+        -webkit-column-count: 4;
+        column-count: 4;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 4;
+        -webkit-columns: 4;
+        columns: 4;
+    }
+.no-csscolumns .row-masonry-xl-4 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-xl-4:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-xl-4 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 24%;
+    }
+.row-masonry-xl-5 {
+        -moz-column-count: 5;
+        -webkit-column-count: 5;
+        column-count: 5;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 5;
+        -webkit-columns: 5;
+        columns: 5;
+    }
+.no-csscolumns .row-masonry-xl-5 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-xl-5:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-xl-5 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 19%;
+    }
+.row-masonry-xl-6 {
+        -moz-column-count: 6;
+        -webkit-column-count: 6;
+        column-count: 6;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 6;
+        -webkit-columns: 6;
+        columns: 6;
+    }
+.no-csscolumns .row-masonry-xl-6 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-xl-6:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-xl-6 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 15%;
+    }
+.row-masonry-xl-7 {
+        -moz-column-count: 7;
+        -webkit-column-count: 7;
+        column-count: 7;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 7;
+        -webkit-columns: 7;
+        columns: 7;
+    }
+.no-csscolumns .row-masonry-xl-7 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-xl-7:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-xl-7 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 13%;
+    }
+.row-masonry-xl-8 {
+        -moz-column-count: 8;
+        -webkit-column-count: 8;
+        column-count: 8;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 8;
+        -webkit-columns: 8;
+        columns: 8;
+    }
+.no-csscolumns .row-masonry-xl-8 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-xl-8:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-xl-8 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 11%;
+    }
+.row-masonry-xl-9 {
+        -moz-column-count: 9;
+        -webkit-column-count: 9;
+        column-count: 9;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 9;
+        -webkit-columns: 9;
+        columns: 9;
+    }
+.no-csscolumns .row-masonry-xl-9 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-xl-9:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-xl-9 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 10%;
+    }
+.row-masonry-xl-10 {
+        -moz-column-count: 10;
+        -webkit-column-count: 10;
+        column-count: 10;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 10;
+        -webkit-columns: 10;
+        columns: 10;
+    }
+.no-csscolumns .row-masonry-xl-10 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-xl-10:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-xl-10 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 9%;
+    }
+.row-masonry-xl-11 {
+        -moz-column-count: 11;
+        -webkit-column-count: 11;
+        column-count: 11;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 11;
+        -webkit-columns: 11;
+        columns: 11;
+    }
+.no-csscolumns .row-masonry-xl-11 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-xl-11:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-xl-11 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 8%;
+    }
+.row-masonry-xl-12 {
+        -moz-column-count: 12;
+        -webkit-column-count: 12;
+        column-count: 12;
+        -moz-column-gap: 15px;
+        -webkit-column-gap: 15px;
+        column-gap: 15px;
+        -moz-columns: 12;
+        -webkit-columns: 12;
+        columns: 12;
+    }
+.no-csscolumns .row-masonry-xl-12 {
+        text-align: justify;
+    }
+.no-csscolumns .row-masonry-xl-12:after {
+        content: '';
+        display: inline-block;
+        width: 100%;
+    }
+.no-csscolumns .row-masonry-xl-12 > .col-masonry {
+        vertical-align: top;
+        display: inline-block;
+        width: 7%;
+    }
+}
+/* ========================================================================
+ Component: widget.less
+ ========================================================================== */
+.widget {
+    margin-bottom: 20px;
+    border: 0;
+}
+.widget.panel,
+.widget .panel {
+    overflow: hidden;
+}
+.widget .lateral-picture {
+    position: relative;
+    display: block;
+    height: 240px;
+    width: auto;
+    overflow: hidden;
+}
+.widget .lateral-picture > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-height: 100%;
+    width: auto;
+}
+/* ========================================================================
+ Component: typeahead.less
+ ========================================================================== */
+.typeahead-ctrl .dropdown-menu {
+    max-height: 300px;
+    overflow: auto;
+}
+/*!
+ * table-grid (http://mdo.github.io/table-grid)
+ * Released under MIT, (c) 2014 Mark Otto
+ */
+/*
+ * The Grid
+ */
+@media only screen and (min-width: 768px) {
+    /* Add `.table-grid` for the table */
+.table-grid {
+        display: table;
+        width: 100%;
+        height: 100%;
+        table-layout: fixed;
+    }
+    /* Add `.col` for the table cells, or columns */
+.col {
+        display: table-cell;
+        vertical-align: top;
+        height: 100%;
+    }
+.col.col-full-center {
+        vertical-align: middle;
+    }
+    /* Set the widths */
+.col-1 {
+        width: 8.333333%;
+    }
+.col-2 {
+        width: 16.666667%;
+    }
+.col-3 {
+        width: 25%;
+    }
+.col-4 {
+        width: 33.333333%;
+    }
+.col-5 {
+        width: 41.666667%;
+    }
+.col-6 {
+        width: 50%;
+    }
+.col-7 {
+        width: 58.333333%;
+    }
+.col-8 {
+        width: 66.666667%;
+    }
+.col-9 {
+        width: 75%;
+    }
+.col-10 {
+        width: 83.333333%;
+    }
+.col-11 {
+        width: 91.666667%;
+    }
+.col-12 {
+        width: 100%;
+    }
+.col-xxs {
+        width: 60px;
+    }
+.col-xs {
+        width: 90px;
+    }
+.col-sm {
+        width: 150px;
+    }
+.col-sd {
+        width: 200px;
+    }
+.col-md {
+        width: 240px;
+    }
+.col-lg {
+        width: 280px;
+    }
+.col-xl {
+        width: 320px;
+    }
+.col-xxl {
+        width: 360px;
+    }
+.col-wide {
+        width: 100%;
+    }
+.col-auto {
+        width: auto;
+    }
+    /* Padded columns */
+.table-grid-padded {
+        margin-left: -1rem;
+        margin-right: -1rem;
+    }
+.table-grid-padded .table-grid {
+        border-spacing: 1rem 0;
+    }
+}
+@media only screen and (max-width: 991px) {
+.table-grid-desktop.table-grid,
+.table-grid-desktop .col {
+        display: block;
+        width: auto;
+    }
+}
+/*
+ * Vertically center grid content
+ *
+ * Requires content within the column to be inline or inline-block.
+ */
+.table-grid-align-middle .col {
+    vertical-align: middle;
+}
+/* ========================================================================
+ Component: todo.less
+ ========================================================================== */
+.todo .todo-item-list {
+    position: relative;
+}
+.todo .todo-item {
+    -webkit-transition: color 0.6s, background-color 0.3s;
+    -o-transition: color 0.6s, background-color 0.3s;
+    transition: color 0.6s, background-color 0.3s;
+}
+.todo .todo-item.ng-enter {
+    -webkit-animation: fadeInLeft 1s;
+    -o-animation: fadeInLeft 1s;
+    animation: fadeInLeft 1s;
+}
+.todo .todo-item.ng-leave {
+    position: absolute;
+    left: 0;
+    right: 0;
+    -webkit-animation: fadeOutDown 0.7s;
+    -o-animation: fadeOutDown 0.7s;
+    animation: fadeOutDown 0.7s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+.todo .todo-item .todo-edit {
+    display: none;
+    cursor: pointer;
+}
+.todo .todo-item:hover .todo-edit {
+    display: inline;
+}
+.todo .todo-item.todo-complete .todo-edit {
+    display: none;
+}
+.todo textarea {
+    resize: none;
+    max-width: 100%;
+    min-width: 100%;
+}
+.todo .todo-complete {
+    background: #edf1f2;
+    opacity: .6;
+    color: #232735;
+}
+.todo .todo-complete .todo-title {
+    text-decoration: line-through;
+}
+.todo .panel-group > .panel {
+    border: 1px;
+    margin: 0;
+}
+.todo .panel-group > .panel .panel-body {
+    border-bottom: 1px solid #edf1f2;
+}
+/**
+ *   main wrapper for the editor
+ *
+ *  .ng-wig
+ *
+ */
+.ng-wig {
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+.ng-wig,
+.ng-wig .nw-editor {
+    min-height: 250px;
+}
+/**
+ *  styling for toolbar and its items
+ *
+ *  .nw-toolbar
+ *    &__item
+ *
+ */
+.nw-toolbar {
+    display: block;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+    color: #6B7277;
+    background: -webkit-linear-gradient(90deg, #ffffff 0%, #f9f9f9 100%);
+    background: -moz-linear-gradient(90deg, #ffffff 0%, #f9f9f9 100%);
+    background: linear-gradient(180deg, #ffffff 0%, #f9f9f9 100%);
+    border: 1px solid #CCCCCC;
+    border-radius: 3px 3px 0 0;
+}
+.nw-toolbar__item {
+    display: inline-block;
+    vertical-align: top;
+    border-right: 1px solid #DEDEDE;
+}
+.nw-toolbar label {
+    line-height: 30px;
+    display: inline-block;
+    padding: 0 6px 0 3px;
+}
+.nw-toolbar input[type=checkbox] {
+    vertical-align: -3px;
+    margin-right: -1px;
+}
+/**
+ *  styling for the editor part: source code (original textarea) and resulting div
+ *
+ *  .nw-editor
+ *    &__src
+ *    &__res
+ *
+ */
+.nw-editor {
+    display: block;
+    border: 1px solid #e4eaec;
+    border-radius: 0 0 3px 3px;
+    margin-top: 15px;
+}
+.nw-editor__src {
+    width: 100%;
+    height: 100%;
+    resize: none;
+    border-color: #e4eaec;
+}
+.nw-editor__res {
+    width: 100%;
+    height: 100%;
+}
+.nw-editor__res body {
+    color: #fff;
+}
+.ng-wig .btn-group .btn-default {
+    color: #777;
+}
+/**
+ *  styling & formatting of content inside contenteditable div
+ *
+ *  .nw-content
+ *
+ */
+.nw-content {
+    padding: 12px;
+    margin: 0;
+    font-family: sans;
+    font-size: 14px;
+    line-height: 24px;
+    color: #616263;
+}
+.nw-content h1 {
+    margin: 0 0 6px 0;
+    font-size: 24px;
+    line-height: 36px;
+    font-weight: 400;
+}
+.nw-content p {
+    margin: 0 0 12px 0;
+}
+.nw-content ul {
+    padding: 0;
+    margin: 0 0 12px 24px;
+    list-style: disc;
+}
+.nw-content ol {
+    padding: 0;
+    margin: 0 0 12px 24px;
+    list-style: decimal;
+}
+.nw-content li {
+    padding: 0;
+    margin: 0;
+}
+.nw-content a {
+    text-decoration: underline;
+    color: #3fae98;
+    /* green */
+}
+.nw-content a:hover {
+    text-decoration: none;
+}
+.nw-content bold,
+.nw-content strong {
+    font-weight: 700;
+}
+.nw-content i,
+.nw-content italic {
+    font-style: italic;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content {
+    background-color: #fff !important;
+    border-radius: 4px !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+}
+/* ========================================================================
+ Component: nestable.less
+ ========================================================================== */
+.dd {
+    position: relative;
+    display: block;
+    margin: 0;
+    padding: 0;
+    max-width: 600px;
+    list-style: none;
+    font-size: 13px;
+    line-height: 20px;
+}
+.dd-list {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.dd-list .dd-list {
+    padding-left: 30px;
+}
+.dd-collapsed .dd-list {
+    display: none;
+}
+.dd-item,
+.dd-empty,
+.dd-placeholder {
+    display: block;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    min-height: 20px;
+    font-size: 13px;
+    line-height: 20px;
+}
+.dd-handle {
+    display: block;
+    margin: 5px 0;
+    padding: 10px 10px;
+    text-decoration: none;
+    border: 1px solid #ebebeb;
+    background: #fff;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+.dd-handle:hover {
+    background: #fff;
+}
+.dd-item > button {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    float: left;
+    width: 25px;
+    height: 30px;
+    margin: 5px 0;
+    padding: 0;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    border: 0;
+    background: transparent;
+    font-size: 12px;
+    line-height: 1;
+    text-align: center;
+    font-weight: bold;
+}
+.dd-item > button:before {
+    content: '+';
+    display: block;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    text-indent: 0;
+}
+.dd-item > button[data-action="collapse"]:before {
+    content: '-';
+}
+.dd-placeholder,
+.dd-empty {
+    margin: 5px 0;
+    padding: 0;
+    min-height: 30px;
+    background: #f2fbff;
+    border: 1px dashed #b6bcbf;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+.dd-empty {
+    border: 1px dashed #bbb;
+    min-height: 100px;
+    background-color: #e5e5e5;
+    background-size: 60px 60px;
+    background-position: 0 0, 30px 30px;
+}
+.dd-dragel {
+    position: absolute;
+    pointer-events: none;
+    z-index: 9999;
+}
+.dd-dragel > .dd-item .dd-handle {
+    margin-top: 0;
+}
+.dd-dragel .dd-handle {
+    -webkit-box-shadow: 2px 4px 6px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 4px 6px 0 rgba(0, 0, 0, 0.1);
+}
+/**
+ * Nestable Extras
+ */
+.nestable-lists {
+    display: block;
+    clear: both;
+    padding: 30px 0;
+    width: 100%;
+    border: 0;
+    border-top: 2px solid #ddd;
+    border-bottom: 2px solid #ddd;
+}
+@media only screen and (min-width: 700px) {
+.dd + .dd {
+        margin-left: 2%;
+    }
+}
+.dd-hover > .dd-handle {
+    background: #2ea8e5 !important;
+}
+/**
+ * Nestable Draggable Handles
+ */
+.dd3-content {
+    display: block;
+    margin: 5px 0;
+    padding: 10px 10px 10px 50px;
+    text-decoration: none;
+    border: 1px solid #ebebeb;
+    background: #fff;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+.dd-dragel > .dd3-item > .dd3-content {
+    margin: 0;
+}
+.dd3-item > button {
+    margin-left: 40px;
+}
+.dd3-handle {
+    position: absolute;
+    margin: 0;
+    left: 0;
+    top: 0;
+    cursor: pointer;
+    width: 40px;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    border: 1px solid #ebebeb;
+    background: #fff;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.dd3-handle:before {
+    content: '≡';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 100%;
+    text-align: center;
+    text-indent: 0;
+    color: #ccc;
+    font-size: 20px;
+    font-weight: normal;
+}
+.dd3-handle:hover {
+    background: #f7f7f7;
+}
+/* ========================================================================
+ Component: carousel.less
+ ========================================================================== */
+.bgimage {
+    text-align: right;
+    color: white;
+    background-size: cover;
+    height: 100%;
+    background-position: center center;
+}
+ul[rn-carousel] {
+    height: 380px;
+    width: 100%;
+    margin: 0 auto;
+    cursor: pointer;
+}
+.carousel5 li {
+    width: 100%;
+    height: 100%;
+    font-size: 30px;
+}
+.carousel-demo {
+    margin-top: 20px;
+    display: block;
+    text-align: center;
+}
+.carousel-demo-3d > ul[rn-carousel] {
+    display: block !important;
+    max-width: 50%;
+    margin: 0 auto !important;
+}
+.carousel-demo-fullscreen {
+    width: 100%;
+    height: 100%;
+}
+.carousel-demo-fullscreen ul[rn-carousel] {
+    width: 100%;
+    height: 100%;
+}
+.carousel-demo ul[rn-carousel-transition="hexagon"] {
+    margin-left: 100px;
+}
+.rn-carousel-indicator span {
+    display: inline-block;
+    text-indent: -999px;
+    overflow: hidden;
+    background-color: #3a3f51;
+    border: 1px solid #232735;
+    width: 10px;
+    height: 10px;
+    margin: 0 1px;
+    border-radius: 500px;
+}
+.rn-carousel-indicator span.active {
+    background-color: #dde6e9;
+    border: 1px solid #becfd5;
+}
+.custom-indicator span {
+    background-color: #1797be;
+    border: 1px solid #1797be;
+}
+.custom-indicator span.active {
+    background-color: #23b7e5;
+    border: 1px solid #1797be;
+}
+/* ========================================================================
+ Component: masonry-grid-deck.less
+ ========================================================================== */
+.photo {
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+    margin: 0 10px 10px 0;
+    position: relative;
+}
+.photo .photo-loader {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding-top: 40%;
+    z-index: 1;
+}
+.photo img {
+    position: relative;
+    opacity: 0;
+    z-index: 2;
+}
+.photo img.photoloaded {
+    opacity: 1;
+    -webkit-transition: 0.2s;
+    -o-transition: 0.2s;
+    transition: 0.2s;
+}
+.photo img.photoloaded + .photo-loader {
+    display: none;
+}
+.photo .photo-index {
+    background: rgba(58, 63, 81, 0.75);
+    color: #fff;
+    position: absolute;
+    height: 100%;
+    text-align: center;
+    width: 100%;
+    z-index: 99;
+}
+.photo .photo-index p:first-child {
+    margin-top: 10px;
+}
+.photo .photo-wrapper {
+    min-height: 100px;
+}
+.photo .photo-description {
+    padding: 15px;
+}
+.balloon-wrapper {
+    padding-top: 30px;
+    opacity: 1;
+    text-align: center;
+}
+.balloon {
+    background: #5d9cec;
+    border-radius: 50%;
+    display: inline-block;
+    font-size: 160%;
+    text-align: center;
+    height: 100px;
+    line-height: 100px;
+    width: 100px;
+}
+.deckgrid {
+    margin: 0 auto;
+    padding: 10px;
+    max-width: 100%;
+}
+.deckgrid .column {
+    float: left;
+}
+.deckgrid .column.size-1-5 {
+    width: 20%;
+}
+.deckgrid .column.size-1-4 {
+    width: 25%;
+}
+.deckgrid .column.size-1-3 {
+    width: 33.3333%;
+}
+.deckgrid .column.size-1-2 {
+    width: 50%;
+}
+.deckgrid .column.size-1-1 {
+    width: 100%;
+}
+.deckgrid[deckgrid]::before {
+    content: '1 .column.size-1-1';
+    font-size: 0;
+    visibility: hidden;
+}
+@media only screen and (min-width: 480px) {
+.deckgrid[deckgrid]::before {
+        content: '2 .column.size-1-2';
+    }
+}
+@media only screen and (min-width: 768px) {
+.deckgrid[deckgrid]::before {
+        content: '3 .column.size-1-3';
+    }
+}
+@media only screen and (min-width: 992px) {
+.deckgrid[deckgrid]::before {
+        content: '4 .column.size-1-4';
+    }
+}
+@media only screen and (min-width: 1200px) {
+.deckgrid[deckgrid]::before {
+        content: '5 .column.size-1-5';
+    }
+}
+/* ========================================================================
+ Component: chart-flot.less
+ ========================================================================== */
+flot {
+    display: block;
+    width: 100%;
+}
+flot .legend > table tr td {
+    padding: 3px;
+}
+flot .legend > table tr td:first-child {
+    padding-left: 3px;
+}
+flot .legend > table tr td:last-child {
+    padding-right: 3px;
+}
+flot .legend > table tr + tr td {
+    padding-top: 0;
+}
+flot .legend > div:first-child {
+    border-color: rgba(0, 0, 0, 0.1) !important;
+}
+flot .legend .legendColorBox > div,
+flot .legend .legendColorBox > div > div {
+    border-radius: 400px;
+}
+.flot-chart-content {
+    width: 100%;
+    height: 100%;
+}
+.flot-pie-label {
+    padding: 3px 5px;
+    font-size: 10px;
+    text-align: center;
+    color: #fff;
+}
+#flotTip {
+    position: relative;
+    padding: 5px;
+    font-size: 12px !important;
+    border-radius: 2px !important;
+    border-color: transparent !important;
+    background-color: rgba(0, 0, 0, 0.75) !important;
+    color: #f1f1f1;
+    z-index: 5;
+}
+/* ========================================================================
+ Component: chart-easypie.less
+ ========================================================================== */
+.easypie-chart {
+    display: inline-block;
+    position: relative;
+    padding: 0 6px;
+}
+.easypie-chart span {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    margin-left: -50%;
+    height: 30px;
+    margin-top: -15px;
+    font-size: 20px;
+}
+.easypie-chart canvas {
+    max-width: 100%;
+}
+/* ========================================================================
+ Component: form-elements.less
+ ========================================================================== */
+/**
+ * Custom form elements
+ *    - Checkbox
+ *    - Radios
+ *    - Switch
+ *    - Rounded inputs
+ */
+.c-checkbox,
+.c-radio {
+    margin-right: 4px;
+}
+.c-checkbox *,
+.c-radio * {
+    cursor: pointer;
+}
+.c-checkbox input,
+.c-radio input {
+    opacity: 0;
+    position: absolute;
+    margin-left: 0 !important;
+}
+.c-checkbox span,
+.c-radio span {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: -20px;
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+    text-align: center;
+}
+.c-checkbox span:before,
+.c-radio span:before {
+    margin-left: 0;
+}
+.c-checkbox:hover span,
+.c-radio:hover span {
+    border-color: #5d9cec;
+}
+.form-inline .c-checkbox span,
+.form-inline .c-radio span {
+    margin-left: 0;
+}
+.c-checkbox.c-checkbox-rounded span,
+.c-radio.c-checkbox-rounded span,
+.c-checkbox.c-radio-rounded span,
+.c-radio.c-radio-rounded span {
+    border-radius: 500px;
+}
+/* override for radio */
+.c-radio span {
+    border-radius: 500px;
+}
+/* the icon */
+.c-checkbox span:before,
+.c-radio span:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    text-align: center !important;
+    font-size: 12px;
+    line-height: 18px;
+    vertical-align: middle;
+}
+/* Checked state */
+.c-checkbox,
+.c-radio {
+    /* override for radio */
+    /* Disable state */
+    /* override for radio */
+}
+.c-checkbox input[type=checkbox]:checked + span:before,
+.c-radio input[type=checkbox]:checked + span:before,
+.c-checkbox input[type=radio]:checked + span:before,
+.c-radio input[type=radio]:checked + span:before {
+    color: #fff;
+    opacity: 1;
+    transition: color 0.3s ease-out;
+}
+.c-checkbox input[type=checkbox]:checked + span,
+.c-radio input[type=checkbox]:checked + span,
+.c-checkbox input[type=radio]:checked + span,
+.c-radio input[type=radio]:checked + span {
+    border-color: #5d9cec;
+    background-color: #5d9cec;
+}
+.c-checkbox input[type=radio]:checked + span,
+.c-radio input[type=radio]:checked + span {
+    background-color: #fff;
+}
+.c-checkbox input[type=radio]:checked + span:before,
+.c-radio input[type=radio]:checked + span:before {
+    color: #5d9cec;
+}
+.c-checkbox input[type=checkbox]:disabled + span,
+.c-radio input[type=checkbox]:disabled + span,
+.c-checkbox input[type=radio]:disabled + span,
+.c-radio input[type=radio]:disabled + span {
+    border-color: #dddddd !important;
+    background-color: #dddddd !important;
+}
+.c-checkbox input[type=radio]:disabled + span,
+.c-radio input[type=radio]:disabled + span {
+    background-color: #fff !important;
+}
+.c-checkbox input[type=radio]:disabled + span:before,
+.c-radio input[type=radio]:disabled + span:before {
+    color: #dddddd;
+}
+.c-radio.c-radio-nofont {
+    /* override for radio */
+    /* Disable state */
+    /* override for radio */
+}
+.c-radio.c-radio-nofont span:before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    top: 50%;
+    left: 50%;
+    margin-top: -5px;
+    margin-left: -5px;
+    border-radius: 500px;
+}
+.c-radio.c-radio-nofont input[type=radio]:checked + span:before {
+    color: #fff;
+    opacity: 1;
+    transition: color 0.3s ease-out;
+}
+.c-radio.c-radio-nofont input[type=radio]:checked + span {
+    border-color: #5d9cec;
+    background-color: #5d9cec;
+}
+.c-radio.c-radio-nofont input[type=radio]:checked + span {
+    background-color: #fff;
+}
+.c-radio.c-radio-nofont input[type=radio]:checked + span:before {
+    background-color: #5d9cec;
+}
+.c-radio.c-radio-nofont input[type=radio]:disabled + span {
+    border-color: #dddddd !important;
+    background-color: #dddddd !important;
+}
+.c-radio.c-radio-nofont input[type=radio]:disabled + span {
+    background-color: #fff !important;
+}
+.c-radio.c-radio-nofont input[type=radio]:disabled + span:before {
+    background-color: #dddddd;
+}
+.form-control-rounded {
+    border-radius: 100px;
+}
+.switch .form-control {
+    padding-top: 7px;
+    margin-bottom: 0;
+}
+.switch * {
+    cursor: pointer;
+}
+.switch input {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+}
+.switch span {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    background-color: #fff;
+    border: 1px solid #dddddd;
+    border-radius: 100px;
+    transition: all .5s;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1) inset;
+    vertical-align: middle;
+}
+.switch span:after {
+    content: "";
+    position: absolute;
+    background-color: #fff;
+    top: 0;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    border: 1px solid #ddd;
+    border-radius: 400px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    -webkit-transition: all .2s;
+}
+.switch.switch-lg span {
+    width: 50px;
+    height: 25px;
+}
+.switch.switch-lg span:after {
+    height: 23px;
+    width: 23px;
+}
+.switch.switch-sm span {
+    width: 30px;
+    height: 15px;
+}
+.switch.switch-sm span:after {
+    height: 13px;
+    width: 13px;
+}
+.switch input:checked + span {
+    background-color: #5d9cec;
+    border-color: #5d9cec;
+    transition: all .5s;
+}
+.switch input:checked + span:after {
+    left: 50%;
+    transition: all .2s;
+}
+.form-control-feedback {
+    left: 16px;
+    right: auto;
+}
+.form-control + .form-control-feedback,
+.form-control + .parsley-errors-list + .form-control-feedback {
+    right: 0;
+    left: auto;
+    top: 10px;
+}
+.input-sm + .form-control-feedback,
+.input-sm + .parsley-errors-list + .form-control-feedback {
+    top: 0;
+}
+label + .form-control + .form-control-feedback,
+label + .form-control + .parsley-errors-list + .form-control-feedback {
+    top: 36px;
+}
+.input-md {
+    width: 260px;
+}
+.note-editor {
+    background-image: -webkit-linear-gradient(#eeeeee 0.1em, transparent 0.1em);
+    background-image: linear-gradient(#eeeeee 0.1em, transparent 0.1em);
+    background-size: 100% 20px;
+    background-color: #fff;
+    line-height: 20px;
+    margin-top: 5px;
+    padding: 0;
+    padding-bottom: 1px;
+    border: none;
+}
+.note-editor.note-editor-margin {
+    background-image: -webkit-linear-gradient(0deg, transparent 49px, #ffe0c4 49px, #ffe0c4 51px, transparent 51px), -webkit-linear-gradient(#eeeeee 0.1em, transparent 0.1em);
+    background-image: linear-gradient(90deg, transparent 49px, #ffe0c4 49px, #ffe0c4 51px, transparent 51px), linear-gradient(#eeeeee 0.1em, transparent 0.1em);
+    padding-left: 55px;
+}
+/* ========================================================================
+ Component: form-imgcrop.less
+ ========================================================================== */
+.imgcrop-area {
+    width: 100%;
+    height: 410px;
+    overflow: hidden;
+    background: #dde6e9;
+}
+.imgcrop-preview {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    margin: 0 auto;
+    background: #dde6e9;
+    text-align: center;
+}
+.imgcrop-preview:after {
+    content: attr(data-text);
+    display: block;
+    position: absolute;
+    height: 50%;
+    text-align: center;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 0;
+    color: #909fa7;
+}
+.imgcrop-preview > img {
+    position: relative;
+    z-index: 1;
+    max-width: 100%;
+}
+/* ========================================================================
+ Component: form-validation.less
+ ========================================================================== */
+.form-validate .form-control.ng-dirty.ng-invalid {
+    border-color: #f05050;
+}
+.form-validate .form-control.ng-dirty.ng-valid,
+.form-validate .form-control.ng-dirty.ng-valid:focus {
+    border-color: #27c24c;
+}
+.form-validate .has-error .form-control {
+    border-color: #f05050 !important;
+}
+.form-validate .c-checkbox input.ng-dirty.ng-invalid + span,
+.form-validate .c-radio input.ng-dirty.ng-invalid + span {
+    border-color: #f05050;
+}
+.form-validate .ui-select-container.ng-dirty.ng-invalid .btn {
+    border-color: #f05050;
+}
+.form-validate .input-group .ui-select-container.ng-dirty.ng-invalid .btn {
+    margin-left: -1px;
+}
+.form-validate .chosen-select.ng-dirty.ng-invalid + .chosen-container > .chosen-choices {
+    border-color: #f05050;
+}
+.form-validate .chosen-select.ng-dirty.ng-valid + .chosen-container > .chosen-choices,
+.form-validate .chosen-select.ng-dirty.ng-valid:focus + .chosen-container > .chosen-choices {
+    border-color: #27c24c;
+}
+.form-validate .form-control.ng-dirty.ng-invalid + .bootstrap-tagsinput {
+    border-color: #f05050;
+}
+.form-validate .form-control.ng-dirty.ng-valid + .bootstrap-tagsinput,
+.form-validate .form-control.ng-dirty.ng-valid:focus + .bootstrap-tagsinput {
+    border-color: #27c24c;
+}
+.parsley-error {
+    border-color: #f05050 !important;
+}
+.parsley-errors-list {
+    display: none;
+    margin: 0;
+    padding: 0;
+}
+.parsley-errors-list.filled {
+    display: block;
+}
+.parsley-errors-list > li {
+    font-size: 12px;
+    list-style: none;
+    color: #f05050;
+}
+/* ========================================================================
+ Component: form-tags.less
+ ========================================================================== */
+body .bootstrap-tagsinput {
+    box-shadow: 0 0 0 #000 !important;
+    display: block;
+    width: 100%;
+    height: 35px;
+    padding: 6px 16px;
+    font-size: 14px;
+    line-height: 1.52857143;
+    color: #3a3f51;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #dde6e9;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    height: auto;
+    min-height: 35px;
+    margin-bottom: 0;
+}
+body .bootstrap-tagsinput:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+body .bootstrap-tagsinput::-moz-placeholder {
+    color: #b7bac9;
+    opacity: 1;
+}
+body .bootstrap-tagsinput:-ms-input-placeholder {
+    color: #b7bac9;
+}
+body .bootstrap-tagsinput::-webkit-input-placeholder {
+    color: #b7bac9;
+}
+body .bootstrap-tagsinput[disabled],
+body .bootstrap-tagsinput[readonly],
+    fieldset[disabled] body .bootstrap-tagsinput {
+    cursor: not-allowed;
+    background-color: #edf1f2;
+    opacity: 1;
+}
+textareabody .bootstrap-tagsinput {
+    height: auto;
+}
+body .bootstrap-tagsinput .tag {
+    color: #fff;
+}
+/* ========================================================================
+ Component: form-wizard.less
+ ========================================================================== */
+.form-wizard > ol {
+    list-style-type: none;
+    padding: 0 15px;
+}
+.form-wizard > ol > li {
+    min-height: 50px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: #fcfcfc;
+    cursor: pointer;
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.form-wizard > ol > li > a {
+    text-decoration: none;
+}
+.form-wizard > ol > li .label {
+    background-color: #5d9cec;
+    vertical-align: super;
+    margin-right: 6px;
+}
+.form-wizard > ol > li .label[href]:hover,
+.form-wizard > ol > li .label[href]:focus {
+    background-color: #2f80e7;
+}
+.form-wizard > ol > li h4 {
+    display: inline-block;
+    color: #515253;
+}
+.form-wizard > ol > li small {
+    display: block;
+    color: #909fa7;
+}
+.form-wizard > ol > li.active {
+    background-color: #5d9cec;
+}
+.form-wizard > ol > li.active h4,
+.form-wizard > ol > li.active small {
+    color: #fff;
+}
+.form-wizard > ol > li.active .label {
+    background-color: #fff;
+    border-color: #fff;
+    color: #5d9cec;
+}
+.form-wizard .bwizard-buttons {
+    margin: 0;
+}
+.form-wizard .well {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    box-shadow: 0 0 0 #000;
+}
+.form-wizard .well fieldset {
+    margin: 0;
+}
+@media only screen and (min-width: 992px) {
+.form-wizard.wizard-horizontal > ol > li {
+        display: inline-block;
+    }
+}
+.form-wizard.wizard-vertical:before,
+.form-wizard.wizard-vertical:after {
+    content: " ";
+    display: table;
+}
+.form-wizard.wizard-vertical:after {
+    clear: both;
+}
+.form-wizard.wizard-vertical > ol {
+    float: left;
+    width: 39%;
+    padding: 0;
+}
+.form-wizard.wizard-vertical > ol > li {
+    display: block;
+    padding: 10px;
+}
+.form-wizard.wizard-vertical > ol > li h4 {
+    font-size: 14px;
+}
+.form-wizard.wizard-vertical > div {
+    float: right;
+    width: 59%;
+}
+.form-wizard.wizard-vertical .pager {
+    clear: both;
+    padding-top: 10px;
+}
+.form-wizard.wizard-vertical .well {
+    padding: 0;
+}
+/* ========================================================================
+ Component: uiselect.less
+ ========================================================================== */
+.ui-select-bootstrap > .ui-select-match {
+    text-align: left;
+}
+.ui-select-toggle {
+    font-size: 14px;
+}
+.btn-default-focus {
+    box-shadow: 0 0 0 #000 !important;
+    outline: 0 !important;
+}
+/* ========================================================================
+ Component: code-editor.less
+ ========================================================================== */
+.code-container {
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+}
+.code-files {
+    border-right: 1px solid #dde6e9;
+    background-color: #edf1f2;
+}
+.code-files .nav.nav-pills {
+    padding: 10px;
+    overflow: hidden;
+}
+.code-files .nav.nav-pills > li > a {
+    color: #3a3f51;
+}
+.code-files .nav.nav-pills > li > a:hover {
+    background-color: #e4eaec;
+}
+.code-files .nav.nav-pills > li.active > a {
+    background-color: #23b7e5;
+    color: #ffffff;
+}
+.code-toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    margin: 0;
+    border-bottom: 1px solid #dde6e9;
+    background: #ffffff;
+    z-index: 5;
+}
+.code-editor {
+    position: relative;
+    padding-top: 50px;
+}
+@media only screen and (min-width: 480px) {
+.code-editor .CodeMirror {
+        max-height: 100%;
+        min-height: 180px;
+        height: 100%;
+    }
+}
+.code-editor .CodeMirror .CodeMirror-scroll {
+    height: 100%;
+}
+.code-editor .CodeMirror .CodeMirror-gutters {
+    min-height: 100%;
+}
+/* ========================================================================
+ Component: datatable.less
+ ========================================================================== */
+.dataTables_filter input {
+    margin-left: 10px;
+}
+.dataTables_length select {
+    margin-right: 10px;
+}
+table.dataTable tfoot > tr > th {
+    color: #a1a2a3;
+    background: #f1f2f3;
+}
+.panel .dataTables_wrapper .row {
+    margin: 10px 0;
+}
+.panel .dataTable {
+    width: 100% !important;
+}
+.ColVis button.ColVis_Button {
+    border-radius: 3px;
+    font-size: 13px;
+    border-color: transparent;
+    -webkit-appearance: none;
+    outline: none !important;
+    -webkit-transition: all 0.1s;
+    -o-transition: all 0.1s;
+    transition: all 0.1s;
+    border-color: #eaeaea;
+    background-image: none;
+    box-shadow: 0 0 0 #000;
+    cursor: pointer;
+    height: 31px;
+}
+.ColVis button.ColVis_Button.btn-link {
+    box-shadow: none;
+    border: 0;
+}
+.ColVis button.ColVis_Button.btn-default {
+    border-color: #eaeaea;
+}
+.input-group .ColVis button.ColVis_Button {
+    font-size: 14px;
+    border-color: #dde6e9;
+}
+.input-group .input-sm + .input-group-btn .ColVis button.ColVis_Button {
+    font-size: 13px;
+}
+.ColVis button.ColVis_Button > span {
+    color: #656565;
+}
+.ColVis_collectionBackground {
+    display: none;
+}
+ul.ColVis_collection {
+    background-color: #fff !important;
+}
+ul.ColVis_collection > li {
+    border: 0 !important;
+    background-image: none !important;
+    box-shadow: 0 0 0 #000 !important;
+    margin: 0;
+}
+ul.ColVis_collection > li > label {
+    margin: 0;
+}
+ul.ColVis_collection > li > label > span {
+    color: #888;
+    vertical-align: top;
+    font-weight: normal;
+}
+ul.ColVis_collection > li > label > span:hover {
+    color: #555;
+}
+ul.ColVis_collection > li > label input[type=checkbox]:checked + span,
+ul.ColVis_collection > li > label input[type=radio]:checked + span {
+    background-color: transparent;
+}
+.ColVis_catcher {
+    cursor: pointer;
+}
+table.dataTable {
+    border-bottom: 1px solid #e4eaec !important;
+}
+table.dataTable thead th,
+    table.dataTable thead td {
+    border-bottom: 1px solid #e4eaec !important;
+}
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper select {
+    box-shadow: none;
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #3a3f51;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #dde6e9;
+    border-radius: 4px;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    background-image: none !important;
+    background-color: #edf1f2 !important;
+    border: 0 !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #fff !important;
+}
+body .dataTable:before,
+    body .dataTable:after {
+    content: " ";
+    display: table;
+}
+body .dataTable:after {
+    clear: both;
+}
+body .dataTables_wrapper .dataTables_paginate .paginate_button {
+    background-color: #fff !important;
+    border: 1px solid #e4eaec !important;
+    margin-left: 0;
+    padding: 6px 16px;
+}
+body .dataTables_wrapper .dataTables_paginate .paginate_button.previous {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+body .dataTables_wrapper .dataTables_paginate .paginate_button.next {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+body .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    color: #5d9cec !important;
+}
+body .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    body .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background-color: #5d9cec !important;
+    color: #fff !important;
+    border-color: #5d9cec !important;
+}
+body table.dataTable.row-border tbody th,
+    body table.dataTable.row-border tbody td,
+    body table.dataTable.display tbody th,
+    body table.dataTable.display tbody td {
+    border-top-color: #eee;
+}
+body table.dataTable tbody tr:nth-child(odd),
+    body table.dataTable.hover tbody tr:hover,
+    body table.dataTable.display tbody tr:hover {
+    background-color: #fafbfc;
+}
+body table.dataTable thead th,
+    body .dataTables_wrapper .dataTables_length,
+    body .dataTables_wrapper .dataTables_filter,
+    body .dataTables_wrapper .dataTables_info,
+    body .dataTables_wrapper .dataTables_processing,
+    body .dataTables_wrapper .dataTables_paginate {
+    color: #888;
+}
+/* ========================================================================
+ Component: table-extras.less
+ ========================================================================== */
+.table > thead > tr > th {
+    padding: 14px 8px;
+    color: #888;
+}
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+.table > tbody > tr > td > .media img {
+    width: 36px;
+    height: 36px;
+    margin: 0 auto;
+}
+.table .checkbox {
+    margin: 0 auto;
+    width: 20px;
+}
+.table .progress {
+    margin-bottom: 0;
+}
+.table .radial-bar {
+    margin-bottom: 0;
+    margin: 0 auto;
+}
+.jqstooltip {
+    box-sizing: content-box;
+}
+#table-ext-1 th:nth-child(1) {
+    width: 3%;
+}
+#table-ext-1 th:nth-child(2) {
+    width: 5%;
+}
+#table-ext-1 th:nth-child(7) {
+    width: 5%;
+}
+#table-ext-1 th:nth-child(9) {
+    width: 5%;
+}
+#table-ext-2 th:nth-child(1) {
+    width: 5%;
+}
+#table-ext-2 th:nth-child(3) {
+    width: 10%;
+}
+/* ========================================================================
+ Component: table-ngtable.less
+ ========================================================================== */
+body .ng-table th.sortable.sort-desc,
+body .ng-table th.sortable.sort-asc {
+    background-color: #fff;
+    text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+}
+body .ng-table th.sortable div:after,
+body .ng-table th.sortable div:before {
+    border-color: #3a3f51 transparent;
+}
+body .ng-table th.sortable div:before {
+    border-top-color: #3a3f51;
+}
+body .ng-table th.sortable.sort-desc div:after {
+    border-top-color: #3a3f51;
+}
+body [ng-table-pagination] {
+    padding: 15px 5px;
+}
+body [ng-table-pagination] .ng-table-pagination {
+    margin: 0;
+}
+body .ng-table .plus,
+body .ng-table .minus {
+    font-weight: bold;
+    padding-left: 18px;
+    position: relative;
+}
+body .ng-table .plus:before,
+body .ng-table .minus:before {
+    content: "";
+    border-width: 4px;
+    border-style: solid;
+    left: 8px;
+    top: 50%;
+    position: absolute;
+    margin-top: -2px;
+}
+body .ng-table .plus {
+    color: green;
+}
+body .ng-table .plus:before {
+    border-color: green;
+    border-top: none;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+}
+body .ng-table .minus {
+    color: red;
+}
+body .ng-table .minus:before {
+    border-color: red;
+    border-bottom: none;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+}
+body .ng-table-rowselected tr {
+    cursor: pointer;
+}
+body .ng-table-pager:before,
+body .ng-table-pager:after {
+    content: " ";
+    display: table;
+}
+body .ng-table-pager:after {
+    clear: both;
+}
+/* ========================================================================
+ Component: table-ng-grid.less
+ ========================================================================== */
+.ngGrid {
+    min-height: 480px;
+    background-color: transparent;
+}
+.ngGrid .ngVerticalBarVisible {
+    background-color: #e4eaec;
+}
+.ngGrid .ngTopPanel {
+    position: relative;
+    z-index: 1;
+    background-color: #fff;
+    border-bottom: 1px solid #e4eaec;
+}
+.ngGrid .ngTopPanel .ngHeaderContainer {
+    border-bottom: 1px solid #e4eaec;
+}
+.ngGrid .ngGroupPanel {
+    background-color: #fff;
+    border-bottom: 1px solid #e4eaec;
+}
+.ngGrid .ngGroupName {
+    background-color: #fff;
+    border: 1px solid #e4eaec;
+}
+.ngGrid .ngRow {
+    position: absolute;
+    border-top: 1px solid #e4eaec;
+}
+.ngGrid .ngRow.odd {
+    background-color: #edf1f2;
+}
+.ngGrid .ngRow.even {
+    background-color: #fff;
+    border-bottom: 1px solid #e4eaec;
+}
+.ngGrid .ngRow.selected {
+    background-color: #e4eaec;
+}
+.ngGrid .ngFooterPanel {
+    padding: 0 5px;
+    background-color: #fff;
+    border-top: 1px solid #e4eaec;
+}
+.ngGrid .ngPagerFirstBar {
+    border-left: 2px solid #3a3f51;
+}
+.ngGrid .ngPagerFirstTriangle {
+    border-color: transparent #3a3f51 transparent transparent;
+}
+.ngGrid .ngPagerLastTriangle {
+    border-color: transparent transparent transparent #3a3f51;
+}
+.ngGrid .ngPagerLastBar {
+    border-left: 2px solid #3a3f51;
+}
+.ngGrid .ngPagerButton {
+    background-color: #fff;
+    border: 1px solid #e4eaec;
+}
+.ngGrid .ngHeaderText,
+.ngGrid .ngCellText {
+    padding: 8px 15px;
+}
+.ngGrid .ngFooterSelectedItems {
+    padding-top: 0;
+    margin-top: -4px;
+}
+.ngGrid .ngGridMaxPagesNumber {
+    position: relative;
+    top: -6px;
+}
+.ngGrid .ngViewport {
+    overflow-x: hidden;
+}
+.ngGrid .ngSortButtonUp,
+.ngGrid .ngSortButtonDown {
+    top: 14px;
+}
+.ngGrid .ngLabel {
+    margin-right: 10px;
+}
+.ngGrid input,
+.ngGrid select {
+    border: 1px solid #e4eaec;
+}
+.ngGrid input {
+    line-height: 18px;
+}
+/* ========================================================================
+ Component: uigrid.less
+ ========================================================================== */
+.table-uigrid.ui-grid {
+    border-top-width: 3px;
+}
+.table-uigrid.ui-grid,
+.table-uigrid.ui-grid .ui-grid-header,
+.table-uigrid.ui-grid .ui-grid-footer-panel,
+.table-uigrid.ui-grid .ui-grid-cell,
+.table-uigrid.ui-grid input[type="text"].ui-grid-filter-input {
+    border-color: #dde6e9;
+}
+.table-uigrid.ui-grid .ui-grid-filter-input {
+    padding: 2px 4px;
+}
+.table-uigrid.ui-grid .ui-grid-row:nth-child(even) .ui-grid-cell {
+    background-color: #edf1f2;
+    border-bottom: 1px solid #e4eaec;
+    border-top: 1px solid #e4eaec;
+}
+.table-uigrid.ui-grid .ui-grid-header-cell:not(:last-child) .ui-grid-vertical-bar {
+    background-color: #dde6e9;
+}
+.table-uigrid.ui-grid .ui-grid-top-panel,
+.table-uigrid.ui-grid .ui-grid-footer-panel {
+    background-color: #fff;
+    background-image: none;
+}
+.table-uigrid.ui-grid .ui-grid-cell,
+.table-uigrid.ui-grid .ui-grid-row {
+    min-height: 36px;
+}
+.table-uigrid.ui-grid .ui-grid-cell-contents {
+    padding: 8px 15px;
+}
+.table-uigrid.ui-grid .ui-grid-column-menu-button {
+    top: 5px;
+}
+.table-uigrid.ui-grid .ui-grid-viewport {
+    overflow-x: hidden !important;
+}
+.table-uigrid.ui-grid .ui-grid-pager-panel {
+    padding-top: 8px;
+    padding-bottom: 5px;
+}
+.table-uigrid.ui-grid .ui-grid-pager-control button {
+    background-color: #fff;
+    border: 1px solid #edf1f2;
+}
+.table-uigrid.ui-grid .ui-grid-pager-control input,
+.table-uigrid.ui-grid .ui-grid-pager-row-count-picker select {
+    color: #3a3f51;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #dde6e9;
+    border-radius: 4px;
+    padding: 2px;
+}
+#uigrid-demo {
+    width: 100%;
+    min-height: 380px;
+}
+/* ========================================================================
+ Component: table-angulargrid.less
+ ========================================================================== */
+.ag-angle .ag-root {
+    border: 1px solid #e4eaec;
+}
+.ag-angle .ag-cell {
+    padding: 4px 15px;
+}
+.ag-angle .ag-cell-focus {
+    border: 1px solid #becfd5;
+}
+.ag-angle .ag-cell-no-focus {
+    border-right: 1px dotted #e4eaec;
+    border-top: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
+.ag-angle .ag-pinned-header {
+    border-bottom: 1px solid #e4eaec;
+}
+.ag-angle .ag-header-container {
+    border-bottom: 1px solid #e4eaec;
+}
+.ag-angle .ag-header {
+    border-top: 2px solid #e4eaec;
+    height: auto !important;
+}
+.ag-angle .ag-header-cell {
+    border-right: 1px solid #e4eaec;
+}
+.ag-angle .ag-header-group-cell {
+    border-right: 1px solid #e4eaec;
+}
+.ag-angle .ag-header-group-cell-with-group {
+    border-bottom: 1px solid #e4eaec;
+}
+.ag-angle .ag-header-cell-label {
+    padding: 8px 15px;
+}
+.ag-angle .ag-header-cell-text {
+    padding-left: 2px;
+}
+.ag-angle .ag-header-group-cell-label {
+    padding: 4px;
+    font-weight: bold;
+}
+.ag-angle .ag-header-group-text {
+    margin-right: 2px;
+}
+.ag-angle .ag-header-cell-menu-button {
+    padding: 2px;
+    margin-top: 6px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.ag-angle .ag-header-cell-menu-button .ag-header-icon {
+    color: #edf1f2;
+}
+.ag-angle .ag-header-cell-menu-button:hover .ag-header-icon {
+    color: #dde6e9;
+}
+.ag-angle .ag-header-icon {
+    color: #800000;
+}
+.ag-angle .ag-dark .ag-header-expand-icon:hover {
+    cursor: pointer;
+}
+.ag-angle .ag-row-odd {
+    background-color: #edf1f2;
+}
+.ag-angle .ag-row-even {
+    background-color: #fff;
+}
+.ag-angle .ag-loading-panel {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+.ag-angle .ag-loading-center {
+    background-color: #fff;
+    border: 1px solid #e4eaec;
+    border-radius: 4px;
+    padding: 10px;
+}
+.ag-angle .ag-body {
+    padding-top: 40px !important;
+    background-color: #fff;
+}
+.ag-angle .ag-row-selected {
+    background-color: #b0e0e6;
+}
+.ag-angle .ag-group-cell-entire-row {
+    background-color: #aaa;
+    padding: 4px;
+}
+.ag-angle .ag-footer-cell-entire-row {
+    background-color: #aaa;
+    padding: 4px;
+}
+.ag-angle .ag-group-cell {
+    font-style: italic;
+}
+.ag-angle .ag-footer-cell {
+    font-style: italic;
+}
+.ag-angle .ag-filter-checkbox {
+    position: relative;
+    top: 2px;
+    left: 2px;
+}
+.ag-angle .ag-filter-header-container {
+    border-bottom: 1px solid #dde6e9;
+}
+.ag-angle .ag-filter {
+    border: 1px solid #e4eaec;
+    background-color: #fff;
+}
+.ag-angle .ag-filter input[type="text"],
+.ag-angle .ag-filter select {
+    width: 95%;
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #3a3f51;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #dde6e9;
+    border-radius: 4px;
+}
+.ag-angle .ag-filter input[type="text"]:focus,
+.ag-angle .ag-filter select:focus {
+    border-color: #5d9cec;
+}
+.ag-angle .ag-selection-checkbox {
+    margin-left: 4px;
+}
+.ag-angle .ag-paging-panel {
+    padding: 4px;
+}
+.ag-angle .ag-paging-button {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+.ag-angle .ag-paging-row-summary-panel {
+    display: inline-block;
+    width: 300px;
+}
+/* ========================================================================
+ Component: plugins.less
+ - User this stylesheet to include single css styles and fixes
+ for plugins
+ ========================================================================== */
+/**
+ * Bootstrap Slider
+ */
+.bs-slider {
+    display: inline-block;
+}
+.bs-slider .slider-handle,
+.bs-slider .slider-track,
+.bs-slider .slider-selection {
+    background-image: none;
+    box-shadow: 0 0 0 #000;
+}
+.bs-slider .slider-handle {
+    background-color: #fff;
+    border: 1px solid #5d9cec;
+    opacity: 1;
+}
+.bs-slider .slider-track {
+    background-color: #fff;
+    border: 1px solid #5d9cec;
+}
+.bs-slider .slider-selection {
+    background-color: #5d9cec;
+}
+.bs-slider .slider .tooltip.top .tooltip-arrow {
+    border-top-color: #2c3037;
+}
+.bs-slider .slider .tooltip.right .tooltip-arrow {
+    border-right-color: #2c3037;
+}
+.bs-slider .slider .tooltip-inner {
+    background-color: #2c3037;
+}
+.bs-slider .slider-lg {
+    width: 380px;
+}
+body {
+    /**
+     * Chosen
+     */
+    /* Support for input groups */
+    /**
+     * Filestyle
+     */
+}
+body .chosen-container {
+    max-width: 100%;
+}
+body .chosen-container-multi .chosen-choices {
+    box-shadow: 0 0 0 #000 !important;
+    display: block;
+    width: 100%;
+    height: 35px;
+    padding: 6px 16px;
+    font-size: 14px;
+    line-height: 1.52857143;
+    color: #3a3f51;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #dde6e9;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+body .chosen-container-multi .chosen-choices:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+body .chosen-container-multi .chosen-choices::-moz-placeholder {
+    color: #b7bac9;
+    opacity: 1;
+}
+body .chosen-container-multi .chosen-choices:-ms-input-placeholder {
+    color: #b7bac9;
+}
+body .chosen-container-multi .chosen-choices::-webkit-input-placeholder {
+    color: #b7bac9;
+}
+body .chosen-container-multi .chosen-choices[disabled],
+body .chosen-container-multi .chosen-choices[readonly],
+    fieldset[disabled] body .chosen-container-multi .chosen-choices {
+    cursor: not-allowed;
+    background-color: #edf1f2;
+    opacity: 1;
+}
+textareabody .chosen-container-multi .chosen-choices {
+    height: auto;
+}
+body .chosen-container-multi .chosen-choices li.search-field input[type=text] {
+    height: auto;
+    padding: 0;
+}
+body .chosen-container-multi .chosen-choices li.search-choice {
+    margin: 0 5px 3px 0;
+    background-color: #f5f6f7;
+    border: 1px solid #e7e9ec;
+    background-image: none;
+}
+body .chosen-container .chosen-results li.highlighted {
+    background-color: #a1a2a3;
+    background-image: none;
+}
+body .chosen-container .chosen-drop {
+    border-color: #ddd;
+}
+body .chosen-container .chosen-results li.group-result {
+    color: #747576;
+    letter-spacing: 0.02em;
+}
+body .chosen-container-single .chosen-single,
+body .chosen-container-active.chosen-with-drop .chosen-single {
+    box-shadow: 0 0 0 #000 !important;
+    display: block;
+    width: 100%;
+    height: 35px;
+    padding: 6px 16px;
+    font-size: 14px;
+    line-height: 1.52857143;
+    color: #3a3f51;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #dde6e9;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+body .chosen-container-single .chosen-single:focus,
+body .chosen-container-active.chosen-with-drop .chosen-single:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+body .chosen-container-single .chosen-single::-moz-placeholder,
+body .chosen-container-active.chosen-with-drop .chosen-single::-moz-placeholder {
+    color: #b7bac9;
+    opacity: 1;
+}
+body .chosen-container-single .chosen-single:-ms-input-placeholder,
+body .chosen-container-active.chosen-with-drop .chosen-single:-ms-input-placeholder {
+    color: #b7bac9;
+}
+body .chosen-container-single .chosen-single::-webkit-input-placeholder,
+body .chosen-container-active.chosen-with-drop .chosen-single::-webkit-input-placeholder {
+    color: #b7bac9;
+}
+body .chosen-container-single .chosen-single[disabled],
+body .chosen-container-active.chosen-with-drop .chosen-single[disabled],
+body .chosen-container-single .chosen-single[readonly],
+body .chosen-container-active.chosen-with-drop .chosen-single[readonly],
+    fieldset[disabled] body .chosen-container-single .chosen-single,
+    fieldset[disabled] body .chosen-container-active.chosen-with-drop .chosen-single {
+    cursor: not-allowed;
+    background-color: #edf1f2;
+    opacity: 1;
+}
+textareabody .chosen-container-single .chosen-single,
+textareabody .chosen-container-active.chosen-with-drop .chosen-single {
+    height: auto;
+}
+body .chosen-container-single .chosen-drop {
+    margin-top: -3px;
+}
+body .chosen-container-single .chosen-single div {
+    top: 6px;
+    right: 5px;
+}
+body .chosen-container-multi .chosen-choices li.search-field input[type=text] {
+    color: #b7bac9;
+}
+body .input-group .chosen-container:last-child > a {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+body .input-group select:first-child + .chosen-container > a {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+body [classyloader] {
+    max-width: 100%;
+}
+body .ui-select-bootstrap .ui-select-toggle {
+    text-align: left;
+}
+/* ========================================================================
+ Component: slim-scroll.less
+ ========================================================================== */
+scrollable {
+    display: block;
+}
+.slimScrollBar {
+    opacity: 1 !important;
+    background-color: rgba(0, 0, 0, 0.35) !important;
+    border: 0 !important;
+    border-radius: 1px !important;
+}
+.slimScrollRail {
+    opacity: 1 !important;
+    background-color: rgba(0, 0, 0, 0.15) !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    bottom: 0;
+}
+/* ========================================================================
+ Component: datepicker.less
+ ========================================================================== */
+.ui-datepicker {
+    display: inline-block;
+    max-width: 100%;
+    overflow: auto;
+}
+/* ========================================================================
+ Component: alerts.less
+ ========================================================================== */
+.alerts {
+    position: fixed;
+    top: 60px;
+    left: 60px;
+    z-index: 9090;
+    width: 350px;
+    left: auto;
+    right: 60px;
+}
+.alerts:hover .alert .close {
+    opacity: 1;
+    visibility: visible;
+}
+.alerts-top-right,
+.alerts-bottom-right {
+    left: auto;
+    right: 60px;
+}
+.alerts-top-center,
+.alerts-bottom-center {
+    left: 50%;
+    margin-left: -175px;
+}
+.alerts-bottom-left,
+.alerts-bottom-right,
+.alerts-bottom-center {
+    top: auto;
+    bottom: 60px;
+}
+@media (max-width: 480px) {
+.alerts {
+        left: 10px;
+        right: 10px;
+        width: auto;
+        margin: 0;
+    }
+}
+/* ========================================================================
+ Component: notify.less
+ ========================================================================== */
+.uk-notify {
+    position: fixed;
+    top: 50px;
+    left: 50px;
+    z-index: 1040;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 350px;
+}
+.uk-notify-top-right,
+.uk-notify-bottom-right {
+    left: auto;
+    right: 50px;
+}
+.uk-notify-top-center,
+.uk-notify-bottom-center {
+    left: 50%;
+    margin-left: -175px;
+}
+.uk-notify-bottom-left,
+.uk-notify-bottom-right,
+.uk-notify-bottom-center {
+    top: auto;
+    bottom: 50px;
+}
+@media (max-width: 480px) {
+.uk-notify {
+        left: 10px;
+        right: 10px;
+        width: auto;
+        margin: 0;
+    }
+}
+.uk-notify-message {
+    position: relative;
+    margin-bottom: 10px;
+    padding: 15px;
+    font-size: 16px;
+    line-height: 22px;
+    border-radius: 3px;
+    padding-right: 35px;
+    cursor: pointer;
+}
+.uk-notify-message.alert.alert-normal {
+    background: #444444;
+    color: #ffffff;
+}
+.uk-notify-message > .close {
+    visibility: hidden;
+}
+.uk-notify-message:hover > .close {
+    visibility: visible;
+}
+/* ========================================================================
+ Component: calendar.less
+ ========================================================================== */
+.calendar-app .fc-button {
+    color: #333333;
+    background-color: #ffffff;
+    border-color: #eaeaea;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+    height: auto;
+    background-image: none;
+}
+.calendar-app .fc-button:focus,
+.calendar-app .fc-button.focus {
+    color: #333333;
+    background-color: #f5f5f5;
+    border-color: #d6d6d6;
+}
+.calendar-app .fc-button:hover {
+    color: #333333;
+    background-color: #f5f5f5;
+    border-color: #d6d6d6;
+}
+.calendar-app .fc-button:active,
+.calendar-app .fc-button.active,
+.open > .dropdown-toggle.calendar-app .fc-button {
+    color: #333333;
+    background-color: #f5f5f5;
+    border-color: #d6d6d6;
+}
+.calendar-app .fc-button:active:hover,
+.calendar-app .fc-button.active:hover,
+.open > .dropdown-toggle.calendar-app .fc-button:hover,
+.calendar-app .fc-button:active:focus,
+.calendar-app .fc-button.active:focus,
+.open > .dropdown-toggle.calendar-app .fc-button:focus,
+.calendar-app .fc-button:active.focus,
+.calendar-app .fc-button.active.focus,
+.open > .dropdown-toggle.calendar-app .fc-button.focus {
+    color: #333333;
+    background-color: #f5f5f5;
+    border-color: #d6d6d6;
+}
+.calendar-app .fc-button:active,
+.calendar-app .fc-button.active,
+.open > .dropdown-toggle.calendar-app .fc-button {
+    background-image: none;
+}
+.calendar-app .fc-button.disabled,
+.calendar-app .fc-button[disabled],
+fieldset[disabled] .calendar-app .fc-button,
+.calendar-app .fc-button.disabled:hover,
+.calendar-app .fc-button[disabled]:hover,
+fieldset[disabled] .calendar-app .fc-button:hover,
+.calendar-app .fc-button.disabled:focus,
+.calendar-app .fc-button[disabled]:focus,
+fieldset[disabled] .calendar-app .fc-button:focus,
+.calendar-app .fc-button.disabled.focus,
+.calendar-app .fc-button[disabled].focus,
+fieldset[disabled] .calendar-app .fc-button.focus,
+.calendar-app .fc-button.disabled:active,
+.calendar-app .fc-button[disabled]:active,
+fieldset[disabled] .calendar-app .fc-button:active,
+.calendar-app .fc-button.disabled.active,
+.calendar-app .fc-button[disabled].active,
+fieldset[disabled] .calendar-app .fc-button.active {
+    background-color: #ffffff;
+    border-color: #eaeaea;
+}
+.calendar-app .fc-button .badge {
+    color: #ffffff;
+    background-color: #333333;
+}
+.calendar-app .fc-button:active,
+.calendar-app .fc-button.active,
+.calendar-app .fc-button.fc-state-active {
+    outline: 0;
+    background-image: none;
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.calendar-app .fc-button .fc-icon {
+    margin: 0 .1em;
+    font-size: inherit;
+    font-family: FontAwesome !important;
+    vertical-align: baseline;
+    color: #555;
+}
+.calendar-app .fc-button .fc-icon:after {
+    display: none;
+}
+.calendar-app .fc-state-highlight,
+.calendar-app .fc-day:hover {
+    background-color: #f7f8f9;
+}
+.calendar-app .fc-day-number {
+    font-size: 18px;
+    font-weight: bold;
+    color: #a1a2a3;
+}
+.calendar-app .fc-view {
+    overflow: visible;
+}
+.calendar-app .external-events {
+    margin: 0;
+}
+.calendar-app .external-events > div {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding: 6px 10px;
+    color: #fff;
+    font-size: 11px;
+    border-radius: 2px;
+    cursor: move;
+}
+.calendar-app .external-events:empty {
+    content: "EMRTPUY";
+}
+.calendar-app .external-events-trash {
+    position: relative;
+    min-height: 120px;
+}
+.calendar-app .external-events-trash:after {
+    content: "\f00d";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #131e26;
+    opacity: 0;
+    font-family: FontAwesome;
+    color: #fff;
+    text-align: center;
+    font-size: 50px;
+    padding: 8%;
+    max-height: 100%;
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    z-index: -1;
+}
+.calendar-app .external-events-trash.active:after {
+    opacity: 1;
+    z-index: 1;
+}
+.calendar-app .external-events-trash.hovered:after {
+    background-color: #fb797e;
+}
+.calendar-app .external-event-color-selector .circle.selected {
+    border: 3px solid rgba(255, 255, 255, 0.5);
+}
+/* ========================================================================
+ Component: spinner.less
+ ========================================================================== */
+body .whirl {
+    position: relative;
+}
+body .whirl:before {
+    content: attr(data-spinner-text);
+    display: block;
+    background-color: #f0f0f0;
+    opacity: 0.7;
+}
+body .whirl.solid {
+    opacity: 1;
+}
+body .whirl:after {
+    border-top-color: #5d9cec;
+}
+body .whirl.blade:after {
+    border-bottom-color: #5d9cec;
+}
+body .whirl.double-up:after {
+    border-right-color: #5d9cec;
+    border-top-color: #5d9cec;
+    border-left-color: #5d9cec;
+    border-bottom-color: #5d9cec;
+}
+body .whirl.duo:after {
+    border-right-color: #5d9cec;
+    border-left-color: #5d9cec;
+    border-top-color: #7266ba;
+    border-bottom-color: #7266ba;
+}
+body .whirl.helicopter:after {
+    background-color: #5d9cec;
+}
+body .whirl.ringed:after {
+    border-right-color: #23b7e5;
+    border-top-color: #7266ba;
+    border-left-color: #7266ba;
+    border-bottom-color: #7266ba;
+}
+body .whirl.traditional:after {
+    border-right-color: #23b7e5;
+    border-top-color: #23b7e5;
+    border-left-color: #7266ba;
+    border-bottom-color: #fad732;
+}
+body .whirl.line:after {
+    box-shadow: inset -10px 0px 0px rgba(93, 156, 236, 0.5);
+}
+.no-cssanimations body .whirl:before {
+    opacity: .9;
+}
+.no-cssanimations body .whirl:after {
+    content: "Loading...";
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    line-height: 40px;
+    color: #000;
+    opacity: 1;
+    border: 0;
+    box-shadow: 0 0 0 #000;
+    background-color: transparent;
+    text-align: center;
+}
+body .ball-pulse > div,
+body .ball-grid-pulse > div,
+body .square-spin > div,
+body .ball-pulse-rise > div,
+body .ball-rotate > div,
+body .ball-rotate > div:before,
+body .ball-rotate > div:after,
+body .cube-transition > div,
+body .ball-zig-zag > div,
+body .ball-zig-zag-deflect > div,
+body .ball-triangle-path > div,
+body .ball-scale > div,
+body .line-scale > div,
+body .line-scale-party > div,
+body .ball-scale-multiple > div,
+body .ball-pulse-sync > div,
+body .ball-beat > div,
+body .line-scale-pulse-out > div,
+body .line-scale-pulse-out-rapid > div,
+body .ball-spin-fade-loader > div,
+body .line-spin-fade-loader > div,
+body .triangle-skew-spin > div,
+body .ball-grid-beat > div,
+body .semi-circle-spin > div {
+    background-color: #5d9cec;
+}
+body .ball-clip-rotate-multiple {
+    width: 1px;
+}
+body .ball-clip-rotate-multiple > div {
+    border-color: #5d9cec transparent #5d9cec transparent;
+}
+body .ball-clip-rotate-multiple > div:last-child {
+    border-color: transparent #5d9cec transparent #5d9cec;
+}
+body .ball-clip-rotate > div {
+    border-color: #5d9cec;
+    border-bottom-color: transparent;
+}
+body .ball-clip-rotate-pulse > div:first-child {
+    background-color: #5d9cec;
+    top: 5px;
+    left: -8px;
+}
+body .ball-clip-rotate-pulse > div:last-child {
+    border-color: #5d9cec transparent #5d9cec transparent;
+}
+body .square-spin > div,
+body .ball-scale-ripple > div,
+body .ball-scale-ripple-multiple > div {
+    border-color: #5d9cec;
+}
+body .pacman > div:first-of-type {
+    border-top-color: #5d9cec;
+    border-left-color: #5d9cec;
+    border-bottom-color: #5d9cec;
+}
+body .pacman > div:nth-child(2) {
+    border-top-color: #5d9cec;
+    border-left-color: #5d9cec;
+    border-bottom-color: #5d9cec;
+}
+body .pacman > div:nth-child(3),
+body .pacman > div:nth-child(4),
+body .pacman > div:nth-child(5),
+body .pacman > div:nth-child(6) {
+    background-color: #5d9cec;
+}
+body .sk-spinner-rotating-plane.sk-spinner,
+body .sk-spinner-double-bounce .sk-double-bounce1,
+body .sk-spinner-double-bounce .sk-double-bounce2,
+body .sk-spinner-wave div,
+body .sk-spinner-wandering-cubes .sk-cube1,
+body .sk-spinner-wandering-cubes .sk-cube2,
+body .sk-spinner-chasing-dots .sk-dot1,
+body .sk-spinner-chasing-dots .sk-dot2,
+body .sk-spinner-three-bounce div,
+body .sk-spinner-circle .sk-circle:before,
+body .sk-spinner-cube-grid .sk-cube,
+body .sk-spinner-fading-circle .sk-circle:before,
+body .sk-spinner-pulse.sk-spinner,
+body .sk-spinner-wordpress.sk-spinner {
+    background-color: #5d9cec;
+}
+body .sk-spinner-wordpress .sk-inner-circle {
+    background-color: #fff;
+}
+/* just for loaders.css demo */
+.loader-demo {
+    height: 150px;
+    padding-top: 50px;
+    text-align: center;
+}
+.loader-demo > div {
+    display: inline-block;
+}
+/* ========================================================================
+ Component: gmap.less
+ ========================================================================== */
+.gmap {
+    height: 300px;
+}
+.gmap.gmap-sm {
+    height: 150px;
+}
+/* ========================================================================
+ Component: vector-map.less
+ ========================================================================== */
+body .jvectormap-label {
+    position: absolute;
+    display: none;
+    border: solid 1px #313232;
+    border-radius: 2px;
+    background: #313232;
+    color: white;
+    padding: 3px 6px;
+    opacity: 0.9;
+    z-index: 11;
+}
+body .jvectormap-zoomin,
+body .jvectormap-zoomout {
+    position: absolute;
+    left: 10px;
+    width: 22px;
+    height: 22px;
+    border-radius: 2px;
+    background: #515253;
+    padding: 5px;
+    color: white;
+    cursor: pointer;
+    line-height: 10px;
+    text-align: center;
+}
+body .jvectormap-zoomin {
+    top: 10px;
+}
+body .jvectormap-zoomout {
+    top: 30px;
+}
+/* ========================================================================
+ Component: portlets.less
+ ========================================================================== */
+[portlet] {
+    min-height: 30px;
+}
+[portlet].portlet-handler,
+[portlet] .portlet-handler {
+    cursor: move;
+}
+.portlets-wrapper {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    overflow: auto;
+}
+.portlet.box-placeholder {
+    padding: 0;
+}
+/* ========================================================================
+ Component: mailbox.less
+ ========================================================================== */
+.mb-boxes {
+    height: 0;
+    overflow: hidden;
+}
+.mb-boxes .nav > li > a {
+    font-weight: 600;
+    color: #3a3f51;
+    margin: 5px 0;
+    -webkit-transition: background-color 0.3s ease;
+    -o-transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease;
+}
+.mb-boxes .nav > li > a:hover,
+.mb-boxes .nav > li > a:focus {
+    background-color: #c0d0d3;
+}
+.mb-boxes .nav > li.active > a {
+    background-color: #5d9cec !important;
+    color: #fff;
+}
+@media only screen and (min-width: 992px) {
+.mb-boxes {
+        height: auto !important;
+        visibility: visible !important;
+        display: block;
+    }
+}
+@media only screen and (min-width: 992px) {
+.mb-compose-button {
+        display: block;
+        width: 100%;
+    }
+.mb-toggle-button {
+        display: none;
+    }
+}
+.mb-mails > tbody > tr > td {
+    border-top-color: transparent;
+    cursor: pointer;
+}
+.mb-mails .mb-mail-active {
+    background-color: #f7f8f9 !important;
+}
+.mb-mails .mb-mail-avatar {
+    float: left;
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 3px;
+}
+.mb-mails .mb-mail-date {
+    display: block;
+    float: right;
+    color: #909fa7;
+    font-size: 12px;
+    font-weight: bold;
+}
+.mb-mails .mb-mail-from {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+}
+.mb-mails .mb-mail-meta {
+    overflow: hidden;
+}
+.mb-mails .mb-mail-subject {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 6px;
+}
+.mb-mails .mb-mail-preview {
+    clear: both;
+    margin-top: 10px;
+    color: #909fa7;
+    margin-top: 2px;
+}
+.mb-mails .mb-attachment {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid #e4eaec;
+}
+.mb-view > tbody > tr > td {
+    cursor: auto;
+}
+.mb-view .mb-mail-to-list {
+    margin-top: 6px;
+}
+.mb-view .mb-mail-to-list > a {
+    margin-right: 5px;
+    color: #909fa7;
+}
+/* ========================================================================
+ Component: utils.less
+ ========================================================================== */
+.m0 {
+    margin: 0 !important;
+}
+.ml0 {
+    margin-left: 0 !important;
+}
+.mr0 {
+    margin-right: 0 !important;
+}
+.mt0 {
+    margin-top: 0 !important;
+}
+.mb0 {
+    margin-bottom: 0 !important;
+}
+.m {
+    margin: 10px !important;
+}
+.ml {
+    margin-left: 10px !important;
+}
+.mr {
+    margin-right: 10px !important;
+}
+.mt {
+    margin-top: 10px !important;
+}
+.mb {
+    margin-bottom: 10px !important;
+}
+.m-sm {
+    margin: 5px !important;
+}
+.ml-sm {
+    margin-left: 5px !important;
+}
+.mr-sm {
+    margin-right: 5px !important;
+}
+.mt-sm {
+    margin-top: 5px !important;
+}
+.mb-sm {
+    margin-bottom: 5px !important;
+}
+.m-lg {
+    margin: 15px !important;
+}
+.ml-lg {
+    margin-left: 15px !important;
+}
+.mr-lg {
+    margin-right: 15px !important;
+}
+.mt-lg {
+    margin-top: 15px !important;
+}
+.mb-lg {
+    margin-bottom: 15px !important;
+}
+.m-xl {
+    margin: 30px !important;
+}
+.ml-xl {
+    margin-left: 30px !important;
+}
+.mr-xl {
+    margin-right: 30px !important;
+}
+.mt-xl {
+    margin-top: 30px !important;
+}
+.mb-xl {
+    margin-bottom: 30px !important;
+}
+.mv {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+.mh {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+}
+.mv-lg {
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
+}
+.mh-lg {
+    margin-left: 15px !important;
+    margin-right: 15px !important;
+}
+.mv-sm {
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+}
+.mh-sm {
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+}
+.p0 {
+    padding: 0 !important;
+}
+.pl0 {
+    padding-left: 0 !important;
+}
+.pr0 {
+    padding-right: 0 !important;
+}
+.pt0 {
+    padding-top: 0 !important;
+}
+.pb0 {
+    padding-bottom: 0 !important;
+}
+.pv0 {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+.ph0 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+.p {
+    padding: 10px !important;
+}
+.pl {
+    padding-left: 10px !important;
+}
+.pr {
+    padding-right: 10px !important;
+}
+.pt {
+    padding-top: 10px !important;
+}
+.pb {
+    padding-bottom: 10px !important;
+}
+.p-sm {
+    padding: 5px !important;
+}
+.pl-sm {
+    padding-left: 5px !important;
+}
+.pr-sm {
+    padding-right: 5px !important;
+}
+.pt-sm {
+    padding-top: 5px !important;
+}
+.pb-sm {
+    padding-bottom: 5px !important;
+}
+.p-lg {
+    padding: 15px !important;
+}
+.pl-lg {
+    padding-left: 15px !important;
+}
+.pr-lg {
+    padding-right: 15px !important;
+}
+.pt-lg {
+    padding-top: 15px !important;
+}
+.pb-lg {
+    padding-bottom: 15px !important;
+}
+.p-xl {
+    padding: 30px !important;
+}
+.pl-xl {
+    padding-left: 30px !important;
+}
+.pr-xl {
+    padding-right: 30px !important;
+}
+.pt-xl {
+    padding-top: 30px !important;
+}
+.pb-xl {
+    padding-bottom: 30px !important;
+}
+.pv {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+.ph {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+.pv-xl {
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
+}
+.ph-xl {
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+}
+.pv-lg {
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+}
+.ph-lg {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+.pv-sm {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+.ph-sm {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+.b0 {
+    border-width: 0 !important;
+}
+.bl0 {
+    border-left-width: 0 !important;
+}
+.br0 {
+    border-right-width: 0 !important;
+}
+.bt0 {
+    border-top-width: 0 !important;
+}
+.bb0 {
+    border-bottom-width: 0 !important;
+}
+.br {
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+}
+.bl {
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+.bt {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+.bb {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+.b,
+.ba {
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+.radius-clear {
+    border-radius: 0 !important;
+}
+.shadow-clear {
+    box-shadow: 0 0 0 #000 !important;
+}
+.text-white {
+    color: #fff;
+}
+.text-inverse {
+    color: #131e26;
+}
+.text-alpha {
+    color: rgba(255, 255, 255, 0.5);
+}
+.text-pink {
+    color: #f532e5;
+}
+.text-purple {
+    color: #7266ba;
+}
+.text-dark {
+    color: #3a3f51;
+}
+.text-alpha-inverse {
+    color: rgba(0, 0, 0, 0.5);
+}
+.text-green {
+    color: #37bc9b;
+}
+.text-yellow {
+    color: #fad732;
+}
+.text-gray-darker {
+    color: #232735;
+}
+.text-gray-dark {
+    color: #3a3f51;
+}
+.text-gray {
+    color: #dde6e9;
+}
+.text-gray-light {
+    color: #e4eaec;
+}
+.text-gray-lighter {
+    color: #edf1f2;
+}
+.text-inherit {
+    color: inherit;
+}
+.text-sm {
+    font-size: 11.9px;
+}
+.text-md {
+    font-size: 26.6px;
+}
+.text-lg {
+    font-size: 42px;
+}
+.text-nowrap {
+    white-space: nowrap;
+}
+.text-thin {
+    font-weight: 100 !important;
+}
+.text-normal {
+    font-weight: normal !important;
+}
+.text-bold {
+    font-weight: bold !important;
+}
+.inline {
+    display: inline-block !important;
+}
+.block-center {
+    margin: 0 auto;
+}
+.bg-primary {
+    background-color: #5d9cec;
+    color: #ffffff !important;
+}
+.bg-primary-light {
+    background-color: #8bb8f1;
+    color: #ffffff !important;
+}
+.bg-primary-dark {
+    background-color: #2f80e7;
+    color: #ffffff !important;
+}
+.bg-primary small {
+    color: inherit;
+}
+.bg-success {
+    background-color: #27c24c;
+    color: #ffffff !important;
+}
+.bg-success-light {
+    background-color: #43d967;
+    color: #ffffff !important;
+}
+.bg-success-dark {
+    background-color: #1e983b;
+    color: #ffffff !important;
+}
+.bg-success small {
+    color: inherit;
+}
+.bg-info {
+    background-color: #23b7e5;
+    color: #ffffff !important;
+}
+.bg-info-light {
+    background-color: #51c6ea;
+    color: #ffffff !important;
+}
+.bg-info-dark {
+    background-color: #1797be;
+    color: #ffffff !important;
+}
+.bg-info small {
+    color: inherit;
+}
+.bg-warning {
+    background-color: #ff902b;
+    color: #ffffff !important;
+}
+.bg-warning-light {
+    background-color: #ffab5e;
+    color: #ffffff !important;
+}
+.bg-warning-dark {
+    background-color: #f77600;
+    color: #ffffff !important;
+}
+.bg-warning small {
+    color: inherit;
+}
+.bg-danger {
+    background-color: #f05050;
+    color: #ffffff !important;
+}
+.bg-danger-light {
+    background-color: #f47f7f;
+    color: #ffffff !important;
+}
+.bg-danger-dark {
+    background-color: #ec2121;
+    color: #ffffff !important;
+}
+.bg-danger small {
+    color: inherit;
+}
+.bg-green {
+    background-color: #37bc9b;
+    color: #ffffff !important;
+}
+.bg-green-light {
+    background-color: #58ceb1;
+    color: #ffffff !important;
+}
+.bg-green-dark {
+    background-color: #2b957a;
+    color: #ffffff !important;
+}
+.bg-green small {
+    color: inherit;
+}
+.bg-pink {
+    background-color: #f532e5;
+    color: #ffffff !important;
+}
+.bg-pink-light {
+    background-color: #f763eb;
+    color: #ffffff !important;
+}
+.bg-pink-dark {
+    background-color: #e90bd6;
+    color: #ffffff !important;
+}
+.bg-pink small {
+    color: inherit;
+}
+.bg-purple {
+    background-color: #7266ba;
+    color: #ffffff !important;
+}
+.bg-purple-light {
+    background-color: #9289ca;
+    color: #ffffff !important;
+}
+.bg-purple-dark {
+    background-color: #564aa3;
+    color: #ffffff !important;
+}
+.bg-purple small {
+    color: inherit;
+}
+.bg-inverse {
+    background-color: #131e26;
+    color: #ffffff !important;
+}
+.bg-inverse-light {
+    background-color: #243948;
+    color: #ffffff !important;
+}
+.bg-inverse-dark {
+    background-color: #020304;
+    color: #ffffff !important;
+}
+.bg-inverse small {
+    color: inherit;
+}
+.bg-yellow {
+    background-color: #fad732;
+    color: #ffffff !important;
+}
+.bg-yellow-light {
+    background-color: #fbe164;
+    color: #ffffff !important;
+}
+.bg-yellow-dark {
+    background-color: #f3ca06;
+    color: #ffffff !important;
+}
+.bg-yellow small {
+    color: inherit;
+}
+.bg-white {
+    background-color: #ffffff;
+    color: inherit !important;
+}
+.bg-gray-darker {
+    background-color: #232735;
+    color: #ffffff !important;
+}
+.bg-gray-dark {
+    background-color: #3a3f51;
+    color: #ffffff !important;
+}
+.bg-gray {
+    background-color: #dde6e9;
+    color: #515253 !important;
+}
+.bg-gray-light {
+    background-color: #e4eaec;
+    color: #515253 !important;
+}
+.bg-gray-lighter {
+    background-color: #edf1f2;
+    color: #515253 !important;
+}
+.bg-transparent {
+    background-color: transparent !important;
+}
+.bg-cover {
+    background-size: cover;
+}
+.thumb8 {
+    width: 8px !important;
+    height: 8px !important;
+}
+.thumb16 {
+    width: 16px !important;
+    height: 16px !important;
+}
+.thumb24 {
+    width: 24px !important;
+    height: 24px !important;
+}
+.thumb32 {
+    width: 32px !important;
+    height: 32px !important;
+}
+.thumb48 {
+    width: 48px !important;
+    height: 48px !important;
+}
+.thumb64 {
+    width: 64px !important;
+    height: 64px !important;
+}
+.thumb80 {
+    width: 80px !important;
+    height: 80px !important;
+}
+.thumb96 {
+    width: 96px !important;
+    height: 96px !important;
+}
+.thumb128 {
+    width: 128px !important;
+    height: 128px !important;
+}
+.align-middle {
+    vertical-align: middle;
+}
+.align-top {
+    vertical-align: top;
+}
+.align-bottom {
+    vertical-align: bottom;
+}
+.bg-center {
+    background-position: center center;
+    background-size: cover;
+}
+.list-icon em {
+    font-size: 14px;
+    width: 40px;
+    vertical-align: middle;
+    margin: 0;
+    display: inline-block;
+    text-align: center;
+    -webkit-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+    line-height: 30px;
+}
+.list-icon div:hover em {
+    -webkit-transform: scale(3, 3);
+    -ms-transform: scale(3, 3);
+    -o-transform: scale(3, 3);
+    transform: scale(3, 3);
+}
+.wd-xxs {
+    width: 60px;
+}
+.wd-xs {
+    width: 90px;
+}
+.wd-sm {
+    width: 150px;
+}
+.wd-sd {
+    width: 200px;
+}
+.wd-md {
+    width: 240px;
+}
+.wd-lg {
+    width: 280px;
+}
+.wd-xl {
+    width: 320px;
+}
+.wd-xxl {
+    width: 360px;
+}
+.wd-wide {
+    width: 100%;
+}
+.wd-auto {
+    width: auto;
+}
+.wd-zero {
+    width: 0;
+}
+.label-inverse {
+    background-color: #131e26;
+}
+.label-inverse[href]:hover,
+.label-inverse[href]:focus {
+    background-color: #020304;
+}
+.label-green {
+    background-color: #37bc9b;
+}
+.label-green[href]:hover,
+.label-green[href]:focus {
+    background-color: #2b957a;
+}
+.label-pink {
+    background-color: #f532e5;
+}
+.label-pink[href]:hover,
+.label-pink[href]:focus {
+    background-color: #e90bd6;
+}
+.label-purple {
+    background-color: #7266ba;
+}
+.label-purple[href]:hover,
+.label-purple[href]:focus {
+    background-color: #564aa3;
+}
+.alert-purple {
+    background-color: #7266ba;
+    border-color: #7266ba;
+    color: #ffffff;
+}
+.alert-purple hr {
+    border-top-color: #6254b2;
+}
+.alert-purple .alert-link {
+    color: #e6e6e6;
+}
+.alert-green {
+    background-color: #37bc9b;
+    border-color: #37bc9b;
+    color: #ffffff;
+}
+.alert-green hr {
+    border-top-color: #31a88b;
+}
+.alert-green .alert-link {
+    color: #e6e6e6;
+}
+.alert-pink {
+    background-color: #f532e5;
+    border-color: #f532e5;
+    color: #ffffff;
+}
+.alert-pink hr {
+    border-top-color: #f41ae2;
+}
+.alert-pink .alert-link {
+    color: #e6e6e6;
+}
+.alert-inverse {
+    background-color: #131e26;
+    border-color: #131e26;
+    color: #ffffff;
+}
+.alert-inverse hr {
+    border-top-color: #0a1115;
+}
+.alert-inverse .alert-link {
+    color: #e6e6e6;
+}
+.abs-center-container {
+    position: relative;
+}
+.abs-center {
+    height: 50%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+.abs-center.abs-fixed {
+    position: fixed;
+    z-index: 999;
+}
+.abs-center.abs-right {
+    left: auto;
+    right: 20px;
+    text-align: right;
+}
+.abs-center.abs-left {
+    right: auto;
+    left: 20px;
+    text-align: left;
+}
+
+.abs-center.login {
+    position: relative;
+    margin-top: 20px;
+}
+
+.abs-center.login label {
+    font-weight: inherit;
+    margin: 5px 0px 0px;
+    font-size: 12px;
+}
+
+@media (max-height: 720px) {
+.abs-center {
+        position: relative;
+    }
+}
+.link-unstyled {
+    text-decoration: none !important;
+    outline: none !important;
+}
+.no-resize {
+    resize: none;
+    max-width: 100%;
+    min-width: 100%;
+}
+/**
+ * Displays hidden content on hover. Add this class to the parent element.
+ * Markup
+ *   <div class="hover-visible">
+ *    <div class="hover-hidden"></div>
+ *   </div>
+ */
+.hover-visible .hover-hidden {
+    display: none;
+}
+.hover-visible:hover .hover-hidden {
+    display: block;
+}
+.hover-visible:hover .hover-hidden-inline {
+    display: inline-block;
+}
+.media-box,
+.media-box-body {
+    overflow: hidden;
+    zoom: 1;
+}
+.media-box,
+.media-box .media-box {
+    margin-top: 15px;
+}
+.media-box:first-child {
+    margin-top: 0;
+}
+.media-box-object {
+    display: block;
+}
+.media-box-heading {
+    margin: 0 0 5px;
+}
+.media-box > .pull-left {
+    margin-right: 10px;
+}
+.media-box > .pull-right {
+    margin-left: 10px;
+}
+.media-box-list {
+    padding-left: 0;
+    list-style: none;
+}
+/* ========================================================================
+ Component: print.less
+ ========================================================================== */
+@media print {
+.sidebar,
+.topnavbar,
+.offsidebar,
+.btn {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+.wrapper,
+.wrapper > section,
+.content-wrapper {
+        margin: 0 !important;
+        /* remove margin used for sidebar and expand the content */
+        padding: 0 !important;
+        width: 100% !important;
+    }
+.content-wrapper {
+        overflow: hidden !important;
+    }
+}
+.setting-color {
+    padding: 0 5px;
+}
+.setting-color > label {
+    display: block;
+    position: relative;
+    margin: 0 10px;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+.setting-color > label:first-child {
+    margin-left: 0;
+}
+.setting-color > label:last-child {
+    margin-right: 0;
+}
+.setting-color > label > .color {
+    display: block;
+    height: 18px;
+}
+.setting-color > label > .split {
+    display: block;
+}
+.setting-color > label > .split:before,
+.setting-color > label > .split:after {
+    content: " ";
+    display: table;
+}
+.setting-color > label > .split:after {
+    clear: both;
+}
+.setting-color > label > .split > .color {
+    display: block;
+    height: 37.5px;
+}
+.setting-color > label > .split > .color:first-child {
+    float: left;
+    width: 70%;
+}
+.setting-color > label > .split > .color:last-child {
+    float: right;
+    width: 30%;
+}
+.setting-color > label > .icon-check {
+    position: absolute;
+    display: block;
+    left: 50%;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -20px;
+    margin-left: -10px;
+    text-align: center;
+    font-size: 1.33333333em;
+    vertical-align: -15%;
+    color: #fff;
+    opacity: 0;
+}
+.setting-color > label > input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+}
+.setting-color > label > input[type="radio"]:checked + .icon-check {
+    opacity: 1 !important;
+}
+flatdoc {
+    display: block;
+    margin: -15px;
+}
+@media only screen and (min-width: 768px) {
+    flatdoc {
+        margin: -20px;
+    }
+}
+flatdoc [role~="flatdoc"] {
+    width: 100%;
+    height: 100%;
+}
+@media only screen and (min-width: 768px) {
+    flatdoc [role~="flatdoc"] {
+        display: table;
+        table-layout: fixed;
+        border-spacing: 0;
+    }
+}
+flatdoc [role~="flatdoc-menu"] {
+    border-right: 1px solid #e1e2e3;
+    font-size: 14px;
+}
+@media only screen and (min-width: 768px) {
+    flatdoc [role~="flatdoc-menu"] {
+        position: relative;
+        display: table-cell;
+        height: 100%;
+        vertical-align: top;
+        width: 180px;
+    }
+    flatdoc [role~="flatdoc-menu"] > ul {
+        padding-top: 20px;
+    }
+}
+flatdoc [role~="flatdoc-menu"] ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+flatdoc [role~="flatdoc-menu"] ul.level-1 > li > a {
+    padding-top: 25px;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e1e2e3;
+    pointer-events: none;
+}
+flatdoc [role~="flatdoc-menu"] ul.level-2 > li + li > a,
+    flatdoc [role~="flatdoc-menu"] ul.level-2 > li:first-child > a {
+    background-color: rgba(255, 255, 255, 0.75);
+}
+flatdoc [role~="flatdoc-menu"] ul a {
+    position: relative;
+    display: block;
+    padding: 10px;
+    padding-right: 30px;
+}
+flatdoc [role~="flatdoc-menu"] ul a,
+    flatdoc [role~="flatdoc-menu"] ul a:visited {
+    color: #3a3f51;
+}
+flatdoc [role~="flatdoc-menu"] ul a:hover {
+    color: #2e3241;
+    background-color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+}
+flatdoc [role~="flatdoc-menu"] ul a.level-1 {
+    font-family: montserrat, sans-serif;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+flatdoc [role~="flatdoc-menu"] ul a.level-1,
+    flatdoc [role~="flatdoc-menu"] ul a.level-1:visited {
+    color: #3a3f51;
+}
+flatdoc [role~="flatdoc-menu"] ul a.level-1:hover {
+    color: #3a3f51;
+}
+flatdoc [role~="flatdoc-menu"] ul a.level-2 {
+    font-weight: 600;
+}
+flatdoc [role~="flatdoc-menu"] ul a.level-3 {
+    font-weight: normal;
+    font-size: 0.9em;
+    padding-left: 15px;
+}
+flatdoc [role~="flatdoc-menu"] ul a.active {
+    font-weight: bold !important;
+}
+flatdoc [role~="flatdoc-menu"] ul a.active,
+    flatdoc [role~="flatdoc-menu"] ul a.active:visited,
+    flatdoc [role~="flatdoc-menu"] ul a.active:hover {
+    color: #505050 !important;
+}
+flatdoc [role~="flatdoc-menu"] ul a.active:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    margin-top: -2px;
+    right: 15px;
+    width: 9px;
+    height: 3px;
+    border-radius: 2px;
+    background: #3a3f51;
+}
+flatdoc [role~="flatdoc-content"] {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 1px;
+    padding-bottom: 50px;
+    background-color: #fff;
+}
+@media only screen and (min-width: 768px) {
+    flatdoc [role~="flatdoc-content"] {
+        display: table-cell;
+        height: 100%;
+        vertical-align: top;
+    }
+}
+flatdoc [role~="flatdoc-content"] pre {
+    background-color: #f3f6fb;
+    border: 1px solid #dde6e9;
+}
+flatdoc [role~="flatdoc-content"] pre code {
+    display: inline-block;
+    white-space: pre;
+}
+flatdoc [role~="flatdoc-content"] pre code .string,
+    flatdoc [role~="flatdoc-content"] pre code .number {
+    color: #2b957a;
+}
+flatdoc [role~="flatdoc-content"] pre code .init {
+    color: #2b957a;
+}
+flatdoc [role~="flatdoc-content"] pre code .keyword {
+    color: #3a3f51;
+    font-weight: bold;
+}
+flatdoc [role~="flatdoc-content"] pre code .comment {
+    color: #909fa7;
+}
+flatdoc [role~="flatdoc-content"] > h1 {
+    padding: 11px 0;
+    margin: 0;
+    line-height: 1;
+}
+flatdoc [role~="flatdoc-content"] > h2,
+    flatdoc [role~="flatdoc-content"] > h3 {
+    padding: 20px;
+    border-top: 1px solid #f1f2f3;
+    margin: 0 -20px;
+}
+flatdoc .button {
+    display: inline-block;
+    padding: 6px 16px;
+    font-size: 13px;
+    border-radius: 3px;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #23b7e5;
+    border-color: #23b7e5;
+}
+flatdoc .button:focus,
+    flatdoc .button.focus {
+    color: #ffffff;
+    background-color: #1aacda;
+    border-color: #189ec8;
+}
+flatdoc .button:hover {
+    color: #ffffff;
+    background-color: #1aacda;
+    border-color: #189ec8;
+}
+flatdoc .button:active,
+    flatdoc .button.active,
+.open > .dropdown-toggleflatdoc .button {
+    color: #ffffff;
+    background-color: #1aacda;
+    border-color: #189ec8;
+}
+flatdoc .button:active:hover,
+    flatdoc .button.active:hover,
+.open > .dropdown-toggleflatdoc .button:hover,
+    flatdoc .button:active:focus,
+    flatdoc .button.active:focus,
+.open > .dropdown-toggleflatdoc .button:focus,
+    flatdoc .button:active.focus,
+    flatdoc .button.active.focus,
+.open > .dropdown-toggleflatdoc .button.focus {
+    color: #ffffff;
+    background-color: #1aacda;
+    border-color: #189ec8;
+}
+flatdoc .button:active,
+    flatdoc .button.active,
+.open > .dropdown-toggleflatdoc .button {
+    background-image: none;
+}
+flatdoc .button.disabled,
+    flatdoc .button[disabled],
+    fieldset[disabled] flatdoc .button,
+    flatdoc .button.disabled:hover,
+    flatdoc .button[disabled]:hover,
+    fieldset[disabled] flatdoc .button:hover,
+    flatdoc .button.disabled:focus,
+    flatdoc .button[disabled]:focus,
+    fieldset[disabled] flatdoc .button:focus,
+    flatdoc .button.disabled.focus,
+    flatdoc .button[disabled].focus,
+    fieldset[disabled] flatdoc .button.focus,
+    flatdoc .button.disabled:active,
+    flatdoc .button[disabled]:active,
+    fieldset[disabled] flatdoc .button:active,
+    flatdoc .button.disabled.active,
+    flatdoc .button[disabled].active,
+    fieldset[disabled] flatdoc .button.active {
+    background-color: #23b7e5;
+    border-color: #23b7e5;
+}
+flatdoc .button .badge {
+    color: #23b7e5;
+    background-color: #ffffff;
+}
+
+.gallery-backend {
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: 0px auto;
+    background-size: contain;
+    background-position: center;
+    max-width: 100%;
+    background-repeat: no-repeat;
+}
+
+#load_textarea {
+    width: 35px;
+    height: 35px;
+    position: relative;
+}
+
+.pointer {
+    margin: -22.5px 0px 0px -22.5px;
+    position: absolute;
+    display: inline-block;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    text-align: center;
+    background-color: #000;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    cursor: all-scroll;
+    -webkit-transition: background-color 0.2s;
+    -moz-transition: background-color 0.2s;
+    -o-transition: background-color 0.2s;
+    -ms-transition: background-color 0.2s;
+    transition: background-color 0.2s;
+}
+
+.pointer > #edit-point {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: inline-block;
+    width: 0px;
+    height: 0px;
+    background-color: #bbb;
+    border-radius: 50%;
+    border: 2px solid #FFF;
+    color: #FFF;
+    text-align: center;
+    cursor: pointer;
+    -webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -ms-transition: all 0.4s;
+    transition: all 0.4s;
+    overflow: hidden;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    opacity: 0;
+}
+
+.pointer:hover {
+    background-color: #666;
+}
+
+.pointer::after {
+    content: "\f047";
+    color: #FFF;
+    font-family: 'FontAwesome';
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 20px;
+    line-height: 45px;
+}
+
+.pointer:hover > #edit-point {
+    top: -13px;
+    right: -17px;
+    width: 30px;
+    height: 30px;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    filter: alpha(opacity=100);
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    opacity: 1;
+}
+
+
+
+.pointer > #edit-point:hover {
+    background-color: #ccc;
+}
+
+.pointer > #edit-point > i {
+    line-height: 29px;
+}
+
+#immagine {
+    position: relative;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+}
+
+#overlay-waiting {
+    position:fixed;
+    top:0;
+    left:0;
+    background:rgba(0,0,0,0.6);
+    z-index:1000000;
+    width:100%;
+    height:100%;
+}
+
+.modal {
+    z-index: 100000;
+}
+
+pre.sf-dump {
+    z-index: 1000;
+}
+
+.chosen-container {
+    width: 100% !important;
+}
+
+#overlay-waiting-content {
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    position: relative;
+    top: 50%;
+    text-align: center;
+    color: #FFF;
+    font-size: 20px;
+}
+
+#overlay-waiting-content .fa-spin {
+    margin-right: 10px;
+}
+
+.nav-arrow {
+    color: #000;
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 20px;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+}

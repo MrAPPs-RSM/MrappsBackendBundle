@@ -207,7 +207,6 @@ liip_imagine.controller.imagine_filter:
     "toastr": "~2.1.2",
     "angular-sanitize": "~1.4.7",
     "ngInfiniteScroll": "~1.2.1",
-    "ngmap": "~1.16.7",
     "tinymce": "~4.2.8",
     "angular-ui-sortable": "~0.13.4",
     "angular-ui-tinymce": "~0.0.10",
@@ -217,7 +216,8 @@ liip_imagine.controller.imagine_filter:
     "ui-select": "angular-ui-select#~0.14.2",
     "angular-ui-validate": "^1.2.2",
     "angular-minicolors": "~0.0.7",
-    "fullcalendar": "^2.6.1"
+    "fullcalendar": "^2.6.1",
+    "angular-google-maps": "2.3.2"
   }
 }
 ```
