@@ -240,8 +240,22 @@ class Utils
 
     public static function getListResults($em = null, $entity = '', $count = 0, $page = 1, $filters = array(), $sorting = array())
     {
-
         if ($em !== null && strlen($entity) > 0) {
+
+            //Se l'entity è DRAFT attivo di default il filtro "published = FALSE"
+            $isDraft = false;
+            $exploded1 = explode(':',$entity);
+            if(count($exploded1) > 1) {
+                $exploded2 = preg_split('/(?=[A-Z])/', $exploded1[0], -1, PREG_SPLIT_NO_EMPTY);
+                $expCount = count($exploded2);
+                if($expCount > 1 && strtolower($exploded2[$expCount-1]) == 'bundle') {
+                    $exploded2[$expCount-2] = $exploded2[$expCount-2].$exploded2[$expCount-1];
+                    unset($exploded2[$expCount-1]);
+                }
+                $fullEntity = implode('\\', $exploded2).'\\Entity\\'.$exploded1[1];
+
+                $isDraft = is_subclass_of($fullEntity, 'Mrapps\\BackendBundle\\Entity\\Draft');
+            }
 
             $count = intval($count);
             $page = intval($page);
@@ -251,6 +265,7 @@ class Utils
             if ($page < 1) $page = 1;
             if (!is_array($filters)) $filters = array();
             if (!is_array($sorting)) $sorting = array('createdAt' => 'desc');    //Sorting di default
+            if ($isDraft) $filters['published'] = 0;
             //--------------------------------------------------------------------------------------------
 
             //Filtri
@@ -429,17 +444,17 @@ class Utils
                 $array[$key] = $value;
             }
         }
-        
+
         return $array;
     }
-    
+
     public static function getLanguages(){
         return [
             "it" => "Italiano",
             "en" => "English"
         ];
     }
-    
+
     public static function getDefaultRouteForUser($container, $user) {
 
         $defaultRoutes = $container->getParameter('mrapps_backend.default_routes');
