@@ -20,7 +20,7 @@ class ValidateHandler
      * Cast to INTEGER (alias)
      */
     public function int($value, $preserveNull = true) {
-        return ValidateUtils::integer($value, $preserveNull);
+        return $this->integer($value, $preserveNull);
     }
 
     /*
@@ -48,7 +48,7 @@ class ValidateHandler
      * Cast to STRING (alias)
      */
     public function str($value, $preserveNull = true) {
-        return ValidateUtils::string($value, $preserveNull);
+        return $this->string($value, $preserveNull);
     }
 
     /*
@@ -56,7 +56,7 @@ class ValidateHandler
      */
     public function stringToUpper($value, $preserveNull = true) {
 
-        $string = ValidateUtils::string($value, $preserveNull);
+        $string = $this->string($value, $preserveNull);
         return ($string !== null) ? strtoupper($string) : null;
     }
 
@@ -64,7 +64,7 @@ class ValidateHandler
      * Cast to STRING, upperCase (alias)
      */
     public function strToUpper($value, $preserveNull = true) {
-        return ValidateUtils::stringToUpper($value, $preserveNull);
+        return $this-stringToUpper($value, $preserveNull);
     }
 
     /*
@@ -72,7 +72,7 @@ class ValidateHandler
      */
     public function stringToLower($value, $preserveNull = true) {
 
-        $string = ValidateUtils::string($value, $preserveNull);
+        $string = $this->string($value, $preserveNull);
         return ($string !== null) ? strtolower($string) : null;
     }
 
@@ -80,7 +80,7 @@ class ValidateHandler
      * Cast to STRING, lowerCase (alias)
      */
     public function strToLower($value, $preserveNull = true) {
-        return ValidateUtils::stringToLower($value, $preserveNull);
+        return $this->stringToLower($value, $preserveNull);
     }
 
     /*
@@ -98,7 +98,7 @@ class ValidateHandler
      * Cast to FLOAT (alias)
      */
     public function double($value, $preserveNull = true) {
-        return ValidateUtils::float($value, $preserveNull);
+        return $this->float($value, $preserveNull);
     }
 
     /*
@@ -117,7 +117,7 @@ class ValidateHandler
      */
     public function checkLength($value, $length = 0) {
 
-        $tmp = ValidateUtils::string($value, false);
+        $tmp = $this->string($value, false);
         return (strlen($tmp) <= intval($length));
     }
 
@@ -126,7 +126,7 @@ class ValidateHandler
      */
     public function truncate($value, $length = 0) {
 
-        $tmp = ValidateUtils::string($value, false);
+        $tmp = $this->string($value, false);
         return substr($tmp, 0, intval($length));
     }
 
@@ -135,8 +135,8 @@ class ValidateHandler
      */
     public function inRange($value, $type = '', $min = null, $max = null) {
 
-        if(method_exists(get_class(), $type)) {
-            $value = call_user_func('MarluBundle\Classes\ValidateUtils::'.$type, $value, false);
+        if(method_exists($this, $type)) {
+            $value = call_user_func($type, $value, false);
         }
 
         if($min !== null) {
@@ -175,9 +175,9 @@ class ValidateHandler
         if(is_array($array) && isset($array[$key])) {
 
             $value = $array[$key];
-            return (method_exists(get_class(), $type)) ? call_user_func('MarluBundle\Classes\ValidateUtils::'.$type, $value, $preserveNull) : $value;
+            return (method_exists($this, $type)) ? call_user_func($type, $value, $preserveNull) : $value;
         }
 
-        return ($preserveNull) ? null : ( (method_exists(get_class(), $type)) ? call_user_func('MarluBundle\Classes\ValidateUtils::'.$type, null, false) : null);
+        return ($preserveNull) ? null : ( (method_exists($this, $type)) ? call_user_func($type, null, false) : null);
     }
 }
