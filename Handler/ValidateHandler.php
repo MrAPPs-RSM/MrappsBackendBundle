@@ -136,7 +136,7 @@ class ValidateHandler
     public function inRange($value, $type = '', $min = null, $max = null) {
 
         if(method_exists($this, $type)) {
-            $value = call_user_func($type, $value, false);
+            $value = call_user_func(array($this, $type), $value, false);
         }
 
         if($min !== null) {
@@ -175,9 +175,9 @@ class ValidateHandler
         if(is_array($array) && isset($array[$key])) {
 
             $value = $array[$key];
-            return (method_exists($this, $type)) ? call_user_func($type, $value, $preserveNull) : $value;
+            return (method_exists($this, $type)) ? call_user_func(array($this, $type), $value, $preserveNull) : $value;
         }
 
-        return ($preserveNull) ? null : ( (method_exists($this, $type)) ? call_user_func($type, null, false) : null);
+        return ($preserveNull) ? null : ( (method_exists($this, $type)) ? call_user_func(array($this, $type), null, false) : null);
     }
 }
