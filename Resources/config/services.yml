@@ -24,3 +24,6 @@ services:
             class: Mrapps\BackendBundle\Handler\LanguageHandler
             calls:
                     - [setRequest , ["@service_container"]]
+
+    mrapps.backend.validate:
+                class: Mrapps\BackendBundle\Handler\ValidateHandler
