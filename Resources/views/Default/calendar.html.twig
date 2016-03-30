@@ -2,9 +2,16 @@
 {% extends 'MrappsBackendBundle:Default:layout.html.twig' %}
 {% block css %}
     <link rel="stylesheet" href="{{ asset('assets/vendor/fullcalendar/dist/fullcalendar.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/mrappsbackend/css/select2-bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/angular-ui-bootstrap-bower/ui-bootstrap-csp.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/jstree/dist/themes/default/style.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-minicolors/jquery.minicolors.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/ui-select/dist/select.min.css') }}">
 {% endblock css %}
 {% block content %}
-    <div class="container-fluid">
+    <div class="container-fluid" ng-controller="CalendarController as form">
         <div class="row">
             {% if fields is not null %}
                 <div class="col-md-4">
@@ -34,12 +41,27 @@
     <script src="{{ asset('assets/vendor/fullcalendar/dist/fullcalendar.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/fullcalendar/dist/lang-all.js') }}"></script>
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.min.js"></script>
+    <script src="{{ asset('assets/vendor/angular-resource/angular-resource.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/angular-file-upload/dist/angular-file-upload.min.js') }}"></script>
+    <script src='{{ asset('assets/vendor/tinymce-dist/tinymce.min.js') }}'></script>
+    <script src='{{ asset('assets/vendor/angular-ui-tinymce/src/tinymce.js') }}'></script>
+    <script src="{{ asset('assets/vendor/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src='{{ asset('assets/vendor/angular-ui-sortable/sortable.min.js') }}'></script>
+    <script src='{{ asset('assets/vendor/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js') }}'></script>
+    <script src="{{ asset('assets/vendor/jstree/dist/jstree.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/ng-js-tree/dist/ngJsTree.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/angular-ui-validate/dist/validate.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-minicolors/jquery.minicolors.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/angular-minicolors/angular-minicolors.js') }}"></script>
     <script src="{{ asset('assets/vendor/ui-select/dist/select.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/lodash/dist/lodash.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/angular-simple-logger/dist/angular-simple-logger.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/angular-google-maps/dist/angular-google-maps.min.js') }}"></script>
 {% endblock srcjavascript %}
 {% block javascript %}
     <script type="text/javascript">
         $(document).ready(function() {
-
             $('#calendar').fullCalendar({
                 lang: 'it',
                 eventSources: [
@@ -61,5 +83,27 @@
                 },
             })
         });
+
+        myAngular.controller("CalendarController", CalendarController);
+
+        function CalendarController($scope, $http, FileUploader, uiGmapGoogleMapApi) {
+            var vm = this;
+
+            {% set jsFields = [] %}
+            {% for field in fields %}
+                {% set jsFields = jsFields|merge([field]) %}
+                {% if field.type == 'switch' %}
+                    {% for inner_field in field.data %}
+                        {% set jsFields = jsFields|merge([inner_field]) %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+
+            {% for field in jsFields %}
+                {% set twig_name = ['MrappsBackendBundle:TypeJS:',field.type,'.js.twig']|join %}
+                {{ include(twig_name, { 'field': field }) }}
+            {% endfor %}
+
+        }
     </script>
 {% endblock javascript %}

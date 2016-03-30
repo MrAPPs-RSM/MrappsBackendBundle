@@ -186,12 +186,12 @@
 
             {% set jsFields = [] %}
             {% for field in fields %}
-            {% set jsFields = jsFields|merge([field]) %}
-            {% if field.type == 'switch' %}
-            {% for inner_field in field.data %}
-            {% set jsFields = jsFields|merge([inner_field]) %}
-            {% endfor %}
-            {% endif %}
+                {% set jsFields = jsFields|merge([field]) %}
+                {% if field.type == 'switch' %}
+                    {% for inner_field in field.data %}
+                        {% set jsFields = jsFields|merge([inner_field]) %}
+                    {% endfor %}
+                {% endif %}
             {% endfor %}
 
             {% for field in jsFields %}
