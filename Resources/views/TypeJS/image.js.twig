@@ -1,0 +1,33 @@
+$scope.{{ field.name }}_url = '';
+{% if field.value is not null %}
+    {% set field_url=field.value.url | imagine_filter('backend_thumbnail') %}
+    var {{ field.name }} = { 'id':{{ field.value.id }}, 'url': '{{ field_url }}' };
+
+    $scope.form.{{ field.name }} = {{ field.name }}.id;
+    $scope.{{ field.name }}_url = {{ field.name }}.url;
+{% endif %}
+
+$scope.{{ field.name }} = new FileUploader({
+    url: '{{ path('mrapps_backend_uploadimmagine') }}',
+    autoUpload: true,
+    queueLimit: 1
+});
+$scope.{{ field.name }}.onBeforeUploadItem = function (item) {
+    $scope.{{ field.name }}.clearQueue();
+    $('#load_{{ field.name }}').removeClass('hide');
+};
+$scope.{{ field.name }}.onAfterAddingFile = function (item) {
+    document.getElementById("save").disabled = true;
+};
+$scope.{{ field.name }}.onSuccessItem = function (fileItem, response, status, headers) {
+    $('#load_{{ field.name }}').addClass('hide');
+    if (response.success == false) {
+        toastr.error('{{ 'form.errore'|trans }}', response.message);
+        $scope.{{ field.name }}.clearQueue();
+        $scope.form.{{ field.name }} = null;
+    } else {
+        $scope.form.{{ field.name }} = response.id;
+        $scope.{{ field.name }}_url = response.url;
+    }
+    document.getElementById("save").disabled = false;
+};

@@ -1,0 +1,9 @@
+$scope.{{field.name}}ColorSettings = {
+    control: 'brightness',
+    theme: 'bootstrap',
+    position: 'top left',
+    {% if field.value is defined and field.value != null %}
+        defaultValue: '{{ field.value }}',
+    {% endif %}
+    letterCase: 'uppercase',
+};

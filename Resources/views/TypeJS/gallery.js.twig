@@ -1,0 +1,44 @@
+{% set uploader_name = ['gallery_',field.name]|join %}
+
+$scope.gallery_{{ field.name }}_immagini = [];
+
+$scope.{{ uploader_name }} = new FileUploader({
+    url: '{{ path('mrapps_backend_uploadimmagine') }}',
+    autoUpload: true
+});
+
+$scope.{{ uploader_name }}.removeId = function (array, index) {
+    array.splice(index, 1);
+    $scope.form.{{ field.name }} = $scope.gallery_{{ field.name }}_immagini;
+}
+
+$scope.{{ uploader_name }}.onBeforeUploadItem = function (item) {
+    document.getElementById("save").disabled = true;
+    $('#load_{{ field.name }}').removeClass('hide');
+}
+
+$scope.{{ uploader_name }}.onSuccessItem = function (fileItem, response, status, headers) {
+    if (response.success == false) {
+        toastr.error('Errore!', response.message);
+    } else {
+        $('#load_{{ field.name }}').addClass('hide');
+        $scope.gallery_{{field.name}}_immagini.push(response);
+        $scope.form.{{ field.name }} = $scope.gallery_{{ field.name }}_immagini;
+        toastr.success('{{ 'form.errore'|trans }}', "{{ 'form.immagine_salvata'|trans }}");
+    }
+    document.getElementById("save").disabled = false;
+}
+
+{% if field.value is not null %}
+    var gallery = {{ field.value | raw }};
+    gallery.forEach(function (item) {
+        $scope.gallery_{{field.name}}_immagini.push(item);
+    });
+    $scope.form.{{ field.name }} = $scope.gallery_{{ field.name }}_immagini;
+{% endif %}
+
+$scope.sortableOptions = {
+    stop: function (e, ui) {
+        $scope.form.{{ field.name }} = $scope.gallery_{{ field.name }}_immagini;
+    }
+};
