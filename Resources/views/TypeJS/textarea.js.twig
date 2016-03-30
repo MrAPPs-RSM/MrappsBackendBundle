@@ -1,0 +1,4 @@
+{% if field.value is defined %}
+    $scope.form.{{ field.name }} = '{{ field.value|e('js') }}';
+    $scope.form.{{ field.name }} = $scope.form.{{ field.name }}.toString();
+{% endif %}

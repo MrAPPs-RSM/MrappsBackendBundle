@@ -856,7 +856,7 @@ class DefaultController extends Controller
             'linkBreadcrumb' => $linkBreadcrumb,
             'calendarNew' => $calendarNew,
             'fields' => $fields,
-            'angular' => '',
+            'angular' => '"ui.select"',
         ));
     }
 }
