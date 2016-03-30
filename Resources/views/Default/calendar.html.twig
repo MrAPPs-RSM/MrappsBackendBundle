@@ -72,9 +72,15 @@
                         data: $('#input').serialize() + "&date=" + date.format(),
                         success: function(data) {
                             if(data.success){
+                                toastr.success('elemento salvato', 'Salvato');
                                 data = JSON.parse(data.data);
                                 $('#calendar').fullCalendar('renderEvent', data);
+                            }else{
+                                toastr.error(data.message, 'Error');
                             }
+                        },
+                        error: function () {
+                            toastr.error("Errore richiesta al server", 'Error');
                         },
                         dataType: 'json'
                     });
