@@ -145,15 +145,17 @@
         }
 
         {% set initializeGmaps = false %}
+        {% set gmapsApiKey = '' %}
         {% for field in fields if initializeGmaps == false %}
-        {% if field.type == "map" %}
+        {% if field.type == "latlng" %}
         {% set initializeGmaps = true %}
+        {% set gmapsApiKey = field.gmaps_api_key %}
         {% endif %}
         {% endfor %}
         {% if initializeGmaps == true %}
         myAngular.config(function(uiGmapGoogleMapApiProvider) {
             uiGmapGoogleMapApiProvider.configure({
-                key: 'AIzaSyDuBs5L2-vRVDChykp-jF8X-I1STTsAwso',
+                key: '{{ gmapsApiKey }}',
                 v: '3',
                 libraries: 'weather,geometry,visualization'
             });
@@ -247,11 +249,13 @@
                 }
                 document.getElementById("save").disabled = false;
             };
-            {% elseif field.type == "map" %}
+            {% elseif field.type == "latlng" %}
 
             {% if field.getLatLng_ajax|length > 0 %}
+            $scope.{{field.name}}ObtainLatLngLoading = false;
             $scope.{{field.name}}ObtainLatLngFnc = function() {
 
+                $scope.{{field.name}}ObtainLatLngLoading = true;
                 return $http.post('{{ field.getLatLng_ajax }}', {'form':$scope.form})
                         .then(function (response) {
                             if(response.data.success) {
@@ -261,6 +265,7 @@
                             }else {
                                 toastr.error('Errore!', 'Indirizzo non trovato.');
                             }
+                            $scope.{{field.name}}ObtainLatLngLoading = false;
                         });
             };
             {% endif %}

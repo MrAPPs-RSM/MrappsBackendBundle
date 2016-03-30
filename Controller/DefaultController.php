@@ -306,11 +306,20 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $languages = $em->getRepository('MrappsBackendBundle:Language')->findBy(["visible" => true]);
 
+
+        $gmapsApiKey = ($this->container->hasParameter('gmaps_api_key')) ? $this->container->getParameter('gmaps_api_key') : '';
+
         foreach ($fields as $k => $f) {
-            if($f['type'] == 'map') {
+
+            //Mappa
+            if($f['type'] == 'latlng') {
+
                 //Numero random, necessario per il marker (tipo mappa)
                 $rnd = mt_rand(1, 999999);
                 $fields[$k]['random_number'] = $rnd;
+
+                //Api Key Google Maps
+                $fields[$k]['gmaps_api_key'] = $gmapsApiKey;
             }
         }
 
