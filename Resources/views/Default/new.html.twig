@@ -262,6 +262,7 @@
                                 $scope.form.{{field.name}}.address = response.data.address;
                                 $scope.form.{{field.name}}.center.latitude = response.data.lat;
                                 $scope.form.{{field.name}}.center.longitude = response.data.lng;
+                                $scope.createMarker();
                             }else {
                                 toastr.error('Errore!', 'Indirizzo non trovato.');
                             }
@@ -272,24 +273,35 @@
 
             $scope.form.{{field.name}} = { address: '', center: { latitude: {{ field.value.lat|default('42.247564380437346') }}, longitude: {{ field.value.lng|default('12.916211206249972') }} }, zoom: {{ field.value.zoom|default('5') }} };
 
-            $scope.{{field.name}}Marker = {
-                id: {{ field.random_number }},
-                coords: {
-                    latitude: $scope.form.{{field.name}}.center.latitude,
-                    longitude: $scope.form.{{field.name}}.center.longitude
-        },
-            options: { draggable: true },
-            events: {
-                dragend: function (marker, eventName, args) {
+            $scope.destroyMarker = function() {
+                $scope.{{field.name}}Marker = {};
+            };
+            $scope.createMarker = function() {
 
-                    var lat = marker.getPosition().lat();
-                    var lng = marker.getPosition().lng();
+                $scope.destroyMarker();
 
-                    $scope.form.{{field.name}}.center.latitude = lat;
-                    $scope.form.{{field.name}}.center.longitude = lng;
+                $scope.{{field.name}}Marker = {
+                    id: {{ field.random_number }},
+                    coords: {
+                        latitude: $scope.form.{{field.name}}.center.latitude,
+                        longitude: $scope.form.{{field.name}}.center.longitude
+            },
+                options: { draggable: true },
+                events: {
+                    dragend: function (marker, eventName, args) {
+
+                        var lat = marker.getPosition().lat();
+                        var lng = marker.getPosition().lng();
+
+                        $scope.form.{{field.name}}.center.latitude = lat;
+                        $scope.form.{{field.name}}.center.longitude = lng;
+                    }
                 }
-            }
-        };
+            };
+            };
+
+            $scope.createMarker();
+
             {% elseif field.type == "file" %}
 
             $scope.{{ field.name }}_uploading = false;
