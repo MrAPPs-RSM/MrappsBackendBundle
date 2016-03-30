@@ -1,0 +1,21 @@
+<fieldset id="{{field.name}}" {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
+    <div class="form-group">
+        {#<label class="col-sm-2 control-label">{{field.title}}{% if switch is not defined and field.required %} *{% endif %}</label>#}
+        {#<div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">#}
+            {#<ui-gmap-google-map center='form.{{field.name}}.center' zoom='form.{{field.name}}.zoom'>#}
+                {#<ui-gmap-marker coords="{{field.name}}Marker.coords" options="{{field.name}}Marker.options" events="{{field.name}}Marker.events" idkey="{{ field.random_number }}"></ui-gmap-marker>#}
+            {#</ui-gmap-google-map>#}
+            {#<div>{/ form.{{field.name}}.address /}</div>#}
+            {#<div>[{/ form.{{field.name}}.center.latitude /}, {/ form.{{field.name}}.center.longitude /}, {/ form.{{field.name}}.zoom /}]</div>#}
+            {#{% if field.getLatLng_ajax|length > 0 %}#}
+                {#<input class="form-control" type="button" ng-disabled="{{field.name}}ObtainLatLngLoading" ng-click="{{field.name}}ObtainLatLngFnc()" value="Ottieni Latitudine e Longitudine" />#}
+                {#<i ng-show="{{field.name}}ObtainLatLngLoading" class="fa fa-spin fa-spinner"></i>#}
+            {#{% endif %}#}
+        {#</div>#}
+        {#{% if field.didascalia is defined %}#}
+            {#<div class="col-sm-4">#}
+                {#<small class="text-muted">{{field.didascalia}}</small>#}
+            {#</div>#}
+        {#{% endif %}#}
+    </div>
+</fieldset>
