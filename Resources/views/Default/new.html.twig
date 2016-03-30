@@ -1,7 +1,6 @@
 {% trans_default_domain 'MrappsBackendBundle' %}
 {% extends 'MrappsBackendBundle:Default:layout.html.twig' %}
 {% block css %}
-    <link rel="stylesheet" href="{{ asset('//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('bundles/mrappsbackend/css/select2-bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/angular-ui-bootstrap-bower/ui-bootstrap-csp.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/jstree/dist/themes/default/style.min.css') }}">
@@ -78,7 +77,6 @@
 
 {% endblock content %}
 {% block srcjavascript %}
-    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.8/select2.min.js"></script>
     <script src="{{ asset('assets/vendor/angular-resource/angular-resource.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/angular-file-upload/dist/angular-file-upload.min.js') }}"></script>
     <script src='{{ asset('assets/vendor/tinymce-dist/tinymce.min.js') }}'></script>
