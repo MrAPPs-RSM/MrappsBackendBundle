@@ -6,7 +6,7 @@
                 <ui-select-match>
                     <span ng-bind="$select.selected.name"></span>
                 </ui-select-match>
-                <ui-select-choices {% if field.ajax is defined %} refresh="refresh{{ field.name }}($select.search)" refresh-delay="0" {% endif %} group-by="'type'" repeat="item in ({{ field.name }}Items | filter: $select.search) track by item.value">
+                <ui-select-choices {% if field.ajax is defined %} refresh="refresh{{ field.name }}($select.search)" refresh-delay="300" {% endif %} group-by="'type'" repeat="item in ({{ field.name }}Items | filter: $select.search) track by item.value">
                     <span ng-bind="item.name"></span>
                 </ui-select-choices>
             </ui-select>
