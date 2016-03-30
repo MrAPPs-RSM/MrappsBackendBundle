@@ -856,7 +856,7 @@ class DefaultController extends Controller
             'linkBreadcrumb' => $linkBreadcrumb,
             'calendarNew' => $calendarNew,
             'fields' => $fields,
-            'angular' => '"ui.select"',
+            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps"',
         ));
     }
 }
