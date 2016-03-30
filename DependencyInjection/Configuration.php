@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('logo_path')->defaultValue('temp')->end()
             ->scalarNode('temp_folder')->defaultValue('temp')->end()
             ->scalarNode('images_url')->defaultValue('')->end()
+            ->scalarNode('gmaps_api_key')->defaultValue('')->end()
             ->arrayNode('default_routes')
             ->prototype('array')
             ->children()

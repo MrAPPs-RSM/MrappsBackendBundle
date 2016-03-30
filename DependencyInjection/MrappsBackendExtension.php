@@ -24,6 +24,8 @@ class MrappsBackendExtension extends Extension
 
         $container->setParameter('mrapps_backend.logo_path', $config['logo_path']);
         $container->setParameter('mrapps_backend.temp_folder', $config['temp_folder']);
+        $container->setParameter('mrapps_backend.images_url', $config['images_url']);
+        $container->setParameter('mrapps_backend.gmaps_api_key', $config['gmaps_api_key']);
         $container->setParameter('mrapps_backend.default_routes', $config['default_routes']);
         $container->setParameter('mrapps_backend.file_accepted_types.image', $config['file_accepted_types']['image']);
         $container->setParameter('mrapps_backend.file_accepted_types.video', $config['file_accepted_types']['video']);
@@ -36,6 +38,7 @@ class MrappsBackendExtension extends Extension
         $container->setParameter('mrapps_backend.customization.text_hover_on_primary_color', $config['customization']['text_hover_on_primary_color']);
         $container->setParameter('mrapps_backend.customization.text_on_secondary_color', $config['customization']['text_on_secondary_color']);
         $container->setParameter('mrapps_backend.customization.text_hover_on_secondary_color', $config['customization']['text_hover_on_secondary_color']);
+
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
