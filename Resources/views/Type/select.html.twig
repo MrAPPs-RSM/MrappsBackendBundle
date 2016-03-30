@@ -2,33 +2,14 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">{{ field.title }}{% if switch is not defined and field.required %} *{% endif %}</label>
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
-            {% if field.ajax is not defined or field.ajax == false %}
-                <select name="{{ field.name }}" id="select_{{ field.name }}"
-                        {% if field.multiple is defined %}multiple="multiple"{% endif %} {% if switch is not defined and field.required %}required="true"{% endif %}
-                        ng-model="form.{{ field.name }}"
-                        class="form-control select">
-                    {% for item in field.options %}
-                        {% if item.values is defined %}
-                            <optgroup label="{{ item.title }}">
-                                {% for option in item.values %}
-                                    <option value="{{ option.value }}">{{ option.name }}</option>
-                                {% endfor %}
-                            </optgroup>
-                        {% else %}
-                            <option value="{{ item.value }}">{{ item.name }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-            {% else %}
-                <ui-select name="{{ field.name }}" id="select_{{ field.name }}" ng-model="form.{{ field.name }}">
-                    <ui-select-match>
-                        <span ng-bind="$select.selected.name"></span>
-                    </ui-select-match>
-                    <ui-select-choices refresh="refresh{{ field.name }}($select.search)" refresh-delay="0" group-by="'type'" repeat="item in ({{ field.name }}Items | filter: $select.search) track by item.value">
-                        <span ng-bind="item.name"></span>
-                    </ui-select-choices>
-                </ui-select>
-            {% endif %}
+            <ui-select name="{{ field.name }}" id="select_{{ field.name }}" ng-model="form.{{ field.name }}">
+                <ui-select-match>
+                    <span ng-bind="$select.selected.name"></span>
+                </ui-select-match>
+                <ui-select-choices {% if field.ajax is defined %} refresh="refresh{{ field.name }}($select.search)" refresh-delay="0" {% endif %} group-by="'type'" repeat="item in ({{ field.name }}Items | filter: $select.search) track by item.value">
+                    <span ng-bind="item.name"></span>
+                </ui-select-choices>
+            </ui-select>
         </div>
         {% if switch is not defined and field.required %}<span
             ng-show="form.validateInput('{{ field.name }}', 'required')" class="text-danger">

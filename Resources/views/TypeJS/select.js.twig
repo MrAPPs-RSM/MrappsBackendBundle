@@ -19,54 +19,17 @@ setTimeout(function () {
         {% if field.value is defined and field.value is not empty %}
         $http.get('{{ field.ajax_options.url }}?id={{ field.value }}')
                 .then(function (response) {
-                    $scope.form.{{ field.name }} = response.data;
+                    $scope.form.{{ field.name }} = response.data
                 });
         {% endif %}
 
     {% else %}
 
-        jQuery("#select_{{ field.name }}").select2({
-            {% if field.required==false %}
-                "allowClear": true,
-            {% endif %}
-            dropdownCssClass: "bigdrop"
-        });
-
-        {% if field.disable is defined and field.disable==true %}
-            jQuery("#select_{{ field.name }}").prop("disabled", true);
-        {% endif %}
+        $scope.{{ field.name }}Items = {{ field.options | json_encode | raw}};
 
         {% if field.value is defined and field.value is not empty %}
-
-            {% if field.value is iterable %}
-                $scope.form.{{ field.name }} = {{ field.value | json_encode }};
-            {% else %}
-                $scope.form.{{ field.name }} = "{{ field.value }}";
-            {% endif %}
-
-            jQuery("#select_{{ field.name }}").val($scope.form.{{ field.name }});
-            jQuery("#select_{{ field.name }}").trigger('change');
-
-        {% else %}
-
-            {% if field.required==true %}
-
-                {% set field_values= field.options | first %}
-                {% if field_values.values is defined %}
-                    {% set field_value= field_values.values | first %}
-                {% else %}
-                    {% set field_value= field_values %}
-                {% endif %}
-
-                $scope.form.{{ field.name }} = {{ field_value.value | json_encode }};
-                jQuery("#select_{{ field.name }}").val($scope.form.{{ field.name }});
-                jQuery("#select_{{ field.name }}").trigger('change');
-            {% endif %}
+            $scope.form.{{ field.name }} = {{ field.value | json_encode | raw}};
         {% endif %}
-
-        jQuery("#{{ field.name }}").on("change", function (e) {
-            $scope.form.{{ field.name }} = $("#select_{{ field.name }}").val();
-        });
 
     {% endif %}
 
