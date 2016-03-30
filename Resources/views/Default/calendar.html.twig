@@ -2,7 +2,7 @@
 {% extends 'MrappsBackendBundle:Default:layout.html.twig' %}
 {% block css %}
     <link rel="stylesheet" href="{{ asset('assets/vendor/fullcalendar/dist/fullcalendar.min.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('assets/vendor/sweetalert/dist/sweetalert.css') }}">
     <link rel="stylesheet" href="{{ asset('bundles/mrappsbackend/css/select2-bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/angular-ui-bootstrap-bower/ui-bootstrap-csp.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/jstree/dist/themes/default/style.min.css') }}">
@@ -39,7 +39,7 @@
     <script src="{{ asset('assets/vendor/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/fullcalendar/dist/fullcalendar.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/fullcalendar/dist/lang-all.js') }}"></script>
-
+    <script src="{{ asset('assets/vendor/sweetalert/dist/sweetalert.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/angular-resource/angular-resource.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/angular-file-upload/dist/angular-file-upload.min.js') }}"></script>
     <script src='{{ asset('assets/vendor/tinymce-dist/tinymce.min.js') }}'></script>
@@ -65,6 +65,7 @@
                 eventSources: [
                     '{{ linkAjax }}'
                 ],
+                {% if calendarNew is defined and calendarNew is not null  %}
                 dayClick: function(date, jsEvent, view) {
                     $.ajax({
                         type: "POST",
@@ -85,6 +86,37 @@
                         dataType: 'json'
                     });
                 },
+                {% endif  %}
+                {% if calendarDelete is defined and calendarDelete is not null  %}
+                eventClick: function(event) {
+                    swal({
+                        title: "Delete event",
+                        text: "Sei sicuro di volerlo eliminare?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "{{ 'checkbox.si'|trans }}",
+                        cancelButtonText: "{{ 'checkbox.no'|trans }}",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    }, function (isConfirm) {
+                        if (isConfirm) {
+                            $.post("{{ calendarDelete }}", event.id).then(function successCallback(response) {
+                                if (response.data.success) {
+                                    swal("Eliminato", "Elemento salvato con sucesso", "success");
+                                    $('#calendar').fullCalendar('removeEvents',event._id);
+                                } else {
+                                    swal("Errore", response.data.message, "error");
+                                }
+                            }, function errorCallback(response) {
+                                swal("Errore", "Errore nella richiesta al server", "error");
+                            });
+                        } else {
+                            swal("Annullato", "eliminazione annullata", "error");
+                        }
+                    });
+                },
+                {% endif  %}
             })
         });
 
