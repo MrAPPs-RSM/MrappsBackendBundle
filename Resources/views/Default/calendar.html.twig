@@ -123,7 +123,7 @@
                         }, function (isConfirm) {
                             if (isConfirm) {
                                 $.post("{{ calendarDelete }}", event.id).then(function successCallback(response) {
-                                    if (response.data.success) {
+                                    if (response.success) {
                                         swal("Eliminato", "Elemento salvato con sucesso", "success");
                                         $('#calendar').fullCalendar('removeEvents',event._id);
                                     } else {
