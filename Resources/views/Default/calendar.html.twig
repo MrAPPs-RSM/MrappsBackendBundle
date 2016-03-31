@@ -11,27 +11,26 @@
 {% endblock css %}
 {% block content %}
     <div class="container-fluid" ng-controller="CalendarController as form">
-        <div class="row">
-            {% if fields is not null %}
-                <div class="col-md-4">
-                    <div id='panel'>
-                        <form id="input">
-                            {% for field in fields %}
-                                {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
-                                {{ include(twig_name, { 'field': field }) }}
-                            {% endfor %}
-                        </form>
-                    </div>
+        {% if fields is not null %}
+            <div class="col-md-4">
+                <div id='panel'>
+                    <form id="input">
+                        {% for field in fields %}
+                            {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
+                            {{ include(twig_name, { 'field': field }) }}
+                        {% endfor %}
+                    </form>
                 </div>
-                <div class="col-md-8">
-                    <div id='calendar'></div>
-                </div>
-            {% else %}
-                <div class="col-md-12">
-                    <div id='calendar'></div>
-                </div>
-            {% endif %}
-        </div>
+            </div>
+            <div class="col-md-8">
+                <div id='calendar'></div>
+            </div>
+        {% else %}
+            <div class="col-md-12">
+                <div id='calendar'></div>
+            </div>
+        {% endif %}
+    </div>
     </div>
 
 {% endblock content %}
@@ -59,66 +58,6 @@
 {% endblock srcjavascript %}
 {% block javascript %}
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('#calendar').fullCalendar({
-                lang: 'it',
-                eventSources: [
-                    '{{ calendarAjax }}'
-                ],
-                {% if calendarNew is defined and calendarNew is not null  %}
-                dayClick: function(date, jsEvent, view) {
-                    $.ajax({
-                        type: "POST",
-                        url: "{{ calendarNew }}",
-                        data: $('#input').serialize() + "&date=" + date.format(),
-                        success: function(data) {
-                            if(data.success){
-                                toastr.success('elemento salvato', 'Salvato');
-                                data = JSON.parse(data.data);
-                                $('#calendar').fullCalendar('renderEvent', data);
-                            }else{
-                                toastr.error(data.message, 'Error');
-                            }
-                        },
-                        error: function () {
-                            toastr.error("Errore richiesta al server", 'Error');
-                        },
-                        dataType: 'json'
-                    });
-                },
-                {% endif  %}
-                {% if calendarDelete is defined and calendarDelete is not null  %}
-                eventClick: function(event) {
-                    swal({
-                        title: "Delete event",
-                        text: "Sei sicuro di volerlo eliminare?",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "{{ 'checkbox.si'|trans }}",
-                        cancelButtonText: "{{ 'checkbox.no'|trans }}",
-                        closeOnConfirm: false,
-                        closeOnCancel: false
-                    }, function (isConfirm) {
-                        if (isConfirm) {
-                            $.post("{{ calendarDelete }}", event.id).then(function successCallback(response) {
-                                if (response.data.success) {
-                                    swal("Eliminato", "Elemento salvato con sucesso", "success");
-                                    $('#calendar').fullCalendar('removeEvents',event._id);
-                                } else {
-                                    swal("Errore", response.data.message, "error");
-                                }
-                            }, function errorCallback(response) {
-                                swal("Errore", "Errore nella richiesta al server", "error");
-                            });
-                        } else {
-                            swal("Annullato", "eliminazione annullata", "error");
-                        }
-                    });
-                },
-                {% endif  %}
-            })
-        });
 
         myAngular.controller("CalendarController", CalendarController);
 
@@ -127,18 +66,80 @@
 
             {% set jsFields = [] %}
             {% for field in fields %}
-                {% set jsFields = jsFields|merge([field]) %}
-                {% if field.type == 'switch' %}
-                    {% for inner_field in field.data %}
-                        {% set jsFields = jsFields|merge([inner_field]) %}
-                    {% endfor %}
-                {% endif %}
+            {% set jsFields = jsFields|merge([field]) %}
+            {% if field.type == 'switch' %}
+            {% for inner_field in field.data %}
+            {% set jsFields = jsFields|merge([inner_field]) %}
+            {% endfor %}
+            {% endif %}
             {% endfor %}
 
             {% for field in jsFields %}
-                {% set twig_name = ['MrappsBackendBundle:TypeJS:',field.type,'.js.twig']|join %}
-                {{ include(twig_name, { 'field': field }) }}
+            {% set twig_name = ['MrappsBackendBundle:TypeJS:',field.type,'.js.twig']|join %}
+            {{ include(twig_name, { 'field': field }) }}
             {% endfor %}
+
+            $(document).ready(function() {
+                $('#calendar').fullCalendar({
+                    lang: 'it',
+                    eventSources: [
+                        '{{ calendarAjax }}'
+                    ],
+                    {% if calendarNew is defined and calendarNew is not null  %}
+                    dayClick: function(date, jsEvent, view) {
+                        $scope.form.date = date.format();
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ calendarNew }}",
+                            data: $scope.form,
+                            success: function(data) {
+                                if(data.success){
+                                    toastr.success('elemento salvato', 'Salvato');
+                                    data = JSON.parse(data.data);
+                                    $('#calendar').fullCalendar('renderEvent', data);
+                                }else{
+                                    toastr.error(data.message, 'Error');
+                                }
+                            },
+                            error: function () {
+                                toastr.error("Errore richiesta al server", 'Error');
+                            },
+                            dataType: 'json'
+                        });
+                    },
+                    {% endif  %}
+                    {% if calendarDelete is defined and calendarDelete is not null  %}
+                    eventClick: function(event) {
+                        swal({
+                            title: "Delete event",
+                            text: "Sei sicuro di volerlo eliminare?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "{{ 'checkbox.si'|trans }}",
+                            cancelButtonText: "{{ 'checkbox.no'|trans }}",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function (isConfirm) {
+                            if (isConfirm) {
+                                $.post("{{ calendarDelete }}", event.id).then(function successCallback(response) {
+                                    if (response.data.success) {
+                                        swal("Eliminato", "Elemento salvato con sucesso", "success");
+                                        $('#calendar').fullCalendar('removeEvents',event._id);
+                                    } else {
+                                        swal("Errore", response.data.message, "error");
+                                    }
+                                }, function errorCallback(response) {
+                                    swal("Errore", "Errore nella richiesta al server", "error");
+                                });
+                            } else {
+                                swal("Annullato", "eliminazione annullata", "error");
+                            }
+                        });
+                    },
+                    {% endif  %}
+                })
+            });
 
         }
     </script>
