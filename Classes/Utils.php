@@ -394,34 +394,45 @@ class Utils
 
     public static function getArrayLang($entity, $method = 'getTraduzioni', $fields = null, $options = array())
     {
-
         if (!is_array($fields) || count($fields) == 0) $fields = null;
 
         if (!is_array($options)) $options = array();
         if (!isset($options['key_isocodes'])) $options['key_isocodes'] = false;
+        if (!isset($options['force_published_entity'])) $options['force_published_entity'] = true;
+
+        //Forza l'entity pubblicata in caso di entity draft
+        if((bool)$options['force_published_entity'] == true) {
+            $class = get_class($entity);
+            if(is_subclass_of($class, 'Mrapps\\BackendBundle\\Entity\\Draft') && $entity->getPublished() == false && $entity->getOther() != null) {
+                $entity = $entity->getOther();
+            }
+        }
 
         $array = [];
         $reader = new AnnotationReader();
-        foreach ($entity->$method() as $item) {
 
-            $objUser = new \ReflectionObject($item);
-            $properties = $objUser->getProperties();
-            foreach ($properties as $p) {
+        $traduzioni = $entity->$method();
+        if(count($traduzioni) > 0) {
+            foreach ($traduzioni as $item) {
+                $objUser = new \ReflectionObject($item);
+                $properties = $objUser->getProperties();
+                foreach ($properties as $p) {
 
-                if ($fields == null || in_array($p->name, $fields)) {
+                    if ($fields == null || in_array($p->name, $fields)) {
 
-                    $annOneToOne = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToOne');
-                    $annManyToOne = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\ManyToOne');
-                    $annOneToMany = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToMany');
+                        $annOneToOne = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToOne');
+                        $annManyToOne = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\ManyToOne');
+                        $annOneToMany = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToMany');
 
-                    if ($annOneToOne == null && $annManyToOne == null && $annOneToMany == null) {
+                        if ($annOneToOne == null && $annManyToOne == null && $annOneToMany == null) {
 
-                        $method = 'get' . Utils::snakeToCamelCase($p->name);
+                            $method = 'get' . Utils::snakeToCamelCase($p->name);
 
-                        $lang = $item->getLang();
-                        $key = ($lang !== null) ? (($options['key_isocodes']) ? $lang->getIsoCode() : $lang->getId()) : null;
-                        if ($key != null) {
-                            $array[$p->name][$key] = $item->$method();
+                            $lang = $item->getLang();
+                            $key = ($lang !== null) ? (($options['key_isocodes']) ? $lang->getIsoCode() : $lang->getId()) : null;
+                            if ($key != null) {
+                                $array[$p->name][$key] = $item->$method();
+                            }
                         }
                     }
                 }
@@ -437,7 +448,7 @@ class Utils
         if ($entity == null || $method == null || $lang == null) {
             return null;
         }
-        
+
         $traduzioni = $entity->$method();
         $criteria = Criteria::create()->where(Criteria::expr()->eq("lang", $lang));
 
