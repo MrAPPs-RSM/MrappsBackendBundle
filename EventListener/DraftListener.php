@@ -245,6 +245,9 @@ class DraftListener
                 $this->setRelazioni($uow, $bozza, $pubblicata);
 
             }else {
+                //Salvo eventuali modifiche alla bozza (altrimenti qualsiasi persist esterno a questo listener verrebbe sovrascritto)
+                $this->em->flush($bozza);
+
                 //Set relazioni corrette per le entity non-draft
                 $this->setRelazioni($uow, null, $bozza);
             }
