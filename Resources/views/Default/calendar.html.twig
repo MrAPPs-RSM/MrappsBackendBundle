@@ -63,7 +63,7 @@
             $('#calendar').fullCalendar({
                 lang: 'it',
                 eventSources: [
-                    '{{ linkAjax }}'
+                    '{{ calendarAjax }}'
                 ],
                 {% if calendarNew is defined and calendarNew is not null  %}
                 dayClick: function(date, jsEvent, view) {

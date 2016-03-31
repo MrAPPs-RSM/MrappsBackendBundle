@@ -845,14 +845,14 @@ class DefaultController extends Controller
         return new JsonResponse(array('valid' => $valid, 'code' => $httpCode, 'url' => $url));
     }
 
-    public function __calendarAction($title, $linkAjax, $linkBreadcrumb = null, $calendarNew= null, $fields = null)
+    public function __calendarAction($title, $calendarAjax, $linkBreadcrumb = null, $calendarNew= null, $fields = null)
     {
 
         $em = $this->getDoctrine()->getManager();
 
         return $this->render('MrappsBackendBundle:Default:calendar.html.twig', array(
             'title' => $title,
-            'linkAjax' => $linkAjax,
+            'calendarAjax' => $calendarAjax,
             'linkBreadcrumb' => $linkBreadcrumb,
             'calendarNew' => $calendarNew,
             'fields' => $fields,
