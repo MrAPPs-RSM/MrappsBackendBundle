@@ -309,6 +309,9 @@ class DefaultController extends Controller
 
         $gmapsApiKey = ($this->container->hasParameter('gmaps_api_key')) ? $this->container->getParameter('gmaps_api_key') : '';
 
+        $panels = array();
+
+        //Allineamento campi
         foreach ($fields as $k => $f) {
 
             //Mappa
@@ -321,12 +324,55 @@ class DefaultController extends Controller
                 //Api Key Google Maps
                 $fields[$k]['gmaps_api_key'] = $gmapsApiKey;
             }
+
+            //Pannello
+            if($f['type'] == 'panel') {
+                $panels[] = array(
+                    'index' => $k,
+                    'label' => (isset($f['label'])) ? $f['label'] : '',
+                );
+            }
         }
+
+        //Indice da cui partire a leggere i fields
+        $prevPanelIndex = 0;
+
+        //Raggruppamento in pannelli
+        if(count($panels) == 0) {
+            $panels[] = array('index' => 0, 'label' => '');
+            $prevPanelIndex = -1;
+        }
+
+        //Se il primo elemento non è un pannello ne creo uno fittizio
+        if($panels[0]['index'] != 0) {
+            $panels = array_merge(array(array('index' => 0, 'label' => '')), $panels);
+            $prevPanelIndex = -1;
+        }
+
+        foreach ($panels as $k => $p) {
+
+            //Scorre i campi a partire dall'indice successivo a quello del pannello precedente
+            for($i = $prevPanelIndex+1; $i < count($fields); $i++) {
+
+                if(!isset($panels[$k]['fields'])) $panels[$k]['fields'] = array();
+
+                //Aggiunge i campi al pannello
+                if($fields[$i]['type'] != 'panel') {
+                    $panels[$k]['fields'][] = $fields[$i];
+                }else {
+                    //Quando trova un altro pannello si ferma
+                    $prevPanelIndex = $i;
+                    break;
+                }
+            }
+        }
+
 
         return $this->render('MrappsBackendBundle:Default:new.html.twig', array(
             'current_route' => $request->get('_route'),
             'title' => $title,
-            'fields' => $fields,
+//            'fields' => $fields,
+            'panels' => $panels,
             'linkSave' => $linkSave,
             'linkEdit' => $linkEdit,
             'create' => $create,

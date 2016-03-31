@@ -2,35 +2,33 @@ setTimeout(function () {
 
     {% if field.ajax is defined and field.ajax == true %}
 
-        $scope.{{ field.name }}Items = [];
-        $scope.refresh{{ field.name }} = function(search) {
-            var text = search;
-            if(text.length >= {{ field.ajax_options.min_length|default(0) }}) {
-                var params = {q: search, form:$scope.form};
-                return $http.post('{{ field.ajax_options.url }}', params)
-                        .then(function (response) {
-                            $scope.{{ field.name }}Items = response.data
-                        });
-            }
-            return true;
-        };
-
-        //Set initial value
-        {% if field.value is defined and field.value is not empty %}
-        $http.get('{{ field.ajax_options.url }}?id={{ field.value }}')
-                .then(function (response) {
-                    $scope.form.{{ field.name }} = response.data
-                });
-        {% endif %}
+    $scope.{{ field.name }}Items = [];
+    $scope.refresh{{ field.name }} = function(search) {
+        var text = search;
+        if(text.length >= {{ field.ajax_options.min_length|default(0) }}) {
+            var params = {q: search, form:$scope.form};
+            return $http.post('{{ field.url }}', params)
+                    .then(function (response) {
+                        $scope.{{ field.name }}Items = response.data
+                    });
+        }
+        return true;
+    };
 
     {% else %}
 
-        $scope.{{ field.name }}Items = {{ field.options | json_encode | raw}};
+    {#$scope.{{ field.name }}Items = {{ field.options | json_encode | raw}};#}
+    $http.get('{{ field.url }}').then(function (response) {
+        $scope.{{ field.name }}Items = response.data;
+    });
 
-        {% if field.value is defined and field.value is not empty %}
-            $scope.form.{{ field.name }} = {{ field.value | json_encode | raw}};
-        {% endif %}
+    {% endif %}
 
+    {% if field.value is defined and field.value is not empty %}
+    {#  $scope.form.{{ field.name }} = {{ field.value | json_encode | raw}};#}
+    $http.get('{{ field.url }}?id={{ field.value }}').then(function (response) {
+        $scope.form.{{ field.name }} = response.data;
+    });
     {% endif %}
 
 }, 0);

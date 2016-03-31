@@ -10,7 +10,7 @@
                         $scope.form.{{field.name}}.center.longitude = response.data.lng;
                         $scope.createMarker();
                     }else {
-                        toastr.error('Errore!', 'Indirizzo non trovato.');
+                        toastr.error('Indirizzo non trovato.','Errore!');
                     }
                     $scope.{{field.name}}ObtainLatLngLoading = false;
                 });
