@@ -845,7 +845,7 @@ class DefaultController extends Controller
         return new JsonResponse(array('valid' => $valid, 'code' => $httpCode, 'url' => $url));
     }
 
-    public function __calendarAction($title, $calendarAjax, $linkBreadcrumb = null, $calendarNew= null, $fields = null)
+    public function __calendarAction($title, $calendarAjax, $linkBreadcrumb = null, $calendarNew= null, $calendarDelete= null, $fields = null)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -855,6 +855,7 @@ class DefaultController extends Controller
             'calendarAjax' => $calendarAjax,
             'linkBreadcrumb' => $linkBreadcrumb,
             'calendarNew' => $calendarNew,
+            'calendarDelete' => $calendarDelete,
             'fields' => $fields,
             'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps"',
         ));
