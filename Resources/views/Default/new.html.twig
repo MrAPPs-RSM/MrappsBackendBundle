@@ -200,8 +200,21 @@
             {% endfor %}
 
             {% for field in jsFields %}
+
             {% set twig_name = ['MrappsBackendBundle:TypeJS:',field.type,'.js.twig']|join %}
+
+            {% if field.lang is defined and field.lang %}
+            {% set field_lang = field.value %}
+            {% set field_name = field.name %}
+            {% for lang in languages %}
+            {% set field = field|merge({"name" : [field_name,'_',lang.id]|join}) %}
+            {% set field = field|merge({"value" : field_lang[lang.id]}) %}
             {{ include(twig_name, { 'field': field }) }}
+            {% endfor %}
+            {% else %}
+            {{ include(twig_name, { 'field': field }) }}
+            {% endif %}
+
             {% endfor %}
 
             vm.submitted = false;
