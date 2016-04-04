@@ -137,7 +137,7 @@
         }
 
         $( document ).ready(function() {
-            changeLaguagesReady("it",1);
+            changeLaguagesReady("{{ default_language.isoCode }}",{{ default_language.id }});
             changeLaguages();
         });
 

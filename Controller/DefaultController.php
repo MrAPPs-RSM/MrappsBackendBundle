@@ -307,6 +307,12 @@ class DefaultController extends Controller
         $languages = $em->getRepository('MrappsBackendBundle:Language')->findBy(["visible" => true]);
 
 
+        //Locale di default tendine multilingua
+        $locale = $request->getLocale();
+        $defaultLocale = $em->getRepository('MrappsBackendBundle:Language')->findByIso($locale);
+        if($defaultLocale == null) $defaultLocale = $em->getRepository('MrappsBackendBundle:Language')->findByIso('it');
+
+
         $gmapsApiKey = ($this->container->hasParameter('gmaps_api_key')) ? $this->container->getParameter('gmaps_api_key') : '';
 
         $panels = array();
@@ -382,6 +388,7 @@ class DefaultController extends Controller
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,
             'languages' => $languages,
+            'default_language' => $defaultLocale,
             'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps"',
         ));
     }
