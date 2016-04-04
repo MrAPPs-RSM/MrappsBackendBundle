@@ -15,4 +15,47 @@ class LanguageRepository extends EntityRepository
     public function findByIso($iso) {
         return $this->findOneBy(array('isoCode' => strtolower(trim($iso))));
     }
+
+    public function getLang($entity = null, $language = null) {
+
+        $em = $this->getEntityManager();
+
+        if(!is_object($language)) {
+            $language = $em->getRepository('MrappsBackendBundle:Language')->findByIso(strtolower(trim($language)));
+        }
+
+        if($entity !== null && is_object($entity) && $language !== null) {
+
+            $entityLangClass = get_class($entity).'Lang';
+            if(is_subclass_of($entityLangClass, 'Mrapps\\BackendBundle\\Entity\\LanguageBase') ||
+                is_subclass_of($entityLangClass, 'Mrapps\\BackendBundle\\Entity\\LanguageBaseDraft')) {
+
+                //Entity draft e entity lang non-draft? Punto all'entity pubblicata
+                if(is_subclass_of($entityLangClass, 'Mrapps\\BackendBundle\\Entity\\LanguageBase') &&
+                    is_subclass_of($entity, 'Mrapps\\BackendBundle\\Entity\\Draft') &&
+                    !$entity->getPublished()) {
+
+                    $entity = $entity->getOther();
+                }
+
+                if($entity !== null) {
+
+                    $entityLang = $em->getRepository($entityLangClass)->findOneBy(array('padre' => $entity, 'lang' => $language));
+                    if($entityLang == null) {
+
+                        $entityLang = new $entityLangClass();
+                        $entityLang->setLang($language);
+                        $entityLang->setPadre($entity);
+
+                        $em->persist($entityLang);
+                        $em->flush($entityLang);
+                    }
+
+                    return $entityLang;
+                }
+            }
+        }
+
+        return null;
+    }
 }
