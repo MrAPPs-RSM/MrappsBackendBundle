@@ -28,12 +28,20 @@ class Draft extends Base implements DraftInterface {
      */
     protected $published;
 
-    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="deleted", type="boolean", nullable=true)
+     */
+    protected $deleted;
+
+
     public function __construct() {
 
         parent::__construct();
 
         $this->published = 0;
+        $this->deleted = 0;
     }
 
     /**
@@ -65,6 +73,28 @@ class Draft extends Base implements DraftInterface {
      */
     public function getPublished() {
         return $this->published;
+    }
+
+    /**
+     * Set deleted
+     *
+     * @param bool $deleted
+     *
+     * @return Draft
+     */
+    public function setDeleted($deleted) {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return bool
+     */
+    public function getDeleted() {
+        return $this->deleted;
     }
 
     public function getOther()

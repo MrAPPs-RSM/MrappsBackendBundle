@@ -253,6 +253,35 @@ class DraftListener
             }
         }
 
+        //Entity draft eliminate
+        foreach ($uow->getScheduledEntityDeletions() as $bozza) {
+
+            $class = ($bozza !== null && is_object($bozza)) ? get_class($bozza) : '';
+
+            if (strlen($class) > 0 && is_subclass_of($class, $this->draftClass) && !$bozza->getPublished()) {
+
+                //Set Deleted=TRUE, Visible=FALSE su entity DRAFT
+                $bozza->setDeleted(1);
+                $bozza->setVisible(0);
+                $this->em->persist($bozza);
+                $this->em->flush($bozza);
+                $this->computeChangeSet($uow, $bozza);
+
+                //Set Deleted=TRUE su entity PUBBLICATA
+                $pubblicata = $bozza->getOther();
+                if($pubblicata != null) {
+                    $pubblicata->setDeleted(1);
+                    $this->em->persist($pubblicata);
+                    $this->em->flush($pubblicata);
+                    $this->computeChangeSet($uow, $pubblicata);
+                }
+
+                //Impedisce l'eliminazione dell'entity
+                $this->em->detach($bozza);
+            }
+        }
+
+
         //Riaggiungo l'evento onFlush
         $eventManager->addEventListener('onFlush', $this);
     }
