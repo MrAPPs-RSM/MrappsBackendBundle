@@ -398,7 +398,7 @@ class Utils
 
         if (!is_array($options)) $options = array();
         if (!isset($options['key_isocodes'])) $options['key_isocodes'] = false;
-        if (!isset($options['force_published_entity'])) $options['force_published_entity'] = true;
+        if (!isset($options['force_published_entity'])) $options['force_published_entity'] = false;
 
         //Forza l'entity pubblicata in caso di entity draft
         if((bool)$options['force_published_entity'] == true) {
