@@ -462,9 +462,8 @@ class Utils
 
                 if ($entity !== null) {
 
+                    $entityLang = $em->getRepository($entityLangClass)->findOneBy(array('padre' => $entity, 'lang' => $language));
                     if ($options['create_entity'] === true) {
-
-                        $entityLang = $em->getRepository($entityLangClass)->findOneBy(array('padre' => $entity, 'lang' => $language));
                         if ($entityLang == null) {
 
                             $entityLang = new $entityLangClass();
@@ -474,11 +473,7 @@ class Utils
                             $em->persist($entityLang);
                             $em->flush($entityLang);
                         }
-
-                        return $entityLang;
                     }
-
-                    return null;
                 }
             }
         }
