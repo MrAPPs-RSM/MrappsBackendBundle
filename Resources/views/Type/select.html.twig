@@ -1,10 +1,11 @@
 <fieldset id="{{field.name}}" {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
     <div class="form-group">
         <label class="col-sm-2 control-label">{{ field.title }}{% if switch is not defined and field.required %} *{% endif %}</label>
+        <div>{/ form.{{field.name}} /}</div>
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
-            <ui-select name="{{ field.name }}" id="select_{{ field.name }}" ng-model="form.{{ field.name }}">
+            <ui-select name="{{ field.name }}" id="select_{{ field.name }}" ng-model="form.{{ field.name }}" {% if field.multiple is defined and field.multiple == true %}multiple{% endif %}>
                 <ui-select-match>
-                    <span ng-bind="$select.selected.name"></span>
+                    <span ng-bind="{% if field.multiple is defined and field.multiple == true %}$item{% else %}$select.selected{% endif %}.name"></span>
                 </ui-select-match>
                 <ui-select-choices {% if field.ajax is defined %} refresh="refresh{{ field.name }}($select.search)" refresh-delay="300" {% endif %} group-by="'type'" repeat="item in ({{ field.name }}Items | filter: $select.search) track by item.value">
                     <span ng-bind="item.name"></span>
