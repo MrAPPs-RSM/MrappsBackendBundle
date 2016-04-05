@@ -401,9 +401,9 @@ class Utils
         if (!isset($options['force_published_entity'])) $options['force_published_entity'] = false;
 
         //Forza l'entity pubblicata in caso di entity draft
-        if((bool)$options['force_published_entity'] == true) {
+        if ((bool)$options['force_published_entity'] == true) {
             $class = get_class($entity);
-            if(is_subclass_of($class, 'Mrapps\\BackendBundle\\Entity\\Draft') && $entity->getPublished() == false && $entity->getOther() != null) {
+            if (is_subclass_of($class, 'Mrapps\\BackendBundle\\Entity\\Draft') && $entity->getPublished() == false && $entity->getOther() != null) {
                 $entity = $entity->getOther();
             }
         }
@@ -412,7 +412,7 @@ class Utils
         $reader = new AnnotationReader();
 
         $traduzioni = $entity->$method();
-        if(count($traduzioni) > 0) {
+        if (count($traduzioni) > 0) {
             foreach ($traduzioni as $item) {
                 $objUser = new \ReflectionObject($item);
                 $properties = $objUser->getProperties();
@@ -442,54 +442,74 @@ class Utils
         return $array;
     }
 
-    public static function getTraduzione($em = null, $entity = null, $language = null)
+    private static function findTraduzione($em = null, $entity = null, $language = null, $options = array())
     {
-        if(!is_object($language)) {
-            $language = $em->getRepository('MrappsBackendBundle:Language')->findByIso(strtolower(trim($language)));
-        }
+        if ($entity !== null && is_object($entity) && $language !== null) {
 
-        if($entity !== null && is_object($entity) && $language !== null) {
-
-            $entityLangClass = get_class($entity).'Lang';
-            if(is_subclass_of($entityLangClass, 'Mrapps\\BackendBundle\\Entity\\LanguageBase') ||
-                is_subclass_of($entityLangClass, 'Mrapps\\BackendBundle\\Entity\\LanguageBaseDraft')) {
+            $entityLangClass = get_class($entity) . 'Lang';
+            if (is_subclass_of($entityLangClass, 'Mrapps\\BackendBundle\\Entity\\LanguageBase') ||
+                is_subclass_of($entityLangClass, 'Mrapps\\BackendBundle\\Entity\\LanguageBaseDraft')
+            ) {
 
                 //Entity draft e entity lang non-draft? Punto all'entity pubblicata
-                if(is_subclass_of($entityLangClass, 'Mrapps\\BackendBundle\\Entity\\LanguageBase') &&
+                if (is_subclass_of($entityLangClass, 'Mrapps\\BackendBundle\\Entity\\LanguageBase') &&
                     is_subclass_of($entity, 'Mrapps\\BackendBundle\\Entity\\Draft') &&
-                    !$entity->getPublished()) {
+                    !$entity->getPublished()
+                ) {
 
                     $entity = $entity->getOther();
                 }
 
-                if($entity !== null) {
+                if ($entity !== null) {
 
                     $entityLang = $em->getRepository($entityLangClass)->findOneBy(array('padre' => $entity, 'lang' => $language));
-                    if($entityLang == null) {
+                    if ($options['create_entity'] === true) {
+                        if ($entityLang == null) {
 
-                        $entityLang = new $entityLangClass();
-                        $entityLang->setLang($language);
-                        $entityLang->setPadre($entity);
+                            $entityLang = new $entityLangClass();
+                            $entityLang->setLang($language);
+                            $entityLang->setPadre($entity);
 
-                        $em->persist($entityLang);
-                        $em->flush($entityLang);
+                            $em->persist($entityLang);
+                            $em->flush($entityLang);
+                        }
                     }
-
-                    return $entityLang;
                 }
             }
         }
 
         return null;
+    }
 
-//        if ($entity == null || $method == null || $lang == null) {
-//            return null;
-//        }
-//
-//        $traduzioni = $entity->$method();
-//        $criteria = Criteria::create()->where(Criteria::expr()->eq("lang", $lang));
-//
-//        return $traduzioni->matching($criteria);
+    public static function getTraduzione($em = null, $entity = null, $language = null, $options = array())
+    {
+        if (!is_array($options)) $options = array();
+        if (!isset($options['create_entity'])) $options['create_entity'] = false;
+
+        if (is_array($language)) {
+
+            foreach ($language as $item) {
+
+                if (!is_object($item)) {
+                    $lang = $em->getRepository('MrappsBackendBundle:Language')->findByIso(strtolower(trim($item)));
+                } else {
+                    $lang = $item;
+                }
+
+                $result = Utils::findTraduzione($em, $entity, $lang, $options);
+
+                if ($result !== null) {
+                    return $result;
+                }
+            }
+
+        } else {
+            if (!is_object($language)) {
+                $language = $em->getRepository('MrappsBackendBundle:Language')->findByIso(strtolower(trim($language)));
+            }
+
+            return Utils::findTraduzione($em, $entity, $language, $options);
+        }
     }
 
     public static function snakeToCamelCase($snakeCase)
