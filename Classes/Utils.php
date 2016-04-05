@@ -474,6 +474,8 @@ class Utils
                             $em->flush($entityLang);
                         }
                     }
+
+                    return $entityLang;
                 }
             }
         }
