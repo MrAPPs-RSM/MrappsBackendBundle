@@ -1,23 +1,30 @@
 {% if field.getLatLng_ajax|length > 0 %}
-    $scope.{{field.name}}ObtainLatLngLoading = false;
-    $scope.{{field.name}}ObtainLatLngFnc = function() {
-        $scope.{{field.name}}ObtainLatLngLoading = true;
-        return $http.post('{{ field.getLatLng_ajax }}', {'form':$scope.form})
-                .then(function (response) {
-                    if(response.data.success) {
-                        $scope.form.{{field.name}}.address = response.data.address;
-                        $scope.form.{{field.name}}.center.latitude = response.data.lat;
-                        $scope.form.{{field.name}}.center.longitude = response.data.lng;
-                        $scope.createMarker();
-                    }else {
-                        toastr.error('Indirizzo non trovato.','Errore!');
-                    }
-                    $scope.{{field.name}}ObtainLatLngLoading = false;
-                });
-    };
+$scope.{{field.name}}ObtainLatLngLoading = false;
+$scope.{{field.name}}ObtainLatLngFnc = function() {
+    $scope.{{field.name}}ObtainLatLngLoading = true;
+    return $http.post('{{ field.getLatLng_ajax }}', {'form':$scope.form})
+            .then(function (response) {
+                if(response.data.success) {
+                    $scope.form.{{field.name}}.address = response.data.address;
+                    $scope.form.{{field.name}}.center.latitude = response.data.lat;
+                    $scope.form.{{field.name}}.center.longitude = response.data.lng;
+                    $scope.form.{{field.name}}.marker.latitude = response.data.lat;
+                    $scope.form.{{field.name}}.marker.longitude = response.data.lng;
+                    $scope.createMarker();
+                }else {
+                    toastr.error('Indirizzo non trovato.','Errore!');
+                }
+                $scope.{{field.name}}ObtainLatLngLoading = false;
+            });
+};
 {% endif %}
 
-$scope.form.{{field.name}} = { address: '', center: { latitude: {{ field.value.lat|default('42.247564380437346') }}, longitude: {{ field.value.lng|default('12.916211206249972') }} }, zoom: {{ field.value.zoom|default('5') }} };
+$scope.form.{{field.name}} = {
+    address: '',
+    center: { latitude: {{ field.value.lat|default('42.247564380437346') }}, longitude: {{ field.value.lng|default('12.916211206249972') }} },
+    marker: { latitude: {{ field.value.lat|default('42.247564380437346') }}, longitude: {{ field.value.lng|default('12.916211206249972') }} },
+    zoom: {{ field.value.zoom|default('5') }}
+};
 
 $scope.destroyMarker = function() {
     $scope.{{field.name}}Marker = {};
@@ -29,21 +36,21 @@ $scope.createMarker = function() {
     $scope.{{field.name}}Marker = {
         id: {{ field.random_number }},
         coords: {
-            latitude: $scope.form.{{field.name}}.center.latitude,
-            longitude: $scope.form.{{field.name}}.center.longitude
-        },
-        options: { draggable: true },
-        events: {
-            dragend: function (marker, eventName, args) {
+            latitude: $scope.form.{{field.name}}.marker.latitude,
+            longitude: $scope.form.{{field.name}}.marker.longitude
+},
+    options: { draggable: true },
+    events: {
+        dragend: function (marker, eventName, args) {
 
-                var lat = marker.getPosition().lat();
-                var lng = marker.getPosition().lng();
+            var lat = marker.getPosition().lat();
+            var lng = marker.getPosition().lng();
 
-                $scope.form.{{field.name}}.center.latitude = lat;
-                $scope.form.{{field.name}}.center.longitude = lng;
-            }
+            $scope.form.{{field.name}}.marker.latitude = lat;
+            $scope.form.{{field.name}}.marker.longitude = lng;
         }
-    };
+    }
+};
 };
 
 $scope.createMarker();

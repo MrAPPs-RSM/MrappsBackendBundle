@@ -6,7 +6,7 @@
                 <ui-gmap-marker coords="{{field.name}}Marker.coords" options="{{field.name}}Marker.options" events="{{field.name}}Marker.events" idkey="{{ field.random_number }}"></ui-gmap-marker>
             </ui-gmap-google-map>
             <div>{/ form.{{field.name}}.address /}</div>
-            <div>[{/ form.{{field.name}}.center.latitude /}, {/ form.{{field.name}}.center.longitude /}, {/ form.{{field.name}}.zoom /}]</div>
+            <div>[{/ form.{{field.name}}.marker.latitude /}, {/ form.{{field.name}}.marker.longitude /}]</div>
             {% if field.getLatLng_ajax|length > 0 %}
                 <input class="form-control" type="button" ng-disabled="{{field.name}}ObtainLatLngLoading" ng-click="{{field.name}}ObtainLatLngFnc()" value="Ottieni Latitudine e Longitudine" />
                 <i ng-show="{{field.name}}ObtainLatLngLoading" class="fa fa-spin fa-spinner"></i>
