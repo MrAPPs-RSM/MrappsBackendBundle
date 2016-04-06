@@ -462,7 +462,15 @@ class Utils
 
                 if ($entity !== null) {
 
-                    $entityLang = $em->getRepository($entityLangClass)->findOneBy(array('padre' => $entity, 'lang' => $language));
+                    $findRules = array('padre' => $entity, 'lang' => $language);
+                    
+                    if ($options["find_rules"] !== false && is_array($options["find_rules"])) {
+                        foreach ($options["find_rules"] as $rule) {
+                            $findRules[$rule["rule_key"]] = $rule["rule_value"];
+                        }
+                    }
+
+                    $entityLang = $em->getRepository($entityLangClass)->findOneBy($findRules);
                     if ($options['create_entity'] === true) {
                         if ($entityLang == null) {
 
@@ -487,6 +495,7 @@ class Utils
     {
         if (!is_array($options)) $options = array();
         if (!isset($options['create_entity'])) $options['create_entity'] = false;
+        if (!isset($options['find_rules'])) $options['find_rules'] = false; //valore accettato $options['find_rules']=array(array("rule_key"=>"key","rule_value"=>"value"))
 
         if (is_array($language)) {
 
