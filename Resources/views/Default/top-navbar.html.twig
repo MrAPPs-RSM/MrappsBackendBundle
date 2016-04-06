@@ -13,21 +13,6 @@
         </a>
     </div>
     <!-- END navbar header-->
-    {% if routeName is defined and routeName|length > 0 %}
-        <ul>
-            {% set paramsList = [] %}
-            {% for key, param in routeParams %}
-                {% if key != '_locale' %}
-                    {% set paramsList = paramsList|merge({(key):param}) %}
-                {% endif %}
-            {% endfor %}
-
-            {% for key, lang in languages %}
-                <li><a href="{{ url(routeName, paramsList|merge({"_locale": key})) }}">{{ lang }}</a></li>
-            {% endfor %}
-
-        </ul>
-    {% endif %}
     <!-- START Nav wrapper-->
     <div class="nav-wrapper">
         <!-- START Left navbar-->
@@ -71,6 +56,25 @@
             </li>
         </ul>
         <!-- END Left navbar-->
+        {% if routeName is defined and routeName|length > 0 %}
+        	<div class="dropdown languages-list">
+				<button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+					<i class="fa fa-flag"></i> Language
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+					{% set paramsList = [] %}
+					{% for key, param in routeParams %}
+						{% if key != '_locale' %}
+							{% set paramsList = paramsList|merge({(key):param}) %}
+						{% endif %}
+					{% endfor %}
+					{% for key, lang in languages %}
+						<li><a href="{{ url(routeName, paramsList|merge({"_locale": key})) }}">{{ lang }}</a></li>
+					{% endfor %}
+				</ul>
+			</div>
+	    {% endif %}
         <!-- START Right Navbar-->
         {#
         <ul class="nav navbar-nav navbar-right">

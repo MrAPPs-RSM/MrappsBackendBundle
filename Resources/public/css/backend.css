@@ -1084,6 +1084,7 @@ _:-ms-lang(x),
 }
 .nav-wrapper .nav.navbar-nav {
   float: left;
+	margin: 7.5px 0px;
 }
 .nav-wrapper .nav.navbar-nav.navbar-right {
   float: right;
@@ -11455,4 +11456,22 @@ pre.sf-dump {
     width: 25px;
     height: 25px;
     text-align: center;
+}
+
+.languages-list {
+	float: right;
+}
+
+header .btn-link {
+	text-decoration: none !important;
+	margin-top: 19px;
+}
+
+header .btn-link .caret {
+	vertical-align: middle;
+}
+
+header .dropdown-menu {
+	left: inherit;
+	right: 0px;
 }
