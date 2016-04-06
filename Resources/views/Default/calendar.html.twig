@@ -10,28 +10,38 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/ui-select/dist/select.min.css') }}">
 {% endblock css %}
 {% block content %}
-    <div class="container-fluid" ng-controller="CalendarController as form">
-        {% if fields is not null %}
-            <div class="col-md-4">
-                <div id='panel'>
-                    <form id="input">
-                        {% for field in fields %}
-                            {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
-                            {{ include(twig_name, { 'field': field }) }}
-                        {% endfor %}
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-8">
-                <div id='calendar'></div>
-            </div>
-        {% else %}
-            <div class="col-md-12">
-                <div id='calendar'></div>
-            </div>
-        {% endif %}
-    </div>
-    </div>
+    
+<div class="panel panel-default">
+	<div class="panel-heading clearfix">
+		<div class="panel-title pull-left">Calendario</div>
+	</div>
+	<div class="panel-body">
+		<div class="container-fluid" ng-controller="CalendarController as form">
+			{% if fields is not null %}
+				<div class="col-md-4">
+					<div id='panel'>
+						<form id="input">
+							{% for field in fields %}
+								{% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
+								{{ include(twig_name, { 'field': field }) }}
+							{% endfor %}
+						</form>
+					</div>
+				</div>
+				<div class="col-md-8">
+					<div id='calendar'></div>
+				</div>
+			{% else %}
+				<div class="col-md-12">
+					<div id='calendar'></div>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+    
+    
+    
 
 {% endblock content %}
 {% block srcjavascript %}
