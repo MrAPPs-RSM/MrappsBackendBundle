@@ -46,6 +46,8 @@ class Base {
      * @ORM\Column(name="visible", type="boolean", nullable=true)
      */
     protected $visible;
+
+
     
     public function __construct() {
         $this->createdAt = new \DateTime();
@@ -62,7 +64,7 @@ class Base {
     public function getId() {
         return $this->id;
     }
-    
+
     /**
      * Get weight
      *
@@ -71,7 +73,7 @@ class Base {
     public function getWeight() {
         return $this->weight;
     }
-    
+
     /**
      * Set weight
      *
@@ -81,9 +83,9 @@ class Base {
     public function setWeight($weight)
     {
         $this->weight = $weight;
-
         return $this;
     }
+
 
     /**
      * Set createdAt
@@ -132,7 +134,7 @@ class Base {
     /**
      * Set visible
      *
-     * @param integer $visible
+     * @param bool $visible
      *
      * @return Base
      */
@@ -145,7 +147,7 @@ class Base {
     /**
      * Get visible
      *
-     * @return \DateTime
+     * @return bool
      */
     public function getVisible() {
         return $this->visible;
@@ -169,5 +171,16 @@ class Base {
      */
     public function getRealUpdatedDate() {
         return ($this->getUpdatedAt() !== null) ? $this->getUpdatedAt() : (($this->getCreatedAt() !== null) ? $this->getCreatedAt() : new \DateTime());
+    }
+    
+    /**
+     * Reset ID
+     *
+     * @return Base
+     */
+    public function resetId() {
+        $this->id = null;
+
+        return $this;
     }
 }

@@ -1,0 +1,108 @@
+{% extends 'MrappsBackendBundle:Default:layout.html.twig' %}
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('assets/vendor/ng-table/dist/ng-table.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/sweetalert/dist/sweetalert.css') }}">
+{% endblock css %}
+{% block content %}
+    {% if route_url is defined and route_url|length > 0 %}
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ol class="breadcrumb ng-scope">
+                <li>
+                    <a href="{{ route_url }}">
+                        <i class="fa fa-home"></i>
+                        Torna alla lista
+                    </a>
+                </li>
+            </ol>
+        </div>
+    {% endif %}
+    <div ng-controller="NGTableCtrl as table" class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix"></div>
+            {% if permissions|length > 0 %}
+            <table ng-table="table.tableParams2" show-filter="true" class="table table-bordered table-striped">
+                <thead>
+                    <th data-title="Role">Role</th>
+                    <th data-title="Can View">Can View</th>
+                    <th data-title="Can Create">Can Create</th>
+                    <th data-title="Can Edit">Can Edit</th>
+                    <th data-title="Can Delete">Can Delete</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in $data">
+                    <td data-title="Role">{/ row.role /}</td>
+                    <td ng-style="{'background-color':(row.can_view)?'#CCFFCC':'#FF9999'}" data-title="Can View"><input type="checkbox" ng-model="row.can_view" ng-disabled="row.role=='ROLE_SUPER_ADMIN'" /> {/ row.can_view /}</td>
+                    <td ng-style="{'background-color':(row.can_create)?'#CCFFCC':'#FF9999'}" data-title="Can Create"><input type="checkbox" ng-model="row.can_create" ng-disabled="row.role=='ROLE_SUPER_ADMIN'" /> {/ row.can_create /}</td>
+                    <td ng-style="{'background-color':(row.can_edit)?'#CCFFCC':'#FF9999'}" data-title="Can Edit"><input type="checkbox" ng-model="row.can_edit" ng-disabled="row.role=='ROLE_SUPER_ADMIN'" /> {/ row.can_edit /}</td>
+                    <td ng-style="{'background-color':(row.can_delete)?'#CCFFCC':'#FF9999'}" data-title="Can Delete"><input type="checkbox" ng-model="row.can_delete" ng-disabled="row.role=='ROLE_SUPER_ADMIN'" /> {/ row.can_delete /}</td>
+                </tr>
+                </tbody>
+            </table>
+            {% else %}
+                Nessun dato ricevuto! Provare ad aggiornare i permessi lanciando da terminale il seguente comando:<br/>
+                app/console mrapps:backend:generatepermissions
+            {% endif %}
+        </div>
+        <div class="panel-footer text-right">
+            <button ng-disabled="saving" type="submit" id="save" class="btn btn-success" ng-click="savePermissions()"><i class="fa fa-spin fa-spinner" ng-show="saving"></i> Salva</button>
+        </div>
+    </div>
+
+{% endblock content %}
+{% block srcjavascript %}
+    <script src="{{ asset('assets/vendor/angular-resource/angular-resource.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/ng-table/dist/ng-table.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/sweetalert/dist/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-ui/jquery-ui.min.js') }}"></script>
+{% endblock srcjavascript %}
+{% block javascript %}
+    <script type="text/javascript">
+        (function () {
+            "use strict";
+
+            myAngular.controller("NGTableCtrl", NGTableCtrl);
+
+            function NGTableCtrl($http, $window, $scope, $location, $filter, NgTableParams, $resource, $rootScope) {
+                var self = this;
+
+                $scope.saving = false;
+                $scope.savePermissions = function() {
+                    $scope.saving = true;
+
+                    $http({
+                        method: 'POST',
+                        url: '{{ path('mrapps_backend_savepermissions') }}',
+                        data: {'object': '{{ object }}', 'rows': self.tableParams2.data},
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                    }).then(function successCallback(response) {
+                        if (!response.data.success) {
+                            toastr.error(response.data.message, 'Errore!');
+                        } else {
+                            toastr.success('Salvato!', 'Permessi settati');
+                        }
+                        $scope.saving = false;
+
+                    }, function errorCallback(response) {
+                        toastr.error('Errore!', 'Errore nella richiesta al server');
+                        $scope.saving = false;
+                    });
+                };
+
+                self.tableParams2 = new NgTableParams({
+                    page: 1,
+                    count: {{ permissions|length }}
+                }, {
+                    //total: dati.length, // length of data
+                    getData: function ($defer, params) {
+                        var data = [{% for p in permissions %}{'role':'{{ p.role }}','can_view':{% if p.canView %}true{% else %}false{% endif %},'can_create':{% if p.canCreate %}true{% else %}false{% endif %},'can_edit':{% if p.canEdit %}true{% else %}false{% endif %},'can_delete':{% if p.canDelete %}true{% else %}false{% endif %}}{% if loop.last == false %},{% endif %}{% endfor %}];
+                        params.total(data.length);
+                        $defer.resolve(data);
+                    },
+                    counts: []
+                });
+            }
+        })();
+    </script>
+{% endblock javascript %}

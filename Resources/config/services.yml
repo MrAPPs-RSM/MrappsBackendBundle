@@ -2,3 +2,28 @@ services:
     mrapps_backend:
         class: Mrapps\BackendBundle\Twig
         arguments: ['@service_container']
+
+    mrapps.backend.buildsidebar_command:
+            class: Mrapps\BackendBundle\Command\BuildSidebarCommand
+            arguments:  []
+            tags:
+                -  { name: console.command }
+
+    mrapps.backend.generatepermissions_command:
+            class: Mrapps\BackendBundle\Command\GeneratePermissionsCommand
+            arguments:  []
+            tags:
+                -  { name: console.command }
+
+    mrapps.backend.draft_listener:
+            class: Mrapps\BackendBundle\EventListener\DraftListener
+            tags:
+                - { name: doctrine.event_listener, event: onFlush }
+
+    mrapps.backend.languages:
+            class: Mrapps\BackendBundle\Handler\LanguageHandler
+            calls:
+                    - [setRequest , ["@service_container"]]
+
+    mrapps.backend.validate:
+                class: Mrapps\BackendBundle\Handler\ValidateHandler

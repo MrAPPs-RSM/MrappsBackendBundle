@@ -46,6 +46,16 @@ fos_user_change_password:
     
 ```
 
+## setup config.yml per usare swicth lingua in twig
+
+```
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+    globals:
+        mrappsBackendLanguages: "@mrapps.backend.languages"
+```
+
 ##setup config.yml per usare liip_bundle + storage files locale
 
 ```
@@ -119,7 +129,6 @@ mrapps_backend:
        pdf: application/pdf, x-pdf, application/vnd.pdf, text/pdf
        zip: application/zip, application/octet-stream
        json: application/json, text/plain, text/json
-    sidebar_menu: [{ has_submenu: true, min_role: ROLE_USER, title: Voce 1, icon: icon-test, submenu: [{ title: Submenu 1, route_name: mrapps_backend_index }, { title: Submenu 2, route_name: mrapps_backend_index }] }, { has_submenu: false, min_role: ROLE_ADMIN, title: Voce 2, icon: icon-test, route_name: mrapps_backend_index }]
     customization:
             navbar_color: #FFCC00
             navbar_text_color: black
@@ -198,7 +207,6 @@ liip_imagine.controller.imagine_filter:
     "toastr": "~2.1.2",
     "angular-sanitize": "~1.4.7",
     "ngInfiniteScroll": "~1.2.1",
-    "ngmap": "~1.14.9",
     "tinymce": "~4.2.8",
     "angular-ui-sortable": "~0.13.4",
     "angular-ui-tinymce": "~0.0.10",
@@ -206,7 +214,10 @@ liip_imagine.controller.imagine_filter:
     "SpinKit": "spinkit#~1.2.3",
     "ng-js-tree": "~0.0.7",
     "ui-select": "angular-ui-select#~0.14.2",
-    "angular-ui-validate": "^1.2.2"
+    "angular-ui-validate": "^1.2.2",
+    "angular-minicolors": "~0.0.7",
+    "fullcalendar": "^2.6.1",
+    "angular-google-maps": "2.3.2"
   }
 }
 ```
@@ -217,4 +228,23 @@ liip_imagine.controller.imagine_filter:
 {
     "directory": "web/assets/vendor/"
 }
+```
+
+## Controller Backend ##
+Per configurare le thumbnails o utilizzare altri servizi, è necessario estendere la classe BaseBackendController.
+
+## Generazione Sidebar laterale ##
+
+  - Assicurarsi che i Controller interessati estendano la classe BaseBackendController.
+  - Importare le annotations:
+```php
+use Mrapps\BackendBundle\Annotation\Sidebar;
+```
+  - Configurare le annotations in corrispondenza delle action interessate:
+```php
+@Sidebar("ID_ELEMENTO", label="Elenco Piloti", min_role="ROLE_ADMIN", visible=true, weight=3, parent="ID_ELEMENTO_PADRE", icon="icon-layers")
+```
+  - Una volta terminata la configurazione, generare la struttura su Database:
+```!/bin/bash
+app/console mrapps:backend:buildsidebar
 ```

@@ -24,19 +24,21 @@ class MrappsBackendExtension extends Extension
 
         $container->setParameter('mrapps_backend.logo_path', $config['logo_path']);
         $container->setParameter('mrapps_backend.temp_folder', $config['temp_folder']);
-        $container->setParameter('mrapps_backend.default_route_name', $config['default_route_name']);
+        $container->setParameter('mrapps_backend.images_url', $config['images_url']);
+        $container->setParameter('mrapps_backend.gmaps_api_key', $config['gmaps_api_key']);
+        $container->setParameter('mrapps_backend.default_routes', $config['default_routes']);
         $container->setParameter('mrapps_backend.file_accepted_types.image', $config['file_accepted_types']['image']);
         $container->setParameter('mrapps_backend.file_accepted_types.video', $config['file_accepted_types']['video']);
         $container->setParameter('mrapps_backend.file_accepted_types.pdf', $config['file_accepted_types']['pdf']);
         $container->setParameter('mrapps_backend.file_accepted_types.zip', $config['file_accepted_types']['zip']);
         $container->setParameter('mrapps_backend.file_accepted_types.json', $config['file_accepted_types']['json']);
-        $container->setParameter('mrapps_backend.sidebar_menu', $config['sidebar_menu']);
         $container->setParameter('mrapps_backend.customization.primary_color', $config['customization']['primary_color']);
         $container->setParameter('mrapps_backend.customization.text_on_primary_color', $config['customization']['text_on_primary_color']);
         $container->setParameter('mrapps_backend.customization.secondary_color', $config['customization']['secondary_color']);
         $container->setParameter('mrapps_backend.customization.text_hover_on_primary_color', $config['customization']['text_hover_on_primary_color']);
         $container->setParameter('mrapps_backend.customization.text_on_secondary_color', $config['customization']['text_on_secondary_color']);
         $container->setParameter('mrapps_backend.customization.text_hover_on_secondary_color', $config['customization']['text_hover_on_secondary_color']);
+
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');

@@ -1,0 +1,63 @@
+<fieldset id="{{field.name}}" {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{field.title}}{% if switch is not defined and field.required %} *{% endif %}</label>
+        <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <div class="panel-title pull-left" ng-show='{{field.name}}AddNew'>
+                        <ui-select name="{{ field.name }}Selected" ng-model="{{field.name}}Select.selected">
+                            <ui-select-match>
+                                <span ng-bind="$select.selected.{{ field.select2.string_field }}"></span>
+                            </ui-select-match>
+                            <ui-select-choices refresh="{{field.name}}RefreshSelect($select.search)" refresh-delay="300" group-by="'type'" repeat="item in ({{ field.name }}Select.data | filter: $select.search) track by item.{{ field.select2.id_field }}">
+                                <span ng-bind="item.{{ field.select2.string_field }}"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                        <button type="button" class="btn btn-labeled btn-info" ng-click="{{field.name}}SaveSelect()">
+                            <span class="btn-label">
+                                <em class="fa fa-check"></em>
+                            </span>Salva
+                        </button>
+                        <button type="button" class="btn btn-labeled btn-warning" ng-click="{{field.name}}CloseAdd()">
+                            <span class="btn-label">
+                                <em class="fa fa-ban"></em>
+                            </span>Annulla
+                        </button>
+                    </div>
+                    <button type="button" class="btn btn-labeled btn-success pull-right" ng-click="{{field.name}}OpenAdd()" ng-show='!{{field.name}}AddNew'>
+                        <span class="btn-label">
+                            <em class="fa fa-plus"></em>
+                        </span>{{ 'form.aggiungi_nuovo'|trans }}
+                    </button>
+                </div>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        {% for c in field.columns if (c.visible is not defined or c.visible == true) %}
+                            <th sortable="'{{ c.name }}'">{{ c.title }}</th>
+                        {% endfor %}
+                        <th>Azioni</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="r in form.{{field.name}}">
+                        {% for c in field.columns if (c.visible is not defined or c.visible == true) %}
+                            <td data-title="'{{ c.title }}'">{/ r.{{ c.name }} /}</td>
+                        {% endfor %}
+                        <td>
+                            <button type="button" ng-click="{{field.name}}DeleteItem(r)" class="btn btn-sm btn-danger">
+                                <em class="fa fa-trash-o"></em>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% if field.didascalia is defined %}
+            <div class="col-sm-4">
+                <small class="text-muted">{{field.didascalia}}</small>
+            </div>
+        {% endif %}
+    </div>
+</fieldset>

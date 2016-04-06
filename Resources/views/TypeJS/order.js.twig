@@ -1,0 +1,5 @@
+var prodotti = {{ field.value | raw }};
+$scope.form.{{ field.name }} = [];
+prodotti.forEach(function (item) {
+    $scope.form.{{ field.name }}.push(item);
+});

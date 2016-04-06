@@ -1,0 +1,302 @@
+<?php
+
+namespace Mrapps\BackendBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity(repositoryClass="Mrapps\BackendBundle\Repository\SidebarEntryRepository")
+ * @ORM\Table(name="mrapps_backend_sidebar")
+ */
+class SidebarEntry extends Base
+{
+    /**
+     * @ORM\Column(name="code", type="string", length=50)
+     * @Assert\Length(max=50)
+     */
+    protected $code;
+
+
+    /**
+     * @ORM\Column(name="label", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    protected $label;
+
+
+    /**
+     * @ORM\Column(name="min_role", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    protected $minRole;
+    
+    
+    /**
+     * @ORM\Column(name="icon", type="string", length=100, nullable=true)
+     * @Assert\Length(max=100)
+     */
+    protected $icon;
+
+    
+    /**
+     * @ORM\Column(name="route", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    protected $route;
+    
+    
+    /**
+     * @ORM\Column(name="controller", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    protected $controller;
+    
+    
+    /**
+     * @ORM\Column(name="action", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    protected $action;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SidebarEntry", inversedBy="children")
+     * @ORM\JoinColumn(name="parent",referencedColumnName="id")
+     */
+    protected $parent;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="SidebarEntry", mappedBy="parent")
+     */
+    protected $children;
+
+
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return SidebarEntry
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     *
+     * @return SidebarEntry
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * Set minRole
+     *
+     * @param string $minRole
+     *
+     * @return SidebarEntry
+     */
+    public function setMinRole($minRole)
+    {
+        $this->minRole = $minRole;
+
+        return $this;
+    }
+
+    /**
+     * Get minRole
+     *
+     * @return string
+     */
+    public function getMinRole()
+    {
+        return $this->minRole;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Mrapps\BackendBundle\Entity\SidebarEntry $parent
+     *
+     * @return SidebarEntry
+     */
+    public function setParent(\Mrapps\BackendBundle\Entity\SidebarEntry $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Mrapps\BackendBundle\Entity\SidebarEntry
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Add child
+     *
+     * @param \Mrapps\BackendBundle\Entity\SidebarEntry $child
+     *
+     * @return SidebarEntry
+     */
+    public function addChild(\Mrapps\BackendBundle\Entity\SidebarEntry $child)
+    {
+        $this->children[] = $child;
+
+        return $this;
+    }
+
+    /**
+     * Remove child
+     *
+     * @param \Mrapps\BackendBundle\Entity\SidebarEntry $child
+     */
+    public function removeChild(\Mrapps\BackendBundle\Entity\SidebarEntry $child)
+    {
+        $this->children->removeElement($child);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Set route
+     *
+     * @param string $route
+     *
+     * @return SidebarEntry
+     */
+    public function setRoute($route)
+    {
+        $this->route = $route;
+
+        return $this;
+    }
+
+    /**
+     * Get route
+     *
+     * @return string
+     */
+    public function getRoute()
+    {
+        return $this->route;
+    }
+
+    /**
+     * Set controller
+     *
+     * @param string $controller
+     *
+     * @return SidebarEntry
+     */
+    public function setController($controller)
+    {
+        $this->controller = $controller;
+
+        return $this;
+    }
+
+    /**
+     * Get controller
+     *
+     * @return string
+     */
+    public function getController()
+    {
+        return $this->controller;
+    }
+
+    /**
+     * Set action
+     *
+     * @param string $action
+     *
+     * @return SidebarEntry
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return string
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * Set icon
+     *
+     * @param string $icon
+     *
+     * @return SidebarEntry
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * Get icon
+     *
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+}

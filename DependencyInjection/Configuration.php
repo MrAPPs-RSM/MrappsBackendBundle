@@ -20,12 +20,27 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('mrapps_backend');
 
+        /*
+         * default_routes:
+        - { role: ROLE_ADMIN, name: mrapps_testing_list }
+        - { role: ROLE_SUPER_ADMIN, name: mrapps_testing_list }
+        - { role: ROLE_RISTORATORE, name: mrapps_testing_list }
+         */
+
         $rootNode
             ->children()
             ->scalarNode('logo_path')->defaultValue('temp')->end()
             ->scalarNode('temp_folder')->defaultValue('temp')->end()
             ->scalarNode('images_url')->defaultValue('')->end()
-            ->scalarNode('default_route_name')->defaultValue('mrapps_backend_index')->end()
+            ->scalarNode('gmaps_api_key')->defaultValue('')->end()
+            ->arrayNode('default_routes')
+            ->prototype('array')
+            ->children()
+            ->scalarNode('role')->defaultValue('')->end()
+            ->scalarNode('name')->defaultValue('')->end()
+            ->end()
+            ->end()
+            ->end()
             ->arrayNode('file_accepted_types')
             ->addDefaultsIfNotSet()
             ->children()
@@ -34,26 +49,6 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('pdf')->defaultValue('application/pdf, x-pdf, application/vnd.pdf, text/pdf')->end()
             ->scalarNode('zip')->defaultValue('application/zip, application/octet-stream')->end()
             ->scalarNode('json')->defaultValue('application/json, text/plain, text/json')->end()
-            ->end()
-            ->end()
-            ->arrayNode('sidebar_menu')
-            ->requiresAtLeastOneElement()
-            ->prototype('array')
-            ->children()
-            ->booleanNode('has_submenu')->defaultValue(false)->end()
-            ->scalarNode('min_role')->defaultValue('')->end()
-            ->scalarNode('title')->end()
-            ->scalarNode('icon')->end()
-            ->scalarNode('route_name')->end()
-            ->arrayNode('submenu')
-            ->prototype('array')
-            ->children()
-            ->scalarNode('title')->end()
-            ->scalarNode('route_name')->end()
-            ->end()
-            ->end()
-            ->end()
-            ->end()
             ->end()
             ->end()
             ->arrayNode('customization')

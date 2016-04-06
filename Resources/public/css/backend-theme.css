@@ -160,3 +160,11 @@ body,
 .cb {
 	clear: both;
 }
+
+button+button {
+  margin-right: 10px;
+}
+
+.multilang fieldset {
+  display: none;
+}

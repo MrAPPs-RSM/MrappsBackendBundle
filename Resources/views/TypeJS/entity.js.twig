@@ -1,0 +1,53 @@
+{# Table #}
+$scope.{{field.name}}RefreshTable = function() {
+    $http.post('{{ field.data_url }}', {'origin':'table','form':$scope.form}).then(function (response) {
+        $scope.form.{{field.name}} = response.data;
+    });
+};
+$scope.{{field.name}}RefreshTable();
+
+$scope.{{field.name}}DeleteItem = function(item) {
+    var index = $scope.form.{{field.name}}.indexOf(item);
+    $scope.form.{{field.name}}.splice(index, 1);
+    toastr.success('Elemento eliminato', '');
+};
+
+{# Select2 #}
+
+$scope.{{field.name}}Select = {
+    'data': [],
+    'selected': []
+};
+
+$scope.{{field.name}}RefreshSelect = function(q) {
+    if(q.length > 0) {
+        return $http.post('{{ field.data_url }}', {'origin':'select','form':$scope.form, 'q':q}).then(function (response) {
+            $scope.{{field.name}}Select.data = response.data;
+        });
+    }
+    return true;
+};
+
+$scope.{{field.name}}SaveSelect = function() {
+    if($scope.{{field.name}}Select.selected.{{ field.select2.id_field }} > 0) {
+        $scope.form.{{field.name}}.push($scope.{{field.name}}Select.selected);
+        $scope.{{field.name}}CloseAdd();
+        toastr.success('Elemento inserito', '');
+    }else {
+        toastr.error("Nessun elemento selezionato.", '{{ 'form.errore'|trans }}');
+    }
+};
+
+$scope.{{field.name}}AddNew = false;
+
+$scope.{{field.name}}OpenAdd = function() {
+    $scope.{{field.name}}AddNew = true;
+};
+
+$scope.{{field.name}}CloseAdd = function() {
+    $scope.{{field.name}}Select = {
+        'data': [],
+        'selected': []
+    };
+    $scope.{{field.name}}AddNew = false;
+};

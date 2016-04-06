@@ -2,9 +2,11 @@
 
 namespace Mrapps\BackendBundle\Controller;
 
+use Mrapps\BackendBundle\Entity\SidebarEntry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,12 +14,49 @@ use Symfony\Component\HttpFoundation\Response;
 use Mrapps\BackendBundle\Classes\Utils;
 use Mrapps\BackendBundle\Entity\Immagine;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * @Route("/panel")
  */
 class DefaultController extends Controller
 {
+    public function security(Request $request, $action) {
+
+        $canProceed = false;
+
+        $compact = Utils::getControllerCompactName($request->attributes->get('_controller'));
+
+        $user = $this->getUser();
+        if($user !== null && is_object($user)) {
+
+            $canProceed = ($user->hasRole('ROLE_SUPER_ADMIN'));
+
+            if(!$canProceed) {
+
+                //Ruoli che possono accedere all'oggetto
+                $em = $this->getDoctrine()->getManager();
+                $roles = $em->getRepository('MrappsBackendBundle:Permission')->getActiveRoles($compact, $action);
+
+                //Ruoli dell'utente
+                $userRoles = $user->getRoles();
+                foreach($userRoles as $r) {
+
+                    //L'utente ha almeno un ruolo valido?
+                    if(isset($roles[$r])) {
+                        $canProceed = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(!$canProceed) {
+            throw new AccessDeniedHttpException("Accesso non autorizzato!");
+        }
+
+        return $canProceed;
+    }
 
     public function __navigationAction()
     {
@@ -41,67 +80,165 @@ class DefaultController extends Controller
         return $this->getRequest()->getSchemeAndHttpHost() . '/uploads/' . $dir;
     }
 
-    public function __topNavBarAction()
+    public function __topNavBarAction(Request $request)
     {
-        $defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
+        $defaultRouteName = $this->getDefaultRouteForUser();
+        //$defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
+        $url = $this->container->get('request')->get('_route');
 
         return $this->render('MrappsBackendBundle:Default:top-navbar.html.twig',
             array("logo_path" => $this->container->hasParameter('mrapps_backend.logo_path') ? $this->container->getParameter('mrapps_backend.logo_path') : null,
-                "default_route_name" => $defaultRouteName,));
+                "default_route_name" => $defaultRouteName,
+                "request" => $request,
+                "languages" => Utils::getLanguages()
+            )
+        );
     }
 
+    private function _checkRoleSidebar($sidebar = null) {
+
+        if($sidebar !== null) {
+
+            //Primo livello con figli => sempre visibile
+            $sidebarRoute = trim($sidebar->getRoute());
+            if(strlen($sidebarRoute) == 0 && $sidebar->getParent() == null) {
+                return true;
+            }
+
+            //Negli altri casi controllo i permessi
+
+            $controllerCompact = Utils::getControllerCompactName($sidebar->getController());
+
+            $user = $this->getUser();
+
+            $em = $this->getDoctrine()->getManager();
+            $perm = $em->getRepository('MrappsBackendBundle:Permission')->getPermissions($controllerCompact, $user);
+
+            return $perm['view'];
+
+//            $checker = $this->get('security.authorization_checker');
+//            $minRole = $sidebar->getMinRole();
+//            return (is_null($minRole) || strlen($minRole) == 0 || $checker->isGranted($minRole));
+        }
+
+        return false;
+    }
 
     public function __sideBarAction()
     {
         $menu = array();
 
-        $sidebar = ($this->container->hasParameter('mrapps_backend.sidebar_menu')) ? $this->container->getParameter('mrapps_backend.sidebar_menu') : null;
-        if (!is_array($sidebar)) $sidebar = array();
+        $em = $this->getDoctrine()->getManager();
 
-        foreach ($sidebar as $firstLevel) {
+        //Voci di menu al primo livello, ordinate per peso
+        $primoLivello = $em->createQuery("
+                SELECT s
+                FROM MrappsBackendBundle:SidebarEntry s
+                WHERE s.parent IS NULL
+                AND s.visible = :visible
+                ORDER BY s.weight ASC
+        ")->setParameters(array('visible' => 1))->execute();
 
-            $hasSubmenu = (isset($firstLevel['has_submenu'])) ? (bool)$firstLevel['has_submenu'] : false;
-            $minRole = (isset($firstLevel['min_role'])) ? trim($firstLevel['min_role']) : '';
-            $icon = (isset($firstLevel['icon'])) ? trim($firstLevel['icon']) : '';
-            $routeName = (isset($firstLevel['route_name'])) ? trim($firstLevel['route_name']) : '';
-            $title = (isset($firstLevel['title'])) ? trim($firstLevel['title']) : '';
+        //Voci di menu al secondo livello, raggruppate per parent ID e ordinate per peso
+        $secondoLivello = $em->createQuery("
+                SELECT s,p
+                FROM MrappsBackendBundle:SidebarEntry s
+                JOIN s.parent p
+                WHERE s.parent IS NOT NULL
+                AND s.visible = :visible
+                AND s.route != :route
+                AND s.route IS NOT NULL
+                ORDER BY p.id ASC, s.weight ASC
+        ")->setParameters(array('visible' => 1, 'route' => ''))->execute();
 
-            if ($hasSubmenu) {
+        //Organizzazione voci di menu secondo livello
+        $secondoLivelloParents = array();
+        foreach($secondoLivello as $sidebar) {
 
-                $submenu = array();
-                $sub = (isset($firstLevel['submenu']) && is_array($firstLevel['submenu'])) ? $firstLevel['submenu'] : array();
-                foreach ($sub as $secondLevel) {
+            //Check ruolo
+            if($this->_checkRoleSidebar($sidebar)) {
 
-                    $subTitle = (isset($secondLevel['title'])) ? trim($secondLevel['title']) : '';
-                    $subRouteName = (isset($secondLevel['route_name'])) ? trim($secondLevel['route_name']) : '';
-                    $subUrl = (strlen($subRouteName) > 0) ? $this->generateUrl($subRouteName) : '';
-
-                    $submenu[] = array('title' => $subTitle, 'url' => $subUrl, 'route_name' => $subRouteName);
+                $parentId = ($sidebar->getParent() !== null) ? $sidebar->getParent()->getId() : 0;
+                if(!isset($secondoLivelloParents[$parentId])) {
+                    $secondoLivelloParents[$parentId] = array();
                 }
-
-                $url = $submenu;
-
-            } else {
-                $url = (strlen($routeName) > 0) ? $this->generateUrl($routeName) : '';
+                $secondoLivelloParents[$parentId][] = $sidebar;
             }
-
-            $menu[] = array(
-                'has_submenu' => $hasSubmenu,
-                'title' => $title,
-                'icon' => $icon,
-                'url' => $url,
-                'route_name' => $routeName,
-                'min_role' => $minRole,
-            );
         }
 
-        $actual_link = preg_replace('/\/app_dev.php/', '', $_SERVER['REQUEST_URI']);
-        $route = $this->get('router')->match($actual_link)['_route'];
+        //Gestione sidebar primo livello
+        foreach($primoLivello as $sidebar) {
+
+            //Check ruolo
+            if($this->_checkRoleSidebar($sidebar)) {
+
+                $thisId = $sidebar->getId();
+                if(isset($secondoLivelloParents[$thisId]) && count($secondoLivelloParents[$thisId]) > 0) {
+
+                    $hasSubmenu = true;
+
+                    $url = array();
+
+                    foreach($secondoLivelloParents[$thisId] as $subSidebar) {
+
+                        //Rotta submenu
+                        $route = $subSidebar->getRoute();
+                        try {
+                            $subUrl = (strlen($route) > 0) ? $this->generateUrl($route) : '';
+                        }catch(\Exception $e) {
+                            $subUrl = '';
+                        }
+
+                        $url[] = array(
+                            'title' => $subSidebar->getLabel(),
+                            'url' => $subUrl,
+                            'route_name' => $route,
+                        );
+                    }
+
+                }else {
+
+                    $hasSubmenu = false;
+
+                    //No voci di secondo livello: generazione rotta
+                    $route = $sidebar->getRoute();
+                    try {
+                        $url = (strlen($route) > 0) ? $this->generateUrl($route) : '';
+                    }catch(\Exception $e) {
+                        $url = '';
+                    }
+                }
+
+                $menu[] = array(
+                    'has_submenu' => $hasSubmenu,
+                    'title' => $sidebar->getLabel(),
+                    'icon' => $sidebar->getIcon(),
+                    'url' => $url,
+                    'route_name' => $route,
+                    'min_role' => $sidebar->getMinRole(),
+                );
+            }
+        }
+
+        $urlArray = explode('?', preg_replace('/\/app_dev.php/', '', $_SERVER['REQUEST_URI']));
+
+        $actual_link = $urlArray[0];
+
+        if (empty($actual_link)) {
+            $route = '';
+        } else {
+            $route = $this->get('router')->match($actual_link)['_route'];
+        }
 
         return $this->render('MrappsBackendBundle:Default:sidebar.html.twig', array(
             'menu' => $menu,
             'active_page' => $route,
         ));
+    }
+
+    private function getDefaultRouteForUser() {
+
+        return Utils::getDefaultRouteForUser($this->container, $this->getUser());
     }
 
     /**
@@ -110,12 +247,22 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        $defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
-        return new RedirectResponse($this->generateUrl($defaultRouteName));
+        $defaultRouteForUser = $this->getDefaultRouteForUser();
+
+        return new RedirectResponse($this->generateUrl($defaultRouteForUser));
     }
 
-    public function __listAction($title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null, $deleteMessages = array())
+    public function __listAction(Request $request, $title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null, $deleteMessages = array())
     {
+        $this->security($request, 'view');
+
+        $em = $this->getDoctrine()->getManager();
+        $currentObject = Utils::getControllerCompactName($request->attributes->get('_controller'));
+
+        //Permessi per questo oggetto
+        $permissions = $em->getRepository('MrappsBackendBundle:Permission')->getPermissions($currentObject, $this->getUser());
+
+        //Messaggi schermata eliminazione
         if (!is_array($deleteMessages)) $deleteMessages = array();
         if (!isset($deleteMessages['question'])) $deleteMessages['question'] = "Procedere con l'eliminazione?";
         if (!isset($deleteMessages['success'])) $deleteMessages['success'] = 'Procedura completata con successo.';
@@ -123,6 +270,8 @@ class DefaultController extends Controller
         if (!isset($deleteMessages['cancel'])) $deleteMessages['cancel'] = 'Operazione annullata.';
 
         return $this->render('MrappsBackendBundle:Default:table.html.twig', array(
+            'current_object' => $currentObject,
+            'current_route' => $request->get('_route'),
             'title' => $title,
             'tableColumns' => $tableColumns,
             'defaultSorting' => json_encode($defaultSorting),
@@ -137,11 +286,14 @@ class DefaultController extends Controller
             'linkAction' => $linkAction,
             'angular' => '"ngTable","ngResource","ui.sortable"',
             'deleteMessages' => $deleteMessages,
+            'permissions' => $permissions,
         ));
     }
 
-    public function __newAction($title, $fields, $linkSave = null, $linkEdit = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false)
+    public function __newAction(Request $request, $title, $fields, $linkSave = null, $linkEdit = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false, $linkNew = null)
     {
+        $this->security($request, ($edit) ? 'edit' : 'create');
+
         if ($confirmSave == null) $confirmSave = false;
 
         $imagesUrl = '';
@@ -151,18 +303,93 @@ class DefaultController extends Controller
             $imagesUrl = $this->getLocalUrlDir('');
         }
 
+        $em = $this->getDoctrine()->getManager();
+        $languages = $em->getRepository('MrappsBackendBundle:Language')->findBy(["visible" => true]);
+
+
+        //Locale di default tendine multilingua
+        $locale = $request->getLocale();
+        $defaultLocale = $em->getRepository('MrappsBackendBundle:Language')->findByIso($locale);
+        if($defaultLocale == null) $defaultLocale = $em->getRepository('MrappsBackendBundle:Language')->findByIso('it');
+
+
+        $gmapsApiKey = ($this->container->hasParameter('gmaps_api_key')) ? $this->container->getParameter('gmaps_api_key') : '';
+
+        $panels = array();
+
+        //Allineamento campi
+        foreach ($fields as $k => $f) {
+
+            //Mappa
+            if($f['type'] == 'latlng') {
+
+                //Numero random, necessario per il marker (tipo mappa)
+                $rnd = mt_rand(1, 999999);
+                $fields[$k]['random_number'] = $rnd;
+
+                //Api Key Google Maps
+                $fields[$k]['gmaps_api_key'] = $gmapsApiKey;
+            }
+
+            //Pannello
+            if($f['type'] == 'panel') {
+                $panels[] = array(
+                    'index' => $k,
+                    'label' => (isset($f['label'])) ? $f['label'] : '',
+                );
+            }
+        }
+
+        //Indice da cui partire a leggere i fields
+        $prevPanelIndex = 0;
+
+        //Raggruppamento in pannelli
+        if(count($panels) == 0) {
+            $panels[] = array('index' => 0, 'label' => '');
+            $prevPanelIndex = -1;
+        }
+
+        //Se il primo elemento non è un pannello ne creo uno fittizio
+        if($panels[0]['index'] != 0) {
+            $panels = array_merge(array(array('index' => 0, 'label' => '')), $panels);
+            $prevPanelIndex = -1;
+        }
+
+        foreach ($panels as $k => $p) {
+
+            //Scorre i campi a partire dall'indice successivo a quello del pannello precedente
+            for($i = $prevPanelIndex+1; $i < count($fields); $i++) {
+
+                if(!isset($panels[$k]['fields'])) $panels[$k]['fields'] = array();
+
+                //Aggiunge i campi al pannello
+                if($fields[$i]['type'] != 'panel') {
+                    $panels[$k]['fields'][] = $fields[$i];
+                }else {
+                    //Quando trova un altro pannello si ferma
+                    $prevPanelIndex = $i;
+                    break;
+                }
+            }
+        }
+
 
         return $this->render('MrappsBackendBundle:Default:new.html.twig', array(
+            'current_route' => $request->get('_route'),
             'title' => $title,
-            'fields' => $fields,
+//            'fields' => $fields,
+            'panels' => $panels,
             'linkSave' => $linkSave,
             'linkEdit' => $linkEdit,
             'create' => $create,
             'edit' => $edit,
+            'linkNew' => $linkNew,
             'linkBreadcrumb' => $linkBreadcrumb,
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,
-            'angular' => '"localytics.directives","angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate"',
+            'languages' => $languages,
+            'default_language' => $defaultLocale,
+            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps"',
         ));
     }
 
@@ -187,6 +414,7 @@ class DefaultController extends Controller
         $responseId = 0;
         $responseUrl = '';
         $responseError = '';
+        $success = false;
 
         $tmpImg = $request->files->all();
 
@@ -204,8 +432,6 @@ class DefaultController extends Controller
             $sha1 = sha1(file_get_contents($filePath));
 
             $localDir = $this->getLocalUploadDir('mrapps_backend_images');
-
-            // $this->container->get('liip_imagine.controller')->filterAction($request, $notizia->getFoto()->getUrl(), 'backend_thumbnail')
 
             if (Utils::bundleMrappsAmazonExists($this->container)) {
 
@@ -235,6 +461,7 @@ class DefaultController extends Controller
                 $responseId = $immagine->getId();
                 $responseUrl = $thumbnailUrl;
                 $responseError = '';
+                $success = true;
 
             } else {
 
@@ -298,7 +525,8 @@ class DefaultController extends Controller
             'location' => $responseLocation,       //location viene usato da tinymce
             'id' => $responseId,
             'url' => $responseUrl,
-            'error' => $responseError,
+            'message' => $responseError,
+            'success' => $success,
         );
 
         return new JsonResponse($data);
@@ -428,81 +656,261 @@ class DefaultController extends Controller
      */
     public function uploadPdfAction(Request $request)
     {
-        if (Utils::bundleMrappsAmazonExists($this->container)) {
+        /* @var $s3 \Mrapps\AmazonBundle\Handler\S3Handler */
+        $s3 = $this->container->get('mrapps.amazon.s3');
 
-            /* @var $s3 \Mrapps\AmazonBundle\Handler\S3Handler */
-            $s3 = $this->container->get('mrapps.amazon.s3');
+        $pdf = $request->files->all();
+        $array = [];
 
-            $pdf = $request->files->all();
-            $array = [];
+        $webFolder = realpath($this->container->get('kernel')->getRootDir() . '/../web') . '/';
+        $tempRelativeFolder = $this->container->get('mrapps_backend.temp_folder') . '/';
+        $tempFolder = $webFolder . $tempRelativeFolder;
 
-            $webFolder = realpath($this->container->get('kernel')->getRootDir() . '/../web') . '/';
-            $tempRelativeFolder = $this->container->get('mrapps_backend.temp_folder') . '/';
-            $tempFolder = $webFolder . $tempRelativeFolder;
+        $success = false;
+        $message = '';
 
-            $success = false;
-            $message = '';
+        if (isset($pdf['file']) && !$pdf['file']->getError()) {
 
-            if (isset($pdf['file']) && !$pdf['file']->getError()) {
+            $file = $pdf['file'];
+            if (Utils::isValidFile($this->container, 'pdf', $file)) {
 
-                $file = $pdf['file'];
-                if (Utils::isValidFile($this->container, 'pdf', $file)) {
+                $em = $this->getDoctrine()->getManager();
+                $filePath = $file->getPathname();
+                $localDir = $this->getLocalUploadDir('mrapps_backend_images');
 
-                    $em = $this->getDoctrine()->getManager();
-                    $filePath = $file->getPathname();
+                $images = new \Imagick();
+                $images->setResolution(300, 300);
+                $images->readImage($filePath);
 
-                    $images = new \Imagick();
-                    $images->setResolution(300, 300);
-                    $images->readImage($filePath);
+                foreach ($images as $image) {
+                    $imagePath = $image->getPathname();
 
-                    foreach ($images as $image) {
 
-                        //$relativePath parte da "web" (dentro il progetto)
-                        //$absolutePath parte da /
-                        $tempName = sprintf("pdf_page_%s.jpg", Utils::getDateStringForUniqueFiles());
-                        $relativePath = $tempRelativeFolder . $tempName;
-                        $absolutePath = $tempFolder . $tempName;
+                    $tempName = sprintf("pdf_page_%s.jpg", Utils::getDateStringForUniqueFiles());
+                    $relativePath = $tempRelativeFolder . $tempName;
+                    $absolutePath = $tempFolder . $tempName;
 
-                        $image->writeImage($relativePath);
-                        $s3Key = 'mrapps_backend_images/' . sha1(file_get_contents($absolutePath));
+                    $image->writeImage($relativePath);
 
-                        //Entity
-                        $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Key));
-                        if ($immagine == null) {
-                            $immagine = new Immagine();
-                        }
+                    $sha1 = sha1(file_get_contents($absolutePath));
+                    $fileName = $sha1 . '.jpg';
 
-                        $immagine->setUrl($s3Key);
-                        $em->persist($immagine);
-                        $em->flush($immagine);
+                    $url = null;
+
+                    if (Utils::bundleMrappsAmazonExists($this->container)) {
+                        $s3 = $this->container->get('mrapps.amazon.s3');
+                        $s3Key = 'mrapps_backend_images/' . $fileName;
+
 
                         //Caricamento file su s3
                         if (!$s3->objectExists($s3Key)) {
                             $s3->uploadObject($s3Key, $absolutePath);
                         }
 
-                        $array[] = $immagine->getId();
+                        $url = $s3Key;
+
+                        unlink($absolutePath);
+
+                    } else {
+                        $s3Key = $sha1;
+
+                        if (!is_dir($localDir)) {
+
+                            if (false === mkdir($localDir, 0755, true)) {
+                                $dirAvailable = false;
+                            } else {
+                                $dirAvailable = true;
+                            }
+
+                        } else {
+                            $dirAvailable = true;
+                        }
+
+                        if ($dirAvailable) {
+                            copy($absolutePath, $localDir . $fileName);
+                            unlink($absolutePath);
+
+                            $url = 'uploads/mrapps_backend_images/' . $fileName;
+                        } else {
+                            unlink($absolutePath);
+
+                            $success = false;
+                            $message = 'Si è verificato un problema durante il caricamento del pdf; Riprovare più tardi.';
+                            return Utils::generateResponse($success, $message, $array);;
+                        }
+
                     }
 
-                    $success = true;
-                    $message = 'Pdf Caricato.';
+                    //Entity
+                    $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $url));
+                    if ($immagine == null) {
+                        $immagine = new Immagine();
+                    }
 
-                } else {
-                    $success = false;
-                    $message = 'Pdf non valido.';
+                    $immagine->setUrl($s3Key);
+                    $em->persist($immagine);
+                    $em->flush($immagine);
+
+                    $array[] = $immagine->getId();
                 }
+
+                $success = true;
+                $message = 'Pdf Caricato.';
 
             } else {
                 $success = false;
-                $message = 'Si è verificato un problema durante il caricamento del pdf; Riprovare più tardi.';
+                $message = 'Pdf non valido.';
             }
 
         } else {
             $success = false;
-            $message = 'Bundle MrappsAmazonBundle non installato.';
+            $message = 'Si è verificato un problema durante il caricamento del pdf; Riprovare più tardi.';
         }
 
         return Utils::generateResponse($success, $message, $array);
     }
 
+    /**
+     * @Route("/permissions/{object}/{returnRoute}", name="mrapps_backend_permissions")
+     * @Method({"GET"})
+     */
+    public function permissionsAction(Request $request, $object = '', $returnRoute = '')
+    {
+        //Security
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Accesso non autorizzato!');
+
+        $object = trim($object);
+        $returnRoute = trim($returnRoute);
+        try {
+            $routeUrl = (strlen($returnRoute) > 0) ? $this->generateUrl($returnRoute) : '';
+        }catch(\Exception $e) {
+            $routeUrl = '';
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        $permissions = $em->getRepository('MrappsBackendBundle:Permission')->findBy(array('object' => $object));
+
+        return $this->render('MrappsBackendBundle:Default:permissions.html.twig', array(
+            'title' => "Gestione permessi per l'oggetto '".$object."'",
+            'angular' => '"ngTable","ngResource"',
+            'permissions' => $permissions,
+            'route_url' => $routeUrl,
+            'object' => $object,
+        ));
+    }
+
+    /**
+     * @Route("/save_permissions", name="mrapps_backend_savepermissions")
+     * @Method({"POST"})
+     */
+    public function savepermissionsAction(Request $request)
+    {
+        //Security
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Accesso non autorizzato!');
+
+        $em = $this->getDoctrine()->getManager();
+        $content = json_decode($request->getContent(), true);
+
+        $object = (isset($content['object'])) ? trim($content['object']) : '';
+        if(strlen($object) > 0 && isset($content['rows'])) {
+
+            foreach($content['rows'] as $row) {
+
+                $role = strtoupper(trim($row['role']));
+                $canView = (bool)$row['can_view'];
+                $canCreate = (bool)$row['can_create'];
+                $canEdit = (bool)$row['can_edit'];
+                $canDelete = (bool)$row['can_delete'];
+
+                //SuperAdmin avrà sempre permessi massimi
+                if($role == 'ROLE_SUPER_ADMIN') {
+                    $canView = true;
+                    $canCreate = true;
+                    $canEdit = true;
+                    $canDelete = true;
+                }
+
+                $em->getRepository('MrappsBackendBundle:Permission')->addPermission($object, $role, array(
+                    'view' => $canView,
+                    'create' => $canCreate,
+                    'edit' => $canEdit,
+                    'delete' => $canDelete,
+                ), false);
+            }
+
+            $em->flush();
+
+            $success = true;
+            $message = '';
+
+        }else {
+            $success = false;
+            $message = 'Parametri non validi.';
+        }
+
+        return Utils::generateResponse($success, $message);
+    }
+
+    /**
+     * @Route("/validate_facebook", name="mrapps_backend_validatefacebook")
+     * @Method({"GET"})
+     */
+    public function validatefacebookAction(Request $request)
+    {
+        $httpCode = 0;
+        $valid = false;
+
+        $url = strtolower(trim($request->get('url')));
+
+        if(strlen($url) > 0) {
+
+            $pos = strpos($url, 'facebook.com');
+
+            if($pos !== false) {
+
+                if(substr($url, 0, 4) != "http") {
+                    $url = 'http://'.$url;
+                }
+
+                $channel = curl_init();
+                curl_setopt($channel, CURLOPT_URL, $url);
+                curl_setopt($channel, CURLOPT_CONNECTTIMEOUT, 10);
+                curl_setopt($channel, CURLOPT_TIMEOUT, 10);
+                curl_setopt($channel, CURLOPT_HEADER, true);
+                curl_setopt($channel, CURLOPT_NOBODY, true);
+                curl_setopt($channel, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($channel, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 6.1; rv:2.2) Gecko/20110201');
+                curl_setopt($channel, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($channel, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+                curl_setopt($channel, CURLOPT_SSL_VERIFYPEER, FALSE);
+                curl_setopt($channel, CURLOPT_SSL_VERIFYHOST, FALSE);
+                curl_exec($channel);
+                $httpCode = curl_getinfo($channel, CURLINFO_HTTP_CODE );
+                curl_close($channel);
+
+                $valid = ($httpCode == 200);
+            }
+        }else {
+            $valid = true;
+        }
+
+        return new JsonResponse(array('valid' => $valid, 'code' => $httpCode, 'url' => $url));
+    }
+
+    public function __calendarAction($title, $calendarAjax, $linkBreadcrumb = null, $calendarNew= null, $calendarDelete= null, $fields = null)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        return $this->render('MrappsBackendBundle:Default:calendar.html.twig', array(
+            'title' => $title,
+            'calendarAjax' => $calendarAjax,
+            'linkBreadcrumb' => $linkBreadcrumb,
+            'calendarNew' => $calendarNew,
+            'calendarDelete' => $calendarDelete,
+            'fields' => $fields,
+            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps"',
+        ));
+    }
 }

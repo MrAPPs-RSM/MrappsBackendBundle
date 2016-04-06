@@ -2,11 +2,75 @@
 
 namespace Mrapps\BackendBundle\Classes;
 
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Collections\Criteria;
+use Mrapps\BackendBundle\Entity\LanguageBase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use FOS\UserBundle\Model\UserInterface;
 
 class Utils
 {
+    public static function getControllerCompactName($controllerFullName = '')
+    {
+
+        $compactName = $controllerFullName;
+        $pos = strpos($compactName, '::');
+        if ($pos !== false) {
+            $compactName = substr($compactName, 0, $pos);
+        }
+
+        if (strlen($compactName) > 0) {
+            $compactName = str_replace('\\\\', ':', str_replace('Controller', '', $compactName));
+        }
+
+        return $compactName;
+    }
+
+    public static function getRoutesArray($container = null)
+    {
+
+        $arrayRoutes = array();
+
+        if ($container !== null) {
+            $routes = $container->get('router')->getRouteCollection();
+            foreach ($routes as $route) {
+                $controller = $route->getDefault('_controller');
+                $path = $route->getPath();
+                $arrayRoutes[$controller] = $path;
+            }
+        }
+
+        return $arrayRoutes;
+    }
+
+    public static function getControllerActionFullName(\ReflectionMethod $method)
+    {
+
+        $controller = $method->class;
+        $action = $method->name;
+
+        return trim($controller, '\\') . '::' . $action;
+    }
+
+    public static function getAllRoles($container = null)
+    {
+
+        $output = array();
+
+        if ($container !== null) {
+
+            $roles = array_reverse($container->getParameter('security.role_hierarchy.roles'));
+            foreach ($roles as $main => $children) {
+                if (!isset($output[$main])) $output[$main] = $main;
+                foreach ($children as $child) {
+                    if (!isset($output[$child])) $output[$child] = $child;
+                }
+            }
+        }
+
+        return array_reverse($output);
+    }
 
     public static function bundleExists($container = null, $bundleName = '')
     {
@@ -181,8 +245,22 @@ class Utils
 
     public static function getListResults($em = null, $entity = '', $count = 0, $page = 1, $filters = array(), $sorting = array())
     {
-
         if ($em !== null && strlen($entity) > 0) {
+
+            //Se l'entity è DRAFT attivo di default il filtro "published = FALSE"
+            $isDraft = false;
+            $exploded1 = explode(':', $entity);
+            if (count($exploded1) > 1) {
+                $exploded2 = preg_split('/(?=[A-Z])/', $exploded1[0], -1, PREG_SPLIT_NO_EMPTY);
+                $expCount = count($exploded2);
+                if ($expCount > 1 && strtolower($exploded2[$expCount - 1]) == 'bundle') {
+                    $exploded2[$expCount - 2] = $exploded2[$expCount - 2] . $exploded2[$expCount - 1];
+                    unset($exploded2[$expCount - 1]);
+                }
+                $fullEntity = implode('\\', $exploded2) . '\\Entity\\' . $exploded1[1];
+
+                $isDraft = is_subclass_of($fullEntity, 'Mrapps\\BackendBundle\\Entity\\Draft');
+            }
 
             $count = intval($count);
             $page = intval($page);
@@ -192,6 +270,7 @@ class Utils
             if ($page < 1) $page = 1;
             if (!is_array($filters)) $filters = array();
             if (!is_array($sorting)) $sorting = array('createdAt' => 'desc');    //Sorting di default
+            if ($isDraft) $filters['published'] = 0;
             //--------------------------------------------------------------------------------------------
 
             //Filtri
@@ -311,5 +390,185 @@ class Utils
     public static function getYouTubeIdFromUrl($text)
     {
         return preg_replace('~https?://(?:[0-9A-Z-]+\.)?(?:youtu\.be/| youtube(?:-nocookie)?\.com\S*[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:[\'"][^<>]*>| </a>))[?=&+%\w.-]*~ix', '$1', $text);
+    }
+
+    public static function getArrayLang($entity, $method = 'getTraduzioni', $fields = null, $options = array())
+    {
+        if (!is_array($fields) || count($fields) == 0) $fields = null;
+
+        if (!is_array($options)) $options = array();
+        if (!isset($options['key_isocodes'])) $options['key_isocodes'] = false;
+        if (!isset($options['force_published_entity'])) $options['force_published_entity'] = false;
+
+        //Forza l'entity pubblicata in caso di entity draft
+        if ((bool)$options['force_published_entity'] == true) {
+            $class = get_class($entity);
+            if (is_subclass_of($class, 'Mrapps\\BackendBundle\\Entity\\Draft') && $entity->getPublished() == false && $entity->getOther() != null) {
+                $entity = $entity->getOther();
+            }
+        }
+
+        $array = [];
+        $reader = new AnnotationReader();
+
+        $traduzioni = $entity->$method();
+        if (count($traduzioni) > 0) {
+            foreach ($traduzioni as $item) {
+                $objUser = new \ReflectionObject($item);
+                $properties = $objUser->getProperties();
+                foreach ($properties as $p) {
+
+                    if ($fields == null || in_array($p->name, $fields)) {
+
+                        $annOneToOne = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToOne');
+                        $annManyToOne = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\ManyToOne');
+                        $annOneToMany = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToMany');
+
+                        if ($annOneToOne == null && $annManyToOne == null && $annOneToMany == null) {
+
+                            $method = 'get' . Utils::snakeToCamelCase($p->name);
+
+                            $lang = $item->getLang();
+                            $key = ($lang !== null) ? (($options['key_isocodes']) ? $lang->getIsoCode() : $lang->getId()) : null;
+                            if ($key != null) {
+                                $array[$p->name][$key] = $item->$method();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $array;
+    }
+
+    private static function findTraduzione($em = null, $entity = null, $language = null, $options = array())
+    {
+        if ($entity !== null && is_object($entity) && $language !== null) {
+
+            $entityLangClass = get_class($entity) . 'Lang';
+            if (is_subclass_of($entityLangClass, 'Mrapps\\BackendBundle\\Entity\\LanguageBase') ||
+                is_subclass_of($entityLangClass, 'Mrapps\\BackendBundle\\Entity\\LanguageBaseDraft')
+            ) {
+
+                //Entity draft e entity lang non-draft? Punto all'entity pubblicata
+                if (is_subclass_of($entityLangClass, 'Mrapps\\BackendBundle\\Entity\\LanguageBase') &&
+                    is_subclass_of($entity, 'Mrapps\\BackendBundle\\Entity\\Draft') &&
+                    !$entity->getPublished()
+                ) {
+
+                    $entity = $entity->getOther();
+                }
+
+                if ($entity !== null) {
+
+                    $entityLang = $em->getRepository($entityLangClass)->findOneBy(array('padre' => $entity, 'lang' => $language));
+                    if ($options['create_entity'] === true) {
+                        if ($entityLang == null) {
+
+                            $entityLang = new $entityLangClass();
+                            $entityLang->setLang($language);
+                            $entityLang->setPadre($entity);
+
+                            $em->persist($entityLang);
+                            $em->flush($entityLang);
+                        }
+                    }
+
+                    return $entityLang;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static function getTraduzione($em = null, $entity = null, $language = null, $options = array())
+    {
+        if (!is_array($options)) $options = array();
+        if (!isset($options['create_entity'])) $options['create_entity'] = false;
+
+        if (is_array($language)) {
+
+            foreach ($language as $item) {
+
+                if (!is_object($item)) {
+                    $lang = $em->getRepository('MrappsBackendBundle:Language')->findByIso(strtolower(trim($item)));
+                } else {
+                    $lang = $item;
+                }
+
+                $result = Utils::findTraduzione($em, $entity, $lang, $options);
+
+                if ($result !== null) {
+                    return $result;
+                }
+            }
+
+        } else {
+            if (!is_object($language)) {
+                $language = $em->getRepository('MrappsBackendBundle:Language')->findByIso(strtolower(trim($language)));
+            }
+
+            return Utils::findTraduzione($em, $entity, $language, $options);
+        }
+    }
+
+    public static function snakeToCamelCase($snakeCase)
+    {
+        return str_replace(' ', '', ucwords(str_replace('_', ' ', strtolower($snakeCase))));
+    }
+
+    public static function getContent($content)
+    {
+        $content = json_decode($content);
+
+        $array = array();
+
+        foreach ($content as $key => $value) {
+            $item = explode("_", $key);
+            $lang = intval($item[count($item) - 1]);
+            if ($lang > 0) {
+                //CAMPO MULTILINGUA
+                $array[substr($key, 0, -(strlen($lang) + 1))][$lang] = $value;
+            } else {
+                $array[$key] = $value;
+            }
+        }
+
+        return $array;
+    }
+
+    public static function getLanguages()
+    {
+        return [
+            "it" => "Italiano",
+            "en" => "English"
+        ];
+    }
+
+    public static function getDefaultRouteForUser($container, $user)
+    {
+
+        $defaultRoutes = $container->getParameter('mrapps_backend.default_routes');
+
+        $roles = ($user !== null) ? $user->getRoles() : array();
+        $roles[] = 'DEFAULT';
+
+        $defaultRouteForUser = '';
+        $canProceed = true;
+        foreach ($roles as $role) {
+            if ($canProceed) {
+                foreach ($defaultRoutes as $route) {
+                    if ($route['role'] == $role) {
+                        $defaultRouteForUser = $route['name'];
+                        $canProceed = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $defaultRouteForUser;
     }
 }
