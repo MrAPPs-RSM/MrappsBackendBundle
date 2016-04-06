@@ -463,7 +463,7 @@ class Utils
                 if ($entity !== null) {
 
                     $findRules = array('padre' => $entity, 'lang' => $language);
-                    
+
                     if ($options["find_rules"] !== false && is_array($options["find_rules"])) {
                         foreach ($options["find_rules"] as $rule) {
                             $findRules[$rule["rule_key"]] = $rule["rule_value"];
