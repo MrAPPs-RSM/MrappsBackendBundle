@@ -5,11 +5,13 @@
             <ui-gmap-google-map center='form.{{field.name}}.center' zoom='form.{{field.name}}.zoom'>
                 <ui-gmap-marker coords="{{field.name}}Marker.coords" options="{{field.name}}Marker.options" events="{{field.name}}Marker.events" idkey="{{ field.random_number }}"></ui-gmap-marker>
             </ui-gmap-google-map>
-            <div>{/ form.{{field.name}}.address /}</div>
-            <div>[{/ form.{{field.name}}.marker.latitude /}, {/ form.{{field.name}}.marker.longitude /}]</div>
+            <div class="pull-left">{/ form.{{field.name}}.address /}</div>
+            <div class="pull-left">[{/ form.{{field.name}}.marker.latitude /}, {/ form.{{field.name}}.marker.longitude /}]</div>
             {% if field.getLatLng_ajax|length > 0 %}
-                <input class="form-control" type="button" ng-disabled="{{field.name}}ObtainLatLngLoading" ng-click="{{field.name}}ObtainLatLngFnc()" value="Ottieni Latitudine e Longitudine" />
-                <i ng-show="{{field.name}}ObtainLatLngLoading" class="fa fa-spin fa-spinner"></i>
+                <button class="btn btn-success pull-right" ng-disabled="{{field.name}}ObtainLatLngLoading" ng-click="{{field.name}}ObtainLatLngFnc()">
+					<i ng-show="{{field.name}}ObtainLatLngLoading" class="fa fa-spin fa-spinner">&nbsp;&nbsp;</i>Ottieni Latitudine e Longitudine
+                </button>
+                <div class="cb"></div>
             {% endif %}
         </div>
         {% if field.didascalia is defined %}

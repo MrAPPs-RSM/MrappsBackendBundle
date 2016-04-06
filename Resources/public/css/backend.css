@@ -11475,3 +11475,7 @@ header .dropdown-menu {
 	left: inherit;
 	right: 0px;
 }
+
+.angular-google-map {
+	margin-bottom: 20px;
+}
