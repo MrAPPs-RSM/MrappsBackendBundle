@@ -33,12 +33,12 @@
                                 {% for field in panel.fields %}
                                     {% if field.lang is defined and field.lang %}
                                         <div class="dropdown">
-                                            <button class="btn btn-default dropdown-toggle lang_selector" type="button" id="dropdownLanguage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                it
+                                            <button class="btn btn-default dropdown-toggle {{ field.name }}_lang_selector" type="button" id="dropdownLanguage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                {% for lang in field.languages_allowed %}{% if loop.index0 == 0 %}{{ lang.name }}{% endif %}{% endfor %}
                                                 <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownLanguage">
-                                                {% for lang in languages %}
+                                                {% for lang in field.languages_allowed %}
                                                     <li><a data-idlang="{{ lang.id }}" data-isocode="{{ lang.isoCode }}">{{ lang.name }}</a></li>
                                                 {% endfor %}
                                             </ul>
@@ -46,8 +46,8 @@
                                         {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
                                         {% set field_lang = field.value %}
                                         {% set field_name = field.name %}
-                                        <div class="multilang">
-                                            {% for lang in languages %}
+                                        <div class="{{ field.name }}_multilang">
+                                            {% for lang in field.languages_allowed %}
                                                 {% set field = field|merge({"name" : [field_name,'_',lang.id]|join}) %}
                                                 {% set field = field|merge({"value" : field_lang[lang.id]}) %}
                                                 {{ include(twig_name, { 'field': field }) }}
@@ -100,13 +100,16 @@
     <script type="text/javascript">
         'use strict';
 
-        function changeLaguages() {
-            var langSelector=$(".lang_selector");
+        {% for panel in panels %}
+        {% for field in panel.fields %}
+        {% if field.lang is defined and field.lang %}
+        function {{ field.name }}ChangeLaguages() {
+            var langSelector=$(".{{ field.name }}_lang_selector");
             langSelector.next("ul").find("li > a").click(function(){
                 var isoCode=$(this).attr("data-isocode");
                 var idLang=$(this).attr("data-idlang");
                 var idLangLength=idLang.toString().length;
-                var fieldSet=$(".multilang fieldset");
+                var fieldSet=$(".{{ field.name }}_multilang fieldset");
                 langSelector.each(function(){
                     $(this).html(isoCode+' <span class="caret"></span>');
                 });
@@ -120,10 +123,10 @@
             });
         }
 
-        function changeLaguagesReady(isoCode, idLang) {
-            var langSelector=$(".lang_selector");
+        function {{ field.name }}ChangeLaguagesReady(isoCode, idLang) {
+            var langSelector=$(".{{ field.name }}_lang_selector");
             var idLangLength=idLang.toString().length;
-            var fieldSet=$(".multilang fieldset");
+            var fieldSet=$(".{{ field.name }}_multilang fieldset");
             langSelector.each(function(){
                 $(this).html(isoCode+' <span class="caret"></span>');
             });
@@ -135,10 +138,19 @@
                 }
             });
         }
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
 
         $( document ).ready(function() {
-            changeLaguagesReady("{{ default_language.isoCode }}",{{ default_language.id }});
-            changeLaguages();
+            {% for panel in panels %}
+            {% for field in panel.fields %}
+            {% if field.lang is defined and field.lang %}
+            {{ field.name }}ChangeLaguagesReady("{{ field.default_language.isoCode }}",{{ field.default_language.id }});
+            {{ field.name }}ChangeLaguages();
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
         });
 
         function select2default(item) {
@@ -206,7 +218,7 @@
             {% if field.lang is defined and field.lang %}
             {% set field_lang = field.value %}
             {% set field_name = field.name %}
-            {% for lang in languages %}
+            {% for lang in field.languages_allowed %}
             {% set field = field|merge({"name" : [field_name,'_',lang.id]|join}) %}
             {% set field = field|merge({"value" : field_lang[lang.id]}) %}
             {{ include(twig_name, { 'field': field }) }}

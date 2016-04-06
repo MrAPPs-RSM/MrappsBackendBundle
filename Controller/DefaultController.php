@@ -306,12 +306,7 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $languages = $em->getRepository('MrappsBackendBundle:Language')->findBy(["visible" => true]);
 
-
-        //Locale di default tendine multilingua
         $locale = $request->getLocale();
-        $defaultLocale = $em->getRepository('MrappsBackendBundle:Language')->findByIso($locale);
-        if($defaultLocale == null) $defaultLocale = $em->getRepository('MrappsBackendBundle:Language')->findByIso('it');
-
 
         $gmapsApiKey = ($this->container->hasParameter('gmaps_api_key')) ? $this->container->getParameter('gmaps_api_key') : '';
 
@@ -337,6 +332,52 @@ class DefaultController extends Controller
                     'index' => $k,
                     'label' => (isset($f['label'])) ? $f['label'] : '',
                 );
+            }
+
+            //Campo multilingua
+            if(isset($f['lang']) && $f['lang'] == true) {
+
+                $enFound = false;
+                $defaultLanguage = null;
+                $languagesAllowed = array();
+
+                //Limite alle lingue disponibili per questo campo (lista isocode)
+                if(isset($f['lang_allow_only']) && is_array($f['lang_allow_only']) && count($f['lang_allow_only']) > 0) {
+
+                    foreach ($languages as $l) {
+                        if(in_array($l->getIsoCode(), $f['lang_allow_only'])) {
+                            $languagesAllowed[] = $l;
+
+                            //Lingua default -> la lingua letta dalla request
+                            if($l->getIsoCode() == $locale) {
+                                $defaultLanguage = $l;
+                            }
+
+                            if($l->getIsoCode() == 'en') {
+                                $enFound = true;
+                            }
+                        }
+                    }
+
+                    //Rimuovo il campo per non fare confusione
+                    unset($fields[$k]['lang_allow_only']);
+
+                }else {
+                    $languagesAllowed = $languages;
+                }
+
+                //Se non è stata settata la lingua di default, controlla se può impostare "en"
+                if($defaultLanguage == null && $enFound) {
+                    $defaultLanguage = $em->getRepository('MrappsBackendBundle:Language')->findByIso("en");
+                }
+
+                //Se ancora non è stata settata la lingua di default, prende la prima lingua dell'array
+                if($defaultLanguage == null) {
+                    $defaultLanguage = $languagesAllowed[0];
+                }
+
+                $fields[$k]['languages_allowed'] = $languagesAllowed;
+                $fields[$k]['default_language'] = $defaultLanguage;
             }
         }
 
@@ -377,7 +418,6 @@ class DefaultController extends Controller
         return $this->render('MrappsBackendBundle:Default:new.html.twig', array(
             'current_route' => $request->get('_route'),
             'title' => $title,
-//            'fields' => $fields,
             'panels' => $panels,
             'linkSave' => $linkSave,
             'linkEdit' => $linkEdit,
@@ -388,7 +428,6 @@ class DefaultController extends Controller
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,
             'languages' => $languages,
-            'default_language' => $defaultLocale,
             'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps"',
         ));
     }
