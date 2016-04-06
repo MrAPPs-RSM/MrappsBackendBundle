@@ -1,12 +1,12 @@
-$scope.{{ field.name }}_dpOpened = false;
-$scope.{{ field.name }}_dpOpen = function ($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    $scope.{{ field.name }}_dpOpened = true;
-};
-$scope.{{ field.name }}_dpOptions = {
-    startingDay: 1
-};
+{#$scope.{{ field.name }}_dpOpened = false;#}
+{#$scope.{{ field.name }}_dpOpen = function ($event) {#}
+    {#$event.preventDefault();#}
+    {#$event.stopPropagation();#}
+    {#$scope.{{ field.name }}_dpOpened = true;#}
+{#};#}
+{#$scope.{{ field.name }}_dpOptions = {#}
+    {#startingDay: 1#}
+{#};#}
 
-var date_{{ field.name }} = new Date('{{ field.value }}');
-$scope.form.{{ field.name }} = date_{{ field.name }};
+{#var date_{{ field.name }} = new Date('{{ field.value }}');#}
+{#$scope.form.{{ field.name }} = date_{{ field.name }};#}

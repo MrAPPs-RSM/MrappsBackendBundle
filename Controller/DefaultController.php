@@ -949,7 +949,7 @@ class DefaultController extends Controller
             'calendarNew' => $calendarNew,
             'calendarDelete' => $calendarDelete,
             'fields' => $fields,
-            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps"',
+            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ui.bootstrap.datetimepicker","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps"',
         ));
     }
 }
