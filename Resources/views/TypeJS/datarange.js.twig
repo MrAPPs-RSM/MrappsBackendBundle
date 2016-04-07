@@ -11,7 +11,6 @@ $scope.form.{{ field.name }}_{{key}} = null;
 
 {{ jsVar }}.filthypillow({
     startStep: 'day',
-    steps: [ "month", "day", "hour", "minute" ],
     initialDateTime: function(m) {
         {% if field[key].value is defined and field[key].value is not null %}
         var dateObj = moment('{{ field[key].value }}');
