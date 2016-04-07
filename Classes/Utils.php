@@ -580,4 +580,19 @@ class Utils
 
         return $defaultRouteForUser;
     }
+
+    public static function convertTimestampToIso8601($timestamp = null) {
+
+        if($timestamp !== null) {
+
+            $timestamp = intval($timestamp);
+            $date = date('Y-m-d', $timestamp);
+            $time = date('H:i:s', $timestamp);
+            return sprintf("%sT%s.000Z", $date, $time);
+
+        }
+
+        return null;
+    }
+
 }

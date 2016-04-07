@@ -319,36 +319,51 @@ class DefaultController extends Controller
             if($f['type'] == 'datarange') {
 
                 //Converte i value da timestamp a ISO 8601 date
-                $startValue = (isset($f['start']['value'])) ? intval($f['start']['value']) : null;
-                $endValue = (isset($f['end']['value'])) ? intval($f['end']['value']) : null;
+                $startValue = Utils::convertTimestampToIso8601((isset($f['start']['value'])) ? $f['start']['value'] : null);
+                $startMin = Utils::convertTimestampToIso8601((isset($f['start']['min'])) ? $f['start']['min'] : null);
+                $startMax = Utils::convertTimestampToIso8601((isset($f['start']['max'])) ? $f['start']['max'] : null);
 
-                //Default
-                $actualTime = time();
-                if($startValue == null) $startValue = $actualTime;
-                if($endValue == null) $endValue = $actualTime;
-
-                //Start
-                $newStartDate = date('Y-m-d', $startValue).'T00:00:00.000Z';
-                $newStartHours = intval(date('H', $startValue));
-                $newStartMinutes = intval(date('i', $startValue));
+                $endValue = Utils::convertTimestampToIso8601((isset($f['end']['value'])) ? $f['end']['value'] : null);
+                $endMin = Utils::convertTimestampToIso8601((isset($f['end']['min'])) ? $f['end']['min'] : null);
+                $endMax = Utils::convertTimestampToIso8601((isset($f['end']['max'])) ? $f['end']['max'] : null);
 
 
-                //End
-                $newEndDate = date('Y-m-d', $endValue).'T00:00:00.000Z';
-                $newEndHours = intval(date('H', $endValue));
-                $newEndMinutes = intval(date('i', $endValue));
+                $fields[$k]['start']['value'] = $startValue;
+                $fields[$k]['start']['min'] = $startMin;
+                $fields[$k]['start']['max'] = $startMax;
+
+                $fields[$k]['end']['value'] = $endValue;
+                $fields[$k]['end']['min'] = $endMin;
+                $fields[$k]['end']['max'] = $endMax;
 
 
-                $fields[$k]['start']['value'] = array(
-                    'date' => $newStartDate,
-                    'hours' => $newStartHours,
-                    'minutes' => $newStartMinutes,
-                );
-                $fields[$k]['end']['value'] = array(
-                    'date' => $newEndDate,
-                    'hours' => $newEndHours,
-                    'minutes' => $newEndMinutes,
-                );
+//                //Default
+//                $actualTime = time();
+//                if($startValue == null) $startValue = $actualTime;
+//                if($endValue == null) $endValue = $actualTime;
+//
+//                //Start
+//                $newStartDate = date('Y-m-d', $startValue).'T00:00:00.000Z';
+//                $newStartHours = intval(date('H', $startValue));
+//                $newStartMinutes = intval(date('i', $startValue));
+//
+//
+//                //End
+//                $newEndDate = date('Y-m-d', $endValue).'T00:00:00.000Z';
+//                $newEndHours = intval(date('H', $endValue));
+//                $newEndMinutes = intval(date('i', $endValue));
+//
+//
+//                $fields[$k]['start']['value'] = array(
+//                    'date' => $newStartDate,
+//                    'hours' => $newStartHours,
+//                    'minutes' => $newStartMinutes,
+//                );
+//                $fields[$k]['end']['value'] = array(
+//                    'date' => $newEndDate,
+//                    'hours' => $newEndHours,
+//                    'minutes' => $newEndMinutes,
+//                );
             }
 
             //Mappa

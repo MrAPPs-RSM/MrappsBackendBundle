@@ -3,11 +3,11 @@
         <div class="form-group">
             <label class="col-sm-2 control-label">{{field[key].title}}{% if field[key].required %} *{% endif %}</label>
             <div class="{% if field[key].didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
-                {% if field[key].required == false %}
-                    <div>
-                        <label><input type="checkbox" ng-model="{{field.name}}_{{key}}_ignored" />&nbsp;Non settare</label>
-                    </div>
+                <input id="{{field.name}}_{{key}}" />
+                {#{% if field[key].required == false %}
+                    <div><label><input type="checkbox" ng-model="{{field.name}}_{{key}}_ignored" />&nbsp;Non settare</label></div>
                 {% endif %}
+
                 <label {% if field[key].required == false %}ng-show="{{field.name}}_{{key}}_ignored == false"{% endif %} class="control-label">Data</label>
                 <p class="input-group" {% if field[key].required == false %}ng-show="{{field.name}}_{{key}}_ignored == false"{% endif %}>
                     <input type="text" name="{{field.name}}_{{key}}" class="form-control" datepicker-popup="{{field.format}}" ng-click="{{field.name}}_{{key}}_dpOpen($event)"
@@ -26,7 +26,7 @@
                         <select class="form-control" ng-model="form.{{field.name}}_{{key}}_hours"><option ng-repeat="o in {{ field.name }}_{{key}}_range_hours" value="{/ o /}">{/ o /}</option></select>
                         <select class="form-control" ng-model="form.{{field.name}}_{{key}}_minutes"><option ng-repeat="m in {{ field.name }}_{{key}}_range_minutes" value="{/ m /}">{/ m /}</option></select>
                     </div>
-                {% endif %}
+                {% endif %}#}
             </div>
             {% if field[key].didascalia is defined %}
                 <div class="col-sm-4">
