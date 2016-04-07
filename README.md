@@ -217,8 +217,7 @@ liip_imagine.controller.imagine_filter:
     "angular-ui-validate": "^1.2.2",
     "angular-minicolors": "~0.0.7",
     "fullcalendar": "^2.6.1",
-    "angular-google-maps": "2.3.2",
-    "angular-ui-bootstrap-datetimepicker": "~1.2.4"
+    "angular-google-maps": "2.3.2"
   }
 }
 ```

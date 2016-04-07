@@ -1,23 +1,38 @@
-{#<fieldset id="{{field.name}}" {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>#}
-    {#<div class="form-group">#}
-        {#<label class="col-sm-2 control-label">{{field.title}}{% if switch is not defined and field.required %} *{% endif %}</label>#}
-        {#<div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">#}
-            {#<p class="input-group">#}
-                {#<input type="text" name="{{field.name}}" class="form-control" datepicker-popup="{{field.format}}" ng-click="{{field.name}}_dpOpen($event)"#}
-                       {#ng-model="form.{{field.name}}" is-open="{{field.name}}_dpOpened" {% if field.min is defined%}min-date="'{{ field.min|date("Y-m-d") }}'"{% endif %} {% if field.max is defined%}max-date="'{{ field.max|date("Y-m-d") }}'"{% endif %}#}
-                       {#datepicker-options="{{field.name}}_dpOptions" date-disabled="{% if field.disable is defined and field.disable %}true{% else %}false{% endif %}"#}
-                       {#show-button-bar="false" {% if switch is not defined and field.required %}required="true"{% endif %}#}
-                {#/>#}
-                {#<span class="input-group-btn">#}
-                    {#<button type="button" class="btn btn-default btn-form" ng-click="{{field.name}}_dpOpen($event)"><i class="fa fa-calendar"></i></button>#}
-                {#</span>#}
-            {#</p>#}
-            {#{% if switch is not defined and field.required %}<span ng-show="form.validateInput('{{field.name}}', 'required')" class="text-danger">This field is required</span>{% endif %}#}
-        {#</div>#}
-        {#{% if field.didascalia is defined %}#}
-            {#<div class="col-sm-4">#}
-                {#<small class="text-muted">{{field.didascalia}}</small>#}
-            {#</div>#}
-        {#{% endif %}#}
-    {#</div>#}
-{#</fieldset>#}
+{% for key in field|keys if key == "start" or key == "end" %}
+    <fieldset id="{{field.name}}" {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{{field[key].title}}{% if field[key].required %} *{% endif %}</label>
+            <div class="{% if field[key].didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
+                {% if field[key].required == false %}
+                    <div>
+                        <label><input type="checkbox" ng-model="{{field.name}}_{{key}}_ignored" />&nbsp;Non settare</label>
+                    </div>
+                {% endif %}
+                <label {% if field[key].required == false %}ng-show="{{field.name}}_{{key}}_ignored == false"{% endif %} class="control-label">Data</label>
+                <p class="input-group" {% if field[key].required == false %}ng-show="{{field.name}}_{{key}}_ignored == false"{% endif %}>
+                    <input type="text" name="{{field.name}}_{{key}}" class="form-control" datepicker-popup="{{field.format}}" ng-click="{{field.name}}_{{key}}_dpOpen($event)"
+                           ng-model="form.{{field.name}}_{{key}}" is-open="{{field.name}}_{{key}}_dpOpened" {% if field[key].min is defined%}min-date="'{{ field[key].min|date("Y-m-d") }}'"{% endif %} {% if field[key].max is defined%}max-date="'{{ field[key].max|date("Y-m-d") }}'"{% endif %}
+                           datepicker-options="{{field.name}}_{{key}}_dpOptions" date-disabled="{% if field[key].disable is defined and field[key].disable %}true{% else %}false{% endif %}"
+                           show-button-bar="false" {% if field[key].required %}required="true"{% endif %}
+                    />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default btn-form" ng-click="{{field.name}}_{{key}}_dpOpen($event)"><i class="fa fa-calendar"></i></button>
+                </span>
+                </p>
+                {% if field[key].required %}<span ng-show="form.validateInput('{{field.name}}_{{key}}', 'required')" class="text-danger">This field is required</span>{% endif %}
+                {% if field[key].options.enable_time is defined and field[key].options.enable_time == true %}
+                    <div {% if field[key].required == false %}ng-show="{{field.name}}_{{key}}_ignored == false"{% endif %}>
+                        <label class="control-label">Ora</label>
+                        <select class="form-control" ng-model="form.{{field.name}}_{{key}}_hours"><option ng-repeat="o in {{ field.name }}_{{key}}_range_hours" value="{/ o /}">{/ o /}</option></select>
+                        <select class="form-control" ng-model="form.{{field.name}}_{{key}}_minutes"><option ng-repeat="m in {{ field.name }}_{{key}}_range_minutes" value="{/ m /}">{/ m /}</option></select>
+                    </div>
+                {% endif %}
+            </div>
+            {% if field[key].didascalia is defined %}
+                <div class="col-sm-4">
+                    <small class="text-muted">{{field[key].didascalia}}</small>
+                </div>
+            {% endif %}
+        </div>
+    </fieldset>
+{% endfor %}

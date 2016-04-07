@@ -315,6 +315,42 @@ class DefaultController extends Controller
         //Allineamento campi
         foreach ($fields as $k => $f) {
 
+            //DateTime Range
+            if($f['type'] == 'datarange') {
+
+                //Converte i value da timestamp a ISO 8601 date
+                $startValue = (isset($f['start']['value'])) ? intval($f['start']['value']) : null;
+                $endValue = (isset($f['end']['value'])) ? intval($f['end']['value']) : null;
+
+                //Default
+                $actualTime = time();
+                if($startValue == null) $startValue = $actualTime;
+                if($endValue == null) $endValue = $actualTime;
+
+                //Start
+                $newStartDate = date('Y-m-d', $startValue).'T00:00:00.000Z';
+                $newStartHours = intval(date('H', $startValue));
+                $newStartMinutes = intval(date('i', $startValue));
+
+
+                //End
+                $newEndDate = date('Y-m-d', $endValue).'T00:00:00.000Z';
+                $newEndHours = intval(date('H', $endValue));
+                $newEndMinutes = intval(date('i', $endValue));
+
+
+                $fields[$k]['start']['value'] = array(
+                    'date' => $newStartDate,
+                    'hours' => $newStartHours,
+                    'minutes' => $newStartMinutes,
+                );
+                $fields[$k]['end']['value'] = array(
+                    'date' => $newEndDate,
+                    'hours' => $newEndHours,
+                    'minutes' => $newEndMinutes,
+                );
+            }
+
             //Mappa
             if($f['type'] == 'latlng') {
 
@@ -428,7 +464,7 @@ class DefaultController extends Controller
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,
             'languages' => $languages,
-            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ui.bootstrap.datetimepicker","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps"',
+            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps"',
         ));
     }
 

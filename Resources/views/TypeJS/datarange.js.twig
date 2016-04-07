@@ -1,12 +1,45 @@
-{#$scope.{{ field.name }}_dpOpened = false;#}
-{#$scope.{{ field.name }}_dpOpen = function ($event) {#}
-    {#$event.preventDefault();#}
-    {#$event.stopPropagation();#}
-    {#$scope.{{ field.name }}_dpOpened = true;#}
-{#};#}
-{#$scope.{{ field.name }}_dpOptions = {#}
-    {#startingDay: 1#}
-{#};#}
+{% for key in field|keys if key == "start" or key == "end" %}
+$scope.{{ field.name }}_{{key}}_dpOpened = false;
+$scope.{{ field.name }}_{{key}}_dpOpen = function ($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.{{ field.name }}_{{key}}_dpOpened = true;
+};
+$scope.{{ field.name }}_{{key}}_dpOptions = {
+    startingDay: 1
+};
 
-{#var date_{{ field.name }} = new Date('{{ field.value }}');#}
-{#$scope.form.{{ field.name }} = date_{{ field.name }};#}
+{% if field[key].value.date is defined and field[key].value.date is not null %}
+var date_{{ field.name }}_{{key}} = new Date('{{ field[key].value.date }}');
+$scope.form.{{ field.name }}_{{key}} = date_{{ field.name }}_{{key}};
+{% else %}
+$scope.form.{{ field.name }}_{{key}} = null;
+{% endif %}
+
+{% if field[key].options.enable_time is defined and field[key].options.enable_time == true %}
+
+$scope.{{ field.name }}_{{key}}_range_hours = [{% for i in range(1, 24) %}"{{ "%02d"|format(i) }}"{% if loop.last == false %},{% endif %}{% endfor %}];
+$scope.{{ field.name }}_{{key}}_range_minutes = [{% for i in range(1, 60) %}"{{ "%02d"|format(i) }}"{% if loop.last == false %},{% endif %}{% endfor %}];
+
+{% if field[key].value.hours is defined and field[key].value.hours is not null %}
+$scope.form.{{ field.name }}_{{key}}_hours = "{{ "%02d"|format(field[key].value.hours) }}";
+{% else %}
+$scope.form.{{ field.name }}_{{key}}_hours = null;
+{% endif %}
+
+{% if field[key].value.minutes is defined and field[key].value.minutes is not null %}
+$scope.form.{{ field.name }}_{{key}}_minutes = "{{ "%02d"|format(field[key].value.minutes) }}";
+{% else %}
+$scope.form.{{ field.name }}_{{key}}_minutes = null;
+{% endif %}
+
+{% endif %}
+
+{% if field[key].required == false %}
+$scope.{{field.name}}_{{key}}_ignored = false;
+{#$scope.{{ field.name }}_{{key}}_setIgnored = function (i) {
+    $scope.{{field.name}}_{{key}}_ignored = i;
+};#}
+{% endif %}
+
+{% endfor %}
