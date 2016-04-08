@@ -50,7 +50,11 @@
                                         <div class="{{ field.name }}_multilang">
                                             {% for lang in field.languages_allowed %}
                                                 {% set field = field|merge({"name" : [field_name,'_',lang.id]|join}) %}
-                                                {% set field = field|merge({"value" : field_lang[lang.id]}) %}
+                                                {% if field_lang[lang.id] is defined %}
+                                                    {% set field = field|merge({"value" : field_lang[lang.id]|trim}) %}
+                                                {% else %}
+                                                    {% set field = field|merge({"value" : ""}) %}
+                                                {% endif %}
                                                 {{ include(twig_name, { 'field': field }) }}
                                             {% endfor %}
                                         </div>
@@ -223,7 +227,11 @@
             {% set field_name = field.name %}
             {% for lang in field.languages_allowed %}
             {% set field = field|merge({"name" : [field_name,'_',lang.id]|join}) %}
-            {% set field = field|merge({"value" : field_lang[lang.id]}) %}
+            {% if field_lang[lang.id] is defined %}
+            {% set field = field|merge({"value" : field_lang[lang.id]|trim}) %}
+            {% else %}
+            {% set field = field|merge({"value" : ""}) %}
+            {% endif %}
             {{ include(twig_name, { 'field': field }) }}
             {% endfor %}
             {% else %}
