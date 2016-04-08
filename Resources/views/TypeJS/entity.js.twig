@@ -12,6 +12,10 @@ $scope.{{field.name}}DeleteItem = function(item) {
     toastr.success('Elemento eliminato', '');
 };
 
+$scope.{{field.name}}SortableOptions = {
+    stop: function (e, ui) {}
+};
+
 {# Select2 #}
 
 $scope.{{field.name}}Select = {
