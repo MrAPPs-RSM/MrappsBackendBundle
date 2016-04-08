@@ -26,7 +26,22 @@ class LanguageHandler
     public function getTopNavBar()
     {
         $router = $this->container->get('router');
-        $routeParams = ($this->request !== null) ? $router->match($this->request->getRequestURI()) : array();
+        $uri = ($this->request !== null) ? $this->request->getRequestURI() : '';
+
+        $queryParams = array();
+        $routeParams = array();
+        if(strlen($uri) > 0) {
+
+            //I parametri GET li gestisco a parte, altrimenti $router->match va in crisi
+            $qmPos = strpos($uri, '?');
+            if($qmPos !== false) {
+                $query = substr($uri, $qmPos+1);
+                parse_str($query, $queryParams);
+                $uri = substr($uri, 0, $qmPos);
+            }
+
+            $routeParams = $router->match($uri);
+        }
 
         $route = (isset($routeParams['_route'])) ? $routeParams['_route'] : '';
 
@@ -34,6 +49,9 @@ class LanguageHandler
         if(isset($routeParams['_route'])) unset($routeParams['_route']);
         if(isset($routeParams['_controller'])) unset($routeParams['_controller']);
         if(isset($routeParams['_locale'])) unset($routeParams['_locale']);
+
+        //Aggiungo i parametri GET
+        $routeParams = array_merge($routeParams, $queryParams);
 
 
         return $this->container->get('templating')->renderResponse('MrappsBackendBundle:Default:top-navbar.html.twig',
