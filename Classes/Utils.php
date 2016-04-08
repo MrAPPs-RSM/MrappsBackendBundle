@@ -279,8 +279,14 @@ class Utils
             if (count($filters) > 0) {
                 $tmp = array();
                 foreach ($filters as $campo => $valore) {
-                    $tmp[] = sprintf(" a.%s LIKE :%s ", $campo, $campo);
-                    $params[$campo] = '%' . $valore . '%';
+                    if(is_numeric($valore) || is_object($valore)) {
+                        $tmp[] = sprintf(" a.%s = :%s ", $campo, $campo);
+                        $params[$campo] = $valore;
+                    }else {
+                        $tmp[] = sprintf(" a.%s LIKE :%s ", $campo, $campo);
+                        $params[$campo] = '%' . $valore . '%';
+                    }
+
                 }
                 $where = 'WHERE ' . implode('AND', $tmp);
             }
