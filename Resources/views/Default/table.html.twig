@@ -78,7 +78,9 @@
                                 <button type="button"
                                         ng-click="{% if item.is_js == false %}go('{{ item.url }}/'+row.id){% else %}customFunction{{ loop.index }}(row.id){% endif %}"
                                         class="{{ item.class }}">
-                                    <em class="{{ item.icon }}"></em>
+                                    <span class="btn-label">
+                                        <em class="{{ item.icon }}"></em>
+                                    </span>{% if item.text is defined %}{{ item.text|trim }}{% endif %}
                                 </button>
                             {% endfor %}
                         {% endif %}
