@@ -926,7 +926,7 @@ class DefaultController extends Controller
                     'create' => $canCreate,
                     'edit' => $canEdit,
                     'delete' => $canDelete,
-                ), false);
+                ), false, true);
             }
 
             $em->flush();

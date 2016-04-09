@@ -24,7 +24,7 @@ class PermissionRepository extends EntityRepository
         return $numDeleted;
     }
 
-    public function addPermission($object = '', $role = '', $permissions = array(), $autoFlush = true) {
+    public function addPermission($object = '', $role = '', $permissions = array(), $autoFlush = true, $forceEditValues = false) {
 
         $em = $this->getEntityManager();
         $object = trim($object);
@@ -38,6 +38,11 @@ class PermissionRepository extends EntityRepository
                 $p = new Permission();
                 $p->setObject($object);
                 $p->setRole($role);
+
+                $forceEditValues = true;
+            }
+
+            if((bool)$forceEditValues) {
 
                 $canView = (isset($permissions['view'])) ? intval($permissions['view']) : 0;
                 $canCreate = (isset($permissions['create'])) ? intval($permissions['create']) : 0;
@@ -53,6 +58,7 @@ class PermissionRepository extends EntityRepository
                 if($autoFlush) {
                     $em->flush($p);
                 }
+
             }
 
             return $p;
