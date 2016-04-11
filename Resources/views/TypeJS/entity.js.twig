@@ -25,7 +25,13 @@ $scope.{{field.name}}Select = {
 
 $scope.{{field.name}}RefreshSelect = function(q) {
     if(q.length > 0) {
-        return $http.post('{{ field.data_url }}', {'origin':'select','form':$scope.form, 'q':q}).then(function (response) {
+        return $http.post('{{ field.data_url }}',
+                {
+                    'origin':'select',
+                    'form':$scope.form,
+                    'q':q,
+                    {% if field.select2.data_custom is defined %}{{ field.select2.data_custom |raw }}{% endif %}
+                }).then(function (response) {
             $scope.{{field.name}}Select.data = response.data;
         });
     }
