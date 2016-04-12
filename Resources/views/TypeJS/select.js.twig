@@ -27,9 +27,9 @@ setTimeout(function () {
     $http.get('{{ field.url }}{% if field.filter_params is defined and field.filter_params|length > 0 %}?{{ field.filter_params|url_encode }}{% endif %}').then(function (response) {
         $scope.{{ field.name }}Items = response.data;
 
-        {% if field.value is defined and field.value is not empty %}
-
         {% set query_params = [] %}
+
+        {% if field.value is defined and field.value is not empty %}
 
         {% if field.value is iterable %}
         {% set query_params = query_params|merge(field.value) %}
