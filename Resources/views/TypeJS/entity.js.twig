@@ -1,4 +1,5 @@
 {# Table #}
+$scope.form.{{field.name}} = [];
 $scope.{{field.name}}RefreshTable = function() {
     $http.post('{{ field.data_url }}', {'origin':'table','form':$scope.form,
         {% if field.data_custom is defined %}{{ field.data_custom |raw }}{% endif %}
