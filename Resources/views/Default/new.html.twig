@@ -68,6 +68,9 @@
                         </div>
                     {% endfor %}
                     <div class="panel-footer text-right">
+                        {% if edit and linkPublish is defined and linkPublish is not null and linkPublish|length > 0 %}
+                            <button ng-disabled="publishInProgress" type="submit" id="publish" class="btn btn-warning pull-left">{{ 'form.pubblica'|trans }}</button>
+                        {% endif %}
                         {% if edit %}
                             <button type="submit" id="save" class="btn btn-info">{{ 'form.modifica'|trans }}</button>
                         {% else %}
@@ -256,6 +259,14 @@
             toastr.success('{{ 'form.elemento.creato'|trans }}', '{{ 'form.elemento.elemento_creato'|trans }}');
             {% endif %}
 
+            function addOverlay() {
+                $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>{{ 'form.attendere'|trans }}</div></div>');
+            }
+
+            function removeOverlay() {
+                $('#overlay-waiting').remove();
+            }
+
             // Submit form
             vm.submitForm = function () {
                 vm.submitted = true;
@@ -264,7 +275,7 @@
                     if (confirm("{% if edit == false %}{{ 'form.elemento.nuovo_elemento'|trans }}{% else %}{{ 'form.elemento.salvare_modifiche'|trans }}{% endif %}")) {
                         {% endif %}
                         document.getElementById("save").disabled = true;
-                        $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>{{ 'form.attendere'|trans }}</div></div>');
+                        addOverlay();
                         $http({
                             method: 'POST',
                             url: '{{ linkSave }}',
@@ -273,7 +284,7 @@
                                 'Content-Type': 'application/json'
                             },
                         }).then(function successCallback(response) {
-                            $('#overlay-waiting').remove();
+                            removeOverlay();
                             if (!response.data.success) {
                                 toastr.error(response.data.message, '{{ 'form.errore'|trans }}');
                             } else {
@@ -286,7 +297,7 @@
                             document.getElementById("save").disabled = false;
 
                         }, function errorCallback(response) {
-                            $('#overlay-waiting').remove();
+                            removeOverlay();
                             toastr.error('{{ 'form.errore'|trans }}', '{{ 'form.errore_server'|trans }}');
                             document.getElementById("save").disabled = false;
                         });
@@ -298,6 +309,43 @@
                     return false;
                 }
             };
+
+
+            {% if edit and linkPublish is defined and linkPublish is not null and linkPublish|length > 0 %}
+            $scope.publishInProgress = false;
+            $scope.doPublish = function() {
+
+                if (confirm("{{ 'form.elemento.pubblicare_contenuto'|trans }}")) {
+
+                    $scope.publishInProgress = true;
+                    addOverlay();
+                    $http({
+                        method: 'POST',
+                        url: '{{ linkPublish }}',
+                        data: $scope.form,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                    }).then(function successCallback(response) {
+                        removeOverlay();
+                        if (!response.data.success) {
+                            toastr.error(response.data.message, '{{ 'form.errore'|trans }}');
+                        } else {
+                            toastr.success('{{ 'form.pubblicato'|trans }}', '{{ 'form.elemento.elemento_modificato'|trans }}');
+                        }
+                        $scope.publishInProgress = false;
+
+                    }, function errorCallback(response) {
+                        removeOverlay();
+                        toastr.error('{{ 'form.errore'|trans }}', '{{ 'form.errore_server'|trans }}');
+                        $scope.publishInProgress = false;
+                    });
+
+
+                }
+            };
+            {% endif %}
+
             var src = null;
             $scope.tinymceOptions = {
                 inline: false,

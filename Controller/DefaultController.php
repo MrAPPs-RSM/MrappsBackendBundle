@@ -312,7 +312,7 @@ class DefaultController extends Controller
         ));
     }
 
-    public function __newAction(Request $request, $title, $fields, $linkSave = null, $linkEdit = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false, $linkNew = null)
+    public function __newAction(Request $request, $title, $fields, $linkSave = null, $linkEdit = null, $linkPublish = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false, $linkNew = null)
     {
         $this->security($request, ($edit) ? 'edit' : 'create');
 
@@ -494,6 +494,7 @@ class DefaultController extends Controller
             'panels' => $panels,
             'linkSave' => $linkSave,
             'linkEdit' => $linkEdit,
+            'linkPublish' => $linkPublish,
             'create' => $create,
             'edit' => $edit,
             'linkNew' => $linkNew,
