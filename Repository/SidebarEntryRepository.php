@@ -16,11 +16,11 @@ class SidebarEntryRepository extends EntityRepository
     public function clearSidebar() {
 
         $em = $this->getEntityManager();
-        
+
         //Secondo livello
         $q2 = $em->createQuery('delete from MrappsBackendBundle:SidebarEntry s where s.parent IS NOT NULL');
         $numDeleted2 = $q2->execute();
-        
+
         //Primo livello
         $q1 = $em->createQuery('delete from MrappsBackendBundle:SidebarEntry s where s.parent IS NULL');
         $numDeleted1 = $q1->execute();
@@ -37,17 +37,22 @@ class SidebarEntryRepository extends EntityRepository
             $code = (isset($sidebar['code'])) ? strtoupper(trim($sidebar['code'])) : '';
             $label = (isset($sidebar['label'])) ? trim($sidebar['label']) : '';
             $icon = (isset($sidebar['icon'])) ? trim($sidebar['icon']) : '';
-            $minRole = (isset($sidebar['min_role'])) ? strtoupper(trim($sidebar['min_role'])) : null;
             $visible = (isset($sidebar['visible'])) ? (bool)$sidebar['visible'] : false;
             $parentCode = (isset($sidebar['parent'])) ? strtoupper(trim($sidebar['parent'])) : '';
             $weight = (isset($sidebar['weight'])) ? intval($sidebar['weight']) : 0;
             $route = (isset($sidebar['route'])) ? trim($sidebar['route']) : '';
             $controller = (isset($sidebar['controller'])) ? trim($sidebar['controller']) : '';
             $action = (isset($sidebar['action'])) ? trim($sidebar['action']) : '';
+            $type = (isset($sidebar['type'])) ? trim($sidebar['type']) : '';
+            $allowedRoles = (isset($sidebar['allowed_roles']) && is_array($sidebar['allowed_roles'])) ? $sidebar['allowed_roles'] : array();
 
             if(strlen($code) > 0) {
 
                 $em = $this->getEntityManager();
+
+                //Sistemazioni
+                if(strlen($type) == 0) $type = 'view';
+                $allowedRolesStr = implode(',', $allowedRoles);
 
                 $entry = $this->findOneBy(array('code' => $code));
                 if($entry == null) {
@@ -57,13 +62,14 @@ class SidebarEntryRepository extends EntityRepository
 
                 $entry->setLabel($label);
                 $entry->setIcon($icon);
-                $entry->setMinRole($minRole);
                 $entry->setVisible($visible);
                 $entry->setWeight($weight);
                 $entry->setRoute($route);
                 $entry->setController($controller);
                 $entry->setAction($action);
-                
+                $entry->setType($type);
+                $entry->setRoles($allowedRolesStr);
+
                 $parent = $this->findOneBy(array('code' => $parentCode));
                 $entry->setParent($parent);
 

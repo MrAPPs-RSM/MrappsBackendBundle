@@ -26,38 +26,45 @@ class SidebarEntry extends Base
 
 
     /**
-     * @ORM\Column(name="min_role", type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
-     */
-    protected $minRole;
-    
-    
-    /**
      * @ORM\Column(name="icon", type="string", length=100, nullable=true)
      * @Assert\Length(max=100)
      */
     protected $icon;
 
-    
+
     /**
      * @ORM\Column(name="route", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
     protected $route;
-    
-    
+
+
     /**
      * @ORM\Column(name="controller", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
     protected $controller;
-    
-    
+
+
     /**
      * @ORM\Column(name="action", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
     protected $action;
+
+
+    /**
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
+     */
+    protected $type;
+
+
+    /**
+     * @ORM\Column(name="roles", type="string", length=1000, nullable=true)
+     * @Assert\Length(max=1000)
+     */
+    protected $roles;
 
 
     /**
@@ -72,6 +79,10 @@ class SidebarEntry extends Base
      */
     protected $children;
 
+    public function __construct() {
+        parent::__construct();
+        $this->setType('view');
+    }
 
 
     /**
@@ -122,29 +133,6 @@ class SidebarEntry extends Base
         return $this->label;
     }
 
-    /**
-     * Set minRole
-     *
-     * @param string $minRole
-     *
-     * @return SidebarEntry
-     */
-    public function setMinRole($minRole)
-    {
-        $this->minRole = $minRole;
-
-        return $this;
-    }
-
-    /**
-     * Get minRole
-     *
-     * @return string
-     */
-    public function getMinRole()
-    {
-        return $this->minRole;
-    }
 
     /**
      * Set parent
@@ -298,5 +286,53 @@ class SidebarEntry extends Base
     public function getIcon()
     {
         return $this->icon;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return SidebarEntry
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set roles
+     *
+     * @param string $roles
+     *
+     * @return SidebarEntry
+     */
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Get roles
+     *
+     * @return string
+     */
+    public function getRoles()
+    {
+        return $this->roles;
     }
 }

@@ -99,13 +99,16 @@ class DefaultController extends Controller
 
         if($sidebar !== null) {
 
+            $type = trim($sidebar->getType());
+            if(strlen($type) == 0) $type = 'view';
+
             //Primo livello con figli => sempre visibile
             $sidebarRoute = trim($sidebar->getRoute());
             if(strlen($sidebarRoute) == 0 && $sidebar->getParent() == null) {
                 return true;
             }
 
-            //Negli altri casi controllo i permessi
+            //Negli altri casi controllo i permessi e la lista ruoli
 
             $controllerCompact = Utils::getControllerCompactName($sidebar->getController());
 
@@ -114,11 +117,31 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager();
             $perm = $em->getRepository('MrappsBackendBundle:Permission')->getPermissions($controllerCompact, $user);
 
-            return $perm['view'];
+            //Controllo permesso del tipo sidebar (view, edit, ...)
+            $canProceedType = (isset($perm[$type])) ? (bool)$perm[$type] : false;
 
-//            $checker = $this->get('security.authorization_checker');
-//            $minRole = $sidebar->getMinRole();
-//            return (is_null($minRole) || strlen($minRole) == 0 || $checker->isGranted($minRole));
+            //Controllo lista ruoli che possono accedere alla rotta
+            $allowedRolesStr = trim($sidebar->getRoles());
+            if(strlen($allowedRolesStr) > 0) {
+                $allowedRoles = explode(',', $sidebar->getRoles());
+
+                $canProceedRoles = false;
+
+                foreach ($allowedRoles as $r) {
+                    $r = strtoupper(trim($r));
+                    if(strlen($r) > 0 && $this->isGranted($r)) {
+                        $canProceedRoles = true;
+                        break;
+                    }
+                }
+
+            }else {
+                $canProceedRoles = true;
+            }
+
+
+
+            return ($canProceedType && $canProceedRoles);
         }
 
         return false;
@@ -215,7 +238,6 @@ class DefaultController extends Controller
                     'icon' => $sidebar->getIcon(),
                     'url' => $url,
                     'route_name' => $route,
-                    'min_role' => $sidebar->getMinRole(),
                 );
             }
         }
