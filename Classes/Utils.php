@@ -8,6 +8,10 @@ use Mrapps\BackendBundle\Entity\LanguageBase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\UserBundle\Model\UserInterface;
+use Mrapps\BackendBundle\Model\DraftInterface;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query as DoctrineQuery;
+use Mrapps\BackendBundle\Entity\Base;
 
 class Utils
 {
@@ -601,4 +605,140 @@ class Utils
         return null;
     }
 
+    public static function getEntityBozza(EntityManager $em = null, DraftInterface $entity = null) {
+
+        if($em !== null && $entity !== null) {
+            $newEntity = ($entity->getPublished()) ? $entity->getOther() : $entity;
+            return Utils::getFullEntityFromProxy($em, $newEntity);
+        }
+
+        return null;
+    }
+
+    public static function getEntityPublished(EntityManager $em = null, DraftInterface $entity = null) {
+
+        if($em !== null && $entity !== null) {
+            $newEntity = (!$entity->getPublished()) ? $entity->getOther() : $entity;
+            return Utils::getFullEntityFromProxy($em, $newEntity);
+        }
+
+        return null;
+    }
+
+    public static function getFullEntityFromProxy(EntityManager $em = null, Base $entity = null) {
+
+        if($entity !== null) {
+
+            $proxyClass = 'Doctrine\\ORM\\Proxy\\Proxy';
+            if(is_subclass_of(get_class($entity), $proxyClass)) {
+
+                $realClass = str_replace('Proxies\\__CG__\\', '', get_class($entity));
+
+                $query = "SELECT a FROM {$realClass} a WHERE a.id = :id";
+                $params = array('id' => $entity->getId());
+                $tmp = $em->createQuery($query)->setParameters($params)->getResult(DoctrineQuery::HYDRATE_OBJECT);
+                if(count($tmp) > 0) $entity = $tmp[0];
+            }
+        }
+
+        return $entity;
+    }
+
+    public static function pubblicaEntity(EntityManager $em = null, DraftInterface $entity = null) {
+
+        //Entity bozza
+        $bozza = Utils::getEntityBozza($em, $entity);
+
+        //Entity pubblicata
+        $pubblicata = Utils::getEntityPublished($em, $entity);
+
+        $draftClass = 'Mrapps\\BackendBundle\\Entity\\Draft';
+
+        if($em !== null && $bozza !== null && $pubblicata !== null) {
+
+//            $oneToOneClass = 'Doctrine\\ORM\\Mapping\\OneToOne';
+//            $manyToOneClass = 'Doctrine\\ORM\\Mapping\\ManyToOne';
+            $oneToManyClass = 'Doctrine\\ORM\\Mapping\\OneToMany';
+
+            $reader = new AnnotationReader();
+
+            //Dalla procedura verranno escluse le relazioni OneToOne\ManyToOne e i campi specificati in questo array
+            $excludedFields = array('id', 'published', 'other', 'createdAt', 'updatedAt', 'visible', 'deleted');
+
+            //Lista property da pubblicare a cascata
+            $cascadingProperties = array();
+
+            $refBozza = new \ReflectionObject($bozza);
+            $refPubblicata = new \ReflectionObject($pubblicata);
+
+            //Cicla le property dell'entity Bozza
+            foreach ($refBozza->getProperties() as $p) {
+
+//                $annOneToOne = $reader->getPropertyAnnotation($p, $oneToOneClass);
+//                $annManyToOne = $reader->getPropertyAnnotation($p, $manyToOneClass);
+                $annOneToMany = $reader->getPropertyAnnotation($p, $oneToManyClass);
+
+                if($annOneToMany !== null) {
+
+                    //Aggiunge la property tra quelle da elaborare dopo
+                    $cascadingProperties[] = $p;
+
+                }else {
+
+                    $fieldName = $p->name;
+
+                    //Il campo non deve essere tra quelli da escludere e non deve essere una relazione
+                    //if(!in_array($fieldName, $excludedFields) && $annOneToOne == null && $annManyToOne == null) {
+
+                    //Il campo non deve essere tra quelli da escludere
+                    if(!in_array($fieldName, $excludedFields)) {
+
+                        try {
+
+                            //Valore campo corrente su entity Bozza
+                            $p->setAccessible(true);
+                            $value = $p->getValue($bozza);
+                            $p->setAccessible(false);
+
+                            //Setto il valore su entity Pubblicata
+                            $pPubbl = $refPubblicata->getProperty($fieldName);
+                            $pPubbl->setAccessible(true);
+                            $pPubbl->setValue($pubblicata, $value);
+                            $pPubbl->setAccessible(false);
+
+                        } catch (\Exception $ex) {}
+                    }
+                }
+            }
+
+            //Salvataggio entity Pubblicata
+            $pubblicata->setVisible(1);
+            $em->persist($pubblicata);
+            $em->flush();
+
+            //Pubblicazione a cascata
+            foreach ($cascadingProperties as $p) {
+
+                //Lettura valore propertty
+                $p->setAccessible(true);
+                $array = $p->getValue($bozza);
+                $p->setAccessible(false);
+
+                //Iterabile?
+                if($array !== null && (is_array($array) || is_subclass_of($array, 'Doctrine\\Common\\Collections\\Collection'))) {
+                    foreach ($array as $r) {
+
+                        //Se è una draft pubblica l'entity
+                        if($r !== null && is_subclass_of($r, $draftClass)) {
+                            Utils::pubblicaEntity($em, $r);
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
 }
