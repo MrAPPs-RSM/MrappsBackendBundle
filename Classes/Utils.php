@@ -644,7 +644,7 @@ class Utils
         return $entity;
     }
 
-    public static function pubblicaEntity(EntityManager $em = null, DraftInterface $entity = null) {
+    public static function pubblicaEntity(EntityManager $em = null, DraftInterface $entity = null, $excludeFields = array()) {
 
         //Entity bozza
         $bozza = Utils::getEntityBozza($em, $entity);
@@ -662,8 +662,9 @@ class Utils
 
             $reader = new AnnotationReader();
 
-            //Dalla procedura verranno escluse le relazioni OneToOne\ManyToOne e i campi specificati in questo array
-            $excludedFields = array('id', 'published', 'other', 'createdAt', 'updatedAt', 'visible', 'deleted');
+            //Dalla procedura verranno escluse le relazioni OneToOne\ManyToOne, i campi specificati in questo array e i campi specificati come parametro
+            if(!is_array($excludeFields)) $excludeFields = array($excludeFields);
+            $excludedFields = array_merge(array('id', 'published', 'other', 'createdAt', 'updatedAt', 'visible', 'deleted'), $excludeFields);
 
             //Lista property da pubblicare a cascata
 //            $cascadingProperties = array();
