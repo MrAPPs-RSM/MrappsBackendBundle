@@ -68,7 +68,7 @@ class LanguageBase {
     /**
      * @return boolean
      */
-    public function isTradotto()
+    public function getTradotto()
     {
         return $this->tradotto;
     }
