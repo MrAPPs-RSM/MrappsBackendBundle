@@ -274,7 +274,7 @@ class Utils
             if ($page < 1) $page = 1;
             if (!is_array($filters)) $filters = array();
             if (!is_array($sorting)) $sorting = array('createdAt' => 'desc');    //Sorting di default
-            if ($isDraft) $filters['published'] = 0;
+            if ($isDraft && !isset($filters['published']) ) $filters['published'] = 0;
             //--------------------------------------------------------------------------------------------
 
             //Filtri
