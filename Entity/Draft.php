@@ -40,14 +40,14 @@ class Draft extends Base implements DraftInterface {
      *
      * @ORM\Column(name="enable_locking_feature", type="boolean", nullable=true)
      */
-    protected $enableLockingFeature;
+    protected $enableLockingFeature = false;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="locked", type="boolean", nullable=true)
      */
-    protected $locked;
+    protected $locked = false;
 
     /**
      * @var \DateTime

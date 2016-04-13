@@ -12,6 +12,7 @@ use Mrapps\BackendBundle\Model\DraftInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query as DoctrineQuery;
 use Mrapps\BackendBundle\Entity\Base;
+use FOS\UserBundle\Entity\User;
 
 class Utils
 {
@@ -654,7 +655,7 @@ class Utils
 
         $draftClass = 'Mrapps\\BackendBundle\\Entity\\Draft';
 
-        if($em !== null && $bozza !== null && $pubblicata !== null) {
+        if($em !== null && $bozza !== null && $pubblicata !== null && $bozza->getLocked() != true) {
 
             $oneToOneClass = 'Doctrine\\ORM\\Mapping\\OneToOne';
             $manyToOneClass = 'Doctrine\\ORM\\Mapping\\ManyToOne';
@@ -723,6 +724,14 @@ class Utils
                     } catch (\Exception $ex) {}
                 }
 //                }
+            }
+
+            //Lock entity Bozza
+            if($bozza->getEnableLockingFeature() == 1) {
+                $bozza->setLocked(1);
+                $bozza->setLockedAt(new \DateTime());
+                $em->persist($bozza);
+                $em->flush();
             }
 
             //Salvataggio entity Pubblicata
