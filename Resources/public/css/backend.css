@@ -11479,3 +11479,41 @@ header .dropdown-menu {
 .angular-google-map {
 	margin-bottom: 20px;
 }
+
+#login-logo {
+	margin: 60px auto 50px;
+}
+
+#flash {
+	position: fixed;
+	right: 10px;
+	top: 10px;
+}
+
+#flash .alert {
+	padding: 10px 15px;
+}
+
+#login-panel .panel-body {
+	padding: 50px 40px;
+}
+
+#login-panel .login {
+	width: 500px;
+	max-width: 100%;
+}
+
+#login-panel .form-group {
+	margin-bottom: 25px;
+}
+
+#login-panel label,
+#login-panel .mt-sm {
+	margin-top: 20px !important;
+}
+
+
+
+
+
+
