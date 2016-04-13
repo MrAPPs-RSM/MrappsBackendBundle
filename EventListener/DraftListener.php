@@ -231,8 +231,17 @@ class DraftListener
                         $this->em->flush($pubblicata);
                         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                        $bozza->setPublished(0);
                         $bozza->setVisible(1);
+                        $bozza->setPublished(0);
+                        $bozza->setPublishedAt(null);
+                        $bozza->setLocked(0);
+                        $bozza->setLockedAt(null);
+
+                        //Default enable locking feature
+                        if($bozza->getEnableLockingFeature() == null) {
+                            $bozza->setEnableLockingFeature(0);
+                        }
+
                         $this->setOtherByReflection($bozza, $pubblicata);
 
                         $this->em->persist($bozza);
