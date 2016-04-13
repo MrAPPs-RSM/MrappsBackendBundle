@@ -351,7 +351,6 @@ fieldset .form-group {
   margin-top: -10px;
   margin-left: -10px;
 }
-.nav,
 .pagination,
 .carousel,
 .panel-title a {
@@ -5837,7 +5836,6 @@ x:-o-prefocus,
 .user-block {
   position: relative;
   padding: 25px 0 10px;
-  cursor: pointer;
 }
 .user-block:before,
 .user-block:after {
