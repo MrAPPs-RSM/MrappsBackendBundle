@@ -22,7 +22,7 @@ class LanguageController extends BaseBackendController
     /**
      * @Route("/edit/{id}", name="mrapps_language_edit")
      * @Route("/new", name="mrapps_language_new")
-     * @Sidebar("language_new", parent="language_list", label="New Lingua", min_role="ROLE_ADMIN", visible=true, weight=0, icon="fa-spin")
+     * @Sidebar("language_new", parent="language_list", label="New Lingua", visible=true, weight=0, icon="fa-spin")
      */
     public function newAction(Request $request, $id = null)
     {
@@ -59,7 +59,7 @@ class LanguageController extends BaseBackendController
     
     /**
      * @Route("/list", name="mrapps_language_list")
-     * @Sidebar("language_list", label="Lista Lingue", min_role="ROLE_ADMIN", visible=true, weight=0, icon="fa-spin")
+     * @Sidebar("language_list", label="Lista Lingue", visible=true, weight=0, icon="fa-spin")
      */
     public function indexAction(Request $request)
     {

@@ -55,7 +55,7 @@ class GeneratePermissionsCommand extends ContainerAwareCommand
         //Refresh permessi
         $em = $container->get('doctrine.orm.entity_manager');
         $repository = $em->getRepository('MrappsBackendBundle:Permission');
-        $repository->clearPermissions();
+        //$repository->clearPermissions();
 
         //Per ogni combinazione di controller/ruolo creo una riga su database
         foreach($controllers as $object) {

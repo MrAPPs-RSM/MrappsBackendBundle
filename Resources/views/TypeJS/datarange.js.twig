@@ -1,0 +1,94 @@
+{% for key in field|keys if key == "start" or key == "end" %}
+
+{% set jsVar = [field.name,'_',key,'_js']|join %}
+{% set inputFormat = 'DD/MM/YYYY - HH:mm' %}
+{% set angularFormat = 'YYYY-MM-DD[T]HH:mm:ss[.000Z]' %}
+
+
+var {{ jsVar }} = $("#{{field.name}}_{{key}}");
+
+$scope.form.{{ field.name }}_{{key}} = null;
+
+{{ jsVar }}.filthypillow({
+    startStep: 'day',
+    initialDateTime: function(m) {
+        {% if field[key].value is defined and field[key].value is not null %}
+        var dateObj = moment('{{ field[key].value }}');
+        $scope.form.{{ field.name }}_{{key}} = dateObj.format("{{ angularFormat }}");
+        {{ jsVar }}.val(dateObj.format( "{{ inputFormat }}"));
+        return dateObj;
+        {% else %}
+        var dateObj = moment('{{ "now"|date("Y-m-d\\TH:i:s\\.\\0\\0\\0\\Z") }}');
+
+        {#Se è required setto la data\ora corrente anche nello $scope Angular e nel campo input text#}
+        {% if field[key].required is defined and field[key].required == true %}
+        $scope.form.{{ field.name }}_{{key}} = dateObj.format("{{ angularFormat }}");
+        {{ jsVar }}.val(dateObj.format( "{{ inputFormat }}"));
+        {% endif %}
+
+        return dateObj;
+        {% endif %}
+    }{% if field[key].min is defined and field[key].min is not null %},
+    minDateTime: function() {
+        return moment('{{ field[key].min }}');
+    }{% endif %}{% if field[key].max is defined and field[key].max is not null %},
+    maxDateTime: function(m) {
+        return moment('{{ field[key].max }}');
+    }{% endif %}
+});
+{{ jsVar }}.filthypillow("setTimeZone", "UTC");
+
+
+{{ jsVar }}.on("focus", function() {
+    {{ jsVar }}.filthypillow("show");
+});
+
+
+{{ jsVar }}.on("fp:save", function(e, dateObj) {
+    $scope.form.{{ field.name }}_{{key}} = dateObj.format("{{ angularFormat }}");
+    {{ jsVar }}.val(dateObj.format( "{{ inputFormat }}"));
+    {{ jsVar }}.filthypillow("hide");
+});
+
+
+{#$scope.{{ field.name }}_{{key}}_dpOpened = false;
+$scope.{{ field.name }}_{{key}}_dpOpen = function ($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.{{ field.name }}_{{key}}_dpOpened = true;
+};
+$scope.{{ field.name }}_{{key}}_dpOptions = {
+    startingDay: 1
+};
+
+{% if field[key].value.date is defined and field[key].value.date is not null %}
+var date_{{ field.name }}_{{key}} = new Date('{{ field[key].value.date }}');
+$scope.form.{{ field.name }}_{{key}} = date_{{ field.name }}_{{key}};
+{% else %}
+$scope.form.{{ field.name }}_{{key}} = null;
+{% endif %}
+
+{% if field[key].options.enable_time is defined and field[key].options.enable_time == true %}
+
+$scope.{{ field.name }}_{{key}}_range_hours = [{% for i in range(1, 24) %}"{{ "%02d"|format(i) }}"{% if loop.last == false %},{% endif %}{% endfor %}];
+$scope.{{ field.name }}_{{key}}_range_minutes = [{% for i in range(1, 60) %}"{{ "%02d"|format(i) }}"{% if loop.last == false %},{% endif %}{% endfor %}];
+
+{% if field[key].value.hours is defined and field[key].value.hours is not null %}
+$scope.form.{{ field.name }}_{{key}}_hours = "{{ "%02d"|format(field[key].value.hours) }}";
+{% else %}
+$scope.form.{{ field.name }}_{{key}}_hours = null;
+{% endif %}
+
+{% if field[key].value.minutes is defined and field[key].value.minutes is not null %}
+$scope.form.{{ field.name }}_{{key}}_minutes = "{{ "%02d"|format(field[key].value.minutes) }}";
+{% else %}
+$scope.form.{{ field.name }}_{{key}}_minutes = null;
+{% endif %}
+
+{% endif %}
+
+{% if field[key].required == false %}
+$scope.{{field.name}}_{{key}}_ignored = false;
+{% endif %}#}
+
+{% endfor %}

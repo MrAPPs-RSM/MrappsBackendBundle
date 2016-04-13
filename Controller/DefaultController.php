@@ -99,13 +99,16 @@ class DefaultController extends Controller
 
         if($sidebar !== null) {
 
+            $type = trim($sidebar->getType());
+            if(strlen($type) == 0) $type = 'view';
+
             //Primo livello con figli => sempre visibile
             $sidebarRoute = trim($sidebar->getRoute());
             if(strlen($sidebarRoute) == 0 && $sidebar->getParent() == null) {
                 return true;
             }
 
-            //Negli altri casi controllo i permessi
+            //Negli altri casi controllo i permessi e la lista ruoli
 
             $controllerCompact = Utils::getControllerCompactName($sidebar->getController());
 
@@ -114,11 +117,31 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager();
             $perm = $em->getRepository('MrappsBackendBundle:Permission')->getPermissions($controllerCompact, $user);
 
-            return $perm['view'];
+            //Controllo permesso del tipo sidebar (view, edit, ...)
+            $canProceedType = (isset($perm[$type])) ? (bool)$perm[$type] : false;
 
-//            $checker = $this->get('security.authorization_checker');
-//            $minRole = $sidebar->getMinRole();
-//            return (is_null($minRole) || strlen($minRole) == 0 || $checker->isGranted($minRole));
+            //Controllo lista ruoli che possono accedere alla rotta
+            $allowedRolesStr = trim($sidebar->getRoles());
+            if(strlen($allowedRolesStr) > 0) {
+                $allowedRoles = explode(',', $sidebar->getRoles());
+
+                $canProceedRoles = false;
+
+                foreach ($allowedRoles as $r) {
+                    $r = strtoupper(trim($r));
+                    if(strlen($r) > 0 && $this->isGranted($r)) {
+                        $canProceedRoles = true;
+                        break;
+                    }
+                }
+
+            }else {
+                $canProceedRoles = true;
+            }
+
+
+
+            return ($canProceedType && $canProceedRoles);
         }
 
         return false;
@@ -215,7 +238,6 @@ class DefaultController extends Controller
                     'icon' => $sidebar->getIcon(),
                     'url' => $url,
                     'route_name' => $route,
-                    'min_role' => $sidebar->getMinRole(),
                 );
             }
         }
@@ -290,7 +312,7 @@ class DefaultController extends Controller
         ));
     }
 
-    public function __newAction(Request $request, $title, $fields, $linkSave = null, $linkEdit = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false, $linkNew = null)
+    public function __newAction(Request $request, $title, $fields, $linkSave = null, $linkEdit = null, $linkPublish = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false, $linkNew = null)
     {
         $this->security($request, ($edit) ? 'edit' : 'create');
 
@@ -314,6 +336,57 @@ class DefaultController extends Controller
 
         //Allineamento campi
         foreach ($fields as $k => $f) {
+
+            //DateTime Range
+            if($f['type'] == 'datarange') {
+
+                //Converte i value da timestamp a ISO 8601 date
+                $startValue = Utils::convertTimestampToIso8601((isset($f['start']['value'])) ? $f['start']['value'] : null);
+                $startMin = Utils::convertTimestampToIso8601((isset($f['start']['min'])) ? $f['start']['min'] : null);
+                $startMax = Utils::convertTimestampToIso8601((isset($f['start']['max'])) ? $f['start']['max'] : null);
+
+                $endValue = Utils::convertTimestampToIso8601((isset($f['end']['value'])) ? $f['end']['value'] : null);
+                $endMin = Utils::convertTimestampToIso8601((isset($f['end']['min'])) ? $f['end']['min'] : null);
+                $endMax = Utils::convertTimestampToIso8601((isset($f['end']['max'])) ? $f['end']['max'] : null);
+
+
+                $fields[$k]['start']['value'] = $startValue;
+                $fields[$k]['start']['min'] = $startMin;
+                $fields[$k]['start']['max'] = $startMax;
+
+                $fields[$k]['end']['value'] = $endValue;
+                $fields[$k]['end']['min'] = $endMin;
+                $fields[$k]['end']['max'] = $endMax;
+
+
+//                //Default
+//                $actualTime = time();
+//                if($startValue == null) $startValue = $actualTime;
+//                if($endValue == null) $endValue = $actualTime;
+//
+//                //Start
+//                $newStartDate = date('Y-m-d', $startValue).'T00:00:00.000Z';
+//                $newStartHours = intval(date('H', $startValue));
+//                $newStartMinutes = intval(date('i', $startValue));
+//
+//
+//                //End
+//                $newEndDate = date('Y-m-d', $endValue).'T00:00:00.000Z';
+//                $newEndHours = intval(date('H', $endValue));
+//                $newEndMinutes = intval(date('i', $endValue));
+//
+//
+//                $fields[$k]['start']['value'] = array(
+//                    'date' => $newStartDate,
+//                    'hours' => $newStartHours,
+//                    'minutes' => $newStartMinutes,
+//                );
+//                $fields[$k]['end']['value'] = array(
+//                    'date' => $newEndDate,
+//                    'hours' => $newEndHours,
+//                    'minutes' => $newEndMinutes,
+//                );
+            }
 
             //Mappa
             if($f['type'] == 'latlng') {
@@ -421,6 +494,7 @@ class DefaultController extends Controller
             'panels' => $panels,
             'linkSave' => $linkSave,
             'linkEdit' => $linkEdit,
+            'linkPublish' => $linkPublish,
             'create' => $create,
             'edit' => $edit,
             'linkNew' => $linkNew,
@@ -875,7 +949,7 @@ class DefaultController extends Controller
                     'create' => $canCreate,
                     'edit' => $canEdit,
                     'delete' => $canDelete,
-                ), false);
+                ), false, true);
             }
 
             $em->flush();

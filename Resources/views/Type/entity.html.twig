@@ -23,6 +23,17 @@
                                 <em class="fa fa-ban"></em>
                             </span>Annulla
                         </button>
+                        <div>
+                            {% if field.extra_fields is defined and field.extra_fields is iterable %}
+                                {% for f in field.extra_fields %}
+                                    <div class="checkbox c-checkbox needsclick">
+                                        <label class="needsclick">
+                                            <input type="checkbox" name="{{field.name}}_{{f.name}}" id="{{field.name}}_extra_{{f.name}}" class="needsclick" {#{% if field.value is defined %}ng-checked="{{field.value}}" ng-init="form.{{field.name}}='{{field.value}}'"{% endif %}#} value="1" {% if f.default == true %}checked{% endif %} />
+                                            <span class="fa fa-check"></span>{{ f.title }}</label>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
                     </div>
                     <button type="button" class="btn btn-labeled btn-success pull-right" ng-click="{{field.name}}OpenAdd()" ng-show='!{{field.name}}AddNew'>
                         <span class="btn-label">
@@ -36,14 +47,30 @@
                         {% for c in field.columns if (c.visible is not defined or c.visible == true) %}
                             <th sortable="'{{ c.name }}'">{{ c.title }}</th>
                         {% endfor %}
+                        {% if field.extra_fields is defined and field.extra_fields is iterable %}
+                            {% for f in field.extra_fields %}
+                                <th sortable="'{{ f.name }}'">{{ f.title }}</th>
+                            {% endfor %}
+                        {% endif %}
                         <th>Azioni</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody ui-sortable="{{field.name}}SortableOptions" ng-model="form.{{field.name}}">
                     <tr ng-repeat="r in form.{{field.name}}">
                         {% for c in field.columns if (c.visible is not defined or c.visible == true) %}
                             <td data-title="'{{ c.title }}'">{/ r.{{ c.name }} /}</td>
                         {% endfor %}
+                        {% if field.extra_fields is defined and field.extra_fields is iterable %}
+                            {% for f in field.extra_fields %}
+                            <td data-title="'{{ f.title }}'">
+                                {% if f.type == "checkbox" %}
+                                    <input type="checkbox" onclick='event.preventDefault();' ng-checked="r.{{ f.name }}">
+                                {% else %}
+                                    <td data-title="'{{ f.title }}'">{/ r.{{ f.name }} /}</td>
+                                {% endif %}
+                                </td>
+                            {% endfor %}
+                        {% endif %}
                         <td>
                             <button type="button" ng-click="{{field.name}}DeleteItem(r)" class="btn btn-sm btn-danger">
                                 <em class="fa fa-trash-o"></em>

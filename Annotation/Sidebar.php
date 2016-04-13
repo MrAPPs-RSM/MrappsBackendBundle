@@ -10,10 +10,11 @@ class Sidebar
     private $code = '';
     private $label = '';
     private $icon = '';
-    private $min_role = 'ROLE_USER';
     private $visible = false;
     private $parent = '';
     private $weight = 0;
+    private $type = '';
+    private $allowed_roles = array();
 
     public function __construct($options)
     {
@@ -41,15 +42,10 @@ class Sidebar
     {
         return trim($this->label);
     }
-    
+
     public function getIcon()
     {
         return trim($this->icon);
-    }
-
-    public function getMinRole()
-    {
-        return strtoupper(trim($this->min_role));
     }
 
     public function getVisible()
@@ -66,6 +62,16 @@ class Sidebar
     public function getWeight()
     {
         return intval($this->weight);
+    }
+
+    public function getType()
+    {
+        return trim($this->type);
+    }
+
+    public function getAllowedRoles()
+    {
+        return $this->allowed_roles;
     }
 
 }

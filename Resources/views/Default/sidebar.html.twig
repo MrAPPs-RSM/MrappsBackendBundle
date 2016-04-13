@@ -28,38 +28,36 @@
                 <span class="ng-binding ng-scope">{{ 'sidebar.navigazione_principale'|trans }}</span>
             </li>
             {% for item in menu %}
-                {% if item.min_role|length == 0 or is_granted(item.min_role) %}
-                    {% set active_menu=false %}
-                    {% for sub_item in item.url if sub_item.route_name == active_page %}
-                        {% set active_menu=true %}
-                    {% endfor %}
-                    <li class="ng-scope {% if active_menu==true or item.route_name == active_page %}active{% endif %}">
-                        {% if item.has_submenu == true %}
-                            <a data-toggle="collapse" data-parent="#accordion" href="#backendSidebar{{ loop.index }}"
-                               title="{{ item.title }}" class="ng-scope {% if active_menu==false %}collapsed{% endif %}">
-                                {% if item.icon is defined %}<em class="fa {{ item.icon }}"></em> {% endif %}
-                                <span class="ng-binding">{{ item.title }}</span>
-                            </a>
-                            <ul id="backendSidebar{{ loop.index }}"
-                                class="nav sidebar-subnav ng-scope panel-collapse collapse {% if active_menu %}in{% endif %}">
-                                {% for sub_item in item.url %}
-                                    <li class="ng-scope {% if sub_item.route_name == active_page %}active{% endif %}">
-                                        <a ng-href="{{ sub_item.url }}" title="{{ sub_item.title }}" class="ng-scope">
-                                            {% if sub_item.icon is defined %}<em
-                                                class="fa {{ sub_item.icon }}"></em> {% endif %}
-                                            <span class="ng-binding">{{ sub_item.title }}</span>
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            <a ng-href="{{ item.url }}" title="{{ item.title }}" class="ng-scope">
-                                {% if item.icon is defined %}<em class="fa {{ item.icon }}"></em> {% endif %}
-                                <span class="ng-binding">{{ item.title }}</span>
-                            </a>
-                        {% endif %}
-                    </li>
-                {% endif %}
+                {% set active_menu=false %}
+                {% for sub_item in item.url if sub_item.route_name == active_page %}
+                    {% set active_menu=true %}
+                {% endfor %}
+                <li class="ng-scope {% if active_menu==true or item.route_name == active_page %}active{% endif %}">
+                    {% if item.has_submenu == true %}
+                        <a data-toggle="collapse" data-parent="#accordion" href="#backendSidebar{{ loop.index }}"
+                           title="{{ item.title }}" class="ng-scope {% if active_menu==false %}collapsed{% endif %}">
+                            {% if item.icon is defined %}<em class="fa {{ item.icon }}"></em> {% endif %}
+                            <span class="ng-binding">{{ item.title }}</span>
+                        </a>
+                        <ul id="backendSidebar{{ loop.index }}"
+                            class="nav sidebar-subnav ng-scope panel-collapse collapse {% if active_menu %}in{% endif %}">
+                            {% for sub_item in item.url %}
+                                <li class="ng-scope {% if sub_item.route_name == active_page %}active{% endif %}">
+                                    <a ng-href="{{ sub_item.url }}" title="{{ sub_item.title }}" class="ng-scope">
+                                        {% if sub_item.icon is defined %}<em
+                                            class="fa {{ sub_item.icon }}"></em> {% endif %}
+                                        <span class="ng-binding">{{ sub_item.title }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <a ng-href="{{ item.url }}" title="{{ item.title }}" class="ng-scope">
+                            {% if item.icon is defined %}<em class="fa {{ item.icon }}"></em> {% endif %}
+                            <span class="ng-binding">{{ item.title }}</span>
+                        </a>
+                    {% endif %}
+                </li>
             {% endfor %}
         </ul>
         <!-- END sidebar nav-->

@@ -41,41 +41,44 @@ class SidebarBuilder
             $code = $annotation->getCode();
             $label = $annotation->getLabel();
             $icon = $annotation->getIcon();
-            $minRole = $annotation->getMinRole();
             $visible = $annotation->getVisible();
             $parent = $annotation->getParent();
             $weight = $annotation->getWeight();
+            $type = $annotation->getType();
+            $allowedRoles = $annotation->getAllowedRoles();
             $route = (isset($extra['route'])) ? $extra['route'] : '';
             $controller = (isset($extra['controller'])) ? $extra['controller'] : '';
             $action = (isset($extra['action'])) ? $extra['action'] : '';
+
 
             return array(
                 'code' => $code,
                 'label' => $label,
                 'icon' => $icon,
-                'min_role' => $minRole,
                 'visible' => $visible,
                 'parent' => $parent,
                 'weight' => $weight,
                 'route' => $route,
                 'controller' => $controller,
                 'action' => $action,
+                'type' => $type,
+                'allowed_roles' => $allowedRoles,
                 'children' => array(),
             );
         }
 
         return null;
     }
-    
+
 
     public function build()
     {
         $sidebar = array();
         $subMenus = array();
-        
+
         //Tutte le rotte
         $routes = Utils::getRoutesArray($this->container);
-        
+
         $objRoutes = $this->container->get('router')->getRouteCollection()->all();
 
         //Controller che estendono BaseBackendBundle
@@ -91,10 +94,10 @@ class SidebarBuilder
                 $controllers[] = $ctrl;
             }
         }
-        
+
         //Controller che estendono BaseBackendController
         foreach($controllers as $class) {
-            
+
             $ctrl = new $class;
             $reflectionObject = new \ReflectionObject($ctrl);
 

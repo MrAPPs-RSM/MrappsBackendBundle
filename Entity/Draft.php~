@@ -3,12 +3,14 @@
 namespace Mrapps\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Mrapps\BackendBundle\Model\DraftInterface;
+use Mrapps\BackendBundle\Exception\NotImplementedException;
 
 /**
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  */
-class Draft extends Base {
+class Draft extends Base implements DraftInterface {
 
     /**
      * @var integer
@@ -22,23 +24,52 @@ class Draft extends Base {
     /**
      * @var integer
      *
-     * @ORM\Column(name="draft_id", type="integer", nullable=true)
-     */
-    protected $draftId;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="published", type="boolean", nullable=true)
      */
     protected $published;
 
-    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="published_at", type="datetime", nullable=true)
+     */
+    protected $publishedAt;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="enable_locking_feature", type="boolean", nullable=true)
+     */
+    protected $enableLockingFeature;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="locked", type="boolean", nullable=true)
+     */
+    protected $locked;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="locked_at", type="datetime", nullable=true)
+     */
+    protected $lockedAt;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="deleted", type="boolean", nullable=true)
+     */
+    protected $deleted;
+
+
     public function __construct() {
 
         parent::__construct();
 
         $this->published = 0;
+        $this->deleted = 0;
     }
 
     /**
@@ -55,7 +86,7 @@ class Draft extends Base {
      *
      * @param bool $published
      *
-     * @return Base
+     * @return Draft
      */
     public function setPublished($published) {
         $this->published = $published;
@@ -70,5 +101,32 @@ class Draft extends Base {
      */
     public function getPublished() {
         return $this->published;
+    }
+
+    /**
+     * Set deleted
+     *
+     * @param bool $deleted
+     *
+     * @return Draft
+     */
+    public function setDeleted($deleted) {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return bool
+     */
+    public function getDeleted() {
+        return $this->deleted;
+    }
+
+    public function getOther()
+    {
+        throw new NotImplementedException();
     }
 }

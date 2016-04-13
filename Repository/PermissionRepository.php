@@ -24,7 +24,7 @@ class PermissionRepository extends EntityRepository
         return $numDeleted;
     }
 
-    public function addPermission($object = '', $role = '', $permissions = array(), $autoFlush = true) {
+    public function addPermission($object = '', $role = '', $permissions = array(), $autoFlush = true, $forceEditValues = false) {
 
         $em = $this->getEntityManager();
         $object = trim($object);
@@ -34,24 +34,31 @@ class PermissionRepository extends EntityRepository
 
             $p = $this->findOneBy(array('role' => $role, 'object' => $object));
             if(null == $p) {
+
                 $p = new Permission();
                 $p->setObject($object);
                 $p->setRole($role);
+
+                $forceEditValues = true;
             }
 
-            $canView = (isset($permissions['view'])) ? intval($permissions['view']) : 0;
-            $canCreate = (isset($permissions['create'])) ? intval($permissions['create']) : 0;
-            $canEdit = (isset($permissions['edit'])) ? intval($permissions['edit']) : 0;
-            $canDelete = (isset($permissions['delete'])) ? intval($permissions['delete']) : 0;
+            if((bool)$forceEditValues) {
 
-            $p->setCanView($canView);
-            $p->setCanCreate($canCreate);
-            $p->setCanEdit($canEdit);
-            $p->setCanDelete($canDelete);
+                $canView = (isset($permissions['view'])) ? intval($permissions['view']) : 0;
+                $canCreate = (isset($permissions['create'])) ? intval($permissions['create']) : 0;
+                $canEdit = (isset($permissions['edit'])) ? intval($permissions['edit']) : 0;
+                $canDelete = (isset($permissions['delete'])) ? intval($permissions['delete']) : 0;
 
-            $em->persist($p);
-            if($autoFlush) {
-                $em->flush($p);
+                $p->setCanView($canView);
+                $p->setCanCreate($canCreate);
+                $p->setCanEdit($canEdit);
+                $p->setCanDelete($canDelete);
+
+                $em->persist($p);
+                if($autoFlush) {
+                    $em->flush($p);
+                }
+
             }
 
             return $p;

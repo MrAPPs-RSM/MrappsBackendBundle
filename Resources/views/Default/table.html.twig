@@ -18,7 +18,7 @@
                     </button>
                 {% endif %}
                 {% if linkNew is defined and linkNew is not null and permissions.create == true %}
-                    <button type="submit" class="btn btn-labeled btn-success pull-right" ng-click="go('{{ linkNew }}')">
+                    <button type="submit" class="btn btn-labeled btn-success pull-right" ng-click="go('{% if linkNew is iterable %}{{ path(linkNew.route, linkNew.params) }}{% else %}{{ linkNew }}{% endif %}')">
                     <span class="btn-label">
                         <em class="fa fa-plus"></em>
                     </span>{{ 'form.aggiungi_nuovo'|trans }}
@@ -63,7 +63,7 @@
                     <td>
                         {% if linkEdit is not null and permissions.edit == true %}
                             <button ng-if="!row.hasOwnProperty('disableEdit')||row.disableEdit==false" type="button"
-                                    ng-click="go('{{ linkEdit }}/'+row.id)" class="btn btn-sm btn-warning">
+                                    ng-click="go({% if linkEdit is iterable %}'{{ path(linkEdit.route, linkEdit.params|merge({'id':'__PLACEHOLDER_ID__'})) }}',row.id{% else %}'{{ linkEdit }}/'+row.id{% endif %})" class="btn btn-sm btn-warning">
                                 <em class="fa fa-edit"></em>
                             </button>
                         {% endif %}
@@ -78,7 +78,9 @@
                                 <button type="button"
                                         ng-click="{% if item.is_js == false %}go('{{ item.url }}/'+row.id){% else %}customFunction{{ loop.index }}(row.id){% endif %}"
                                         class="{{ item.class }}">
-                                    <em class="{{ item.icon }}"></em>
+                                    <span class="btn-label">
+                                        <em class="{{ item.icon }}"></em>
+                                    </span>{% if item.text is defined %}{{ item.text|trim }}{% endif %}
                                 </button>
                             {% endfor %}
                         {% endif %}
@@ -114,7 +116,10 @@
                 var self = this;
                 var Api = $resource('{{ linkData }}');
 
-                $scope.go = function (path) {
+                $scope.go = function (path, replaceId) {
+                    if(typeof(replaceId) !== "undefined" && replaceId !== null) {
+                        path = path.replace(/__PLACEHOLDER_ID__/g, replaceId);
+                    }
                     $window.location.href = path;
                 };
 

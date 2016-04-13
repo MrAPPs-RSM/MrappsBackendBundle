@@ -209,40 +209,52 @@ class DraftListener
             //Considera solo le entity Draft
             if (strlen($class) > 0 && is_subclass_of($class, $this->draftClass)) {
 
-                $pubblicata = $bozza->getOther();
+                if(!$bozza->getPublished()) {
 
-                //Nuova Entity bozza?
-                if($pubblicata == null) {
+                    $pubblicata = $bozza->getOther();
 
-                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    //Nuova Entity bozza?
+                    if($pubblicata == null) {
 
-                    /** @var $pubblicata Draft */
-                    $pubblicata = clone($bozza);
-                    $this->em->detach($pubblicata);
+                        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                    $pubblicata->resetId();
-                    $pubblicata->setPublished(1);
-                    $pubblicata->setVisible(0); //pubblicata ma non ancora visibile (l'utente non ha ancora cliccato su "pubblica")
-                    $this->setOtherByReflection($pubblicata, $bozza);
+                        /** @var $pubblicata Draft */
+                        $pubblicata = clone($bozza);
+                        $this->em->detach($pubblicata);
 
-                    $this->em->persist($pubblicata);
-                    $this->em->flush($pubblicata);
-                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        $pubblicata->resetId();
+                        $pubblicata->setPublished(1);
+                        $pubblicata->setVisible(0); //pubblicata ma non ancora visibile (l'utente non ha ancora cliccato su "pubblica")
+                        $this->setOtherByReflection($pubblicata, $bozza);
 
-                    $bozza->setPublished(0);
-                    $bozza->setVisible(1);
-                    $this->setOtherByReflection($bozza, $pubblicata);
+                        $this->em->persist($pubblicata);
+                        $this->em->flush($pubblicata);
+                        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                    $this->em->persist($bozza);
-                    $this->em->flush($bozza);
-                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        $bozza->setVisible(1);
+                        $bozza->setPublished(0);
+                        $bozza->setPublishedAt(null);
+                        $bozza->setLocked(0);
+                        $bozza->setLockedAt(null);
+
+                        //Default enable locking feature
+                        if($bozza->getEnableLockingFeature() == null) {
+                            $bozza->setEnableLockingFeature(0);
+                        }
+
+                        $this->setOtherByReflection($bozza, $pubblicata);
+
+                        $this->em->persist($bozza);
+                        $this->em->flush($bozza);
+                        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    }
+
+                    $this->computeChangeSet($uow, $pubblicata);
+                    $this->computeChangeSet($uow, $bozza);
+
+                    //Set relazioni corrette
+                    $this->setRelazioni($uow, $bozza, $pubblicata);
                 }
-
-                $this->computeChangeSet($uow, $pubblicata);
-                $this->computeChangeSet($uow, $bozza);
-
-                //Set relazioni corrette
-                $this->setRelazioni($uow, $bozza, $pubblicata);
 
             }else {
                 //Salvo eventuali modifiche alla bozza (altrimenti qualsiasi persist esterno a questo listener verrebbe sovrascritto)
