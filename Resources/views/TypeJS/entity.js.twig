@@ -43,7 +43,7 @@ $scope.{{field.name}}RefreshSelect = function(q) {
 
 $scope.{{field.name}}SaveSelect = function() {
     if($scope.{{field.name}}Select.selected.{{ field.select2.id_field }} > 0) {
-        
+
         var nuovoElemento = $.extend({}, $scope.{{field.name}}Select.selected);
         {% if field.extra_fields is defined and field.extra_fields is iterable %}
             {% for f in field.extra_fields %}

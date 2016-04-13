@@ -24,6 +24,13 @@ class LanguageBase {
      * @ORM\JoinColumn(name="id_lang", referencedColumnName="id")
      */
     private $lang;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="tradotto", type="boolean")
+     */
+    protected $tradotto;
     
     /**
      * Get id
@@ -56,5 +63,21 @@ class LanguageBase {
     public function getLang()
     {
         return $this->lang;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isTradotto()
+    {
+        return $this->tradotto;
+    }
+
+    /**
+     * @param boolean $tradotto
+     */
+    public function setTradotto($tradotto)
+    {
+        $this->tradotto = $tradotto;
     }
 }
