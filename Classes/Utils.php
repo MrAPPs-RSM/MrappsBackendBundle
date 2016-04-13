@@ -656,8 +656,8 @@ class Utils
 
         if($em !== null && $bozza !== null && $pubblicata !== null) {
 
-//            $oneToOneClass = 'Doctrine\\ORM\\Mapping\\OneToOne';
-//            $manyToOneClass = 'Doctrine\\ORM\\Mapping\\ManyToOne';
+            $oneToOneClass = 'Doctrine\\ORM\\Mapping\\OneToOne';
+            $manyToOneClass = 'Doctrine\\ORM\\Mapping\\ManyToOne';
             $oneToManyClass = 'Doctrine\\ORM\\Mapping\\OneToMany';
 
             $reader = new AnnotationReader();
@@ -666,7 +666,7 @@ class Utils
             $excludedFields = array('id', 'published', 'other', 'createdAt', 'updatedAt', 'visible', 'deleted');
 
             //Lista property da pubblicare a cascata
-            $cascadingProperties = array();
+//            $cascadingProperties = array();
 
             $refBozza = new \ReflectionObject($bozza);
             $refPubblicata = new \ReflectionObject($pubblicata);
@@ -674,41 +674,54 @@ class Utils
             //Cicla le property dell'entity Bozza
             foreach ($refBozza->getProperties() as $p) {
 
-//                $annOneToOne = $reader->getPropertyAnnotation($p, $oneToOneClass);
-//                $annManyToOne = $reader->getPropertyAnnotation($p, $manyToOneClass);
+                $annOneToOne = $reader->getPropertyAnnotation($p, $oneToOneClass);
+                $annManyToOne = $reader->getPropertyAnnotation($p, $manyToOneClass);
                 $annOneToMany = $reader->getPropertyAnnotation($p, $oneToManyClass);
 
-                if($annOneToMany !== null) {
+//                if($annOneToMany !== null) {
+//
+//                    //Aggiunge la property tra quelle da elaborare dopo
+//                    $cascadingProperties[] = $p;
+//
+//                }else {
 
-                    //Aggiunge la property tra quelle da elaborare dopo
-                    $cascadingProperties[] = $p;
+                $fieldName = $p->name;
 
-                }else {
-
-                    $fieldName = $p->name;
-
-                    //Il campo non deve essere tra quelli da escludere e non deve essere una relazione
-                    //if(!in_array($fieldName, $excludedFields) && $annOneToOne == null && $annManyToOne == null) {
+                //Il campo non deve essere tra quelli da escludere e non deve essere una relazione oneToMany (array)
+                if(!in_array($fieldName, $excludedFields) && /*$annOneToOne == null && $annManyToOne == null &&*/ $annOneToMany == null) {
 
                     //Il campo non deve essere tra quelli da escludere
-                    if(!in_array($fieldName, $excludedFields)) {
+//                    if(!in_array($fieldName, $excludedFields)) {
 
-                        try {
+                    try {
 
-                            //Valore campo corrente su entity Bozza
-                            $p->setAccessible(true);
-                            $value = $p->getValue($bozza);
-                            $p->setAccessible(false);
+                        $canSetField = true;
 
+                        //Valore campo corrente su entity Bozza
+                        $p->setAccessible(true);
+                        $value = $p->getValue($bozza);
+                        $p->setAccessible(false);
+
+                        //Se è una relazione o2o\m2o, la copio solo se l'entity dall'altra parte non è di tipo Draft
+                        if($annOneToOne !== null || $annManyToOne !== null) {
+                            $canSetField = false;
+                            if($value !== null && is_object($value)) {
+                                $canSetField = !is_subclass_of($value, $draftClass);
+                            }
+                        }
+
+                        if($canSetField) {
                             //Setto il valore su entity Pubblicata
                             $pPubbl = $refPubblicata->getProperty($fieldName);
                             $pPubbl->setAccessible(true);
                             $pPubbl->setValue($pubblicata, $value);
                             $pPubbl->setAccessible(false);
+                        }
 
-                        } catch (\Exception $ex) {}
-                    }
+
+                    } catch (\Exception $ex) {}
                 }
+//                }
             }
 
             //Salvataggio entity Pubblicata
@@ -717,28 +730,26 @@ class Utils
             $em->flush();
 
             //Pubblicazione a cascata
-            foreach ($cascadingProperties as $p) {
-
-                //Lettura valore propertty
-                $p->setAccessible(true);
-                $array = $p->getValue($bozza);
-                $p->setAccessible(false);
-
-                //Iterabile?
-                if($array !== null && (is_array($array) || is_subclass_of($array, 'Doctrine\\Common\\Collections\\Collection'))) {
-                    foreach ($array as $r) {
-
-                        //Se è una draft pubblica l'entity
-                        if($r !== null && is_subclass_of($r, $draftClass)) {
-                            Utils::pubblicaEntity($em, $r);
-                        }
-                    }
-                }
-            }
-
-            return true;
+//            foreach ($cascadingProperties as $p) {
+//
+//                //Lettura valore propertty
+//                $p->setAccessible(true);
+//                $array = $p->getValue($bozza);
+//                $p->setAccessible(false);
+//
+//                //Iterabile?
+//                if($array !== null && (is_array($array) || is_subclass_of($array, 'Doctrine\\Common\\Collections\\Collection'))) {
+//                    foreach ($array as $r) {
+//
+//                        //Se è una draft pubblica l'entity
+//                        if($r !== null && is_subclass_of($r, $draftClass)) {
+//                            Utils::pubblicaEntity($em, $r);
+//                        }
+//                    }
+//                }
+//            }
         }
 
-        return false;
+        return $pubblicata;
     }
 }

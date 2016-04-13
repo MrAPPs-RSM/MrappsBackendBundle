@@ -69,7 +69,7 @@
                     {% endfor %}
                     <div class="panel-footer text-right">
                         {% if edit and linkPublish is defined and linkPublish is not null and linkPublish|length > 0 %}
-                            <button ng-disabled="publishInProgress" type="submit" id="publish" class="btn btn-warning pull-left">{{ 'form.pubblica'|trans }}</button>
+                            <button ng-disabled="publishInProgress" type="button" ng-click="doPublish()" class="btn btn-warning pull-left">{{ 'form.pubblica'|trans }}</button>
                         {% endif %}
                         {% if edit %}
                             <button type="submit" id="save" class="btn btn-info">{{ 'form.modifica'|trans }}</button>
