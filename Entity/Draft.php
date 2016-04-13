@@ -29,6 +29,34 @@ class Draft extends Base implements DraftInterface {
     protected $published;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="published_at", type="datetime", nullable=true)
+     */
+    protected $publishedAt;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="enable_locking_feature", type="boolean", nullable=true)
+     */
+    protected $enableLockingFeature;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="locked", type="boolean", nullable=true)
+     */
+    protected $locked;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="locked_at", type="datetime", nullable=true)
+     */
+    protected $lockedAt;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="deleted", type="boolean", nullable=true)
@@ -100,5 +128,93 @@ class Draft extends Base implements DraftInterface {
     public function getOther()
     {
         throw new NotImplementedException();
+    }
+
+    /**
+     * Set enableLockingFeature
+     *
+     * @param bool $enableLockingFeature
+     *
+     * @return Draft
+     */
+    public function setEnableLockingFeature($enableLockingFeature) {
+        $this->enableLockingFeature = $enableLockingFeature;
+
+        return $this;
+    }
+
+    /**
+     * Get enableLockingFeature
+     *
+     * @return bool
+     */
+    public function getEnableLockingFeature() {
+        return $this->enableLockingFeature;
+    }
+
+    /**
+     * Set locked
+     *
+     * @param bool $locked
+     *
+     * @return Draft
+     */
+    public function setLocked($locked) {
+        $this->locked = $locked;
+
+        return $this;
+    }
+
+    /**
+     * Get locked
+     *
+     * @return bool
+     */
+    public function getLocked() {
+        return $this->locked;
+    }
+
+    /**
+     * Set publishedAt
+     *
+     * @param \DateTime $publishedAt
+     *
+     * @return Base
+     */
+    public function setPublishedAt($publishedAt) {
+        $this->publishedAt = $publishedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get publishedAt
+     *
+     * @return \DateTime
+     */
+    public function getPublishedAt() {
+        return $this->publishedAt;
+    }
+
+    /**
+     * Set lockedAt
+     *
+     * @param \DateTime $lockedAt
+     *
+     * @return Base
+     */
+    public function setLockedAt($lockedAt) {
+        $this->lockedAt = $lockedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get lockedAt
+     *
+     * @return \DateTime
+     */
+    public function getLockedAt() {
+        return $this->lockedAt;
     }
 }
