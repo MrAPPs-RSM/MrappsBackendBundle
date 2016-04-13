@@ -129,7 +129,7 @@ class DefaultController extends Controller
 
                 foreach ($allowedRoles as $r) {
                     $r = strtoupper(trim($r));
-                    if(strlen($r) > 0 && $this->isGranted($r)) {
+                    if(strlen($r) > 0 && $this->has($r)) {
                         $canProceedRoles = true;
                         break;
                     }

@@ -224,7 +224,10 @@ class DraftListener
 
                         $pubblicata->resetId();
                         $pubblicata->setPublished(1);
+                        $pubblicata->setPublishedAt(null);
                         $pubblicata->setVisible(0); //pubblicata ma non ancora visibile (l'utente non ha ancora cliccato su "pubblica")
+                        $pubblicata->setLocked(0);
+                        $pubblicata->setLockedAt(null);
                         $this->setOtherByReflection($pubblicata, $bozza);
 
                         $this->em->persist($pubblicata);

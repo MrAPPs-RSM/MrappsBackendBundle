@@ -28,12 +28,12 @@ $scope.{{ uploader_name }}.onBeforeUploadItem = function (item) {
 
 $scope.{{ uploader_name }}.onSuccessItem = function (fileItem, response, status, headers) {
     if (response.success == false) {
-        toastr.error('Errore!', response.message);
+        toastr.error('{{ 'form.errore'|trans }}', response.message);
     } else {
         $('#load_{{ field.name }}').addClass('hide');
         $scope.gallery_{{field.name}}_immagini.push(response);
         $scope.form.{{ field.name }} = $scope.gallery_{{ field.name }}_immagini;
-        toastr.success('{{ 'form.errore'|trans }}', "{{ 'form.immagine_salvata'|trans }}");
+        toastr.success('{{ 'form.immagine_salvata'|trans }}', response.message);
     }
     document.getElementById("save").disabled = false;
 };

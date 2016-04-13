@@ -728,13 +728,18 @@ class Utils
 
             //Lock entity Bozza
             if($bozza->getEnableLockingFeature() == 1) {
+
+                $now = new \DateTime();
+
                 $bozza->setLocked(1);
-                $bozza->setLockedAt(new \DateTime());
+                $bozza->setLockedAt($now);
                 $em->persist($bozza);
-                $em->flush();
+
+                $pubblicata->setLocked(1);
+                $pubblicata->setLockedAt($now);
             }
 
-            //Salvataggio entity Pubblicata
+            //Salvataggio entity Bozza e Pubblicata
             $pubblicata->setVisible(1);
             $em->persist($pubblicata);
             $em->flush();
