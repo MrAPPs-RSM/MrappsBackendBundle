@@ -645,7 +645,7 @@ class Utils
         return $entity;
     }
 
-    public static function pubblicaEntity(EntityManager $em = null, DraftInterface $entity = null, $excludeFields = array()) {
+    public static function pubblicaEntity(EntityManager $em = null, DraftInterface $entity = null, $excludeFields = array(), $lockEntities = true) {
 
         //Entity bozza
         $bozza = Utils::getEntityBozza($em, $entity);
@@ -726,17 +726,10 @@ class Utils
 //                }
             }
 
-            //Lock entity Bozza
-            if($bozza->getEnableLockingFeature() == 1) {
-
-                $now = new \DateTime();
-
-                $bozza->setLocked(1);
-                $bozza->setLockedAt($now);
-                $em->persist($bozza);
-
-                $pubblicata->setLocked(1);
-                $pubblicata->setLockedAt($now);
+            //Lock entity
+            if((bool)$lockEntities && $bozza->getEnableLockingFeature() == 1) {
+                Utils::lockEntity($em, $bozza, false);
+                Utils::lockEntity($em, $pubblicata, false);
             }
 
             //Salvataggio entity Bozza e Pubblicata
@@ -766,5 +759,41 @@ class Utils
         }
 
         return $pubblicata;
+    }
+
+    public static function lockEntity(EntityManager $em = null, $entity = null, $autoFlush = true) {
+
+        $draftClass = 'Mrapps\\BackendBundle\\Entity\\Draft';
+
+        if($em !== null && $entity !== null && is_subclass_of($entity, $draftClass) && $entity->getEnableLockingFeature() == true) {
+
+            $entity->setLocked(1);
+            $entity->setLockedAt(new \DateTime());
+
+            $em->persist($entity);
+            if($autoFlush) $em->flush();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function unlockEntity(EntityManager $em = null, $entity = null, $autoFlush = true) {
+
+        $draftClass = 'Mrapps\\BackendBundle\\Entity\\Draft';
+
+        if($em !== null && $entity !== null && is_subclass_of($entity, $draftClass)) {
+
+            $entity->setLocked(0);
+            $entity->setLockedAt(null);
+
+            $em->persist($entity);
+            if($autoFlush) $em->flush();
+
+            return true;
+        }
+
+        return false;
     }
 }
