@@ -12,6 +12,7 @@ use Mrapps\BackendBundle\Model\DraftInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query as DoctrineQuery;
 use Mrapps\BackendBundle\Entity\Base;
+use FOS\UserBundle\Entity\User;
 
 class Utils
 {
@@ -274,7 +275,7 @@ class Utils
             if ($page < 1) $page = 1;
             if (!is_array($filters)) $filters = array();
             if (!is_array($sorting)) $sorting = array('createdAt' => 'desc');    //Sorting di default
-            if ($isDraft) $filters['published'] = 0;
+            if ($isDraft && !isset($filters['published']) ) $filters['published'] = 0;
             //--------------------------------------------------------------------------------------------
 
             //Filtri
@@ -644,7 +645,7 @@ class Utils
         return $entity;
     }
 
-    public static function pubblicaEntity(EntityManager $em = null, DraftInterface $entity = null) {
+    public static function pubblicaEntity(EntityManager $em = null, DraftInterface $entity = null, $excludeFields = array(), $lockEntities = true) {
 
         //Entity bozza
         $bozza = Utils::getEntityBozza($em, $entity);
@@ -654,7 +655,7 @@ class Utils
 
         $draftClass = 'Mrapps\\BackendBundle\\Entity\\Draft';
 
-        if($em !== null && $bozza !== null && $pubblicata !== null) {
+        if($em !== null && $bozza !== null && $pubblicata !== null) {   // && $bozza->getLocked() != true
 
             $oneToOneClass = 'Doctrine\\ORM\\Mapping\\OneToOne';
             $manyToOneClass = 'Doctrine\\ORM\\Mapping\\ManyToOne';
@@ -662,8 +663,9 @@ class Utils
 
             $reader = new AnnotationReader();
 
-            //Dalla procedura verranno escluse le relazioni OneToOne\ManyToOne e i campi specificati in questo array
-            $excludedFields = array('id', 'published', 'other', 'createdAt', 'updatedAt', 'visible', 'deleted');
+            //Dalla procedura verranno escluse le relazioni OneToOne\ManyToOne, i campi specificati in questo array e i campi specificati come parametro
+            if(!is_array($excludeFields)) $excludeFields = array($excludeFields);
+            $excludedFields = array_merge(array('id', 'published', 'other', 'createdAt', 'updatedAt', 'visible', 'deleted'), $excludeFields);
 
             //Lista property da pubblicare a cascata
 //            $cascadingProperties = array();
@@ -724,7 +726,13 @@ class Utils
 //                }
             }
 
-            //Salvataggio entity Pubblicata
+            //Lock entity
+            if((bool)$lockEntities && $bozza->getEnableLockingFeature() == 1) {
+                Utils::lockEntity($em, $bozza, false);
+                Utils::lockEntity($em, $pubblicata, false);
+            }
+
+            //Salvataggio entity Bozza e Pubblicata
             $pubblicata->setVisible(1);
             $em->persist($pubblicata);
             $em->flush();
@@ -751,5 +759,41 @@ class Utils
         }
 
         return $pubblicata;
+    }
+
+    public static function lockEntity(EntityManager $em = null, $entity = null, $autoFlush = true) {
+
+        $draftClass = 'Mrapps\\BackendBundle\\Entity\\Draft';
+
+        if($em !== null && $entity !== null && is_subclass_of($entity, $draftClass) && $entity->getEnableLockingFeature() == true) {
+
+            $entity->setLocked(1);
+            $entity->setLockedAt(new \DateTime());
+
+            $em->persist($entity);
+            if($autoFlush) $em->flush();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function unlockEntity(EntityManager $em = null, $entity = null, $autoFlush = true) {
+
+        $draftClass = 'Mrapps\\BackendBundle\\Entity\\Draft';
+
+        if($em !== null && $entity !== null && is_subclass_of($entity, $draftClass)) {
+
+            $entity->setLocked(0);
+            $entity->setLockedAt(null);
+
+            $em->persist($entity);
+            if($autoFlush) $em->flush();
+
+            return true;
+        }
+
+        return false;
     }
 }

@@ -224,15 +224,27 @@ class DraftListener
 
                         $pubblicata->resetId();
                         $pubblicata->setPublished(1);
+                        $pubblicata->setPublishedAt(null);
                         $pubblicata->setVisible(0); //pubblicata ma non ancora visibile (l'utente non ha ancora cliccato su "pubblica")
+                        $pubblicata->setLocked(0);
+                        $pubblicata->setLockedAt(null);
                         $this->setOtherByReflection($pubblicata, $bozza);
 
                         $this->em->persist($pubblicata);
                         $this->em->flush($pubblicata);
                         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-                        $bozza->setPublished(0);
                         $bozza->setVisible(1);
+                        $bozza->setPublished(0);
+                        $bozza->setPublishedAt(null);
+                        $bozza->setLocked(0);
+                        $bozza->setLockedAt(null);
+
+                        //Default enable locking feature
+                        if($bozza->getEnableLockingFeature() == null) {
+                            $bozza->setEnableLockingFeature(0);
+                        }
+
                         $this->setOtherByReflection($bozza, $pubblicata);
 
                         $this->em->persist($bozza);

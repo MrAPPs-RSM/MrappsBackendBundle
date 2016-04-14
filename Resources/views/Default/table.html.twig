@@ -31,9 +31,8 @@
                     {% for item in linkCustom %}
                         <button type="submit" ng-click="go('{{ item.url }}')"
                                 class="btn btn-labeled pull-right {{ item.class }}">
-                        <span class="btn-label">
-                            <em class="{{ item.icon }}"></em>
-                        </span>{{ item.text }}
+								<em class="{{ item.icon }}"></em>
+							{{ item.text }}
                         </button>
                     {% endfor %}
                 {% endif %}
@@ -78,9 +77,8 @@
                                 <button type="button"
                                         ng-click="{% if item.is_js == false %}go('{{ item.url }}/'+row.id){% else %}customFunction{{ loop.index }}(row.id){% endif %}"
                                         class="{{ item.class }}">
-                                    <span class="btn-label">
-                                        <em class="{{ item.icon }}"></em>
-                                    </span>{% if item.text is defined %}{{ item.text|trim }}{% endif %}
+									<em class="{{ item.icon }}"></em>
+                                    {% if item.text is defined %}{{ item.text|trim }}{% endif %}
                                 </button>
                             {% endfor %}
                         {% endif %}

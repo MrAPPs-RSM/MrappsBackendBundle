@@ -332,6 +332,7 @@
                             toastr.error(response.data.message, '{{ 'form.errore'|trans }}');
                         } else {
                             toastr.success('{{ 'form.pubblicato'|trans }}', '{{ 'form.elemento.elemento_modificato'|trans }}');
+                            location.reload();
                         }
                         $scope.publishInProgress = false;
 

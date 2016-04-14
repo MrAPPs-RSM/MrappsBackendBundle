@@ -5,25 +5,27 @@
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
             <div class="panel panel-default">
                 <div class="panel-heading clearfix">
-                    <div class="panel-title pull-left" ng-show='{{field.name}}AddNew'>
-                        <ui-select name="{{ field.name }}Selected" ng-model="{{field.name}}Select.selected">
+                    <div class="panel-title" ng-show='{{field.name}}AddNew'>
+                        <ui-select class="pull-left" ng-disabled='{{ field.name }}Select.progress' name="{{ field.name }}Selected" ng-model="{{field.name}}Select.selected">
                             <ui-select-match>
                                 <span ng-bind="$select.selected.{{ field.select2.string_field }}"></span>
                             </ui-select-match>
-                            <ui-select-choices refresh="{{field.name}}RefreshSelect($select.search)" refresh-delay="300" group-by="'type'" repeat="item in ({{ field.name }}Select.data | filter: $select.search) track by item.{{ field.select2.id_field }}">
+                            <ui-select-choices {% if field.select2.fetch_all is not defined or field.select2.fetch_all == false %}refresh="{{field.name}}RefreshSelect($select.search)" refresh-delay="300"{% endif %} group-by="'type'" repeat="item in ({{ field.name }}Select.data | filter: $select.search) track by item.{{ field.select2.id_field }}">
                                 <span ng-bind="item.{{ field.select2.string_field }}"></span>
                             </ui-select-choices>
                         </ui-select>
-                        <button type="button" class="btn btn-labeled btn-info" ng-click="{{field.name}}SaveSelect()">
+                        <i ng-show='{{ field.name }}Select.progress' class='fa fa-spin fa-spinner'></i>
+                        <button ng-disabled='{{ field.name }}Select.progress' type="button" class="btn btn-labeled btn-info pull-right" ng-click="{{field.name}}SaveSelect()">
                             <span class="btn-label">
                                 <em class="fa fa-check"></em>
                             </span>Salva
                         </button>
-                        <button type="button" class="btn btn-labeled btn-warning" ng-click="{{field.name}}CloseAdd()">
+                        <button ng-disabled='{{ field.name }}Select.progress' type="button" class="btn btn-labeled btn-warning pull-right" ng-click="{{field.name}}CloseAdd()">
                             <span class="btn-label">
                                 <em class="fa fa-ban"></em>
                             </span>Annulla
                         </button>
+                        <div class="cb"></div>
                         <div>
                             {% if field.extra_fields is defined and field.extra_fields is iterable %}
                                 {% for f in field.extra_fields %}

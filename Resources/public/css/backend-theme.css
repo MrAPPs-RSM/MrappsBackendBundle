@@ -3,7 +3,7 @@
  ========================================================================== */
 body,
 .wrapper > section {
-  background-color: #f5f7fa;
+  background-color: #F5F5F5;
 }
 .wrapper > .aside {
   background-color: #ffffff;
@@ -161,8 +161,13 @@ body,
 	clear: both;
 }
 
-button+button {
+.btn+.btn {
+  margin-left: 10px;
+}
+
+.btn.pull-right+.btn.pull-right {
   margin-right: 10px;
+  margin-left: 0px;
 }
 
 .multilang fieldset {

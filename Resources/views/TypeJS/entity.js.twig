@@ -22,12 +22,18 @@ $scope.{{field.name}}SortableOptions = {
 {# Select2 #}
 
 $scope.{{field.name}}Select = {
+    'progress': false,
     'data': [],
     'selected': []
 };
 
 $scope.{{field.name}}RefreshSelect = function(q) {
+    {% if field.select2.fetch_all is not defined or field.select2.fetch_all == false %}
     if(q.length > 0) {
+        {% else %}
+        q = '';
+        {% endif %}
+        $scope.{{field.name}}Select.progress = true;
         return $http.post('{{ field.data_url }}',
                 {
                     'origin':'select',
@@ -36,23 +42,30 @@ $scope.{{field.name}}RefreshSelect = function(q) {
                     {% if field.data_custom is defined %}{{ field.data_custom |raw }}{% endif %}
                 }).then(function (response) {
             $scope.{{field.name}}Select.data = response.data;
+            $scope.{{field.name}}Select.progress = false;
         });
+        {% if field.select2.fetch_all is not defined or field.select2.fetch_all == false %}
     }
+    {% endif %}
     return true;
 };
+
+{% if field.select2.fetch_all is defined and field.select2.fetch_all == true %}
+$scope.{{field.name}}RefreshSelect('');
+{% endif %}
 
 $scope.{{field.name}}SaveSelect = function() {
     if($scope.{{field.name}}Select.selected.{{ field.select2.id_field }} > 0) {
 
         var nuovoElemento = $.extend({}, $scope.{{field.name}}Select.selected);
         {% if field.extra_fields is defined and field.extra_fields is iterable %}
-            {% for f in field.extra_fields %}
-                {% if f.type == "checkbox" %}
-                    nuovoElemento.{{ f.name }} = $('#{{field.name}}_extra_{{f.name}}').is(':checked');
-                {% else %}
-                    nuovoElemento.{{ f.name }} = $('#{{field.name}}_extra_{{f.name}}').val();
-                {% endif %}
-            {% endfor %}
+        {% for f in field.extra_fields %}
+        {% if f.type == "checkbox" %}
+        nuovoElemento.{{ f.name }} = $('#{{field.name}}_extra_{{f.name}}').is(':checked');
+        {% else %}
+        nuovoElemento.{{ f.name }} = $('#{{field.name}}_extra_{{f.name}}').val();
+        {% endif %}
+        {% endfor %}
         {% endif %}
 
         $scope.form.{{field.name}}.push(nuovoElemento);
@@ -70,9 +83,10 @@ $scope.{{field.name}}OpenAdd = function() {
 };
 
 $scope.{{field.name}}CloseAdd = function() {
-    $scope.{{field.name}}Select = {
-        'data': [],
-        'selected': []
-    };
+    $scope.{{field.name}}Select.progress = false;
+    $scope.{{field.name}}Select.selected = [];
+    {% if field.select2.fetch_all is not defined or field.select2.fetch_all == false %}
+    $scope.{{field.name}}Select.data = [];
+    {% endif %}
     $scope.{{field.name}}AddNew = false;
 };
