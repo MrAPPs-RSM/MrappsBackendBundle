@@ -1,7 +1,10 @@
 services:
     mrapps_backend:
-        class: Mrapps\BackendBundle\Twig
+        class: Mrapps\BackendBundle\Twig\MrappsBackendBundleTwigExtension
         arguments: ['@service_container']
+        public: false
+        tags:
+            - { name: twig.extension }
 
     mrapps.backend.buildsidebar_command:
             class: Mrapps\BackendBundle\Command\BuildSidebarCommand
