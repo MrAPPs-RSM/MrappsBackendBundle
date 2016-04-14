@@ -1,0 +1,13 @@
+<fieldset id="{{field.name}}" {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
+    <div class="form-group">
+       <label class="col-sm-2 control-label">{{field.title}}{% if switch is not defined and field.required %} *{% endif %}</label>
+        <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
+            {{ field.value|raw }}
+       </div>
+       {% if field.didascalia is defined %}
+            <div class="col-sm-4">
+                <small class="text-muted">{{field.didascalia}}</small>
+            </div>
+        {% endif %}
+    </div>
+</fieldset>
