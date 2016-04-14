@@ -13083,8 +13083,14 @@ header.topnavbar-wrapper {
 	height:100%;
 }
 
+.ui-select-container {
+	min-width: 160px;
+}
+
 @media screen and (max-width: 767px) {
-	.topnavbar .navbar-header .brand-logo > img,.topnavbar .navbar-header .brand-logo-collapsed > img {
-		max-width:115px!important;
-	}
+	.topnavbar .navbar-header .brand-logo > img,.topnavbar .navbar-header .brand-logo-collapsed > img { max-width:115px!important; }
+}
+
+@media screen and (min-width: 768px) and (max-width: 991px) {
+	.panel-title .btn { width: 48%; margin: 5px 1% 0px 0px !important; }
 }

@@ -161,8 +161,13 @@ body,
 	clear: both;
 }
 
-button+button {
+.btn+.btn {
+  margin-left: 10px;
+}
+
+.btn.pull-right+.btn.pull-right {
   margin-right: 10px;
+  margin-left: 0px;
 }
 
 .multilang fieldset {

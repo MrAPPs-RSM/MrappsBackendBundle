@@ -4,8 +4,8 @@
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
             <div class="panel panel-default">
                 <div class="panel-heading clearfix">
-                    <div class="panel-title pull-left" ng-show='{{field.name}}AddNew'>
-                        <ui-select ng-disabled='{{ field.name }}Select.progress' name="{{ field.name }}Selected" ng-model="{{field.name}}Select.selected">
+                    <div class="panel-title" ng-show='{{field.name}}AddNew'>
+                        <ui-select class="pull-left" ng-disabled='{{ field.name }}Select.progress' name="{{ field.name }}Selected" ng-model="{{field.name}}Select.selected">
                             <ui-select-match>
                                 <span ng-bind="$select.selected.{{ field.select2.string_field }}"></span>
                             </ui-select-match>
@@ -14,12 +14,12 @@
                             </ui-select-choices>
                         </ui-select>
                         <i ng-show='{{ field.name }}Select.progress' class='fa fa-spin fa-spinner'></i>
-                        <button ng-disabled='{{ field.name }}Select.progress' type="button" class="btn btn-labeled btn-info" ng-click="{{field.name}}SaveSelect()">
+                        <button ng-disabled='{{ field.name }}Select.progress' type="button" class="btn btn-labeled btn-info pull-right" ng-click="{{field.name}}SaveSelect()">
                             <span class="btn-label">
                                 <em class="fa fa-check"></em>
                             </span>Salva
                         </button>
-                        <button ng-disabled='{{ field.name }}Select.progress' type="button" class="btn btn-labeled btn-warning" ng-click="{{field.name}}CloseAdd()">
+                        <button ng-disabled='{{ field.name }}Select.progress' type="button" class="btn btn-labeled btn-warning pull-right" ng-click="{{field.name}}CloseAdd()">
                             <span class="btn-label">
                                 <em class="fa fa-ban"></em>
                             </span>Annulla
