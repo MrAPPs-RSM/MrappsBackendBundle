@@ -655,7 +655,7 @@ class Utils
 
         $draftClass = 'Mrapps\\BackendBundle\\Entity\\Draft';
 
-        if($em !== null && $bozza !== null && $pubblicata !== null && $bozza->getLocked() != true) {
+        if($em !== null && $bozza !== null && $pubblicata !== null) {   // && $bozza->getLocked() != true
 
             $oneToOneClass = 'Doctrine\\ORM\\Mapping\\OneToOne';
             $manyToOneClass = 'Doctrine\\ORM\\Mapping\\ManyToOne';
