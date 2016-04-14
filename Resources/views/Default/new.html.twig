@@ -207,6 +207,14 @@
         });
 
         function FormValidationController($scope, $http, FileUploader, uiGmapGoogleMapApi) {
+
+            $scope.go = function (path, replaceId) {
+                if(typeof(replaceId) !== "undefined" && replaceId !== null) {
+                    path = path.replace(/__PLACEHOLDER_ID__/g, replaceId);
+                }
+                $window.location.href = path;
+            };
+
             var vm = this;
 
             {% set jsFields = [] %}
