@@ -129,7 +129,7 @@ class DefaultController extends Controller
 
                 foreach ($allowedRoles as $r) {
                     $r = strtoupper(trim($r));
-                    if(strlen($r) > 0 && $this->has($r)) {
+                    if(strlen($r) > 0 && $user->hasRole($r)) {
                         $canProceedRoles = true;
                         break;
                     }
@@ -232,13 +232,15 @@ class DefaultController extends Controller
                     }
                 }
 
-                $menu[] = array(
-                    'has_submenu' => $hasSubmenu,
-                    'title' => $sidebar->getLabel(),
-                    'icon' => $sidebar->getIcon(),
-                    'url' => $url,
-                    'route_name' => $route,
-                );
+                if ( $url != null && !empty($url) ) {
+                    $menu[] = array(
+                        'has_submenu' => $hasSubmenu,
+                        'title' => $sidebar->getLabel(),
+                        'icon' => $sidebar->getIcon(),
+                        'url' => $url,
+                        'route_name' => $route,
+                    );
+                }
             }
         }
 
