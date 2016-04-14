@@ -212,7 +212,7 @@
                 if(typeof(replaceId) !== "undefined" && replaceId !== null) {
                     path = path.replace(/__PLACEHOLDER_ID__/g, replaceId);
                 }
-                $window.location.href = path;
+                location.href = path;
             };
 
             var vm = this;
