@@ -437,7 +437,6 @@ body {
 }
 .wrapper > section {
   position: relative;
-  height: 100%;
   margin-left: 0;
   background-color: #f5f7fa;
   margin-bottom: 60px !important;
