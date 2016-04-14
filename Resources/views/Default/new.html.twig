@@ -21,7 +21,7 @@
                             <div class="panel-heading clearfix">
                                 <div class="panel-title pull-left">{{ panel.label|default('') }}</div>
                                 {% if edit==true and linkNew is defined and linkNew is not empty %}
-                                    <button type="submit" class="btn btn-labeled btn-success pull-right"
+                                    <button type="button" class="btn btn-labeled btn-success pull-right"
                                             ng-click="go('{{ linkNew }}')">
                                 <span class="btn-label">
                                     <em class="fa fa-plus"></em>
