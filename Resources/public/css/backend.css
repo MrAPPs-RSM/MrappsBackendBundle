@@ -13084,7 +13084,7 @@ header.topnavbar-wrapper {
 }
 
 .ui-select-container {
-	min-width: 160px;
+	min-width: 250px;
 }
 
 @media screen and (max-width: 767px) {
