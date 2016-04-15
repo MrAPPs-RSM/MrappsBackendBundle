@@ -13,7 +13,7 @@ $scope.form.{{ field.name }}_{{key}} = null;
     startStep: 'day',
     initialDateTime: function(m) {
         {% if field[key].value is defined and field[key].value is not null %}
-        var dateObj = moment('{{ field[key].value }}');
+        var dateObj = moment('{{ field[key].value }}').zone(0);
         $scope.form.{{ field.name }}_{{key}} = dateObj.format("{{ angularFormat }}");
         {{ jsVar }}.val(dateObj.format( "{{ inputFormat }}"));
         return dateObj;
@@ -36,7 +36,7 @@ $scope.form.{{ field.name }}_{{key}} = null;
         return moment('{{ field[key].max }}');
     }{% endif %}
 });
-{{ jsVar }}.filthypillow("setTimeZone", "UTC");
+{#{{ jsVar }}.filthypillow("setTimeZone", "UTC");#}
 
 
 {{ jsVar }}.on("focus", function() {
