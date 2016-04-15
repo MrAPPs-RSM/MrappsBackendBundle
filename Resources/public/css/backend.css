@@ -13094,3 +13094,7 @@ header.topnavbar-wrapper {
 @media screen and (max-width: 991px) {
 	.panel-title .btn { margin: 5px 1% 0px 0px !important; }
 }
+
+td.button-column {
+	white-space: nowrap;
+}
