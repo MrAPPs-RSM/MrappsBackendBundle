@@ -1442,7 +1442,7 @@ _:-ms-lang(x),.layout-fixed .wrapper > .aside > .aside-inner {
 }
 
 .sidebar > .nav > li > a,.sidebar > .nav > li > .nav-item {
-	padding:12px 24px;
+	padding: 12px 40px 12px 24px;
 	color:#515253;
 	letter-spacing:.025em;
 	font-weight:400;
@@ -13084,7 +13084,7 @@ header.topnavbar-wrapper {
 }
 
 .ui-select-container {
-	min-width: 160px;
+	min-width: 250px;
 }
 
 @media screen and (max-width: 767px) {

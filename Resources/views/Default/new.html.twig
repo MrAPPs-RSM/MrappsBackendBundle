@@ -21,7 +21,7 @@
                             <div class="panel-heading clearfix">
                                 <div class="panel-title pull-left">{{ panel.label|default('') }}</div>
                                 {% if edit==true and linkNew is defined and linkNew is not empty %}
-                                    <button type="submit" class="btn btn-labeled btn-success pull-right"
+                                    <button type="button" class="btn btn-labeled btn-success pull-right"
                                             ng-click="go('{{ linkNew }}')">
                                 <span class="btn-label">
                                     <em class="fa fa-plus"></em>
@@ -206,7 +206,15 @@
             };
         });
 
-        function FormValidationController($scope, $http, FileUploader, uiGmapGoogleMapApi) {
+        function FormValidationController($scope, $http, $window, FileUploader, uiGmapGoogleMapApi) {
+
+            $scope.go = function (path, replaceId) {
+                if(typeof(replaceId) !== "undefined" && replaceId !== null) {
+                    path = path.replace(/__PLACEHOLDER_ID__/g, replaceId);
+                }
+                location.href = path;
+            };
+
             var vm = this;
 
             {% set jsFields = [] %}
