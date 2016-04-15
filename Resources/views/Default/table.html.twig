@@ -204,6 +204,39 @@
                     });
                 };
                 {% endif %}
+                {% if linkOrder is not null %}
+                $scope.sortableOptions = {
+                    start: function(e, ui) {
+                        $scope.isDragging = true;
+                    },
+                    stop: function(e, ui) {
+                        setTimeout(function(){ $scope.isDragging = false; }, 300);
+                        //if(!self.tableParams2.hasFilter()){
+                        $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
+                        $http({
+                            method: 'POST',
+                            url: '{{ linkOrder }}',
+                            data: {
+                                'data': self.data,
+                                'page': self.tableParams2.url().page - 1,
+                                'count': self.tableParams2.url().count
+                            },
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                        }).then(function successCallback(response) {
+                            $('#overlay-waiting').remove();
+                            self.tableParams2.reload();
+                            toastr.success('Ordinato!', 'Ordine salvato');
+                        }, function errorCallback(response) {
+                            $('#overlay-waiting').remove();
+                            self.tableParams2.reload();
+                            toastr.error('Errore!', 'Errore nel salvataggio');
+                        });
+                        //}
+                    }
+                };
+                {% endif %}
                 {% if linkAction is not null and permissions.edit == true %}
                 {% for item in linkAction %}
                 {% if item.is_js == true %}
