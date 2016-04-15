@@ -78,6 +78,13 @@
                             <button type="button" ng-click="{{field.name}}DeleteItem(r)" class="btn btn-sm btn-danger">
                                 <em class="fa fa-trash-o"></em>
                             </button>
+                            {% if field.action is defined and field.action is iterable %}
+                                {% for action in field.action %}
+                                    <button type="button" ng-click="{{field.name}}GoItem('{{action.url}}', r)" class="btn btn-sm btn-warning">
+                                        <em class="fa {{ action.icon }}"></em>
+                                    </button>
+                                {% endfor %}
+                            {% endif %}
                         </td>
                     </tr>
                     </tbody>

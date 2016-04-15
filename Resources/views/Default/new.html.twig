@@ -206,7 +206,7 @@
             };
         });
 
-        function FormValidationController($scope, $http, FileUploader, uiGmapGoogleMapApi) {
+        function FormValidationController($scope, $http, $window, FileUploader, uiGmapGoogleMapApi) {
 
             $scope.go = function (path, replaceId) {
                 if(typeof(replaceId) !== "undefined" && replaceId !== null) {

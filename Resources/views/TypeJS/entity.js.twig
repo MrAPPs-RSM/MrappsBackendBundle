@@ -15,6 +15,10 @@ $scope.{{field.name}}DeleteItem = function(item) {
     toastr.success('Elemento eliminato', '');
 };
 
+$scope.{{field.name}}GoItem = function(path, item) {
+    $window.location.href = path + '/' + item.id;
+};
+
 $scope.{{field.name}}SortableOptions = {
     stop: function (e, ui) {}
 };
