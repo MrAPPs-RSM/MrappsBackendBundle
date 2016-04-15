@@ -179,7 +179,7 @@ class DefaultController extends Controller
         foreach($secondoLivello as $sidebar) {
 
             //Check ruolo
-            if($this->_checkRoleSidebar($sidebar)) {
+            if($this->isGranted('ROLE_SUPER_ADMIN') || $this->_checkRoleSidebar($sidebar)) {
 
                 $parentId = ($sidebar->getParent() !== null) ? $sidebar->getParent()->getId() : 0;
                 if(!isset($secondoLivelloParents[$parentId])) {
@@ -193,7 +193,7 @@ class DefaultController extends Controller
         foreach($primoLivello as $sidebar) {
 
             //Check ruolo
-            if($this->_checkRoleSidebar($sidebar)) {
+            if($this->isGranted('ROLE_SUPER_ADMIN') || $this->_checkRoleSidebar($sidebar)) {
 
                 $thisId = $sidebar->getId();
                 if(isset($secondoLivelloParents[$thisId]) && count($secondoLivelloParents[$thisId]) > 0) {
