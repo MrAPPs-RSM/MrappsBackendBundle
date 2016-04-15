@@ -16,7 +16,7 @@ $scope.{{field.name}}DeleteItem = function(item) {
 };
 
 $scope.{{field.name}}GoItem = function(path, item) {
-    $window.location.href = path + '/' + item.id;
+    $window.location.href = path + '?id=' + item.id;
 };
 
 $scope.{{field.name}}SortableOptions = {
