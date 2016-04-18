@@ -5,14 +5,13 @@ namespace Mrapps\BackendBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Mrapps\BackendBundle\Classes\Utils;
 
 class BaseBackendController extends Controller
 {
     public function generateThumbnailsList($url, $thumbnails = array())
     {
-        foreach ($thumbnails as $item) {
-            $this->get('liip_imagine.cache.manager')->generateUrl($url, $item);
-        }
+        Utils::generateThumbnailsList($this->container, $url, $thumbnails);
     }
 
 }

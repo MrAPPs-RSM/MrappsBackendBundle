@@ -796,4 +796,14 @@ class Utils
 
         return false;
     }
+
+    public static function generateThumbnailsList($container = null, $url = '', $thumbnails = array())
+    {
+        if($container !== null && strlen($url) > 0) {
+            $liip = $container->get('liip_imagine.cache.manager');
+            foreach ($thumbnails as $item) {
+                $liip->generateUrl($url, $item);
+            }
+        }
+    }
 }
