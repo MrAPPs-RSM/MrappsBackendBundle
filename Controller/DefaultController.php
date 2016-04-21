@@ -147,6 +147,43 @@ class DefaultController extends Controller
         return false;
     }
 
+    private function __getSidebarLabel(SidebarEntry $sidebar = null) {
+
+        if($sidebar !== null) {
+
+            $label = trim($sidebar->getLabel());
+            $labelCanon = strtolower($label);
+
+            if(substr($labelCanon, 0, 5) == 'fnc::') {
+
+                $fnc = substr($label, 5);
+                $controller = $sidebar->getController();
+
+                $label = '';
+                if(strlen($controller) > 0) {
+
+                    try {
+                        $obj = new $controller;
+                    } catch (\Exception $ex) {
+                        $obj = null;
+                    }
+
+                    if($obj !== null) {
+                        try {
+                            $label = $obj->$fnc($this->container);
+                        } catch (\Exception $ex) {
+                            $label = '';
+                        }
+                    }
+                }
+            }
+
+            return $label;
+        }
+
+        return '';
+    }
+
     public function __sideBarAction()
     {
         $menu = array();
@@ -213,7 +250,7 @@ class DefaultController extends Controller
                         }
 
                         $url[] = array(
-                            'title' => $subSidebar->getLabel(),
+                            'title' => $this->__getSidebarLabel($subSidebar),
                             'url' => $subUrl,
                             'route_name' => $route,
                         );
@@ -235,7 +272,7 @@ class DefaultController extends Controller
                 if ( $url != null && !empty($url) ) {
                     $menu[] = array(
                         'has_submenu' => $hasSubmenu,
-                        'title' => $sidebar->getLabel(),
+                        'title' => $this->__getSidebarLabel($sidebar),
                         'icon' => $sidebar->getIcon(),
                         'url' => $url,
                         'route_name' => $route,
