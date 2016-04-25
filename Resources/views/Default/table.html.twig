@@ -61,7 +61,7 @@
                         </td>
                         {% endif %}
                     {% endfor %}
-                    <td>
+                    <td class="button-column">
                         {% if linkEdit is not null and permissions.edit == true %}
                             <button ng-if="!row.hasOwnProperty('disableEdit')||row.disableEdit==false" type="button"
                                     ng-click="go({% if linkEdit is iterable %}'{{ path(linkEdit.route, linkEdit.params|merge({'id':'__PLACEHOLDER_ID__'})) }}',row.id{% else %}'{{ linkEdit }}/'+row.id{% endif %})" class="btn btn-sm btn-warning">

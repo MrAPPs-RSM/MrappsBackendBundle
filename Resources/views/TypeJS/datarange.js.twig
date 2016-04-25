@@ -13,12 +13,12 @@ $scope.form.{{ field.name }}_{{key}} = null;
     startStep: 'day',
     initialDateTime: function(m) {
         {% if field[key].value is defined and field[key].value is not null %}
-        var dateObj = moment('{{ field[key].value }}');
+        var dateObj = moment('{{ field[key].value }}').zone(0);
         $scope.form.{{ field.name }}_{{key}} = dateObj.format("{{ angularFormat }}");
         {{ jsVar }}.val(dateObj.format( "{{ inputFormat }}"));
         return dateObj;
         {% else %}
-        var dateObj = moment('{{ "now"|date("Y-m-d\\TH:i:s\\.\\0\\0\\0\\Z") }}');
+        var dateObj = moment('{{ "now"|date("Y-m-d\\TH:i:s\\.\\0\\0\\0\\Z") }}').zone(0);
 
         {#Se è required setto la data\ora corrente anche nello $scope Angular e nel campo input text#}
         {% if field[key].required is defined and field[key].required == true %}
@@ -30,13 +30,13 @@ $scope.form.{{ field.name }}_{{key}} = null;
         {% endif %}
     }{% if field[key].min is defined and field[key].min is not null %},
     minDateTime: function() {
-        return moment('{{ field[key].min }}');
+        return moment('{{ field[key].min }}').zone(0);
     }{% endif %}{% if field[key].max is defined and field[key].max is not null %},
     maxDateTime: function(m) {
-        return moment('{{ field[key].max }}');
+        return moment('{{ field[key].max }}').zone(0);
     }{% endif %}
 });
-{{ jsVar }}.filthypillow("setTimeZone", "UTC");
+{#{{ jsVar }}.filthypillow("setTimeZone", "UTC");#}
 
 
 {{ jsVar }}.on("focus", function() {
