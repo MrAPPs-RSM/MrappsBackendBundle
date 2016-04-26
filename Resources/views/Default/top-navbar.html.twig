@@ -49,10 +49,17 @@
                 </a>
             </li>
             <li>
-                <a href="{{ path('fos_user_security_logout') }}" title="{{ 'profilo.logout'|trans }}s">
+                {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                <a href="{{ path('default_route_name', {'_switch_user':'_exit'}) }}" title="{{ 'profilo.esci_impersonifica'|trans }}">
+                    <em class="icon-lock"></em>
+                    {{ 'profilo.esci_impersonifica'|trans }}
+                </a>
+                {% else %}
+                <a href="{{ path('fos_user_security_logout') }}" title="{{ 'profilo.logout'|trans }}">
                     <em class="icon-lock"></em>
                     {{ 'profilo.logout'|trans }}
                 </a>
+                {% endif %}
             </li>
         </ul>
         <!-- END Left navbar-->
