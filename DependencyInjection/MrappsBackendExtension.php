@@ -27,6 +27,7 @@ class MrappsBackendExtension extends Extension
         $container->setParameter('mrapps_backend.images_url', $config['images_url']);
         $container->setParameter('mrapps_backend.gmaps_api_key', $config['gmaps_api_key']);
         $container->setParameter('mrapps_backend.default_routes', $config['default_routes']);
+        $container->setParameter('mrapps_backend.custom_css', $config['custom_css']);
         $container->setParameter('mrapps_backend.file_accepted_types.image', $config['file_accepted_types']['image']);
         $container->setParameter('mrapps_backend.file_accepted_types.video', $config['file_accepted_types']['video']);
         $container->setParameter('mrapps_backend.file_accepted_types.pdf', $config['file_accepted_types']['pdf']);
