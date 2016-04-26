@@ -50,38 +50,38 @@
             </li>
             <li>
                 {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                <a href="{{ path('default_route_name', {'_switch_user':'_exit'}) }}" title="{{ 'profilo.esci_impersonifica'|trans }}">
-                    <em class="icon-lock"></em>
-                    {{ 'profilo.esci_impersonifica'|trans }}
-                </a>
+                    <a href="{{ path(default_route_name, {'_switch_user':'_exit'}) }}" title="{{ 'profilo.esci_impersonifica'|trans }}">
+                        <em class="icon-lock"></em>
+                        {{ 'profilo.esci_impersonifica'|trans }}
+                    </a>
                 {% else %}
-                <a href="{{ path('fos_user_security_logout') }}" title="{{ 'profilo.logout'|trans }}">
-                    <em class="icon-lock"></em>
-                    {{ 'profilo.logout'|trans }}
-                </a>
+                    <a href="{{ path('fos_user_security_logout') }}" title="{{ 'profilo.logout'|trans }}">
+                        <em class="icon-lock"></em>
+                        {{ 'profilo.logout'|trans }}
+                    </a>
                 {% endif %}
             </li>
         </ul>
         <!-- END Left navbar-->
         {% if routeName is defined and routeName|length > 0 %}
-        	<div class="dropdown languages-list">
-				<button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-					<i class="fa fa-flag"></i> Language
-					<span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-					{% set paramsList = [] %}
-					{% for key, param in routeParams %}
-						{% if key != '_locale' %}
-							{% set paramsList = paramsList|merge({(key):param}) %}
-						{% endif %}
-					{% endfor %}
-					{% for key, lang in languages %}
-						<li><a href="{{ url(routeName, paramsList|merge({"_locale": key})) }}">{{ lang }}</a></li>
-					{% endfor %}
-				</ul>
-			</div>
-	    {% endif %}
+            <div class="dropdown languages-list">
+                <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <i class="fa fa-flag"></i> Language
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    {% set paramsList = [] %}
+                    {% for key, param in routeParams %}
+                        {% if key != '_locale' %}
+                            {% set paramsList = paramsList|merge({(key):param}) %}
+                        {% endif %}
+                    {% endfor %}
+                    {% for key, lang in languages %}
+                        <li><a href="{{ url(routeName, paramsList|merge({"_locale": key})) }}">{{ lang }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
         <!-- START Right Navbar-->
         {#
         <ul class="nav navbar-nav navbar-right">

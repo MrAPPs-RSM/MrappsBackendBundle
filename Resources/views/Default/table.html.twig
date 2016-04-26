@@ -31,8 +31,8 @@
                     {% for item in linkCustom %}
                         <button type="submit" ng-click="go('{{ item.url }}')"
                                 class="btn btn-labeled pull-right {{ item.class }}">
-								<em class="{{ item.icon }}"></em>
-							{{ item.text }}
+                            <em class="{{ item.icon }}"></em>
+                            {{ item.text }}
                         </button>
                     {% endfor %}
                 {% endif %}
@@ -43,22 +43,22 @@
                 <tr ng-repeat="row in $data">
                     {% for colums in tableColumns %}
                         {% if column.visible is not defined or column.visible == true %}
-                        <td data-title="'{{ colums.title }}'"
-                                {% if colums.filterable %}
-                                    {% set colType= (colums.type=='checkbox'?'select':colums.type) %}
-                                    filter="{ '{{ colums.name }}': '{{ colType }}' }" {% if colums.type=='checkbox' or (colums.type=='select' and colums.filter_options is defined) %} filter-data="{{ colums.name }}_filter" {% endif %}{% endif %} {% if colums.sortable %}sortable="'{{ colums.name }}'"{% endif %} {% if colums.clickable is defined %}ng-click="$event.stopPropagation();showChildren(row.id)"
-                        {% endif %}>
-                            {% if colums.type == 'image' %}
-                                <img src="{/ row.{{ colums.name }} /}">
-                            {% elseif colums.type=='checkbox' %}
-                                <input type="checkbox" onclick='event.preventDefault();'
-                                       ng-checked="{/ row.{{ colums.name }} /}">
-                            {% elseif colums.type=='html' %}
-                                <span ng-bind-html="row.{{ colums.name }}|rawHtml"></span>
-                            {% else %}
-                                {/ row.{{ colums.name }} /}
-                            {% endif %}
-                        </td>
+                            <td data-title="'{{ colums.title }}'"
+                                    {% if colums.filterable %}
+                                        {% set colType= (colums.type=='checkbox'?'select':colums.type) %}
+                                        filter="{ '{{ colums.name }}': '{{ colType }}' }" {% if colums.type=='checkbox' or (colums.type=='select' and colums.filter_options is defined) %} filter-data="{{ colums.name }}_filter" {% endif %}{% endif %} {% if colums.sortable %}sortable="'{{ colums.name }}'"{% endif %} {% if colums.clickable is defined %}ng-click="$event.stopPropagation();showChildren(row.id)"
+                            {% endif %}>
+                                {% if colums.type == 'image' %}
+                                    <img src="{/ row.{{ colums.name }} /}">
+                                {% elseif colums.type=='checkbox' %}
+                                    <input type="checkbox" onclick='event.preventDefault();'
+                                           ng-checked="{/ row.{{ colums.name }} /}">
+                                {% elseif colums.type=='html' %}
+                                    <span ng-bind-html="row.{{ colums.name }}|rawHtml"></span>
+                                {% else %}
+                                    {/ row.{{ colums.name }} /}
+                                {% endif %}
+                            </td>
                         {% endif %}
                     {% endfor %}
                     <td class="button-column">
@@ -77,9 +77,9 @@
                         {% if linkAction is not null and permissions.edit == true %}
                             {% for item in linkAction %}
                                 <button type="button"
-                                        ng-click="{% if item.is_js == false %}go('{{ item.url }}/'+row.id){% else %}customFunction{{ loop.index }}(row.id){% endif %}"
+                                        ng-click="{% if item.is_js == false %}go('{{ item.url }}/'+row.id){% else %}customFunction{{ loop.index }}(row){% endif %}"
                                         class="{{ item.class }}">
-									<em class="{{ item.icon }}"></em>
+                                    <em class="{{ item.icon }}"></em>
                                     {% if item.text is defined %}{{ item.text|trim }}{% endif %}
                                 </button>
                             {% endfor %}
@@ -240,7 +240,8 @@
                 {% if linkAction is not null and permissions.edit == true %}
                 {% for item in linkAction %}
                 {% if item.is_js == true %}
-                $scope.customFunction{{ loop.index }} = function (id) {
+                $scope.customFunction{{ loop.index }} = function (row) {
+                    var id = row.id;
                     {{ item.javascript|raw }}
                 };
                 {% endif %}
