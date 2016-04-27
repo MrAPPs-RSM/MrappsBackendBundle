@@ -31,13 +31,8 @@ class LanguageBase
      *
      * @ORM\Column(name="tradotto", type="boolean")
      */
-    protected $tradotto;
-    
+    protected $tradotto = false;
 
-    public function __construct()
-    {
-        $this->tradotto = false;
-    }
 
     /**
      * Get id
