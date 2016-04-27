@@ -217,7 +217,11 @@ liip_imagine.controller.imagine_filter:
     "angular-ui-validate": "^1.2.2",
     "angular-minicolors": "~0.0.7",
     "fullcalendar": "^2.6.1",
-    "angular-google-maps": "2.3.2"
+    "angular-google-maps": "2.3.2",
+    "angular-input-masks": "~2.2.0"
+  },
+  "resolutions": {
+    "angular": ">=1.4.0"
   }
 }
 ```

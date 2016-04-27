@@ -383,6 +383,9 @@ class DefaultController extends Controller
                 if(!isset($f['step'])) {
                     $fields[$k]['step'] = 1;
                 }
+                if(!isset($f['value']['closed'])) {
+                    $fields[$k]['value']['closed'] = false;
+                }
 
                 //Mattina
                 if(!isset($f['value']['morning']['start']) || strlen(trim($f['value']['morning']['start'])) == '') {
@@ -391,9 +394,6 @@ class DefaultController extends Controller
                 if(!isset($f['value']['morning']['end']) || strlen(trim($f['value']['morning']['end'])) == '') {
                     $fields[$k]['value']['morning']['end'] = '12:00';
                 }
-                if(!isset($f['value']['morning']['closed'])) {
-                    $fields[$k]['value']['morning']['closed'] = false;
-                }
 
                 //Pomeriggio
                 if(!isset($f['value']['afternoon']['start']) || strlen(trim($f['value']['afternoon']['start'])) == '') {
@@ -401,9 +401,6 @@ class DefaultController extends Controller
                 }
                 if(!isset($f['value']['afternoon']['end']) || strlen(trim($f['value']['afternoon']['end'])) == '') {
                     $fields[$k]['value']['afternoon']['end'] = '23:00';
-                }
-                if(!isset($f['value']['afternoon']['closed'])) {
-                    $fields[$k]['value']['afternoon']['closed'] = false;
                 }
             }
 
@@ -572,7 +569,7 @@ class DefaultController extends Controller
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,
             'languages' => $languages,
-            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps","jkuri.timepicker"',
+            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps","ui.utils.masks"',
         ));
     }
 
