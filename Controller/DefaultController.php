@@ -387,21 +387,11 @@ class DefaultController extends Controller
                     $fields[$k]['value']['closed'] = false;
                 }
 
-                //Mattina
-                if(!isset($f['value']['morning']['start']) || strlen(trim($f['value']['morning']['start'])) == '') {
-                    $fields[$k]['value']['morning']['start'] = '07:00';
-                }
-                if(!isset($f['value']['morning']['end']) || strlen(trim($f['value']['morning']['end'])) == '') {
-                    $fields[$k]['value']['morning']['end'] = '12:00';
-                }
-
-                //Pomeriggio
-                if(!isset($f['value']['afternoon']['start']) || strlen(trim($f['value']['afternoon']['start'])) == '') {
-                    $fields[$k]['value']['afternoon']['start'] = '18:00';
-                }
-                if(!isset($f['value']['afternoon']['end']) || strlen(trim($f['value']['afternoon']['end'])) == '') {
-                    $fields[$k]['value']['afternoon']['end'] = '23:00';
-                }
+                //Valori di default
+                if(!isset($f['value']['morning']['start'])) $fields[$k]['value']['morning']['start'] = '';
+                if(!isset($f['value']['morning']['end'])) $fields[$k]['value']['morning']['end'] = '';
+                if(!isset($f['value']['afternoon']['start'])) $fields[$k]['value']['afternoon']['start'] = '';
+                if(!isset($f['value']['afternoon']['end'])) $fields[$k]['value']['afternoon']['end'] = '';
             }
 
             //DateTime Range

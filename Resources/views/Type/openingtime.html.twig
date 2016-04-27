@@ -3,25 +3,26 @@
         <label class="col-sm-2 control-label">{{field.title}}{% if switch is not defined and field.required %} *{% endif %}</label>
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
             <p class="input-group">
-                <label><input type="checkbox" ng-model="form.{{field.name}}.closed">Chiuso</label>
+            <div>{/formValidate/}</div>
+            <label><input type="checkbox" ng-model="form.{{field.name}}.closed">Chiuso</label>
             <div ng-show="!form.{{field.name}}.closed">
-                <div>Mattina</div>
+                <div>Pranzo</div>
                 <div>
                     <input type="text" placeholder="es. 07:00" name="field" ng-model="form.{{field.name}}.morning.start" ui-time-mask="short">
-                    <i ng-show="form.{{field.name}}.morning.start==null || form.{{field.name}}.morning.start==''" class="fa fa-exclamation-triangle"></i>
+                    <i ng-show="form.{{field.name}}.morning.start==null" class="fa fa-exclamation-triangle"></i>
                 </div>
                 <div>
                     <input type="text" placeholder="es. 12:00" name="field" ng-model="form.{{field.name}}.morning.end" ui-time-mask="short">
-                    <i ng-show="form.{{field.name}}.morning.end==null || form.{{field.name}}.morning.end==''" class="fa fa-exclamation-triangle"></i>
+                    <i ng-show="form.{{field.name}}.morning.end==null" class="fa fa-exclamation-triangle"></i>
                 </div>
-                <div>Pomeriggio</div>
+                <div>Cena</div>
                 <div>
                     <input type="text" placeholder="es. 18:00" name="field" ng-model="form.{{field.name}}.afternoon.start" ui-time-mask="short">
-                    <i ng-show="form.{{field.name}}.afternoon.start==null || form.{{field.name}}.afternoon.start==''" class="fa fa-exclamation-triangle"></i>
+                    <i ng-show="form.{{field.name}}.afternoon.start==null" class="fa fa-exclamation-triangle"></i>
                 </div>
                 <div>
                     <input type="text" placeholder="es. 23:00" name="field" ng-model="form.{{field.name}}.afternoon.end" ui-time-mask="short">
-                    <i ng-show="form.{{field.name}}.afternoon.end==null || form.{{field.name}}.afternoon.end==''" class="fa fa-exclamation-triangle"></i>
+                    <i ng-show="form.{{field.name}}.afternoon.end==null" class="fa fa-exclamation-triangle"></i>
                 </div>
             </div>
             </p>
