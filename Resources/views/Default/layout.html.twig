@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/simple-line-icons/css/simple-line-icons.css') }}">
     <link rel='stylesheet' href='{{ asset('assets/vendor/toastr/toastr.min.css') }}'>
     <link rel='stylesheet' href='{{ asset('assets/vendor/SpinKit/css/spinkit.css') }}'>
-    <link rel="stylesheet" href="{{ asset('bundles/mrappsbackend/css/ngTimepicker.css') }}">
     {{ render(controller('MrappsBackendBundle:Resources:__backendCustomCss')) }}
     {% block css %}
     {% endblock css %}
@@ -82,7 +81,7 @@
 <script src="{{ asset('assets/vendor/angular/angular.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 <script src='{{ asset('assets/vendor/toastr/toastr.min.js') }}'></script>
-<script src='{{ asset('bundles/mrappsbackend/js/ngTimepicker.min.js') }}'></script>
+<script src='{{ asset('assets/vendor/angular-input-masks/angular-input-masks-standalone.min.js') }}'></script>
 <script src='{{ asset('bundles/mrappsbackend/js/custom.js') }}'></script>
 {% block srcjavascript %}
 {% endblock srcjavascript %}
