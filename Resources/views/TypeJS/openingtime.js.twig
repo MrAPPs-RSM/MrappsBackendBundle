@@ -1,0 +1,4 @@
+$scope.form.{{field.name}} = {
+    'morning': {'start':'', 'end':'', 'closed':{% if field.value.morning.closed is defined and field.value.morning.closed %}true{% else %}false{% endif %} },
+    'afternoon': {'start':'', 'end':'', 'closed':{% if field.value.afternoon.closed is defined and field.value.afternoon.closed %}true{% else %}false{% endif %} },
+}

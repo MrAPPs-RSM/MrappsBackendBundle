@@ -376,6 +376,37 @@ class DefaultController extends Controller
         //Allineamento campi
         foreach ($fields as $k => $f) {
 
+            //Opening Time
+            if($f['type'] == 'openingtime') {
+
+                //Generale
+                if(!isset($f['step'])) {
+                    $fields[$k]['step'] = 1;
+                }
+
+                //Mattina
+                if(!isset($f['value']['morning']['start']) || strlen(trim($f['value']['morning']['start'])) == '') {
+                    $fields[$k]['value']['morning']['start'] = '07:00';
+                }
+                if(!isset($f['value']['morning']['end']) || strlen(trim($f['value']['morning']['end'])) == '') {
+                    $fields[$k]['value']['morning']['end'] = '12:00';
+                }
+                if(!isset($f['value']['morning']['closed'])) {
+                    $fields[$k]['value']['morning']['closed'] = false;
+                }
+
+                //Pomeriggio
+                if(!isset($f['value']['afternoon']['start']) || strlen(trim($f['value']['afternoon']['start'])) == '') {
+                    $fields[$k]['value']['afternoon']['start'] = '18:00';
+                }
+                if(!isset($f['value']['afternoon']['end']) || strlen(trim($f['value']['afternoon']['end'])) == '') {
+                    $fields[$k]['value']['afternoon']['end'] = '23:00';
+                }
+                if(!isset($f['value']['afternoon']['closed'])) {
+                    $fields[$k]['value']['afternoon']['closed'] = false;
+                }
+            }
+
             //DateTime Range
             if($f['type'] == 'datarange') {
 
@@ -541,7 +572,7 @@ class DefaultController extends Controller
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,
             'languages' => $languages,
-            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps"',
+            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps","jkuri.timepicker"',
         ));
     }
 
