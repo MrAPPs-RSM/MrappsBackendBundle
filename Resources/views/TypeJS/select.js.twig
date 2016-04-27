@@ -3,10 +3,10 @@ setTimeout(function () {
     {% if field.ajax is defined and field.ajax == true %}
 
     $scope.{{ field.name }}Items = [];
-    $scope.refresh{{ field.name }} = function(search) {
+    $scope.refresh{{ field.name }} = function (search) {
         var text = search;
-        if(text.length >= {{ field.ajax_options.min_length|default(0) }}) {
-            var params = {q: search, form:$scope.form};
+        if (text.length >= {{ field.ajax_options.min_length|default(0) }}) {
+            var params = {q: search, form: $scope.form};
             return $http.post('{{ field.url }}', params)
                     .then(function (response) {
                         $scope.{{ field.name }}Items = response.data
@@ -15,7 +15,7 @@ setTimeout(function () {
         return true;
     };
 
-    {% if field.value is defined and field.value is not empty %}
+    {% if field.value is defined and field.value is not empty and field.value is not iterable %}
     $http.get('{{ field.url }}?id={{ field.value }}')
             .then(function (response) {
                 $scope.form.{{ field.name }} = response.data
@@ -29,7 +29,7 @@ setTimeout(function () {
 
         {% set query_params = [] %}
 
-        {% if field.value is defined and field.value is not empty %}
+        {% if field.value is defined and field.value is not empty and ((field.value is iterable and field.value.id |length>0) or field.value is not iterable) %}
 
         {% if field.value is iterable %}
         {% set query_params = query_params|merge(field.value) %}
