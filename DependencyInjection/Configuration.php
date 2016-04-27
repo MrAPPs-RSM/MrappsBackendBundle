@@ -29,10 +29,16 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+
             ->scalarNode('logo_path')->defaultValue('temp')->end()
             ->scalarNode('temp_folder')->defaultValue('temp')->end()
             ->scalarNode('images_url')->defaultValue('')->end()
             ->scalarNode('gmaps_api_key')->defaultValue('')->end()
+
+            ->arrayNode('custom_css')
+            ->prototype('scalar')->end()
+            ->end()
+
             ->arrayNode('default_routes')
             ->prototype('array')
             ->children()
@@ -41,6 +47,7 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->end()
             ->end()
+
             ->arrayNode('file_accepted_types')
             ->addDefaultsIfNotSet()
             ->children()
@@ -51,6 +58,7 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('json')->defaultValue('application/json, text/plain, text/json')->end()
             ->end()
             ->end()
+
             ->arrayNode('customization')
             ->addDefaultsIfNotSet()
             ->children()
@@ -62,6 +70,7 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('text_hover_on_secondary_color')->defaultValue('black')->end()
             ->end()
             ->end()
+
             ->end();
 
         return $treeBuilder;

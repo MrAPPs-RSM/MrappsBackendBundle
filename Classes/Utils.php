@@ -26,7 +26,7 @@ class Utils
         }
 
         if (strlen($compactName) > 0) {
-            $compactName = str_replace('\\\\', ':', str_replace('Controller', '', $compactName));
+            $compactName = str_replace('\\', '', str_replace('\\\\', ':', str_replace('Controller', '', $compactName)));
         }
 
         return $compactName;
@@ -275,7 +275,7 @@ class Utils
             if ($page < 1) $page = 1;
             if (!is_array($filters)) $filters = array();
             if (!is_array($sorting)) $sorting = array('createdAt' => 'desc');    //Sorting di default
-            if ($isDraft && !isset($filters['published'])) $filters['published'] = 0;
+            if ($isDraft && !isset($filters['published']) ) $filters['published'] = 0;
             //--------------------------------------------------------------------------------------------
 
             //Filtri
@@ -284,10 +284,10 @@ class Utils
             if (count($filters) > 0) {
                 $tmp = array();
                 foreach ($filters as $campo => $valore) {
-                    if (is_numeric($valore) || is_object($valore)) {
+                    if(is_numeric($valore) || is_object($valore)) {
                         $tmp[] = sprintf(" a.%s = :%s ", $campo, $campo);
                         $params[$campo] = $valore;
-                    } else {
+                    }else {
                         $tmp[] = sprintf(" a.%s LIKE :%s ", $campo, $campo);
                         $params[$campo] = '%' . $valore . '%';
                     }
@@ -490,10 +490,7 @@ class Utils
                             $entityLang->setPadre($entity);
 
                             $em->persist($entityLang);
-
-                            if ($options['auto_flush'] === true) {
-                                $em->flush($entityLang);
-                            }
+                            $em->flush($entityLang);
                         }
                     }
 
@@ -509,7 +506,6 @@ class Utils
     {
         if (!is_array($options)) $options = array();
         if (!isset($options['create_entity'])) $options['create_entity'] = false;
-        if (!isset($options['auto_flush'])) $options['auto_flush'] = true;
         if (!isset($options['find_rules'])) $options['find_rules'] = false; //valore accettato $options['find_rules']=array(array("rule_key"=>"key","rule_value"=>"value"))
 
         if (is_array($language)) {
@@ -596,10 +592,9 @@ class Utils
         return $defaultRouteForUser;
     }
 
-    public static function convertTimestampToIso8601($timestamp = null)
-    {
+    public static function convertTimestampToIso8601($timestamp = null) {
 
-        if ($timestamp !== null) {
+        if($timestamp !== null) {
 
             $timestamp = intval($timestamp);
             $date = date('Y-m-d', $timestamp);
@@ -611,10 +606,9 @@ class Utils
         return null;
     }
 
-    public static function getEntityBozza(EntityManager $em = null, DraftInterface $entity = null)
-    {
+    public static function getEntityBozza(EntityManager $em = null, DraftInterface $entity = null) {
 
-        if ($em !== null && $entity !== null) {
+        if($em !== null && $entity !== null) {
             $newEntity = ($entity->getPublished()) ? $entity->getOther() : $entity;
             return Utils::getFullEntityFromProxy($em, $newEntity);
         }
@@ -622,10 +616,9 @@ class Utils
         return null;
     }
 
-    public static function getEntityPublished(EntityManager $em = null, DraftInterface $entity = null)
-    {
+    public static function getEntityPublished(EntityManager $em = null, DraftInterface $entity = null) {
 
-        if ($em !== null && $entity !== null) {
+        if($em !== null && $entity !== null) {
             $newEntity = (!$entity->getPublished()) ? $entity->getOther() : $entity;
             return Utils::getFullEntityFromProxy($em, $newEntity);
         }
@@ -633,28 +626,26 @@ class Utils
         return null;
     }
 
-    public static function getFullEntityFromProxy(EntityManager $em = null, Base $entity = null)
-    {
+    public static function getFullEntityFromProxy(EntityManager $em = null, Base $entity = null) {
 
-        if ($entity !== null) {
+        if($entity !== null) {
 
             $proxyClass = 'Doctrine\\ORM\\Proxy\\Proxy';
-            if (is_subclass_of(get_class($entity), $proxyClass)) {
+            if(is_subclass_of(get_class($entity), $proxyClass)) {
 
                 $realClass = str_replace('Proxies\\__CG__\\', '', get_class($entity));
 
                 $query = "SELECT a FROM {$realClass} a WHERE a.id = :id";
                 $params = array('id' => $entity->getId());
                 $tmp = $em->createQuery($query)->setParameters($params)->getResult(DoctrineQuery::HYDRATE_OBJECT);
-                if (count($tmp) > 0) $entity = $tmp[0];
+                if(count($tmp) > 0) $entity = $tmp[0];
             }
         }
 
         return $entity;
     }
 
-    public static function pubblicaEntity(EntityManager $em = null, DraftInterface $entity = null, $excludeFields = array(), $lockEntities = true)
-    {
+    public static function pubblicaEntity(EntityManager $em = null, DraftInterface $entity = null, $excludeFields = array(), $lockEntities = true) {
 
         //Entity bozza
         $bozza = Utils::getEntityBozza($em, $entity);
@@ -664,7 +655,7 @@ class Utils
 
         $draftClass = 'Mrapps\\BackendBundle\\Entity\\Draft';
 
-        if ($em !== null && $bozza !== null && $pubblicata !== null) {   // && $bozza->getLocked() != true
+        if($em !== null && $bozza !== null && $pubblicata !== null) {   // && $bozza->getLocked() != true
 
             $oneToOneClass = 'Doctrine\\ORM\\Mapping\\OneToOne';
             $manyToOneClass = 'Doctrine\\ORM\\Mapping\\ManyToOne';
@@ -673,7 +664,7 @@ class Utils
             $reader = new AnnotationReader();
 
             //Dalla procedura verranno escluse le relazioni OneToOne\ManyToOne, i campi specificati in questo array e i campi specificati come parametro
-            if (!is_array($excludeFields)) $excludeFields = array($excludeFields);
+            if(!is_array($excludeFields)) $excludeFields = array($excludeFields);
             $excludedFields = array_merge(array('id', 'published', 'other', 'createdAt', 'updatedAt', 'visible', 'deleted'), $excludeFields);
 
             //Lista property da pubblicare a cascata
@@ -699,9 +690,7 @@ class Utils
                 $fieldName = $p->name;
 
                 //Il campo non deve essere tra quelli da escludere e non deve essere una relazione oneToMany (array)
-                if (!in_array($fieldName, $excludedFields) && /*$annOneToOne == null && $annManyToOne == null &&*/
-                    $annOneToMany == null
-                ) {
+                if(!in_array($fieldName, $excludedFields) && /*$annOneToOne == null && $annManyToOne == null &&*/ $annOneToMany == null) {
 
                     //Il campo non deve essere tra quelli da escludere
 //                    if(!in_array($fieldName, $excludedFields)) {
@@ -716,14 +705,14 @@ class Utils
                         $p->setAccessible(false);
 
                         //Se è una relazione o2o\m2o, la copio solo se l'entity dall'altra parte non è di tipo Draft
-                        if ($annOneToOne !== null || $annManyToOne !== null) {
+                        if($annOneToOne !== null || $annManyToOne !== null) {
                             $canSetField = false;
-                            if ($value !== null && is_object($value)) {
+                            if($value !== null && is_object($value)) {
                                 $canSetField = !is_subclass_of($value, $draftClass);
                             }
                         }
 
-                        if ($canSetField) {
+                        if($canSetField) {
                             //Setto il valore su entity Pubblicata
                             $pPubbl = $refPubblicata->getProperty($fieldName);
                             $pPubbl->setAccessible(true);
@@ -732,14 +721,13 @@ class Utils
                         }
 
 
-                    } catch (\Exception $ex) {
-                    }
+                    } catch (\Exception $ex) {}
                 }
 //                }
             }
 
             //Lock entity
-            if ((bool)$lockEntities && $bozza->getEnableLockingFeature() == 1) {
+            if((bool)$lockEntities && $bozza->getEnableLockingFeature() == 1) {
                 Utils::lockEntity($em, $bozza, false);
                 Utils::lockEntity($em, $pubblicata, false);
             }
@@ -773,18 +761,17 @@ class Utils
         return $pubblicata;
     }
 
-    public static function lockEntity(EntityManager $em = null, $entity = null, $autoFlush = true)
-    {
+    public static function lockEntity(EntityManager $em = null, $entity = null, $autoFlush = true) {
 
         $draftClass = 'Mrapps\\BackendBundle\\Entity\\Draft';
 
-        if ($em !== null && $entity !== null && is_subclass_of($entity, $draftClass) && $entity->getEnableLockingFeature() == true) {
+        if($em !== null && $entity !== null && is_subclass_of($entity, $draftClass) && $entity->getEnableLockingFeature() == true) {
 
             $entity->setLocked(1);
             $entity->setLockedAt(new \DateTime());
 
             $em->persist($entity);
-            if ($autoFlush) $em->flush();
+            if($autoFlush) $em->flush();
 
             return true;
         }
@@ -792,18 +779,17 @@ class Utils
         return false;
     }
 
-    public static function unlockEntity(EntityManager $em = null, $entity = null, $autoFlush = true)
-    {
+    public static function unlockEntity(EntityManager $em = null, $entity = null, $autoFlush = true) {
 
         $draftClass = 'Mrapps\\BackendBundle\\Entity\\Draft';
 
-        if ($em !== null && $entity !== null && is_subclass_of($entity, $draftClass)) {
+        if($em !== null && $entity !== null && is_subclass_of($entity, $draftClass)) {
 
             $entity->setLocked(0);
             $entity->setLockedAt(null);
 
             $em->persist($entity);
-            if ($autoFlush) $em->flush();
+            if($autoFlush) $em->flush();
 
             return true;
         }
@@ -813,7 +799,7 @@ class Utils
 
     public static function generateThumbnailsList($container = null, $url = '', $thumbnails = array())
     {
-        if ($container !== null && strlen($url) > 0) {
+        if($container !== null && strlen($url) > 0) {
             $liip = $container->get('liip_imagine.cache.manager');
             foreach ($thumbnails as $item) {
                 $liip->generateUrl($url, $item);
