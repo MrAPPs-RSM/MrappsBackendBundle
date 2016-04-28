@@ -10,10 +10,10 @@
             		<div ng-show="!form.{{field.name}}.closed">
 			            <div>    
 			                <input type="text" placeholder="es. 07:00" name="field" class="form-control" ng-model="form.{{field.name}}.morning.start" ui-time-mask="short">
-		                    <i ng-show="form.{{field.name}}.morning.start==null" class="fa fa-exclamation-triangle"></i>
+		                    {# <i ng-show="form.{{field.name}}.morning.start==null" class="fa fa-exclamation-triangle"></i> #}
 							<div class="sep">-</div>
 		                    <input type="text" placeholder="es. 12:00" name="field" class="form-control" ng-model="form.{{field.name}}.morning.end" ui-time-mask="short">
-		                    <i ng-show="form.{{field.name}}.morning.end==null" class="fa fa-exclamation-triangle"></i>
+		                    {# <i ng-show="form.{{field.name}}.morning.end==null" class="fa fa-exclamation-triangle"></i> #}
 						</div>
 		            </div>
             	</div><!-- .col -->
@@ -21,10 +21,10 @@
             		<div ng-show="!form.{{field.name}}.closed">
 			            <div> 
 		                    <input type="text" placeholder="es. 18:00" name="field" class="form-control" ng-model="form.{{field.name}}.afternoon.start" ui-time-mask="short">
-		                    <i ng-show="form.{{field.name}}.afternoon.start==null" class="fa fa-exclamation-triangle"></i>
+							{# <i ng-show="form.{{field.name}}.afternoon.start==null" class="fa fa-exclamation-triangle"></i> #}
 							<div class="sep">-</div>
 		                    <input type="text" placeholder="es. 23:00" name="field" class="form-control" ng-model="form.{{field.name}}.afternoon.end" ui-time-mask="short">
-		                    <i ng-show="form.{{field.name}}.afternoon.end==null" class="fa fa-exclamation-triangle"></i>
+		                    {# <i ng-show="form.{{field.name}}.afternoon.end==null" class="fa fa-exclamation-triangle"></i> #}
 						</div>
 		            </div>
             	</div><!-- .col -->
