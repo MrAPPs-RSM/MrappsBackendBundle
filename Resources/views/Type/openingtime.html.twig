@@ -1,30 +1,47 @@
-<fieldset id="{{field.name}}" {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
+<fieldset class="orari" id="{{field.name}}" {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
     <div class="form-group">
         <label class="col-sm-2 control-label">{{field.title}}{% if switch is not defined and field.required %} *{% endif %}</label>
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
             <p class="input-group">
             <div>{/formValidate/}</div>
-            <label><input type="checkbox" ng-model="form.{{field.name}}.closed">Chiuso</label>
-            <div ng-show="!form.{{field.name}}.closed">
-                <div>Pranzo</div>
-                <div>
-                    <input type="text" placeholder="es. 07:00" name="field" ng-model="form.{{field.name}}.morning.start" ui-time-mask="short">
-                    <i ng-show="form.{{field.name}}.morning.start==null" class="fa fa-exclamation-triangle"></i>
-                </div>
-                <div>
-                    <input type="text" placeholder="es. 12:00" name="field" ng-model="form.{{field.name}}.morning.end" ui-time-mask="short">
-                    <i ng-show="form.{{field.name}}.morning.end==null" class="fa fa-exclamation-triangle"></i>
-                </div>
-                <div>Cena</div>
-                <div>
-                    <input type="text" placeholder="es. 18:00" name="field" ng-model="form.{{field.name}}.afternoon.start" ui-time-mask="short">
-                    <i ng-show="form.{{field.name}}.afternoon.start==null" class="fa fa-exclamation-triangle"></i>
-                </div>
-                <div>
-                    <input type="text" placeholder="es. 23:00" name="field" ng-model="form.{{field.name}}.afternoon.end" ui-time-mask="short">
-                    <i ng-show="form.{{field.name}}.afternoon.end==null" class="fa fa-exclamation-triangle"></i>
-                </div>
-            </div>
+            
+            <div class="row">
+            	<div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+            		<div ng-show="!form.{{field.name}}.closed">
+			            <div>    
+			                <input type="text" placeholder="es. 07:00" name="field" class="form-control" ng-model="form.{{field.name}}.morning.start" ui-time-mask="short">
+		                    <i ng-show="form.{{field.name}}.morning.start==null" class="fa fa-exclamation-triangle"></i>
+							<div class="sep">-</div>
+		                    <input type="text" placeholder="es. 12:00" name="field" class="form-control" ng-model="form.{{field.name}}.morning.end" ui-time-mask="short">
+		                    <i ng-show="form.{{field.name}}.morning.end==null" class="fa fa-exclamation-triangle"></i>
+						</div>
+		            </div>
+            	</div><!-- .col -->
+            	<div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+            		<div ng-show="!form.{{field.name}}.closed">
+			            <div> 
+		                    <input type="text" placeholder="es. 18:00" name="field" class="form-control" ng-model="form.{{field.name}}.afternoon.start" ui-time-mask="short">
+		                    <i ng-show="form.{{field.name}}.afternoon.start==null" class="fa fa-exclamation-triangle"></i>
+							<div class="sep">-</div>
+		                    <input type="text" placeholder="es. 23:00" name="field" class="form-control" ng-model="form.{{field.name}}.afternoon.end" ui-time-mask="short">
+		                    <i ng-show="form.{{field.name}}.afternoon.end==null" class="fa fa-exclamation-triangle"></i>
+						</div>
+		            </div>
+            	</div><!-- .col -->
+            	<div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+            		<a class="btn btn-labeled btn-danger" ng-model="form.{{field.name}}.closed">
+            			<span class="btn-label">
+                        <em class="fa fa-close"></em>
+                    </span>
+                    Chiuso
+            		</a>
+            	</div><!-- .col -->
+            </div><!-- .row -->
+            
+            
+            
+            
+            
             </p>
             {% if switch is not defined and field.required %}<span ng-show="form.validateInput('{{field.name}}', 'required')" class="text-danger">This field is required</span>{% endif %}
         </div>
