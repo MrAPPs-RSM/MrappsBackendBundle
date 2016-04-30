@@ -34,6 +34,11 @@ class LanguageBase
     protected $tradotto = false;
 
 
+    public function __construct()
+    {
+
+    }
+
     /**
      * Get id
      *
