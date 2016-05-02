@@ -49,7 +49,7 @@
                                         filter="{ '{{ colums.name }}': '{{ colType }}' }" {% if colums.type=='checkbox' or (colums.type=='select' and colums.filter_options is defined) %} filter-data="{{ colums.name }}_filter" {% endif %}{% endif %} {% if colums.sortable %}sortable="'{{ colums.name }}'"{% endif %} {% if colums.clickable is defined %}ng-click="$event.stopPropagation();showChildren(row.id)"
                             {% endif %}>
                                 {% if colums.type == 'image' %}
-                                    <img src="{/ row.{{ colums.name }} /}">
+                                    <img ng-src="{/ row.{{ colums.name }} /}">
                                 {% elseif colums.type=='checkbox' %}
                                     <input type="checkbox" onclick='event.preventDefault();'
                                            ng-checked="{/ row.{{ colums.name }} /}">
