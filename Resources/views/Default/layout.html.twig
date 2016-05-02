@@ -25,7 +25,7 @@
     <header class="topnavbar-wrapper">
         {% block topnavbar %}
             {# {{ render(controller('MrappsBackendBundle:Default:__topNavBar', {"request" : app.request})) }} #}
-            {{ mrappsBackendLanguages.getTopNavBar() | raw }}
+            {{ mrappsBackendLanguages.getTopNavBar(app.request, app.user) | raw }}
         {% endblock topnavbar %}
     </header>
     {#<aside class="aside" class="aside" ng-controller="SidebarController">#}

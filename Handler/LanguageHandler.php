@@ -6,6 +6,7 @@ namespace Mrapps\BackendBundle\Handler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Mrapps\BackendBundle\Classes\Utils;
+use FOS\UserBundle\Entity\User;
 
 class LanguageHandler
 {
@@ -23,8 +24,12 @@ class LanguageHandler
 
     }
 
-    public function getTopNavBar()
+    public function getTopNavBar(Request $request = null, User $user = null)
     {
+        if($request != null) {
+            $this->request = $request;
+        }
+
         $router = $this->container->get('router');
         $uri = ($this->request !== null) ? $this->request->getRequestURI() : '';
 
@@ -53,10 +58,14 @@ class LanguageHandler
         //Aggiungo i parametri GET
         $routeParams = array_merge($routeParams, $queryParams);
 
+        if($user == null) {
+            $user = $this->request->getUser();
+        }
+
 
         return $this->container->get('templating')->renderResponse('MrappsBackendBundle:Default:top-navbar.html.twig',
             array("logo_path" => $this->container->hasParameter('mrapps_backend.logo_path') ? $this->container->getParameter('mrapps_backend.logo_path') : null,
-                "default_route_name" => ($this->request !== null) ? Utils::getDefaultRouteForUser($this->container, $this->request->getUser()) : '',
+                "default_route_name" => ($this->request !== null) ? Utils::getDefaultRouteForUser($this->container, $user) : '',
                 "languages" => Utils::getLanguages(),
                 "routeName" => $route,
                 "routeParams" => $routeParams,
