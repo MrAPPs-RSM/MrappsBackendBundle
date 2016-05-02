@@ -26,6 +26,7 @@ class ProfileController extends Controller
      */
     public function changePasswordAction(Request $request)
     {
+        $errors = array();
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         $form = $this->container->get('fos_user.change_password.form');
@@ -33,12 +34,18 @@ class ProfileController extends Controller
 
         $process = $formHandler->process($user);
         if ($process) {
-            $this->setFlash('fos_user_success', 'change_password.flash.success');;
+            $this->setFlash('fos_user_success', 'change_password.flash.success');
+        }else {
+            foreach ($form->getErrors(true) as $er) {
+                $errors[] = $er;
+            }
         }
 
         return $this->render('MrappsBackendBundle:Profile:change_password.html.twig', array(
             'title' => "Cambia Password",
             'form' => $form->createView(),
+            'errors' => $errors,
+            'success' => $process,
         ));
     }
 
