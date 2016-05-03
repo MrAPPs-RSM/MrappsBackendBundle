@@ -110,16 +110,21 @@ class PermissionRepository extends EntityRepository
 
     public function getPermissions($object = '', UserInterface $user = null) {
 
-        $isSuperAdmin = $user->hasRole('ROLE_SUPER_ADMIN');
-
-        $canView = $isSuperAdmin;
-        $canCreate = $isSuperAdmin;
-        $canEdit = $isSuperAdmin;
-        $canDelete = $isSuperAdmin;
+        $canView = false;
+        $canCreate = false;
+        $canEdit = false;
+        $canDelete = false;
 
         $object = trim($object);
 
         if(strlen($object) > 0 && $user !== null) {
+
+            $isSuperAdmin = $user->hasRole('ROLE_SUPER_ADMIN');
+
+            $canView = $isSuperAdmin;
+            $canCreate = $isSuperAdmin;
+            $canEdit = $isSuperAdmin;
+            $canDelete = $isSuperAdmin;
 
             $roles = $user->getRoles();
 
@@ -154,6 +159,7 @@ class PermissionRepository extends EntityRepository
                 }
             }
         }
+
 
         return array(
             'view' => $canView,
