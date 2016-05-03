@@ -114,34 +114,35 @@ class DefaultController extends Controller
 
             $user = $this->getUser();
 
-            $em = $this->getDoctrine()->getManager();
-            $perm = $em->getRepository('MrappsBackendBundle:Permission')->getPermissions($controllerCompact, $user);
+            if($user !== null) {
 
-            //Controllo permesso del tipo sidebar (view, edit, ...)
-            $canProceedType = (isset($perm[$type])) ? (bool)$perm[$type] : false;
+                $em = $this->getDoctrine()->getManager();
+                $perm = $em->getRepository('MrappsBackendBundle:Permission')->getPermissions($controllerCompact, $user);
 
-            //Controllo lista ruoli che possono accedere alla rotta
-            $allowedRolesStr = trim($sidebar->getRoles());
-            if(strlen($allowedRolesStr) > 0) {
-                $allowedRoles = explode(',', $sidebar->getRoles());
+                //Controllo permesso del tipo sidebar (view, edit, ...)
+                $canProceedType = (isset($perm[$type])) ? (bool)$perm[$type] : false;
 
-                $canProceedRoles = false;
+                //Controllo lista ruoli che possono accedere alla rotta
+                $allowedRolesStr = trim($sidebar->getRoles());
+                if(strlen($allowedRolesStr) > 0) {
+                    $allowedRoles = explode(',', $sidebar->getRoles());
 
-                foreach ($allowedRoles as $r) {
-                    $r = strtoupper(trim($r));
-                    if(strlen($r) > 0 && $user->hasRole($r)) {
-                        $canProceedRoles = true;
-                        break;
+                    $canProceedRoles = false;
+
+                    foreach ($allowedRoles as $r) {
+                        $r = strtoupper(trim($r));
+                        if(strlen($r) > 0 && $user->hasRole($r)) {
+                            $canProceedRoles = true;
+                            break;
+                        }
                     }
+
+                }else {
+                    $canProceedRoles = true;
                 }
 
-            }else {
-                $canProceedRoles = true;
+                return ($canProceedType && $canProceedRoles);
             }
-
-
-
-            return ($canProceedType && $canProceedRoles);
         }
 
         return false;
