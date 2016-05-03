@@ -30,7 +30,6 @@ setTimeout(function () {
         {% set query_params = [] %}
 
         {% if field.value is defined and field.value is not empty and ((field.value is iterable and field.value.id |length>0) or field.value is not iterable) %}
-
         {% if field.value is iterable %}
         {% set query_params = query_params|merge(field.value) %}
         {% else %}
@@ -44,6 +43,15 @@ setTimeout(function () {
         $http.get('{{ field.url }}{% if query_params|length > 0 %}?{{ query_params|url_encode }}{% endif %}').then(function (response) {
             $scope.form.{{ field.name }} = response.data;
         });
+        {% endif %}
+
+        {% if (field.value is not defined or field.value is empty) and field.required %}
+        if($scope.{{ field.name }}Items.length > 0) {
+            for(var i in $scope.{{ field.name }}Items) {
+                $scope.form.{{ field.name }} = $scope.{{ field.name }}Items[i];
+                break;
+            }
+        }
         {% endif %}
 
     });
