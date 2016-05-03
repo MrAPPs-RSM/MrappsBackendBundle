@@ -314,6 +314,43 @@ class DefaultController extends Controller
         return new RedirectResponse($this->generateUrl($defaultRouteForUser));
     }
 
+    public function __customAction(Request $request, $params = array()) {
+
+        //Tipologia di permesso (es. view)
+        if(!is_array($params)) $params = array();
+        $permissionsType = '';
+        if(isset($params['__permissions_type'])) {
+            $permissionsType = strtolower(trim($params['__permissions_type']));
+            unset($params['__permissions_type']);
+        }
+        if(strlen($permissionsType) == 0) $permissionsType = 'view';
+
+        //Check permessi
+        $this->security($request, $permissionsType);
+
+        //Template
+        $template = '';
+        if(isset($params['__template'])) {
+            $template = trim($params['__template']);
+            unset($params['__template']);
+        }
+
+        if(strlen($template) > 0) {
+
+            $em = $this->getDoctrine()->getManager();
+            $currentObject = Utils::getControllerCompactName($request->attributes->get('_controller'));
+
+            //Permessi per questo oggetto
+            $permissions = $em->getRepository('MrappsBackendBundle:Permission')->getPermissions($currentObject, $this->getUser());
+            $params['permissions'] = $permissions;
+
+            return $this->render($template, $params);
+
+        }else {
+            throw new \InvalidArgumentException("Parametro __template mancante. Specificare un template valido nella forma AppBundle:Default:test.");
+        }
+    }
+
     public function __listAction(Request $request, $title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null, $deleteMessages = array())
     {
         $this->security($request, 'view');
