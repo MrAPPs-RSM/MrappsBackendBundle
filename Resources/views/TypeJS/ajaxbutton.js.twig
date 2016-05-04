@@ -1,3 +1,19 @@
+$scope.{{ field.name }}Loading = false;
 $scope.executeAjax{{ field.name }} = function() {
-
+    {% if field.confirm is defined and field.confirm|length > 0 %}
+    if(confirm("{{ field.confirm|escape('js') }}")) {
+        {% endif %}
+        $scope.{{ field.name }}Loading = true;
+        $http.post('{{ field.url }}', {'form':$scope.form})
+                .then(function (response) {
+                    if(response.data.success) {
+                        {#TODO settare i val (SOLO I VAL) dei form specificati in data#}
+                    }else {
+                        toastr.error(response.data.message,'Errore!');
+                    }
+                    $scope.{{ field.name }}Loading = false;
+                });
+        {% if field.confirm is defined and field.confirm|length > 0 %}
+    }
+    {% endif %}
 };

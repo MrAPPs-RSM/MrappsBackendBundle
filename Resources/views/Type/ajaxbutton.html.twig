@@ -1,8 +1,12 @@
+{% set button_class = 'success' %}
+{% if field.class is defined and field.class is not empty %}
+    {% set button_class = field.class %}
+{% endif %}
 <fieldset id="{{field.name}}" {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
     <div class="form-group">
         <label class="col-sm-2 control-label">&nbsp;</label>
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
-            <button type="button" ng-click="executeAjax{{ field.name }}()">{% if field.icon is defined %}<i class="fa fa-{{ field.icon }}"></i>&nbsp;{% endif %}{{ field.title }}</button>
+            <button ng-disabled="{{ field.name }}Loading" class="btn btn-{{ field.class }}" type="button" ng-click="executeAjax{{ field.name }}()"><i ng-show="{{ field.name }}Loading" class="fa fa-spin fa-spinner"></i>{% if field.icon is defined %}<i ng-show="{{ field.name }}Loading==false" class="fa fa-{{ field.icon }}"></i>{% endif %}&nbsp;{{ field.title }}</button>
         </div>
         {% if field.didascalia is defined %}
             <div class="col-sm-4">
