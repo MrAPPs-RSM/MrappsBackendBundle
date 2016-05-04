@@ -611,6 +611,22 @@ class Utils
         return null;
     }
 
+    public static function convertIso8601ToDatetime($iso = "")
+    {
+        $iso = trim($iso);
+        if (strlen($iso) > 0) {
+
+            $timestamp = strtotime($iso);
+            if($timestamp !== false) {
+                $output = new \DateTime();
+                $output->setTimestamp($timestamp);
+                return $output;
+            }
+        }
+
+        return null;
+    }
+
     public static function getEntityBozza(EntityManager $em = null, DraftInterface $entity = null)
     {
 
