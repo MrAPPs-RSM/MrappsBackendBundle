@@ -7,7 +7,12 @@ $scope.executeAjax{{ field.name }} = function() {
         $http.post('{{ field.url }}', {'form':$scope.form})
                 .then(function (response) {
                     if(response.data.success) {
-                        {#TODO settare i val (SOLO I VAL) dei form specificati in data#}
+                        toastr.success(response.data.message,'');
+                        $.each(response.data.data, function(k,v) {
+                            if(typeof $scope.form[k] != "undefined") {
+                                $scope.form[k] = v;
+                            }
+                        });
                     }else {
                         toastr.error(response.data.message,'Errore!');
                     }
