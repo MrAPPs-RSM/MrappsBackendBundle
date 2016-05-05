@@ -3,17 +3,17 @@
         <label class="col-sm-2 control-label">{{field.title}}{% if switch is not defined and field.required %} *{% endif %}</label>
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
             <p class="input-group">
-                
-                <input type="text" name="{{field.name}}" class="form-control" datepicker-popup="{{field.format}}" ng-click="{{field.name}}_dpOpen($event)"
-                    ng-model="form.{{field.name}}" is-open="{{field.name}}_dpOpened" {% if field.min is defined%}min-date="'{{ field.min|date("Y-m-d") }}'"{% endif %} {% if field.max is defined%}max-date="'{{ field.max|date("Y-m-d") }}'"{% endif %}
-                    datepicker-options="{{field.name}}_dpOptions" date-disabled="{% if field.disable is defined and field.disable %}true{% else %}false{% endif %}"
-                    show-button-bar="false" {% if switch is not defined and field.required %}required="true"{% endif %}
+
+                <input type="text" name="{{field.name}}" class="form-control" datepicker-popup="{{field.format}}" ng-click="{{field.name}}_dpOpen($event)" ng-change="{{field.name}}_onChange()"
+                       ng-model="form.{{field.name}}_view" is-open="{{field.name}}_dpOpened" {% if field.min is defined%}min-date="'{{ field.min|date("Y-m-d") }}'"{% endif %} {% if field.max is defined%}max-date="'{{ field.max|date("Y-m-d") }}'"{% endif %}
+                       datepicker-options="{{field.name}}_dpOptions" date-disabled="{% if field.disable is defined and field.disable %}true{% else %}false{% endif %}"
+                       show-button-bar="false" {% if switch is not defined and field.required %}required="true"{% endif %}
                 />
                 
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default btn-form" ng-click="{{field.name}}_dpOpen($event)"><i class="fa fa-calendar"></i></button>
                 </span>
-                
+
             </p>
             {% if switch is not defined and field.required %}<span ng-show="form.validateInput('{{field.name}}', 'required')" class="text-danger">This field is required</span>{% endif %}
         </div>

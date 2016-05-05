@@ -8,10 +8,23 @@ $scope.{{ field.name }}_dpOptions = {
     startingDay: 1
 };
 
-var date_{{ field.name }} = new Date('{{ field.value }}');
-var date_{{ field.name }}_tzOffset = date_{{ field.name }}.getTimezoneOffset();
-var date_{{ field.name }}_newTs = date_{{ field.name }}.getTime()+(date_{{ field.name }}_tzOffset*60000);
-date_{{ field.name }} = new Date(date_{{ field.name }}_newTs);
+
+$scope.{{ field.name }}_modelToView = function () {
+    var date_{{ field.name }}_tzOffset = $scope.form.{{ field.name }}.getTimezoneOffset();
+    var date_{{ field.name }}_newTs = $scope.form.{{ field.name }}.getTime()+(date_{{ field.name }}_tzOffset*60000);
+    $scope.form.{{ field.name }}_view = new Date(date_{{ field.name }}_newTs);
+}
+
+$scope.{{ field.name }}_viewToModel = function () {
+    var date_{{ field.name }}_tzOffset = $scope.form.{{ field.name }}_view.getTimezoneOffset();
+    var date_{{ field.name }}_newTs = $scope.form.{{ field.name }}_view.getTime()-(date_{{ field.name }}_tzOffset*60000);
+    $scope.form.{{ field.name }} = new Date(date_{{ field.name }}_newTs);
+}
 
 
-$scope.form.{{ field.name }} = date_{{ field.name }};
+$scope.{{field.name}}_onChange = function() {
+    $scope.{{ field.name }}_viewToModel();
+};
+
+$scope.form.{{ field.name }} = new Date('{{ field.value }}');
+$scope.{{ field.name }}_modelToView();
