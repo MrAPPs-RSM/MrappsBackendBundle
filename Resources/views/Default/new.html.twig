@@ -296,10 +296,27 @@
                             if (!response.data.success) {
                                 toastr.error(response.data.message, '{{ 'form.errore'|trans }}');
                             } else {
+
                                 {% if edit %}
                                 toastr.success('{{ 'form.salvato'|trans }}', '{{ confirmMessages['success'] }}');
+
+                                {# Aggiornamento valori modificati lato server #}
+                                if(typeof response.data.data === "object") {
+                                    for (var property in response.data.data) {
+                                        if (property !== "id" && response.data.data.hasOwnProperty(property) && $scope.form.hasOwnProperty(property)) {
+                                            $scope.form[property] = response.data.data[property];
+                                        }
+                                    }
+                                }
+
                                 {% else %}
-                                location.href = '{{ linkEdit }}/' + response.data.data + '?create=true';
+
+                                {# ID nuovo oggetto creato #}
+                                var id = response.data.data;
+                                if(typeof id === "object") {
+                                    id = id.id; //Awesome
+                                }
+                                location.href = '{{ linkEdit }}/' + id + '?create=true';
                                 {% endif %}
                             }
                             document.getElementById("save").disabled = false;
