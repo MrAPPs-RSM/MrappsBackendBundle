@@ -398,9 +398,8 @@ class DefaultController extends Controller
         if ($confirmSave == null) $confirmSave = false;
 
         if (!is_array($confirmMessages)) $confirmMessages = array();
-        if (!isset($confirmMessages['question'])) $confirmMessages['question'] = $trans->trans(($edit) ? 'form.elemento.salvare_modifiche' : 'form.elemento.nuovo_elemento');
-        if (!isset($confirmMessages['success'])) $confirmMessages['success'] = $trans->trans('form.elemento.elemento_modificato');
-
+        if (!isset($confirmMessages['question'])) $confirmMessages['question'] = $trans->trans(($edit) ? 'form.elemento.salvare_modifiche' : 'form.elemento.nuovo_elemento', array(), 'MrappsBackendBundle');
+        if (!isset($confirmMessages['success'])) $confirmMessages['success'] = $trans->trans('form.elemento.elemento_modificato', array(), 'MrappsBackendBundle');
         $imagesUrl = '';
         if (Utils::bundleMrappsAmazonExists($this->container)) {
             $imagesUrl = ($this->container->hasParameter('mrapps_backend.images_url')) ? $this->container->getParameter('mrapps_backend.images_url') : '';
