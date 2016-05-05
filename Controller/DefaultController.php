@@ -389,11 +389,17 @@ class DefaultController extends Controller
         ));
     }
 
-    public function __newAction(Request $request, $title, $fields, $linkSave = null, $linkEdit = null, $linkPublish = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false, $linkNew = null)
+    public function __newAction(Request $request, $title, $fields, $linkSave = null, $linkEdit = null, $linkPublish = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false, $linkNew = null, $confirmMessages = null)
     {
+        $trans = $this->get('translator');
+
         $this->security($request, ($edit) ? 'edit' : 'create');
 
         if ($confirmSave == null) $confirmSave = false;
+
+        if (!is_array($confirmMessages)) $confirmMessages = array();
+        if (!isset($confirmMessages['question'])) $confirmMessages['question'] = $trans->trans(($edit) ? 'form.elemento.salvare_modifiche' : 'form.elemento.nuovo_elemento');
+        if (!isset($confirmMessages['success'])) $confirmMessages['success'] = $trans->trans('form.elemento.elemento_modificato');
 
         $imagesUrl = '';
         if (Utils::bundleMrappsAmazonExists($this->container)) {
@@ -410,6 +416,18 @@ class DefaultController extends Controller
         $gmapsApiKey = ($this->container->hasParameter('gmaps_api_key')) ? $this->container->getParameter('gmaps_api_key') : '';
 
         $panels = array();
+
+        //Elimina gli array non validi prima di sistemare i dati
+        $riallineaChiavi = false;
+        foreach ($fields as $k => $f) {
+            if(!isset($f['type'])) {
+                unset($fields[$k]);
+                $riallineaChiavi = true;
+            }
+        }
+        if($riallineaChiavi) {
+            $fields = array_values($fields);    //Riallineamento chiavi per far funzionare il raggruppamento in pannelli
+        }
 
         //Allineamento campi
         foreach ($fields as $k => $f) {
@@ -597,6 +615,7 @@ class DefaultController extends Controller
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,
             'languages' => $languages,
+            'confirmMessages' => $confirmMessages,
             'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps","ui.utils.masks"',
         ));
     }

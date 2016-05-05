@@ -280,7 +280,7 @@
                 vm.submitted = true;
                 if (vm.formValidate.$valid) {
                     {% if confirmSave == true %}
-                    if (confirm("{% if edit == false %}{{ 'form.elemento.nuovo_elemento'|trans }}{% else %}{{ 'form.elemento.salvare_modifiche'|trans }}{% endif %}")) {
+                    if (confirm("{{ confirmMessages['question'] }}")) {
                         {% endif %}
                         document.getElementById("save").disabled = true;
                         addOverlay();
@@ -297,7 +297,7 @@
                                 toastr.error(response.data.message, '{{ 'form.errore'|trans }}');
                             } else {
                                 {% if edit %}
-                                toastr.success('{{ 'form.salvato'|trans }}', '{{ 'form.elemento.elemento_modificato'|trans }}');
+                                toastr.success('{{ 'form.salvato'|trans }}', '{{ confirmMessages['success'] }}');
                                 {% else %}
                                 location.href = '{{ linkEdit }}/' + response.data.data + '?create=true';
                                 {% endif %}
