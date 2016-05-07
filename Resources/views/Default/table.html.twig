@@ -41,22 +41,22 @@
                 <tbody {% if linkOrder is not null %} ui-sortable="sortableOptions" ng-model="table.data" {% endif %}>
 
                 <tr ng-repeat="row in $data">
-                    {% for colums in tableColumns %}
+                    {% for column in tableColumns %}
                         {% if column.visible is not defined or column.visible == true %}
-                            <td data-title="'{{ colums.title }}'"
-                                    {% if colums.filterable %}
-                                        {% set colType= (colums.type=='checkbox'?'select':colums.type) %}
-                                        filter="{ '{{ colums.name }}': '{{ colType }}' }" {% if colums.type=='checkbox' or (colums.type=='select' and colums.filter_options is defined) %} filter-data="{{ colums.name }}_filter" {% endif %}{% endif %} {% if colums.sortable %}sortable="'{{ colums.name }}'"{% endif %} {% if colums.clickable is defined %}ng-click="$event.stopPropagation();showChildren(row.id)"
+                            <td data-title="'{{ column.title }}'"
+                                    {% if column.filterable %}
+                                        {% set colType= (column.type=='checkbox'?'select':column.type) %}
+                                        filter="{ '{{ column.name }}': '{{ colType }}' }" {% if column.type=='checkbox' or (column.type=='select' and column.filter_options is defined) %} filter-data="{{ column.name }}_filter" {% endif %}{% endif %} {% if column.sortable %}sortable="'{{ column.name }}'"{% endif %} {% if column.clickable is defined %}ng-click="$event.stopPropagation();showChildren(row.id)"
                             {% endif %}>
-                                {% if colums.type == 'image' %}
-                                    <img ng-src="{/ row.{{ colums.name }} /}">
-                                {% elseif colums.type=='checkbox' %}
+                                {% if column.type == 'image' %}
+                                    <img ng-src="{/ row.{{ column.name }} /}">
+                                {% elseif column.type=='checkbox' %}
                                     <input type="checkbox" onclick='event.preventDefault();'
-                                           ng-checked="{/ row.{{ colums.name }} /}">
-                                {% elseif colums.type=='html' %}
-                                    <span ng-bind-html="row.{{ colums.name }}|rawHtml"></span>
+                                           ng-checked="{/ row.{{ column.name }} /}">
+                                {% elseif column.type=='html' %}
+                                    <span ng-bind-html="row.{{ column.name }}|rawHtml"></span>
                                 {% else %}
-                                    {/ row.{{ colums.name }} /}
+                                    {/ row.{{ column.name }} /}
                                 {% endif %}
                             </td>
                         {% endif %}
@@ -125,14 +125,14 @@
 
                 $scope.isDragging = false;
 
-                {% for colums in tableColumns %}
-                {% if colums.type=='checkbox' %}
-                $scope.{{ colums.name }}_filter = [{"id": null, "title": ""}, {"id": 1, "title": "{{ 'checkbox.si'|trans }}"}, {
+                {% for column in tableColumns %}
+                {% if column.type=='checkbox' %}
+                $scope.{{ column.name }}_filter = [{"id": null, "title": ""}, {"id": 1, "title": "{{ 'checkbox.si'|trans }}"}, {
                     "id": 0,
                     "title": "{{ 'checkbox.no'|trans }}"
                 }];
-                {% elseif colums.type=='select' and colums.filter_options is defined %}
-                $scope.{{ colums.name }}_filter ={{ [{'id':null,'title':''}]|merge(colums.filter_options) | json_encode | raw }};
+                {% elseif column.type=='select' and column.filter_options is defined %}
+                $scope.{{ column.name }}_filter ={{ [{'id':null,'title':''}]|merge(column.filter_options) | json_encode | raw }};
                 {% endif %}
                 {% endfor %}
 
