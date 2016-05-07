@@ -20,7 +20,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading clearfix">
                                 <div class="panel-title pull-left">{{ panel.label|default('') }}</div>
-                                {% if edit==true and linkNew is defined and linkNew is not empty %}
+                                {% if edit==true and linkNew is defined and linkNew is not empty and loop.index0 == 0 %}
                                     <button type="button" class="btn btn-labeled btn-success pull-right"
                                             ng-click="go('{{ linkNew }}')">
                                 <span class="btn-label">
