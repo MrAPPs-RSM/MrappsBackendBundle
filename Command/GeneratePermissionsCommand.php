@@ -74,9 +74,9 @@ class GeneratePermissionsCommand extends ContainerAwareCommand
         foreach($controllers as $object) {
             foreach($roles as $role) {
 
-                if(isset($permessiConfig[$object]['roles'][$role])) {
+                if(isset($permessiConfig[$role]['controllers'][$object])) {
 
-                    $perms = $permessiConfig[$object]['roles'][$role];
+                    $perms = $permessiConfig[$role]['controllers'][$object];
 
                     $canView = (isset($perms['view'])) ? (bool)$perms['view'] : false;
                     $canCreate = (isset($perms['create'])) ? (bool)$perms['create'] : false;
