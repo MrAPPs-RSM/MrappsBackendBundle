@@ -55,19 +55,36 @@ class GeneratePermissionsCommand extends ContainerAwareCommand
         //Refresh permessi
         $em = $container->get('doctrine.orm.entity_manager');
         $repository = $em->getRepository('MrappsBackendBundle:Permission');
-        //$repository->clearPermissions();
+
+        //Permessi hardcoded nel config
+        $permessiConfig = $container->hasParameter('mrapps_backend.default_permissions') ? $container->getParameter('mrapps_backend.default_permissions') : array();
 
         //Per ogni combinazione di controller/ruolo creo una riga su database
         foreach($controllers as $object) {
             foreach($roles as $role) {
 
-                $perm = ($role == 'ROLE_SUPER_ADMIN' || $role == 'ROLE_ADMIN') ? 1 : 0;
+                if(isset($permessiConfig[$object]['roles'][$role])) {
+
+                    $perms = $permessiConfig[$object]['roles'][$role];
+
+                    $canView = (isset($perms['view'])) ? (bool)$perms['view'] : false;
+                    $canCreate = (isset($perms['create'])) ? (bool)$perms['create'] : false;
+                    $canEdit = (isset($perms['edit'])) ? (bool)$perms['edit'] : false;
+                    $canDelete = (isset($perms['delete'])) ? (bool)$perms['delete'] : false;
+
+                }else {
+                    $perm = ($role == 'ROLE_SUPER_ADMIN' || $role == 'ROLE_ADMIN') ? 1 : 0;
+                    $canView = $perm;
+                    $canCreate = $perm;
+                    $canEdit = $perm;
+                    $canDelete = $perm;
+                }
 
                 $repository->addPermission($object, $role, array(
-                    'view' => $perm,
-                    'create' => $perm,
-                    'edit' => $perm,
-                    'delete' => $perm,
+                    'view' => $canView,
+                    'create' => $canCreate,
+                    'edit' => $canEdit,
+                    'delete' => $canDelete,
                 ), false);
             }
         }
