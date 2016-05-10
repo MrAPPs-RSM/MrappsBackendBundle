@@ -6,6 +6,7 @@ use Mrapps\BackendBundle\Classes\Utils;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 
 class GeneratePermissionsCommand extends ContainerAwareCommand
@@ -22,6 +23,12 @@ class GeneratePermissionsCommand extends ContainerAwareCommand
         $this
             ->setName('mrapps:backend:generatepermissions')
             ->setDescription('Genera i record su Database per la gestione dei permessi.')
+            ->addOption(
+                'reset',
+                null,
+                InputOption::VALUE_NONE,
+                "Se TRUE, resetta tutti i permessi al valore di default. Se FALSE, genera solo i permessi mancanti."
+            )
         ;
     }
 
@@ -52,9 +59,13 @@ class GeneratePermissionsCommand extends ContainerAwareCommand
         //Ruoli
         $roles = Utils::getAllRoles($container);
 
-        //Refresh permessi
         $em = $container->get('doctrine.orm.entity_manager');
         $repository = $em->getRepository('MrappsBackendBundle:Permission');
+
+        //Reset dei permessi
+        if ($input->getOption('reset')) {
+            $repository->clearPermissions();
+        }
 
         //Permessi hardcoded nel config
         $permessiConfig = $container->hasParameter('mrapps_backend.default_permissions') ? $container->getParameter('mrapps_backend.default_permissions') : array();
