@@ -426,10 +426,11 @@ class Utils
         if (count($traduzioni) > 0) {
             foreach ($traduzioni as $item) {
                 $objUser = new \ReflectionObject($item);
+                $realClass = str_replace('Proxies\\__CG__\\', '', $objUser->name);
                 $properties = $objUser->getProperties();
                 foreach ($properties as $p) {
 
-                    if ($fields == null || in_array($p->name, $fields)) {
+                    if ($p->class == $realClass && ($fields == null || in_array($p->name, $fields))) {
 
                         $annOneToOne = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\OneToOne');
                         $annManyToOne = $reader->getPropertyAnnotation($p, 'Doctrine\\ORM\\Mapping\\ManyToOne');
@@ -442,7 +443,9 @@ class Utils
                             $lang = $item->getLang();
                             $key = ($lang !== null) ? (($options['key_isocodes']) ? $lang->getIsoCode() : $lang->getId()) : null;
                             if ($key != null) {
-                                $array[$p->name][$key] = $item->$method();
+                                try {
+                                    $array[$p->name][$key] = $item->$method();
+                                } catch (\Exception $ex) {}
                             }
                         }
                     }
