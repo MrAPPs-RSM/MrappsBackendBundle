@@ -248,6 +248,19 @@ class Utils
         return false;
     }
 
+    /**
+     * Lista Risultati Entity filtrata ed ordinata in base ad i dati specificati.
+     *
+     * @param EntityManager $em entity manager
+     * @param string $entity Percorso completo classe da cui reperire i risultati
+     * @param int $count numero risultati
+     * @param int $page numero di pagina
+     * @param array $filters clausole in Where Condition (è possibile specificare anche una struttura ad array('operator'=>Operator:GreaterOrEqual,'value'=>valore))
+     * @param array $sorting campi per il sorting
+     *
+     * @return array Ritorna il risultato della query
+     *
+     */
     public static function getListResults($em = null, $entity = '', $count = 0, $page = 1, $filters = array(), $sorting = array())
     {
         if ($em !== null && strlen($entity) > 0) {
@@ -285,8 +298,23 @@ class Utils
                 $tmp = array();
                 foreach ($filters as $campo => $valore) {
                     if (is_numeric($valore) || is_object($valore)) {
-                        $tmp[] = sprintf(" a.%s = :%s ", $campo, $campo);
+                        $tmp[] = sprintf(" a.%s " . Operator::Equal . " :%s ", $campo, $campo);
                         $params[$campo] = $valore;
+                    } elseif (is_array($valore)) {
+
+                        $operator = $valore["operator"];
+
+                        if ($operator == Operator::GreaterOrEqual ||
+                            $operator == Operator::Equal ||
+                            $operator == Operator::Greater ||
+                            $operator == Operator::Lower ||
+                            $operator == Operator::LowerOrEqual
+                        ) {
+
+                            $tmp[] = sprintf(" a.%s " . $operator . " :%s ", $campo, $campo);
+                            $params[$campo] = $valore["value"];
+                        }
+
                     } else {
                         $tmp[] = sprintf(" a.%s LIKE :%s ", $campo, $campo);
                         $params[$campo] = '%' . $valore . '%';
@@ -309,7 +337,7 @@ class Utils
                 $query .= ' ORDER BY ' . $orderBy;
             }
 
-            $tmp = $em->createQuery($query);    //->setMaxResults($count)->setFirstResult(($page-1)*$count)
+            $tmp = $em->createQuery($query)->setMaxResults($count)->setFirstResult(($page - 1) * $count);
 
             if (count($params) > 0) {
                 $tmp->setParameters($params);
