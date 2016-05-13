@@ -13230,6 +13230,10 @@ ul.elenco-btn > li > button {
     color: #000;
 }
 
+.elenco-btn button.panel.active {
+    background-color: #F4D218;
+}
+
 
 
 @media screen and (max-width: 767px) {
