@@ -15,6 +15,9 @@ $scope.{{field.name}}RefreshTable();
 $scope.{{field.name}}DeleteItem = function(item) {
     var index = $scope.form.{{field.name}}.indexOf(item);
     $scope.form.{{field.name}}.splice(index, 1);
+    {% if field.select2.fetch_all is defined and field.select2.fetch_all == true %}
+    $scope.{{field.name}}RefreshSelect('');
+    {% endif %}
     toastr.success('Elemento eliminato', '');
 };
 
