@@ -30,6 +30,24 @@
         color: {{text_on_secondary_color}};
         background: {{secondary_color}};
     }
+    
+    .primary-color {
+	    color: {{primary_color}};
+    }
+    
+    .primary-bgcolor {
+	    background-color: {{primary_color}};
+	    color: {{text_on_primary_color}};
+    }
+    
+    .secondary-color {
+	    color: {{secondary_color}};
+    }
+    
+    .secondary-bgcolor {
+	    background-color: {{secondary_color}};
+	    color: {{text_on_secondary_color}};
+    }
 
     .topnavbar .navbar-nav > li > a:hover,
     .topnavbar .navbar-nav > .open > a:hover,
@@ -181,7 +199,8 @@
         margin-bottom: 20px;
     }
 
-    .btn-primary {
+    .btn-primary,
+    .btn.active {
         background-color: {{primary_color}} !important;
         color: {{text_on_primary_color}} !important;
     }
