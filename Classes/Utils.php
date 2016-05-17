@@ -313,6 +313,10 @@ class Utils
 
                             $tmp[] = sprintf(" a.%s " . $operator . " :%s ", $campo, $campo);
                             $params[$campo] = $valore["value"];
+                        } elseif ($operator == Operator::IsNull ||
+                            $operator == Operator::IsNotNull
+                        ) {
+                            $tmp[] = sprintf(" a.%s " . $operator, $campo);
                         }
 
                     } else {
@@ -473,7 +477,8 @@ class Utils
                             if ($key != null) {
                                 try {
                                     $array[$p->name][$key] = $item->$method();
-                                } catch (\Exception $ex) {}
+                                } catch (\Exception $ex) {
+                                }
                             }
                         }
                     }
@@ -648,7 +653,7 @@ class Utils
         if (strlen($iso) > 0) {
 
             $timestamp = strtotime($iso);
-            if($timestamp !== false) {
+            if ($timestamp !== false) {
                 $output = new \DateTime();
                 $output->setTimestamp($timestamp);
                 return $output;
