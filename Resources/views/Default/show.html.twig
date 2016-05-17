@@ -1,0 +1,466 @@
+{% trans_default_domain 'MrappsBackendBundle' %}
+{% extends 'MrappsBackendBundle:Default:layout.html.twig' %}
+{% block content %}
+{#
+    <div ng-controller="FormValidationController as form" class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form name="form.formValidate" ng-submit="form.submitForm()" novalidate=""
+                      class="form-validate form-horizontal">
+                    {% for panel in panels %}
+                        <!-- START panel-->
+                        <div class="panel panel-default">
+                            <div class="panel-heading clearfix">
+                                <div class="panel-title pull-left">{{ panel.label|default('') }}</div>
+                                {% if edit==true and linkNew is defined and linkNew is not empty and loop.index0 == 0 %}
+                                    <button type="button" class="btn btn-labeled btn-success pull-right"
+                                            ng-click="go('{{ linkNew }}')">
+                                <span class="btn-label">
+                                    <em class="fa fa-plus"></em>
+                                </span>{{ 'form.aggiungi_nuovo'|trans }}
+                                    </button>
+                                    <div class="cb"></div>
+                                {% endif %}
+                            </div>
+                            <div class="panel-body">
+                                {% for field in panel.fields %}
+                                    {% if field.lang is defined and field.lang %}
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle {{ field.name }}_lang_selector" type="button" id="dropdownLanguage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                {% for lang in field.languages_allowed %}{% if loop.index0 == 0 %}{{ lang.name }}{% endif %}{% endfor %}
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownLanguage">
+                                                {% for lang in field.languages_allowed %}
+                                                    <li><a data-idlang="{{ lang.id }}" data-isocode="{{ lang.isoCode }}">{{ lang.name }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                        {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
+                                        {% set field_lang = field.value %}
+                                        {% set field_name = field.name %}
+                                        <div class="{{ field.name }}_multilang">
+                                            {% for lang in field.languages_allowed %}
+                                                {% set field = field|merge({"name" : [field_name,'_',lang.id]|join}) %}
+                                                {% if field_lang[lang.id] is defined %}
+                                                    {% set field = field|merge({"value" : field_lang[lang.id]|trim}) %}
+                                                {% else %}
+                                                    {% set field = field|merge({"value" : ""}) %}
+                                                {% endif %}
+                                                {{ include(twig_name, { 'field': field }) }}
+                                            {% endfor %}
+                                        </div>
+
+                                    {% else %}
+                                        {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
+                                        {{ include(twig_name, { 'field': field }) }}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="panel-footer text-right">
+                        {% if edit and linkPublish is defined and linkPublish is not null and linkPublish|length > 0 %}
+                            <button ng-disabled="publishInProgress" type="button" ng-click="doPublish()" class="btn btn-warning pull-left">{{ 'form.pubblica'|trans }}</button>
+                        {% endif %}
+                        {% if edit %}
+                            <button type="submit" id="save" class="btn btn-info">{{ 'form.modifica'|trans }}</button>
+                        {% else %}
+                            <button type="submit" id="save" class="btn btn-success">{{ 'form.crea'|trans }}</button>
+                        {% endif %}
+                    </div>
+            </div>
+            <!-- END panel-->
+            </form>
+        </div>
+    </div>
+    <!-- END row-->
+    </div>
+#}
+{% endblock content %}
+{% block srcjavascript %}
+    {#
+    <script src="{{ asset('assets/vendor/angular-resource/angular-resource.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/angular-file-upload/dist/angular-file-upload.min.js') }}"></script>
+    <script src='{{ asset('assets/vendor/tinymce-dist/tinymce.min.js') }}'></script>
+    <script src='{{ asset('assets/vendor/angular-ui-tinymce/src/tinymce.js') }}'></script>
+    <script src="{{ asset('assets/vendor/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src='{{ asset('assets/vendor/angular-ui-sortable/sortable.min.js') }}'></script>
+    <script src='{{ asset('assets/vendor/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js') }}'></script>
+    <script src="{{ asset('assets/vendor/jstree/dist/jstree.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/ng-js-tree/dist/ngJsTree.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/angular-ui-validate/dist/validate.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/jquery-minicolors/jquery.minicolors.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/angular-minicolors/angular-minicolors.js') }}"></script>
+    <script src="{{ asset('assets/vendor/ui-select/dist/select.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/lodash/dist/lodash.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/angular-simple-logger/dist/angular-simple-logger.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/angular-google-maps/dist/angular-google-maps.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/moment/min/moment.min.js') }}"></script>
+    <script src="{{ asset('bundles/mrappsbackend/js/jquery.filthypillow.min.js') }}"></script>
+    #}
+{% endblock srcjavascript %}
+{% block javascript %}
+    {##
+    <script type="text/javascript">
+        'use strict';
+
+        {% for panel in panels %}
+        {% for field in panel.fields %}
+        {% if field.lang is defined and field.lang %}
+        function {{ field.name }}ChangeLaguages() {
+            var langSelector=$(".{{ field.name }}_lang_selector");
+            langSelector.next("ul").find("li > a").click(function(){
+                var isoCode=$(this).attr("data-isocode");
+                var idLang=$(this).attr("data-idlang");
+                var idLangLength=idLang.toString().length;
+                var fieldSet=$(".{{ field.name }}_multilang fieldset");
+                langSelector.each(function(){
+                    $(this).html(isoCode+' <span class="caret"></span>');
+                });
+                fieldSet.each(function(){
+                    if($(this).attr("id").substr(-idLangLength)==idLang) {
+                        $(this).show();
+                    }else {
+                        $(this).hide();
+                    }
+                });
+            });
+        }
+
+        function {{ field.name }}ChangeLaguagesReady(isoCode, idLang) {
+            var langSelector=$(".{{ field.name }}_lang_selector");
+            var idLangLength=idLang.toString().length;
+            var fieldSet=$(".{{ field.name }}_multilang fieldset");
+            langSelector.each(function(){
+                $(this).html(isoCode+' <span class="caret"></span>');
+            });
+            fieldSet.each(function(){
+                if($(this).attr("id").substr(-idLangLength)==idLang) {
+                    $(this).show();
+                }else {
+                    $(this).hide();
+                }
+            });
+        }
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+
+        $( document ).ready(function() {
+            {% for panel in panels %}
+            {% for field in panel.fields %}
+            {% if field.lang is defined and field.lang %}
+            {{ field.name }}ChangeLaguagesReady("{{ field.default_language.isoCode }}",{{ field.default_language.id }});
+            {{ field.name }}ChangeLaguages();
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+        });
+
+        function select2default(item) {
+            return '<div>'+item.value+'</div>';
+        }
+
+        {% set initializeGmaps = false %}
+        {% set gmapsApiKey = '' %}
+        {% for p in panels if initializeGmaps == false %}
+        {% for field in p.fields if initializeGmaps == false %}
+        {% if field.type == "latlng" %}
+        {% set initializeGmaps = true %}
+        {% set gmapsApiKey = field.gmaps_api_key %}
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+        {% if initializeGmaps == true %}
+        myAngular.config(function(uiGmapGoogleMapApiProvider) {
+            uiGmapGoogleMapApiProvider.configure({
+                key: '{{ gmapsApiKey }}',
+                v: '3',
+                libraries: 'weather,geometry,visualization'
+            });
+        })
+        {% endif %}
+
+        myAngular.controller("FormValidationController", FormValidationController);
+
+
+        myAngular.directive('validateFacebookDirective', function($http) {
+            var toId;
+            return {
+                require: 'ngModel',
+                link: function(scope, element, attr, mCtrl) {
+                    element.on('blur', function (evt) {
+                        scope.$apply(function () {
+                            $http.get('{{ path('mrapps_backend_validatefacebook') }}?url=' + element.val()).success(function(data) {
+                                mCtrl.$setValidity('facebook', data.valid);
+                            });
+                        });
+                    });
+                }
+            };
+        });
+
+        function FormValidationController($scope, $http, $window, FileUploader, uiGmapGoogleMapApi) {
+
+            $scope.go = function (path, replaceId) {
+                if(typeof(replaceId) !== "undefined" && replaceId !== null) {
+                    path = path.replace(/__PLACEHOLDER_ID__/g, replaceId);
+                }
+                location.href = path;
+            };
+
+            var vm = this;
+
+            {% set jsFields = [] %}
+            {% for p in panels %}
+            {% for field in p.fields %}
+            {% set jsFields = jsFields|merge([field]) %}
+            {% if field.type == 'switch' %}
+            {% for inner_field in field.data %}
+            {% set jsFields = jsFields|merge([inner_field]) %}
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+
+            {% for field in jsFields %}
+
+            {% set twig_name = ['MrappsBackendBundle:TypeJS:',field.type,'.js.twig']|join %}
+
+            {% if field.lang is defined and field.lang %}
+            {% set field_lang = field.value %}
+            {% set field_name = field.name %}
+            {% for lang in field.languages_allowed %}
+            {% set field = field|merge({"name" : [field_name,'_',lang.id]|join}) %}
+            {% if field_lang[lang.id] is defined %}
+            {% set field = field|merge({"value" : field_lang[lang.id]|trim}) %}
+            {% else %}
+            {% set field = field|merge({"value" : ""}) %}
+            {% endif %}
+            {{ include(twig_name, { 'field': field }) }}
+            {% endfor %}
+            {% else %}
+            {{ include(twig_name, { 'field': field }) }}
+            {% endif %}
+
+            {% endfor %}
+
+            vm.submitted = false;
+            vm.validateInput = function (name, type) {
+                if(typeof(name) !== "undefined" && typeof(type) !== "undefined") {
+                    var input = vm.formValidate[name];
+                    if(typeof(input) !== "undefined") {
+                        return (input.$dirty || vm.submitted) && input.$error[type];
+                    }
+                }
+
+                return true;
+            };
+
+            {% if create %}
+            toastr.success('{{ 'form.elemento.creato'|trans }}', '{{ 'form.elemento.elemento_creato'|trans }}');
+            {% endif %}
+
+            function addOverlay() {
+                $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>{{ 'form.attendere'|trans }}</div></div>');
+            }
+
+            function removeOverlay() {
+                $('#overlay-waiting').remove();
+            }
+
+            // Submit form
+            vm.submitForm = function () {
+                vm.submitted = true;
+                if (vm.formValidate.$valid) {
+                    {% if confirmSave == true %}
+                    if (confirm("{{ confirmMessages['question'] }}")) {
+                        {% endif %}
+                        document.getElementById("save").disabled = true;
+                        addOverlay();
+                        $http({
+                            method: 'POST',
+                            url: '{{ linkSave }}',
+                            data: $scope.form,
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                        }).then(function successCallback(response) {
+                            removeOverlay();
+                            if (!response.data.success) {
+                                toastr.error(response.data.message, '{{ 'form.errore'|trans }}');
+                            } else {
+
+                                {% if edit %}
+                                toastr.success('{{ 'form.salvato'|trans }}', '{{ confirmMessages['success'] }}');
+
+
+                                if(typeof response.data.data === "object") {
+                                    for (var property in response.data.data) {
+                                        if (property !== "id" && response.data.data.hasOwnProperty(property) && $scope.form.hasOwnProperty(property)) {
+                                            $scope.form[property] = response.data.data[property];
+                                        }
+                                    }
+                                }
+
+                                {% else %}
+
+                                
+                                var id = response.data.data;
+                                if(typeof id === "object") {
+                                    id = id.id; //Awesome
+                                }
+                                location.href = '{{ linkEdit }}/' + id + '?create=true';
+                                {% endif %}
+                            }
+                            document.getElementById("save").disabled = false;
+
+                        }, function errorCallback(response) {
+                            removeOverlay();
+                            toastr.error('{{ 'form.errore'|trans }}', '{{ 'form.errore_server'|trans }}');
+                            document.getElementById("save").disabled = false;
+                        });
+                        {% if confirmSave == true %}
+                    }
+                    {% endif %}
+                } else {
+                    toastr.error('{{ 'form.errore'|trans }}', '{{ 'form.compila_campi'|trans }}');
+                    return false;
+                }
+            };
+
+
+            {% if edit and linkPublish is defined and linkPublish is not null and linkPublish|length > 0 %}
+            $scope.publishInProgress = false;
+            $scope.doPublish = function() {
+
+                if (confirm("{{ 'form.elemento.pubblicare_contenuto'|trans }}")) {
+
+                    $scope.publishInProgress = true;
+                    addOverlay();
+                    $http({
+                        method: 'POST',
+                        url: '{{ linkPublish }}',
+                        data: $scope.form,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                    }).then(function successCallback(response) {
+                        removeOverlay();
+                        if (!response.data.success) {
+                            toastr.error(response.data.message, '{{ 'form.errore'|trans }}');
+                        } else {
+                            toastr.success('{{ 'form.pubblicato'|trans }}', '{{ 'form.elemento.elemento_modificato'|trans }}');
+                            location.reload();
+                        }
+                        $scope.publishInProgress = false;
+
+                    }, function errorCallback(response) {
+                        removeOverlay();
+                        toastr.error('{{ 'form.errore'|trans }}', '{{ 'form.errore_server'|trans }}');
+                        $scope.publishInProgress = false;
+                    });
+
+
+                }
+            };
+            {% endif %}
+
+            var src = null;
+            $scope.tinymceOptions = {
+                inline: false,
+                skin: 'lightgray',
+                theme: 'modern',
+                plugins: [
+                    "advlist autolink link image imagetools autoresize lists charmap print preview hr anchor pagebreak",
+                    "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
+                    "table contextmenu directionality emoticons paste textcolor code"
+                ],
+                toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect",
+                toolbar2: "| link unlink anchor | image | forecolor backcolor  | print preview code",
+                image_advtab: true,
+
+                paste_data_images: true,
+                images_upload_url: "{{ path('mrapps_backend_uploadimmagine') }}?texarea=1",
+                images_upload_base_path: "{{ images_url }}/textarea/",
+                images_upload_credentials: true,
+                file_browser_callback: function (field_name, url, type, win) {
+                    tinymce.activeEditor.windowManager.open({
+                        title: 'Insert file',
+                        body: [
+                            {name: 'file', type: 'textbox', subtype: 'file', label: 'Upload', onchange: uploadFile},
+                            {
+                                type: 'container',
+                                'minHeight': 50,
+                                'minWidth': 50,
+                                html: '<div id="load_textarea" class="hide sk-circle"><div class="sk-circle1 sk-child"></div><div class="sk-circle2 sk-child"></div><div class="sk-circle3 sk-child"></div><div class="sk-circle4 sk-child"></div><div class="sk-circle5 sk-child"></div><div class="sk-circle6 sk-child"></div><div class="sk-circle7 sk-child"></div><div class="sk-circle8 sk-child"></div><div class="sk-circle9 sk-child"></div><div class="sk-circle10 sk-child"></div><div class="sk-circle11 sk-child"></div><div class="sk-circle12 sk-child"></div></div>'
+                            },
+
+                        ],
+                        buttons: [{
+                            text: 'Insert',
+                            classes: 'widget btn primary first abs-layout-item',
+                            id: 'insertImage',
+                            onclick: function (e) {
+                                if (src != null) {
+                                    tinyMCE.execCommand('mceInsertContent', false, '<img src="' + tinymce.activeEditor.settings.images_upload_base_path + src + '"/>');
+                                    src = null;
+                                }
+                                tinymce.activeEditor.windowManager.close();
+                                tinymce.activeEditor.windowManager.close();
+                            },
+                        }, {
+                            text: 'Close',
+                            onclick: function (e) {
+                                tinymce.activeEditor.windowManager.close();
+                            },
+                        }]
+                    });
+                }
+            };
+
+            function uploadFile(a) {
+                var file = a.currentTarget.files[0];
+                $('#load_textarea').removeClass('hide');
+                $('#insertImage').addClass('mce-disabled');
+                $('#insertImage > button').prop('disabled', true);
+                tinymce.activeEditor.editorUpload.uploadImages(customUpload);
+
+                function customUpload(success) {
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.withCredentials = tinymce.activeEditor.settings.images_upload_credentials;
+
+                    xhr.open('POST', tinymce.activeEditor.settings.images_upload_url);
+
+                    xhr.onload = function () {
+
+                        var json;
+                        if (xhr.status != 200) {
+                            failure("HTTP Error: " + xhr.status);
+                            return;
+                        }
+
+                        json = JSON.parse(xhr.responseText);
+
+                        if (!json || typeof json.location != "string") {
+                            failure("Invalid JSON: " + xhr.responseText);
+                            return;
+                        }
+                        $('#load_textarea').addClass('hide');
+                        $('#insertImage').removeClass('mce-disabled');
+                        $('#insertImage > button').prop('disabled', false);
+                        src = json.location;
+                    };
+
+                    var formData = new FormData();
+                    formData.append('file', file, 'file');
+
+                    xhr.send(formData);
+                }
+            }
+        }
+    </script>
+    #}
+{% endblock javascript %}
