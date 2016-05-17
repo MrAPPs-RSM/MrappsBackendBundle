@@ -11,6 +11,7 @@ form:
     salvato: Saved!
     immagine_salvata: 'Image saved'
     pubblica: 'Publish'
+    pubblicato: 'Pubblicato con successo'
     elemento:
         creato: Created!
         completato: Completated!
@@ -20,7 +21,6 @@ form:
         nuovo_elemento: 'Create the new element?'
         procedere: 'Procedere?'
         pubblicare_contenuto: 'Vuoi pubblicare il contenuto?'
-        pubblicato: 'Pubblicato con successo'
 
 # sidebar
 sidebar:
