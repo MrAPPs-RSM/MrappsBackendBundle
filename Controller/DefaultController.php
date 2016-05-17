@@ -368,6 +368,18 @@ class DefaultController extends Controller
         if (!isset($deleteMessages['error'])) $deleteMessages['error'] = 'Si è verificato un problema durante la procedura di eliminazione; si prega di riprovare più tardi.';
         if (!isset($deleteMessages['cancel'])) $deleteMessages['cancel'] = 'Operazione annullata.';
 
+        //Setta i nomi a tutte le action
+        $laCount = 1;
+        if(is_array($linkAction)) {
+            foreach ($linkAction as $k => $la) {
+                if(!isset($la['name'])) {
+                    $linkAction[$k]['name'] = '__action_'.$laCount;
+                }
+                $laCount++;
+            }
+        }
+
+
         return $this->render('MrappsBackendBundle:Default:table.html.twig', array(
             'current_object' => $currentObject,
             'current_route' => $request->get('_route'),

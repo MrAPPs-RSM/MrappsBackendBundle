@@ -76,7 +76,7 @@
                         {% endif %}
                         {% if linkAction is not null and permissions.edit == true %}
                             {% for item in linkAction %}
-                                <button type="button"
+                                <button type="button" ng-if="!row.hasOwnProperty('__linkActions') || !row.__linkActions.hasOwnProperty('{{ item.name }}') || row.__linkActions.{{ item.name }}==true"
                                         ng-click="{% if item.is_js == false %}go('{{ item.url }}/'+row.id){% else %}customFunction{{ loop.index }}(row){% endif %}"
                                         class="{{ item.class }}">
                                     <em class="{{ item.icon }}"></em>
