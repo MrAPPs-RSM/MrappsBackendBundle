@@ -950,6 +950,12 @@ _:-ms-lang(x),.layout-fixed .wrapper > .aside > .aside-inner {
 	border:0;
 }
 
+.sidebar .nav > li > a[data-toggle="collapse"] span {
+    display: inline-block;
+    max-width: calc(100% - 20px);
+    white-space: normal;
+}
+
 .aside-float .wrapper > .aside {
 	padding:15px 0;
 	background:transparent;
