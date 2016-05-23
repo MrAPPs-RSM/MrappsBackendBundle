@@ -1,0 +1,69 @@
+{% trans_default_domain 'MrappsBackendBundle' %}
+{% extends 'MrappsBackendBundle:Default:layout.html.twig' %}
+{% block content %}
+    <div ng-controller="FormValidationController as form" class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                {% for panel in panels %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading clearfix">
+                            <div class="panel-title pull-left">{{ panel.label|default('') }}</div>
+                        </div>
+                        <div class="panel-body">
+                            {% for field in panel.fields %}
+                                {% set twig_name = ['MrappsBackendBundle:Type:',field.type,'.html.twig']|join %}
+                                {{ include(twig_name, { 'field': field }) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            </form>
+        </div>
+    </div>
+    </div>
+{% endblock content %}
+{% block javascript %}
+
+    <script type="text/javascript">
+        'use strict';
+
+        myAngular.controller("FormValidationController", FormValidationController);
+
+        function FormValidationController($scope) {
+
+            $scope.go = function (path, replaceId) {
+                if(typeof(replaceId) !== "undefined" && replaceId !== null) {
+                    path = path.replace(/__PLACEHOLDER_ID__/g, replaceId);
+                }
+                location.href = path;
+            };
+
+            {% set jsFields = [] %}
+            {% for p in panels %}
+            {% for field in p.fields %}
+            {% set jsFields = jsFields|merge([field]) %}
+            {% if field.type == 'switch' %}
+            {% for inner_field in field.data %}
+            {% set jsFields = jsFields|merge([inner_field]) %}
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+
+            {% for field in jsFields %}
+            {% set twig_name = ['MrappsBackendBundle:TypeJS:',field.type,'.js.twig']|join %}
+            {{ include(twig_name, { 'field': field }) }}
+            {% endfor %}
+
+            function addOverlay() {
+                $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>{{ 'form.attendere'|trans }}</div></div>');
+            }
+
+            function removeOverlay() {
+                $('#overlay-waiting').remove();
+            }
+        }
+    </script>
+
+{% endblock javascript %}

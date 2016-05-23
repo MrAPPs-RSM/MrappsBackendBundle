@@ -9,4 +9,6 @@ class Operator
     const LowerOrEqual = "<=";
     const Lower = "<";
     const Greater = ">";
+    const IsNull = "IS NULL";
+    const IsNotNull = "IS NOT NULL";
 }

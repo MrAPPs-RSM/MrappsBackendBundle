@@ -368,6 +368,18 @@ class DefaultController extends Controller
         if (!isset($deleteMessages['error'])) $deleteMessages['error'] = 'Si è verificato un problema durante la procedura di eliminazione; si prega di riprovare più tardi.';
         if (!isset($deleteMessages['cancel'])) $deleteMessages['cancel'] = 'Operazione annullata.';
 
+        //Setta i nomi a tutte le action
+        $laCount = 1;
+        if(is_array($linkAction)) {
+            foreach ($linkAction as $k => $la) {
+                if(!isset($la['name'])) {
+                    $linkAction[$k]['name'] = '__action_'.$laCount;
+                }
+                $laCount++;
+            }
+        }
+
+
         return $this->render('MrappsBackendBundle:Default:table.html.twig', array(
             'current_object' => $currentObject,
             'current_route' => $request->get('_route'),
@@ -616,6 +628,87 @@ class DefaultController extends Controller
             'languages' => $languages,
             'confirmMessages' => $confirmMessages,
             'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps","ui.utils.masks"',
+        ));
+    }
+
+    public function __showAction(Request $request, $title, $fields, $linkEdit = null, $linkBreadcrumb = null, $linkNew = null)
+    {
+        $trans = $this->get('translator');
+
+        $em = $this->getDoctrine()->getManager();
+        $languages = $em->getRepository('MrappsBackendBundle:Language')->findBy(["visible" => true]);
+
+        $locale = $request->getLocale();
+
+        $panels = array();
+
+        //Elimina gli array non validi prima di sistemare i dati
+        $riallineaChiavi = false;
+        foreach ($fields as $k => $f) {
+            if(!isset($f['type'])) {
+                unset($fields[$k]);
+                $riallineaChiavi = true;
+            }
+        }
+        if($riallineaChiavi) {
+            $fields = array_values($fields);    //Riallineamento chiavi per far funzionare il raggruppamento in pannelli
+        }
+
+        //Allineamento campi
+        foreach ($fields as $k => $f) {
+
+            //Pannello
+            if($f['type'] == 'panel') {
+                $panels[] = array(
+                    'index' => $k,
+                    'label' => (isset($f['label'])) ? $f['label'] : '',
+                );
+            }
+        }
+
+        //Indice da cui partire a leggere i fields
+        $prevPanelIndex = 0;
+
+        //Raggruppamento in pannelli
+        if(count($panels) == 0) {
+            $panels[] = array('index' => 0, 'label' => '');
+            $prevPanelIndex = -1;
+        }
+
+        //Se il primo elemento non è un pannello ne creo uno fittizio
+        if($panels[0]['index'] != 0) {
+            $panels = array_merge(array(array('index' => 0, 'label' => '')), $panels);
+            $prevPanelIndex = -1;
+        }
+
+        foreach ($panels as $k => $p) {
+
+            //Scorre i campi a partire dall'indice successivo a quello del pannello precedente
+            for($i = $prevPanelIndex+1; $i < count($fields); $i++) {
+
+                if(!isset($panels[$k]['fields'])) $panels[$k]['fields'] = array();
+
+                //Aggiunge i campi al pannello
+                if($fields[$i]['type'] != 'panel') {
+                    $panels[$k]['fields'][] = $fields[$i];
+                }else {
+                    //Quando trova un altro pannello si ferma
+                    $prevPanelIndex = $i;
+                    break;
+                }
+            }
+        }
+
+
+        return $this->render('MrappsBackendBundle:Default:show.html.twig', array(
+            'current_route' => $request->get('_route'),
+            'title' => $title,
+            'panels' => $panels,
+            'linkEdit' => $linkEdit,
+            'linkNew' => $linkNew,
+            'linkBreadcrumb' => $linkBreadcrumb,
+            'languages' => $languages,
+            'angular' => '',
         ));
     }
 
