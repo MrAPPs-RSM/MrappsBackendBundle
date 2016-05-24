@@ -10,8 +10,8 @@ form:
     errore: Error!
     salvato: Saved!
     immagine_salvata: 'Image saved'
-    pubblica: 'Publish'
-    pubblicato: 'Pubblicato con successo'
+    pubblica: 'Translate'
+    pubblicato: 'Operazione completata.'
     elemento:
         creato: Created!
         completato: Completated!
