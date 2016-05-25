@@ -294,6 +294,7 @@ class Utils
             //Filtri
             $params = array();
             $where = '';
+            $inCount = 1;
             if (count($filters) > 0) {
                 $tmp = array();
                 foreach ($filters as $campo => $valore) {
@@ -317,6 +318,11 @@ class Utils
                             $operator == Operator::IsNotNull
                         ) {
                             $tmp[] = sprintf(" a.%s " . $operator, $campo);
+
+                        } elseif ($operator == Operator::In) {
+                            $tmp[] = sprintf(" a.%s %s (?%s) ", $campo, $operator, $inCount);
+                            $params[$inCount] = $valore['value'];
+                            $inCount++;
                         }
 
                     } else {
@@ -327,6 +333,7 @@ class Utils
                 }
                 $where = 'WHERE ' . implode('AND', $tmp);
             }
+
 
             //Stringa order by
             $orderBy = '';

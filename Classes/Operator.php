@@ -11,4 +11,5 @@ class Operator
     const Greater = ">";
     const IsNull = "IS NULL";
     const IsNotNull = "IS NOT NULL";
+    const In = "IN";
 }
