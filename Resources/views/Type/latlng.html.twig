@@ -8,8 +8,8 @@
             <div class="pull-left">{/ form.{{field.name}}.address /}</div>
             <div class="pull-left">[{/ form.{{field.name}}.marker.latitude /}, {/ form.{{field.name}}.marker.longitude /}]</div>
             {% if field.getLatLng_ajax|length > 0 %}
-                <button class="btn btn-success pull-right" ng-disabled="{{field.name}}ObtainLatLngLoading" ng-click="{{field.name}}ObtainLatLngFnc()">
-					<i ng-show="{{field.name}}ObtainLatLngLoading" class="fa fa-spin fa-spinner">&nbsp;&nbsp;</i>Ottieni Latitudine e Longitudine
+                <button type="button" class="btn btn-success pull-right" ng-disabled="{{field.name}}ObtainLatLngLoading" ng-click="{{field.name}}ObtainLatLngFnc()">
+                    <i ng-show="{{field.name}}ObtainLatLngLoading" class="fa fa-spin fa-spinner">&nbsp;&nbsp;</i>Ottieni Latitudine e Longitudine
                 </button>
                 <div class="cb"></div>
             {% endif %}
