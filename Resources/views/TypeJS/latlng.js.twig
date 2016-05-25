@@ -21,8 +21,8 @@ $scope.{{field.name}}ObtainLatLngFnc = function() {
 
 $scope.form.{{field.name}} = {
     address: '',
-    center: { latitude: {{ field.value.lat|default('42.247564380437346') }}, longitude: {{ field.value.lng|default('12.916211206249972') }} },
-    marker: { latitude: {{ field.value.lat|default('42.247564380437346') }}, longitude: {{ field.value.lng|default('12.916211206249972') }} },
+    center: { latitude: {{ field.value.lat|default('42.247564380437346')|raw }}, longitude: {{ field.value.lng|default('12.916211206249972')|raw }} },
+    marker: { latitude: {{ field.value.lat|default('42.247564380437346')|raw }}, longitude: {{ field.value.lng|default('12.916211206249972')|raw }} },
     zoom: {{ field.value.zoom|default('5') }}
 };
 
