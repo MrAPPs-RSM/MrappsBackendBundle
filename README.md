@@ -120,9 +120,15 @@ mrapps_amazon:
        default_bucket: ~
        
 mrapps_backend:
-    default_route_name: rotta_di_default
-    logo_path: path_del_logo
+    default_routes:
+        - { role: DEFAULT, name: app_contatti_list }
+        - { role: ROLE_RISTORATORE, name: app_contatti_edit }
+        - { role: ROLE_TRADUTTORE, name: app_ristorantitraduzioni_list }
+    custom_css:
+        - bundles/app/css/gourmet_panel.css
+    logo_path: apple-touch-icon.png
     temp_folder: temp
+    gmaps_api_key: %gmaps_api_key%
     file_accepted_types:
        image: image/jpeg, image/jpg, image/png, image/gif
        video: video/quicktime, video/mp4, video/mpeg, video/x-msvideo, video/3gpp
@@ -130,8 +136,12 @@ mrapps_backend:
        zip: application/zip, application/octet-stream
        json: application/json, text/plain, text/json
     customization:
-            navbar_color: #FFCC00
-            navbar_text_color: black
+       primary_color: '#B03843'
+       text_on_primary_color: '#FFFFFF'
+       text_hover_on_primary_color: '#999999'
+       secondary_color: '#000000'
+       text_on_secondary_color: '#FFFFFF'
+       text_hover_on_secondary_color: '#999999'
 ```
 
 ##app/config/services.yml (sezione services)##
