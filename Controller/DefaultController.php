@@ -401,7 +401,7 @@ class DefaultController extends Controller
         ));
     }
 
-    public function __newAction(Request $request, $title, $fields, $linkSave = null, $linkEdit = null, $linkPublish = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false, $linkNew = null, $confirmMessages = null)
+    public function __newAction(Request $request, $title, $fields, $linkSave = null, $linkEdit = null, $linkPublish = null, $linkBreadcrumb = null, $create, $edit, $confirmSave = false, $linkNew = null, $confirmMessages = null, $linkAction = null)
     {
         $trans = $this->get('translator');
 
@@ -623,6 +623,7 @@ class DefaultController extends Controller
             'edit' => $edit,
             'linkNew' => $linkNew,
             'linkBreadcrumb' => $linkBreadcrumb,
+            'linkAction' => $linkAction,
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,
             'languages' => $languages,

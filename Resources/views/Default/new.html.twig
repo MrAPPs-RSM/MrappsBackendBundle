@@ -68,13 +68,18 @@
                         </div>
                     {% endfor %}
                     <div class="panel-footer text-right">
-                        {% if edit and linkPublish is defined and linkPublish is not null and linkPublish|length > 0 %}
-                            <button ng-disabled="publishInProgress" type="button" ng-click="doPublish()" class="btn btn-warning pull-left">{{ 'form.pubblica'|trans }}</button>
+                        {% if linkAction is not null and linkAction is iterable %}
+                            {% for item in linkAction %}
+                                <button type="button" ng-disabled="linkActionProgress{{ loop.index }}" ng-click="linkActionFunction{{ loop.index }}()" class="pull-left {{ item.class }}">
+                                    {% if item.icon is defined and item.icon|length > 0 %}<em class="fa {{ item.icon }}"></em>{% endif %}
+                                    {% if item.text is defined %}{{ item.text|trim }}{% endif %}
+                                </button>
+                            {% endfor %}
                         {% endif %}
                         {% if edit %}
-                            <button type="submit" id="save" class="btn btn-info">{{ 'form.modifica'|trans }}</button>
+                            <button type="submit" id="save" class="btn btn-info"><em class="fa fa-pencil"></em>{{ 'form.modifica'|trans }}</button>
                         {% else %}
-                            <button type="submit" id="save" class="btn btn-success">{{ 'form.crea'|trans }}</button>
+                            <button type="submit" id="save" class="btn btn-success"><em class="fa fa-plus"></em>{{ 'form.crea'|trans }}</button>
                         {% endif %}
                     </div>
             </div>
@@ -335,18 +340,18 @@
                 }
             };
 
+            {% if linkAction is not null %}
+            {% for item in linkAction %}
+            $scope.linkActionProgress{{ loop.index }} = false;
+            $scope.linkActionFunction{{ loop.index }} = function() {
 
-            {% if edit and linkPublish is defined and linkPublish is not null and linkPublish|length > 0 %}
-            $scope.publishInProgress = false;
-            $scope.doPublish = function() {
+                {% if item.confirm is defined and item.confirm == true %}if (confirm("{{ item.confirmMessage }}")) { {% endif %}
 
-                if (confirm("{{ 'form.elemento.pubblicare_contenuto'|trans }}")) {
-
-                    $scope.publishInProgress = true;
+                    $scope.linkActionProgress{{ loop.index }} = true;
                     addOverlay();
                     $http({
                         method: 'POST',
-                        url: '{{ linkPublish }}',
+                        url: '{{ item.url }}',
                         data: $scope.form,
                         headers: {
                             'Content-Type': 'application/json'
@@ -356,20 +361,19 @@
                         if (!response.data.success) {
                             toastr.error(response.data.message, '{{ 'form.errore'|trans }}');
                         } else {
-                            toastr.success('{{ 'form.pubblicato'|trans }}', '{{ 'form.elemento.elemento_modificato'|trans }}');
-                            location.reload();
+                            toastr.success(response.data.message, '{{ 'form.elemento.completato'|trans }}');
+                            {{ item.callback|raw }}
                         }
-                        $scope.publishInProgress = false;
+                        $scope.linkActionProgress{{ loop.index }} = false;
 
                     }, function errorCallback(response) {
                         removeOverlay();
                         toastr.error('{{ 'form.errore'|trans }}', '{{ 'form.errore_server'|trans }}');
-                        $scope.publishInProgress = false;
+                        $scope.linkActionProgress{{ loop.index }} = false;
                     });
-
-
-                }
+                    {% if item.confirm is defined and item.confirm == true %}}{% endif %}
             };
+            {% endfor %}
             {% endif %}
 
             var src = null;

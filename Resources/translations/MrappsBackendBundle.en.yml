@@ -10,8 +10,6 @@ form:
     errore: Error!
     salvato: Saved!
     immagine_salvata: 'Image saved'
-    pubblica: 'Translate'
-    pubblicato: 'Operazione completata.'
     elemento:
         creato: Created!
         completato: Completated!
@@ -20,7 +18,6 @@ form:
         salvare_modifiche: 'Salvare le modifiche?'
         nuovo_elemento: 'Create the new element?'
         procedere: 'Procedere?'
-        pubblicare_contenuto: 'Vuoi pubblicare il contenuto?'
 
 # sidebar
 sidebar:
