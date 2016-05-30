@@ -345,7 +345,7 @@
             $scope.linkActionProgress{{ loop.index }} = false;
             $scope.linkActionFunction{{ loop.index }} = function() {
 
-                {% if item.confirm is defined and item.confirm == true %}if (confirm("{{ item.confirmMessage }}")) { {% endif %}
+                {% if item.confirm is defined and item.confirm == true %}if (confirm("{{ item.confirmMessage|e('js') }}")) { {% endif %}
 
                     $scope.linkActionProgress{{ loop.index }} = true;
                     addOverlay();
