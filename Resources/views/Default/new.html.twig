@@ -362,7 +362,7 @@
                             toastr.error(response.data.message, '{{ 'form.errore'|trans }}');
                         } else {
                             toastr.success(response.data.message, '{{ 'form.elemento.completato'|trans }}');
-                            {{ item.callback|raw }}
+                            {% if item.callback is defined and item.callback|length > 0 %}{{ item.callback|raw }}{% endif %}
                         }
                         $scope.linkActionProgress{{ loop.index }} = false;
 
