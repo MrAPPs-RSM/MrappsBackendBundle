@@ -15,4 +15,16 @@ class LanguageRepository extends EntityRepository
     public function findByIso($iso) {
         return $this->findOneBy(array('isoCode' => strtolower(trim($iso))));
     }
+
+    public function getSelect() {
+
+        $output = array();
+
+        $languages = $this->findAll();
+        foreach($languages as $l) {
+            $output[$l->getIsoCode()] = $l->getName();
+        }
+
+        return $output;
+    }
 }

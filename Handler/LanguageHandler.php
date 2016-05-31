@@ -66,7 +66,7 @@ class LanguageHandler
         return $this->container->get('templating')->renderResponse('MrappsBackendBundle:Default:top-navbar.html.twig',
             array("logo_path" => $this->container->hasParameter('mrapps_backend.logo_path') ? $this->container->getParameter('mrapps_backend.logo_path') : null,
                 "default_route_name" => ($this->request !== null) ? Utils::getDefaultRouteForUser($this->container, $user) : '',
-                "languages" => Utils::getLanguages(),
+                "languages" => $this->container->get('doctrine.orm.entity_manager')->getRepository('MrappsBackendBundle:Language')->getSelect(),
                 "routeName" => $route,
                 "routeParams" => $routeParams,
             ))->getContent();
