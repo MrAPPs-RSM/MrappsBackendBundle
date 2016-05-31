@@ -555,6 +555,8 @@ class Utils
         if (!isset($options['auto_flush'])) $options['auto_flush'] = true;
         if (!isset($options['find_rules'])) $options['find_rules'] = false; //valore accettato $options['find_rules']=array(array("rule_key"=>"key","rule_value"=>"value"))
 
+        $result = null;
+
         if (is_array($language)) {
 
             foreach ($language as $item) {
@@ -578,6 +580,62 @@ class Utils
             }
 
             return Utils::findTraduzione($em, $entity, $language, $options);
+        }
+
+
+        return null;
+    }
+
+    public static function getFallbackLocales($container = null, $returnSingleLocale = true) {
+
+        if((bool)$returnSingleLocale) {
+            $result = null;
+        }else {
+            $result = array();
+        }
+
+        if($container !== null) {
+
+            $trans = $container->get('translator');
+
+            $canProceed = true;
+            while($canProceed) {
+
+                if(get_class($trans) == 'Symfony\Bundle\FrameworkBundle\Translation\Translator') $canProceed = false;
+
+                if($canProceed) {
+
+                    $refTrans = new \ReflectionObject($trans);
+                    $propTrovata = false;
+                    foreach ($refTrans->getProperties() as $p) {
+                        if($p->name == 'translator') {
+
+                            $p->setAccessible(true);
+                            $trans = $p->getValue($trans);
+                            $p->setAccessible(false);
+
+                            $propTrovata = true;
+                            break;
+                        }
+                    }
+
+                    if(!$propTrovata) {
+                        $trans = null;
+                        $canProceed = false;
+                    }
+                }
+            }
+
+            if($trans !== null && get_class($trans) == 'Symfony\Bundle\FrameworkBundle\Translation\Translator') {
+                $fallbackLocales = $trans->getFallbackLocales();
+                if((bool)$returnSingleLocale) {
+                    $result = (count($fallbackLocales) > 0) ? $fallbackLocales[0] : null;
+                }else {
+                    $result = $fallbackLocales;
+                }
+            }
+
+            return $result;
         }
     }
 

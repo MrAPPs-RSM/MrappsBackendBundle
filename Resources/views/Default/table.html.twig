@@ -176,13 +176,13 @@
                 $scope.deleteajax = function (id) {
                     var data = {id: id};
                     swal({
-                        title: "{{ 'form.elemento.procedere'|trans }}",
-                        text: "{{ deleteMessages['question'] }}",
+                        title: "{{ 'form.elemento.procedere'|trans|e('js') }}",
+                        text: "{{ deleteMessages['question']|e('js') }}",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "{{ 'checkbox.si'|trans }}",
-                        cancelButtonText: "{{ 'checkbox.no'|trans }}",
+                        confirmButtonText: "{{ 'checkbox.si'|trans|e('js') }}",
+                        cancelButtonText: "{{ 'checkbox.no'|trans|e('js') }}",
                         closeOnConfirm: false,
                         closeOnCancel: false
                     }, function (isConfirm) {
@@ -190,16 +190,16 @@
                             $http.post('{{ linkDelete }}', data)
                                     .then(function successCallback(response) {
                                         if (response.data.success) {
-                                            swal("{{ 'form.elemento.completato'|trans }}", "{{ deleteMessages['success'] }}", "success");
+                                            swal("{{ 'form.elemento.completato'|trans|e('js') }}", "{{ deleteMessages['success']|e('js') }}", "success");
                                             self.tableParams2.reload();
                                         } else {
-                                            swal("{{ 'form.errore'|trans }}", response.data.message, "error");
+                                            swal("{{ 'form.errore'|trans|e('js') }}", response.data.message, "error");
                                         }
                                     }, function errorCallback(response) {
-                                        swal("{{ 'form.errore'|trans }}", "{{ deleteMessages['error'] }}", "error");
+                                        swal("{{ 'form.errore'|trans|e('js') }}", "{{ deleteMessages['error']|e('js') }}", "error");
                                     });
                         } else {
-                            swal("{{ 'form.errore'|trans }}", "{{ deleteMessages['cancel'] }}", "error");
+                            swal("{{ 'form.errore'|trans|e('js') }}", "{{ deleteMessages['cancel']|e('js') }}", "error");
                         }
                     });
                 };
