@@ -556,57 +556,93 @@ class Utils
         if (!isset($options['find_rules'])) $options['find_rules'] = false; //valore accettato $options['find_rules']=array(array("rule_key"=>"key","rule_value"=>"value"))
         if (!isset($options['field'])) $options['field'] = null;
 
-        $fieldGetter = ($options['field'] !== null) ? 'get'.Utils::snakeToCamelCase($options['field']) : null;
+        //Se l'opzione "field" è valorizzata il sistema non restituisce più l'entity,
+        //ma il campo (o la lista di campi) nella prima lingua valida che trova
+        $fieldsData = array();
+        if($options['field'] !== null) {
+            if(!is_array($options['field'])) {
+                $options['field'] = array($options['field']);
+            }
 
+            foreach ($options['field'] as $f) {
+                $fieldsData[$f] = array(
+                    'getter' => 'get'.Utils::snakeToCamelCase($f),
+                    'value' => null,
+                );
+            }
+        }
 
         $result = null;
 
-        if (is_array($language)) {
+        if (!is_array($language)) {
+            $language = array($language);
+        }
 
-            foreach ($language as $item) {
+        foreach ($language as $item) {
 
-                if (!is_object($item)) {
-                    $lang = $em->getRepository('MrappsBackendBundle:Language')->findByIso(strtolower(trim($item)));
-                } else {
-                    $lang = $item;
-                }
+            if (!is_object($item)) {
+                $lang = $em->getRepository('MrappsBackendBundle:Language')->findByIso(strtolower(trim($item)));
+            } else {
+                $lang = $item;
+            }
 
-                $result = Utils::findTraduzione($em, $entity, $lang, $options);
+            $result = Utils::findTraduzione($em, $entity, $lang, $options);
 
-                if($fieldGetter !== null) {
+            if($options['field'] !== null) {
 
-                    //Field specificato -> esce dal ciclo solo se il field è valorizzato
-                    $fieldFound = false;
-                    if($result !== null && method_exists($result, $fieldGetter)) {
-                        $fieldValue = trim($result->$fieldGetter());
-                        $fieldFound = (strlen($fieldValue) > 0);
+                if($result !== null) {
+                    foreach ($fieldsData as $fk => $fd) {
+
+                        $fieldGetter = $fd['getter'];
+
+                        //Tento la valorizzazione solo dei valori rimasti a null
+                        if($fieldsData[$fk]['value'] == null && method_exists($result, $fieldGetter)) {
+                            $value = trim($result->$fieldGetter());
+                            if(strlen($value) > 0) {
+                                $fieldsData[$fk]['value'] = $value;
+                            }
+                        }
                     }
+                }
 
-                    if($fieldFound) break;
+                //Field specificato -> esce dal ciclo solo se tutti i field sono valorizzati
+                $fieldFound = true;
+                foreach ($fieldsData as $fd) {
+                    if($fd['value'] == null) {
+                        $fieldFound = false;
+                        break;
+                    }
+                }
+                if($fieldFound) break;
 
-                }else {
-                    //Field non specificato -> al primo oggetto non null che trova esce dal ciclo
-                    if ($result !== null) break;
+            }else {
+                //Field non specificato -> al primo oggetto non null che trova esce dal ciclo
+                if ($result !== null) break;
+            }
+        }
+
+        if($options['field'] !== null && count($fieldsData) > 0) {
+
+            if(count($fieldsData) > 1) {
+
+                //Più campi -> restituisco un array con la lista dei campi
+                $result = array();
+                foreach ($fieldsData as $fk => $fd) {
+                    $result[$fk] = trim($fd['value']);
+                }
+
+                return $result;
+
+            }else {
+
+                //Un solo campo -> restituisco direttamente il valore
+                foreach ($fieldsData as $fd) {
+                    return trim($fd['value']);
                 }
             }
 
-        } else {
-            if (!is_object($language)) {
-                $language = $em->getRepository('MrappsBackendBundle:Language')->findByIso(strtolower(trim($language)));
-            }
-
-            $result = Utils::findTraduzione($em, $entity, $language, $options);
-
-            if($fieldGetter !== null) {
-
-                //Field specificato -> ritorna il valore del field
-                if($result !== null && method_exists($result, $fieldGetter)) {
-                    $fieldValue = trim($result->$fieldGetter());
-                    if(strlen($fieldValue) > 0) return $fieldValue;
-                }
-
-                return '';
-            }
+        }else {
+            return $result;
         }
 
 
