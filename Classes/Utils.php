@@ -554,6 +554,10 @@ class Utils
         if (!isset($options['create_entity'])) $options['create_entity'] = false;
         if (!isset($options['auto_flush'])) $options['auto_flush'] = true;
         if (!isset($options['find_rules'])) $options['find_rules'] = false; //valore accettato $options['find_rules']=array(array("rule_key"=>"key","rule_value"=>"value"))
+        if (!isset($options['field'])) $options['field'] = null;
+
+        $fieldGetter = ($options['field'] !== null) ? 'get'.Utils::snakeToCamelCase($options['field']) : null;
+
 
         $result = null;
 
@@ -569,8 +573,20 @@ class Utils
 
                 $result = Utils::findTraduzione($em, $entity, $lang, $options);
 
-                if ($result !== null) {
-                    return $result;
+                if($fieldGetter !== null) {
+
+                    //Field specificato -> esce dal ciclo solo se il field è valorizzato
+                    $fieldFound = false;
+                    if($result !== null && method_exists($result, $fieldGetter)) {
+                        $fieldValue = trim($result->$fieldGetter());
+                        $fieldFound = (strlen($fieldValue) > 0);
+                    }
+
+                    if($fieldFound) break;
+
+                }else {
+                    //Field non specificato -> al primo oggetto non null che trova esce dal ciclo
+                    if ($result !== null) break;
                 }
             }
 
@@ -579,11 +595,22 @@ class Utils
                 $language = $em->getRepository('MrappsBackendBundle:Language')->findByIso(strtolower(trim($language)));
             }
 
-            return Utils::findTraduzione($em, $entity, $language, $options);
+            $result = Utils::findTraduzione($em, $entity, $language, $options);
+
+            if($fieldGetter !== null) {
+
+                //Field specificato -> ritorna il valore del field
+                if($result !== null && method_exists($result, $fieldGetter)) {
+                    $fieldValue = trim($result->$fieldGetter());
+                    if(strlen($fieldValue) > 0) return $fieldValue;
+                }
+
+                return '';
+            }
         }
 
 
-        return null;
+        return $result;
     }
 
     public static function getFallbackLocales($container = null, $returnSingleLocale = true) {
