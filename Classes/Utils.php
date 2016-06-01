@@ -639,6 +639,28 @@ class Utils
         }
     }
 
+    public static function getListOfLocalesForTraduzioni($container = null, $currentLocale = 'en') {
+
+        $listOfLocales = array();
+
+        if($container !== null) {
+
+            //Locale dell'utente
+            if(is_object($currentLocale) && get_class($currentLocale) == 'Mrapps\BackendBundle\Entity\Language') {
+                $currentLocale = $currentLocale->getIsoCode();
+            }
+            $currentLocale = strtolower(trim($currentLocale));
+
+            //Locale(s) fallback
+            $fallback = Utils::getFallbackLocales($container, false);
+
+            //Lista ordinata di locale(s)
+            $listOfLocales = array_merge(array($currentLocale), $fallback);
+        }
+
+        return array_unique($listOfLocales);
+    }
+
     public static function snakeToCamelCase($snakeCase)
     {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', strtolower($snakeCase))));
