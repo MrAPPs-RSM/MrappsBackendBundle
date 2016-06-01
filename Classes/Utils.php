@@ -709,7 +709,8 @@ class Utils
         if($container !== null) {
 
             //Locale dell'utente
-            if(is_object($currentLocale) && get_class($currentLocale) == 'Mrapps\BackendBundle\Entity\Language') {
+            $class = get_class($currentLocale);
+            if(is_object($currentLocale) && in_array($class, array('Mrapps\BackendBundle\Entity\Language', 'Proxies\__CG__\Mrapps\BackendBundle\Entity\Language'))) {
                 $currentLocale = $currentLocale->getIsoCode();
             }
             $currentLocale = strtolower(trim($currentLocale));
