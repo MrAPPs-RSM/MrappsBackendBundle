@@ -947,8 +947,12 @@ class Utils
                 Utils::lockEntity($em, $pubblicata, false);
             }
 
+            //Setta flag VISIBLE
+            if($visibleValue !== null) {
+                $pubblicata->setVisible((bool)$visibleValue);
+            }
+
             //Salvataggio entity Bozza e Pubblicata
-            $pubblicata->setVisible((bool)$visibleValue);
             $em->persist($pubblicata);
             $em->flush();
 
