@@ -856,7 +856,7 @@ class Utils
         return $entity;
     }
 
-    public static function pubblicaEntity(EntityManager $em = null, DraftInterface $entity = null, $excludeFields = array(), $lockEntities = true)
+    public static function pubblicaEntity(EntityManager $em = null, DraftInterface $entity = null, $excludeFields = array(), $lockEntities = true, $visibleValue = true)
     {
 
         //Entity bozza
@@ -948,7 +948,7 @@ class Utils
             }
 
             //Salvataggio entity Bozza e Pubblicata
-            $pubblicata->setVisible(1);
+            $pubblicata->setVisible((bool)$visibleValue);
             $em->persist($pubblicata);
             $em->flush();
 
