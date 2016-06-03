@@ -348,7 +348,7 @@ class Utils
                 $query .= ' ORDER BY ' . $orderBy;
             }
 
-            $tmp = $em->createQuery($query)->setMaxResults($count)->setFirstResult(($page - 1) * $count);
+            $tmp = $em->createQuery($query); //->setMaxResults($count)->setFirstResult(($page - 1) * $count);   //NON SCOMMENTARE
 
             if (count($params) > 0) {
                 $tmp->setParameters($params);

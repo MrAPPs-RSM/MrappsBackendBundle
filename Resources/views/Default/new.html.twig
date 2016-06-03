@@ -319,7 +319,7 @@
                                 {# ID nuovo oggetto creato #}
                                 var id = response.data.data;
                                 if(typeof id === "object") {
-                                    id = id.id; //Awesome
+                                    id = id.id; {# Awesome #}
                                 }
                                 location.href = '{{ linkEdit }}/' + id + '?create=true';
                                 {% endif %}
