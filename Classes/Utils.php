@@ -762,7 +762,7 @@ class Utils
 
         $defaultRoutes = $container->getParameter('mrapps_backend.default_routes');
 
-        $roles = ($user !== null) ? $user->getRoles() : array();
+        $roles = ($user !== null && is_object($user)) ? $user->getRoles() : array();
         $roles[] = 'DEFAULT';
 
         $defaultRouteForUser = '';
