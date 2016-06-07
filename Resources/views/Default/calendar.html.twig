@@ -137,7 +137,7 @@
                                         swal("Eliminato", "Elemento salvato con sucesso", "success");
                                         $('#calendar').fullCalendar('removeEvents',event._id);
                                     } else {
-                                        swal("Errore", response.data.message, "error");
+                                        swal("Errore", response.message, "error");
                                     }
                                 }, function errorCallback(response) {
                                     swal("Errore", "Errore nella richiesta al server", "error");
