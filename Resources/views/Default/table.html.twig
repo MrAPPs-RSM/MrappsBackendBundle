@@ -144,6 +144,8 @@
                     }
                 };
 
+                var isDataLoading = false;
+
                 self.tableParams2 = new NgTableParams({
                     page: 1,            // show first page
                     count: 10,          // count per page
@@ -152,24 +154,31 @@
                 }, {
                     //total: dati.length, // length of data
                     getData: function ($defer, params) {
-                        $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>{{ 'form.attendere'|trans }}</div></div>');
-                        Api.query(params.url(), function (data) {
-                            // update table params
-                            params.total(data.length);
-                            // use build-in angular filter
-                            /*var orderedData = params.filter() ?
-                             $filter('filter')(data, params.filter()) :
-                             data;*/
-                            var orderedData = params.sorting() ?
-                                    $filter('orderBy')(data, params.orderBy()) :
-                                    orderedData;
-                            self.data = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
 
-                            params.total(orderedData.length); // set total for recalc pagination
+                        if(isDataLoading === false) {
+                            isDataLoading = true;
+                            $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>{{ 'form.attendere'|trans }}</div></div>');
+                            Api.query(params.url(), function (data) {
 
-                            $defer.resolve(self.data);
-                            $('#overlay-waiting').remove();
-                        });
+                                // update table params
+                                params.total(data.length);
+                                // use build-in angular filter
+                                /*var orderedData = params.filter() ?
+                                 $filter('filter')(data, params.filter()) :
+                                 data;*/
+                                var orderedData = params.sorting() ?
+                                        $filter('orderBy')(data, params.orderBy()) :
+                                        orderedData;
+                                self.data = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+
+                                params.total(orderedData.length); // set total for recalc pagination
+
+                                $defer.resolve(self.data);
+                                $('#overlay-waiting').remove();
+
+                                isDataLoading = false;
+                            });
+                        }
                     }
                 });
                 {% if linkDelete is not null and permissions.delete == true %}
