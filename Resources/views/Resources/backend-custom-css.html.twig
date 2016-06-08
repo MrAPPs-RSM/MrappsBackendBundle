@@ -30,23 +30,23 @@
         color: {{text_on_secondary_color}};
         background: {{secondary_color}};
     }
-    
+
     .primary-color {
-	    color: {{primary_color}};
+        color: {{primary_color}};
     }
-    
+
     .primary-bgcolor {
-	    background-color: {{primary_color}};
-	    color: {{text_on_primary_color}};
+        background-color: {{primary_color}};
+        color: {{text_on_primary_color}};
     }
-    
+
     .secondary-color {
-	    color: {{secondary_color}};
+        color: {{secondary_color}};
     }
-    
+
     .secondary-bgcolor {
-	    background-color: {{secondary_color}};
-	    color: {{text_on_secondary_color}};
+        background-color: {{secondary_color}};
+        color: {{text_on_secondary_color}};
     }
 
     .topnavbar .navbar-nav > li > a:hover,
@@ -66,7 +66,7 @@
     .sidebar .nav:not(.sidebar-subnav) > li.open > a,
     .sidebar .nav:not(.sidebar-subnav) > li > a:hover,
     .sidebar .nav:not(.sidebar-subnav) > li > .nav-item:hover,
-    .sidebar .nav:not(.sidebar-subnav) > li.active > a+ul:not(.sidebar-subnav) > li.active > a:hover {
+    .sidebar .nav:not(.sidebar-subnav) > li.active > a + ul:not(.sidebar-subnav) > li.active > a:hover {
         background-color: {{primary_color}} !important;
         color: {{text_on_primary_color}} !important;
         border-left-color: rgba(0, 0, 0, 0.3);
@@ -157,31 +157,32 @@
         height: 34px;
     }
 
-    .sidebar .nav > li > a+ul > li > a:hover,
-    .sidebar .nav > li.active > a+ul > li.active > a {
+    .sidebar .nav > li > a + ul > li > a:hover,
+    .sidebar .nav > li.active > a + ul > li.active > a {
         color: {{primary_color}};
     }
 
-    .sidebar .nav > li > a+ul > li > a:hover::before,
-    .sidebar .nav > li.active > a+ul > li.active > a::before {
+    .sidebar .nav > li > a + ul > li > a:hover::before,
+    .sidebar .nav > li.active > a + ul > li.active > a::before {
         background-color: {{primary_color}};
     }
 
     .sidebar .nav > li > a[data-toggle="collapse"]::after {
-        content: "\f106";font-family: 'FontAwesome';
-		text-rendering: auto;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-		font-size: 18px;
-		-webkit-transition: transform 0.2s;
-		-moz-transition: transform 0.2s;
-		-o-transition: transform 0.2s;
-		-ms-transition: transform 0.2s;
-		transition: transform 0.2s;
-		position: absolute;
-		top: 50%;
-		right: 12px;
-		margin-top: -12px;
+        content: "\f106";
+        font-family: 'FontAwesome';
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-size: 18px;
+        -webkit-transition: transform 0.2s;
+        -moz-transition: transform 0.2s;
+        -o-transition: transform 0.2s;
+        -ms-transition: transform 0.2s;
+        transition: transform 0.2s;
+        position: absolute;
+        top: 50%;
+        right: 12px;
+        margin-top: -12px;
     }
 
     .sidebar .nav > li > a[data-toggle="collapse"].collapsed::after {
@@ -198,24 +199,78 @@
     }
 
     .btn-primary,
-    .btn.active {
+    .btn.active,
+    .pagination > .active > a,
+    .pagination > .active > a:focus,
+    .pagination > .active > a:hover,
+    .pagination > .active > span,
+    .pagination > .active > span:focus,
+    .pagination > .active > span:hover {
         background-color: {{primary_color}} !important;
         color: {{text_on_primary_color}} !important;
     }
 
-
     @media screen and (max-width: 767px) {
-        .wrapper > .aside.aside, .wrapper > .aside.aside+section { -webkit-transition: left 0.2s; -moz-transition: left 0.2s; -o-transition: left 0.2s; -ms-transition: left 0.2s; transition: left 0.2s; left: 0px; }
-        .wrapper > .aside.aside.open, .wrapper > .aside.aside.open+section { left: 220px; }
-        .navbar-header { float: left; }
-        .sidebar-toggle { float: right; padding: 10px; margin: 4px 0px 0px; position: inherit !important; top: inherit; right: inherit; z-index: inherit; }
-        .topnavbar .navbar-nav > li > a { font-size: 0px; padding: 13px 10px 0px; }
-        .topnavbar .navbar-nav > li > a > em, .topnavbar .navbar-nav > li > a > i { font-size: 15px; }
-        table .btn { min-width: 40px; max-width: 100%; margin: 0px auto 5px; display: block; }
-        form.fos_user_change_password > .form-container > div { width: 100%; }
-        header .btn-link { font-size: 0px; margin-top: 15px; }
-        header .btn-link > i { font-size: 15px; margin-right: 5px; }
-        header .btn-link .caret { vertical-align: super; }
+        .wrapper > .aside.aside, .wrapper > .aside.aside + section {
+            -webkit-transition: left 0.2s;
+            -moz-transition: left 0.2s;
+            -o-transition: left 0.2s;
+            -ms-transition: left 0.2s;
+            transition: left 0.2s;
+            left: 0px;
+        }
+
+        .wrapper > .aside.aside.open, .wrapper > .aside.aside.open + section {
+            left: 220px;
+        }
+
+        .navbar-header {
+            float: left;
+        }
+
+        .sidebar-toggle {
+            float: right;
+            padding: 10px;
+            margin: 4px 0px 0px;
+            position: inherit !important;
+            top: inherit;
+            right: inherit;
+            z-index: inherit;
+        }
+
+        .topnavbar .navbar-nav > li > a {
+            font-size: 0px;
+            padding: 13px 10px 0px;
+        }
+
+        .topnavbar .navbar-nav > li > a > em, .topnavbar .navbar-nav > li > a > i {
+            font-size: 15px;
+        }
+
+        table .btn {
+            min-width: 40px;
+            max-width: 100%;
+            margin: 0px auto 5px;
+            display: block;
+        }
+
+        form.fos_user_change_password > .form-container > div {
+            width: 100%;
+        }
+
+        header .btn-link {
+            font-size: 0px;
+            margin-top: 15px;
+        }
+
+        header .btn-link > i {
+            font-size: 15px;
+            margin-right: 5px;
+        }
+
+        header .btn-link .caret {
+            vertical-align: super;
+        }
     }
 
     {{ extra_css }}
