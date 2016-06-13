@@ -13121,7 +13121,7 @@ ul.menu-list {
 }
 
 ul.menu-list > li {
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     position: relative;
 }
 
@@ -13152,7 +13152,7 @@ ul.menu-list > li > p::after {
     position: absolute;
     left: 0px;
     margin: 0px 0px;
-    bottom: -8px;
+    bottom: -13px;
 }
 
 ul.menu-list > li:last-child > p::after {
@@ -13174,6 +13174,11 @@ ul.menu-list > li .qty,
     min-width: 22px;
     text-align: center;
     display: inline-block;	
+}
+
+.room_dett_col ul.menu-list > li .qty {
+    margin-right: 30px;
+    margin-top: 1px;
 }
 
 .full {
