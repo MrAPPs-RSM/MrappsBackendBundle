@@ -7,7 +7,7 @@ class ValidateHandler
     /*
      * Cast to INTEGER
      */
-    public function integer($value, $preserveNull = true) {
+    public function integer($value, $preserveNull = false) {
 
         if((bool)$preserveNull) {
             return ($value !== null) ? intval($value) : null;
@@ -19,14 +19,14 @@ class ValidateHandler
     /*
      * Cast to INTEGER (alias)
      */
-    public function int($value, $preserveNull = true) {
+    public function int($value, $preserveNull = false) {
         return $this->integer($value, $preserveNull);
     }
 
     /*
      * Cast to BOOLEAN
      */
-    public function bool($value, $preserveNull = true) {
+    public function bool($value, $preserveNull = false) {
 
         if((bool)$preserveNull && $value === null) return null;
         return (bool)$value;
@@ -35,7 +35,7 @@ class ValidateHandler
     /*
      * Cast to STRING
      */
-    public function string($value, $preserveNull = true) {
+    public function string($value, $preserveNull = false) {
 
         if((bool)$preserveNull) {
             return ($value !== null) ? trim($value) : null;
@@ -47,14 +47,14 @@ class ValidateHandler
     /*
      * Cast to STRING (alias)
      */
-    public function str($value, $preserveNull = true) {
+    public function str($value, $preserveNull = false) {
         return $this->string($value, $preserveNull);
     }
 
     /*
      * Cast to STRING, upperCase
      */
-    public function stringToUpper($value, $preserveNull = true) {
+    public function stringToUpper($value, $preserveNull = false) {
 
         $string = $this->string($value, $preserveNull);
         return ($string !== null) ? strtoupper($string) : null;
@@ -63,14 +63,14 @@ class ValidateHandler
     /*
      * Cast to STRING, upperCase (alias)
      */
-    public function strToUpper($value, $preserveNull = true) {
+    public function strToUpper($value, $preserveNull = false) {
         return $this-stringToUpper($value, $preserveNull);
     }
 
     /*
      * Cast to STRING, lowerCase
      */
-    public function stringToLower($value, $preserveNull = true) {
+    public function stringToLower($value, $preserveNull = false) {
 
         $string = $this->string($value, $preserveNull);
         return ($string !== null) ? strtolower($string) : null;
@@ -79,14 +79,14 @@ class ValidateHandler
     /*
      * Cast to STRING, lowerCase (alias)
      */
-    public function strToLower($value, $preserveNull = true) {
+    public function strToLower($value, $preserveNull = false) {
         return $this->stringToLower($value, $preserveNull);
     }
 
     /*
      * Cast to FLOAT
      */
-    public function float($value, $preserveNull = true) {
+    public function float($value, $preserveNull = false) {
         if((bool)$preserveNull) {
             return ($value !== null) ? floatval($value) : null;
         }else {
@@ -97,14 +97,14 @@ class ValidateHandler
     /*
      * Cast to FLOAT (alias)
      */
-    public function double($value, $preserveNull = true) {
+    public function double($value, $preserveNull = false) {
         return $this->float($value, $preserveNull);
     }
 
     /*
      * Validate EMAIL
      */
-    public function email($value, $preserveNull = true) {
+    public function email($value, $preserveNull = false) {
 
         if((bool)$preserveNull && $value === null) return null;
 
@@ -168,7 +168,7 @@ class ValidateHandler
     /*
      * Check if field is set in array + cast\validation
      */
-    public function setted($array, $key, $type = '', $preserveNull = true) {
+    public function setted($array, $key, $type = '', $preserveNull = false) {
 
         $type = strtolower(trim($type));
 
