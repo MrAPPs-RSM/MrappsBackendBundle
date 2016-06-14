@@ -323,6 +323,10 @@ class Utils
                             $tmp[] = sprintf(" a.%s %s (?%s) ", $campo, $operator, $inCount);
                             $params[$inCount] = $valore['value'];
                             $inCount++;
+                        } elseif ($operator == Operator::InSubquery) {
+
+                            $tmp[] = sprintf(" a.%s %s (%s) ", $campo, Operator::In, $valore['value']);
+                            $inCount++;
                         }
 
                     } else {
@@ -559,14 +563,14 @@ class Utils
         //Se l'opzione "field" è valorizzata il sistema non restituisce più l'entity,
         //ma il campo (o la lista di campi) nella prima lingua valida che trova
         $fieldsData = array();
-        if($options['field'] !== null) {
-            if(!is_array($options['field'])) {
+        if ($options['field'] !== null) {
+            if (!is_array($options['field'])) {
                 $options['field'] = array($options['field']);
             }
 
             foreach ($options['field'] as $f) {
                 $fieldsData[$f] = array(
-                    'getter' => 'get'.Utils::snakeToCamelCase($f),
+                    'getter' => 'get' . Utils::snakeToCamelCase($f),
                     'value' => null,
                 );
             }
@@ -588,17 +592,17 @@ class Utils
 
             $result = Utils::findTraduzione($em, $entity, $lang, $options);
 
-            if($options['field'] !== null) {
+            if ($options['field'] !== null) {
 
-                if($result !== null) {
+                if ($result !== null) {
                     foreach ($fieldsData as $fk => $fd) {
 
                         $fieldGetter = $fd['getter'];
 
                         //Tento la valorizzazione solo dei valori rimasti a null
-                        if($fieldsData[$fk]['value'] == null && method_exists($result, $fieldGetter)) {
+                        if ($fieldsData[$fk]['value'] == null && method_exists($result, $fieldGetter)) {
                             $value = trim($result->$fieldGetter());
-                            if(strlen($value) > 0) {
+                            if (strlen($value) > 0) {
                                 $fieldsData[$fk]['value'] = $value;
                             }
                         }
@@ -608,22 +612,22 @@ class Utils
                 //Field specificato -> esce dal ciclo solo se tutti i field sono valorizzati
                 $fieldFound = true;
                 foreach ($fieldsData as $fd) {
-                    if($fd['value'] == null) {
+                    if ($fd['value'] == null) {
                         $fieldFound = false;
                         break;
                     }
                 }
-                if($fieldFound) break;
+                if ($fieldFound) break;
 
-            }else {
+            } else {
                 //Field non specificato -> al primo oggetto non null che trova esce dal ciclo
                 if ($result !== null) break;
             }
         }
 
-        if($options['field'] !== null && count($fieldsData) > 0) {
+        if ($options['field'] !== null && count($fieldsData) > 0) {
 
-            if(count($fieldsData) > 1) {
+            if (count($fieldsData) > 1) {
 
                 //Più campi -> restituisco un array con la lista dei campi
                 $result = array();
@@ -633,7 +637,7 @@ class Utils
 
                 return $result;
 
-            }else {
+            } else {
 
                 //Un solo campo -> restituisco direttamente il valore
                 foreach ($fieldsData as $fd) {
@@ -641,7 +645,7 @@ class Utils
                 }
             }
 
-        }else {
+        } else {
             return $result;
         }
 
@@ -649,29 +653,30 @@ class Utils
         return $result;
     }
 
-    public static function getFallbackLocales($container = null, $returnSingleLocale = true) {
+    public static function getFallbackLocales($container = null, $returnSingleLocale = true)
+    {
 
-        if((bool)$returnSingleLocale) {
+        if ((bool)$returnSingleLocale) {
             $result = null;
-        }else {
+        } else {
             $result = array();
         }
 
-        if($container !== null) {
+        if ($container !== null) {
 
             $trans = $container->get('translator');
 
             $canProceed = true;
-            while($canProceed) {
+            while ($canProceed) {
 
-                if(get_class($trans) == 'Symfony\Bundle\FrameworkBundle\Translation\Translator') $canProceed = false;
+                if (get_class($trans) == 'Symfony\Bundle\FrameworkBundle\Translation\Translator') $canProceed = false;
 
-                if($canProceed) {
+                if ($canProceed) {
 
                     $refTrans = new \ReflectionObject($trans);
                     $propTrovata = false;
                     foreach ($refTrans->getProperties() as $p) {
-                        if($p->name == 'translator') {
+                        if ($p->name == 'translator') {
 
                             $p->setAccessible(true);
                             $trans = $p->getValue($trans);
@@ -682,18 +687,18 @@ class Utils
                         }
                     }
 
-                    if(!$propTrovata) {
+                    if (!$propTrovata) {
                         $trans = null;
                         $canProceed = false;
                     }
                 }
             }
 
-            if($trans !== null && get_class($trans) == 'Symfony\Bundle\FrameworkBundle\Translation\Translator') {
+            if ($trans !== null && get_class($trans) == 'Symfony\Bundle\FrameworkBundle\Translation\Translator') {
                 $fallbackLocales = $trans->getFallbackLocales();
-                if((bool)$returnSingleLocale) {
+                if ((bool)$returnSingleLocale) {
                     $result = (count($fallbackLocales) > 0) ? $fallbackLocales[0] : null;
-                }else {
+                } else {
                     $result = $fallbackLocales;
                 }
             }
@@ -702,14 +707,15 @@ class Utils
         }
     }
 
-    public static function getListOfLocalesForTraduzioni($container = null, $currentLocale = 'en') {
+    public static function getListOfLocalesForTraduzioni($container = null, $currentLocale = 'en')
+    {
 
         $listOfLocales = array();
 
-        if($container !== null) {
+        if ($container !== null) {
 
             //Locale dell'utente
-            if(is_object($currentLocale) && in_array(get_class($currentLocale), array('Mrapps\BackendBundle\Entity\Language', 'Proxies\__CG__\Mrapps\BackendBundle\Entity\Language'))) {
+            if (is_object($currentLocale) && in_array(get_class($currentLocale), array('Mrapps\BackendBundle\Entity\Language', 'Proxies\__CG__\Mrapps\BackendBundle\Entity\Language'))) {
                 $currentLocale = $currentLocale->getIsoCode();
             }
             $currentLocale = strtolower(trim($currentLocale));
@@ -947,7 +953,7 @@ class Utils
             }
 
             //Setta flag VISIBLE
-            if($visibleValue !== null) {
+            if ($visibleValue !== null) {
                 $pubblicata->setVisible((bool)$visibleValue);
             }
 

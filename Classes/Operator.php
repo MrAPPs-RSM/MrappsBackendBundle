@@ -12,4 +12,5 @@ class Operator
     const IsNull = "IS NULL";
     const IsNotNull = "IS NOT NULL";
     const In = "IN";
+    const InSubquery = "INSUBQUERY";
 }
