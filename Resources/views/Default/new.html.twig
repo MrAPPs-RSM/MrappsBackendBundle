@@ -34,13 +34,16 @@
                                 {% for field in panel.fields %}
                                     {% if field.lang is defined and field.lang %}
                                         <div class="dropdown">
-                                            <button class="btn btn-default dropdown-toggle {{ field.name }}_lang_selector" type="button" id="dropdownLanguage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            <button class="btn btn-default dropdown-toggle {{ field.name }}_lang_selector"
+                                                    type="button" id="dropdownLanguage" data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="true">
                                                 {% for lang in field.languages_allowed %}{% if loop.index0 == 0 %}{{ lang.name }}{% endif %}{% endfor %}
                                                 <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownLanguage">
                                                 {% for lang in field.languages_allowed %}
-                                                    <li><a data-idlang="{{ lang.id }}" data-isocode="{{ lang.isoCode }}">{{ lang.name }}</a></li>
+                                                    <li><a data-idlang="{{ lang.id }}"
+                                                           data-isocode="{{ lang.isoCode }}">{{ lang.name }}</a></li>
                                                 {% endfor %}
                                             </ul>
                                         </div>
@@ -70,16 +73,21 @@
                     <div class="panel-footer text-right">
                         {% if linkAction is not null and linkAction is iterable %}
                             {% for item in linkAction %}
-                                <button type="button" ng-disabled="linkActionProgress{{ loop.index }}" ng-click="linkActionFunction{{ loop.index }}()" class="pull-left {{ item.class }}">
-                                    {% if item.icon is defined and item.icon|length > 0 %}<em class="fa {{ item.icon }}"></em>{% endif %}
+                                <button type="button" ng-disabled="linkActionProgress{{ loop.index }}"
+                                        ng-click="linkActionFunction{{ loop.index }}()"
+                                        class="pull-left {{ item.class }}">
+                                    {% if item.icon is defined and item.icon|length > 0 %}<em
+                                        class="fa {{ item.icon }}"></em>{% endif %}
                                     {% if item.text is defined %}{{ item.text|trim }}{% endif %}
                                 </button>
                             {% endfor %}
                         {% endif %}
                         {% if edit %}
-                            <button type="submit" id="save" class="btn btn-info"><em class="fa fa-pencil"></em>{{ 'form.modifica'|trans }}</button>
+                            <button type="submit" id="save" class="btn btn-info"><em
+                                        class="fa fa-pencil"></em>{{ 'form.modifica'|trans }}</button>
                         {% else %}
-                            <button type="submit" id="save" class="btn btn-success"><em class="fa fa-plus"></em>{{ 'form.crea'|trans }}</button>
+                            <button type="submit" id="save" class="btn btn-success"><em
+                                        class="fa fa-plus"></em>{{ 'form.crea'|trans }}</button>
                         {% endif %}
                     </div>
             </div>
@@ -119,19 +127,19 @@
         {% for field in panel.fields %}
         {% if field.lang is defined and field.lang %}
         function {{ field.name }}ChangeLaguages() {
-            var langSelector=$(".{{ field.name }}_lang_selector");
-            langSelector.next("ul").find("li > a").click(function(){
-                var isoCode=$(this).attr("data-isocode");
-                var idLang=$(this).attr("data-idlang");
-                var idLangLength=idLang.toString().length;
-                var fieldSet=$(".{{ field.name }}_multilang fieldset");
-                langSelector.each(function(){
-                    $(this).html(isoCode+' <span class="caret"></span>');
+            var langSelector = $(".{{ field.name }}_lang_selector");
+            langSelector.next("ul").find("li > a").click(function () {
+                var isoCode = $(this).attr("data-isocode");
+                var idLang = $(this).attr("data-idlang");
+                var idLangLength = idLang.toString().length;
+                var fieldSet = $(".{{ field.name }}_multilang fieldset");
+                langSelector.each(function () {
+                    $(this).html(isoCode + ' <span class="caret"></span>');
                 });
-                fieldSet.each(function(){
-                    if($(this).attr("id").substr(-idLangLength)==idLang) {
+                fieldSet.each(function () {
+                    if ($(this).attr("id").substr(-idLangLength) == idLang) {
                         $(this).show();
-                    }else {
+                    } else {
                         $(this).hide();
                     }
                 });
@@ -139,16 +147,16 @@
         }
 
         function {{ field.name }}ChangeLaguagesReady(isoCode, idLang) {
-            var langSelector=$(".{{ field.name }}_lang_selector");
-            var idLangLength=idLang.toString().length;
-            var fieldSet=$(".{{ field.name }}_multilang fieldset");
-            langSelector.each(function(){
-                $(this).html(isoCode+' <span class="caret"></span>');
+            var langSelector = $(".{{ field.name }}_lang_selector");
+            var idLangLength = idLang.toString().length;
+            var fieldSet = $(".{{ field.name }}_multilang fieldset");
+            langSelector.each(function () {
+                $(this).html(isoCode + ' <span class="caret"></span>');
             });
-            fieldSet.each(function(){
-                if($(this).attr("id").substr(-idLangLength)==idLang) {
+            fieldSet.each(function () {
+                if ($(this).attr("id").substr(-idLangLength) == idLang) {
                     $(this).show();
-                }else {
+                } else {
                     $(this).hide();
                 }
             });
@@ -157,7 +165,7 @@
         {% endfor %}
         {% endfor %}
 
-        $( document ).ready(function() {
+        $(document).ready(function () {
             {% for panel in panels %}
             {% for field in panel.fields %}
             {% if field.lang is defined and field.lang %}
@@ -169,7 +177,7 @@
         });
 
         function select2default(item) {
-            return '<div>'+item.value+'</div>';
+            return '<div>' + item.value + '</div>';
         }
 
         {% set initializeGmaps = false %}
@@ -183,7 +191,7 @@
         {% endfor %}
         {% endfor %}
         {% if initializeGmaps == true %}
-        myAngular.config(function(uiGmapGoogleMapApiProvider) {
+        myAngular.config(function (uiGmapGoogleMapApiProvider) {
             uiGmapGoogleMapApiProvider.configure({
                 key: '{{ gmapsApiKey }}',
                 v: '3',
@@ -195,14 +203,14 @@
         myAngular.controller("FormValidationController", FormValidationController);
 
         {#  DIRETTIVE ANGULAR  #}
-        myAngular.directive('validateFacebookDirective', function($http) {
+        myAngular.directive('validateFacebookDirective', function ($http) {
             var toId;
             return {
                 require: 'ngModel',
-                link: function(scope, element, attr, mCtrl) {
+                link: function (scope, element, attr, mCtrl) {
                     element.on('blur', function (evt) {
                         scope.$apply(function () {
-                            $http.get('{{ path('mrapps_backend_validatefacebook') }}?url=' + element.val()).success(function(data) {
+                            $http.get('{{ path('mrapps_backend_validatefacebook') }}?url=' + element.val()).success(function (data) {
                                 mCtrl.$setValidity('facebook', data.valid);
                             });
                         });
@@ -214,7 +222,7 @@
         function FormValidationController($scope, $http, $window, FileUploader, uiGmapGoogleMapApi) {
 
             $scope.go = function (path, replaceId) {
-                if(typeof(replaceId) !== "undefined" && replaceId !== null) {
+                if (typeof(replaceId) !== "undefined" && replaceId !== null) {
                     path = path.replace(/__PLACEHOLDER_ID__/g, replaceId);
                 }
                 location.href = path;
@@ -258,15 +266,29 @@
 
             vm.submitted = false;
             vm.validateInput = function (name, type) {
-                if(typeof(name) !== "undefined" && typeof(type) !== "undefined") {
+                if (typeof(name) !== "undefined" && typeof(type) !== "undefined") {
                     var input = vm.formValidate[name];
-                    if(typeof(input) !== "undefined") {
+                    if (typeof(input) !== "undefined") {
                         return (input.$dirty || vm.submitted) && input.$error[type];
                     }
                 }
 
                 return true;
             };
+
+            {#    vm.validateRange = function (value, min, max) {
+
+                var invalid = false
+
+                if ((min != null && value < min) || (max != null && value > max)
+                ) {
+                    invalid = true;
+                }
+
+                return invalid;
+            };
+
+            #}
 
             {% if create %}
             toastr.success('{{ 'form.elemento.creato'|trans }}', '{{ 'form.elemento.elemento_creato'|trans }}');
@@ -306,7 +328,7 @@
                                 toastr.success('{{ 'form.salvato'|trans }}', '{{ confirmMessages['success'] }}');
 
                                 {# Aggiornamento valori modificati lato server #}
-                                if(typeof response.data.data === "object") {
+                                if (typeof response.data.data === "object") {
                                     for (var property in response.data.data) {
                                         if (property !== "id" && response.data.data.hasOwnProperty(property) && $scope.form.hasOwnProperty(property)) {
                                             $scope.form[property] = response.data.data[property];
@@ -318,7 +340,7 @@
 
                                 {# ID nuovo oggetto creato #}
                                 var id = response.data.data;
-                                if(typeof id === "object") {
+                                if (typeof id === "object") {
                                     id = id.id; {# Awesome #}
                                 }
                                 location.href = '{{ linkEdit }}/' + id + '?create=true';
@@ -343,7 +365,7 @@
             {% if linkAction is not null %}
             {% for item in linkAction %}
             $scope.linkActionProgress{{ loop.index }} = false;
-            $scope.linkActionFunction{{ loop.index }} = function() {
+            $scope.linkActionFunction{{ loop.index }} = function () {
 
                 {% if item.confirm is defined and item.confirm == true %}if (confirm("{{ item.confirmMessage|e('js') }}")) { {% endif %}
 

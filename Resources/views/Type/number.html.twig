@@ -2,8 +2,11 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">{{field.title}}{% if switch is not defined and field.required %} *{% endif %}</label>
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
-            <input type="number" name="{{field.name}}" {% if switch is not defined and field.required %}required="true"{% endif %} ng-model="form.{{field.name}}" {% if field.value is not null %}ng-init="form.{{field.name}}={{field.value}}"{% endif %} class="form-control" />
-            <span ng-show="form.validateInput('{{field.name}}', 'number') {% if switch is not defined and field.required %}|| form.validateInput('{{field.name}}', 'required'){% endif %}" {% if field.placeholder is defined %}placeholder="{{field.placeholder}}"{% endif %} class="text-danger">This field must be a valid number</span>
+            {% if min_value is defined or max_vlue is defined %}
+                {% set validateRange='validateRange()' %}
+            {% endif %}
+            <input type="number" name="{{field.name}}" {% if field.min_value is defined %}min="{{ field.min_value }}"{% endif %} {% if field.max_value is defined %}max="{{ field.min_value }}"{% endif %} {% if switch is not defined and field.required %}required="true"{% endif %} ng-model="form.{{field.name}}" {% if field.value is not null %}ng-init="form.{{field.name}}={{field.value}}"{% endif %} class="form-control" />
+            <span ng-show="form.validateInput('{{field.name}}', 'number')  {% if switch is not defined and field.required %}|| form.validateInput('{{field.name}}', 'required'){% endif %}" {% if field.placeholder is defined %}placeholder="{{field.placeholder}}"{% endif %} class="text-danger">This field must be a valid number</span>
         </div>
         {% if field.didascalia is defined %}
             <div class="col-sm-4">
@@ -12,3 +15,5 @@
         {% endif %}
     </div>
 </fieldset>
+
+{# {% if field.min_value is defined or field.max_value is defined %}|| form.validateRange(form.{{field.name}},{% if field.min_value is defined %}{{ field.min_value }}{% else %}null{% endif %},{% if field.max_value is defined %}{{ field.max_value }}{% else %}null{% endif %}){% endif %} #}
