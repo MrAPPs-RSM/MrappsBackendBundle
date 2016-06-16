@@ -7,12 +7,10 @@ use Doctrine\Common\Collections\Criteria;
 use Mrapps\BackendBundle\Entity\LanguageBase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use FOS\UserBundle\Model\UserInterface;
 use Mrapps\BackendBundle\Model\DraftInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query as DoctrineQuery;
 use Mrapps\BackendBundle\Entity\Base;
-use FOS\UserBundle\Entity\User;
 
 class Utils
 {
@@ -520,15 +518,33 @@ class Utils
 
                 if ($entity !== null) {
 
-                    $findRules = array('padre' => $entity, 'lang' => $language);
+                    $findRules = array(array("rule_key" => "padre", "rule_value" => $entity), array("rule_key" => "lang", "rule_value" => $language));
 
                     if ($options["find_rules"] !== false && is_array($options["find_rules"])) {
-                        foreach ($options["find_rules"] as $rule) {
-                            $findRules[$rule["rule_key"]] = $rule["rule_value"];
+                        $findRules = array_merge($findRules, $options["find_rules"]);
+                    }
+
+                    $expr = Criteria::expr();
+                    $criteria = Criteria::create();
+                    $criteria->where($expr->gt("id", 0));
+
+                    foreach ($findRules as $rule) {
+                        if (is_string($rule["rule_value"])) {
+                            if ($rule["rule_value"] == Operator::IsNull) {
+                                $criteria->andWhere($expr->isNull($rule["rule_key"]));
+                            } elseif ($rule["rule_value"] == Operator::IsNotNull) {
+                                $criteria->andWhere($expr->neq($rule["rule_key"], null));
+                            }
+                        } elseif (is_array($rule["rule_value"])) {
+                            $criteria->andWhere($expr->in($rule["rule_key"], $rule["rule_value"]));
+                        } else {
+                            $criteria->andWhere($expr->eq($rule["rule_key"], $rule["rule_value"]));
                         }
                     }
 
-                    $entityLang = $em->getRepository($entityLangClass)->findOneBy($findRules);
+                    $entitiesResult = $em->getRepository($entityLangClass)->matching($criteria);
+                    $entityLang = $entitiesResult !== null && count($entitiesResult) > 0 ? $entitiesResult[0] : null;
+
                     if ($options['create_entity'] === true) {
                         if ($entityLang == null) {
 
@@ -551,6 +567,7 @@ class Utils
 
         return null;
     }
+
 
     public static function getTraduzione($em = null, $entity = null, $language = null, $options = array())
     {
