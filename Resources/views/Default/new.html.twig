@@ -82,12 +82,14 @@
                                 </button>
                             {% endfor %}
                         {% endif %}
+                        {% if linkSave is not null %}
                         {% if edit %}
                             <button type="submit" id="save" class="btn btn-info"><em
                                         class="fa fa-pencil"></em>{{ 'form.modifica'|trans }}</button>
                         {% else %}
                             <button type="submit" id="save" class="btn btn-success"><em
                                         class="fa fa-plus"></em>{{ 'form.crea'|trans }}</button>
+                        {% endif %}
                         {% endif %}
                     </div>
             </div>
