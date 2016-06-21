@@ -1049,4 +1049,37 @@ class Utils
             }
         }
     }
+
+    public static function convertTimeStringToDatetime($timeString = '')
+    {
+
+        //$timeString è in formato "13:45"
+        $exploded = explode(':', trim($timeString));
+        if (count($exploded) == 2) {
+
+            $ore = intval($exploded[0]);
+            $minuti = intval($exploded[1]);
+
+            $dt = new \DateTime();
+            $dt->setTime($ore, $minuti, 0);
+
+            return $dt;
+        }
+
+        return null;
+    }
+
+    public static function convertDatetimeToTimeString(\DateTime $dt = null)
+    {
+
+        if ($dt !== null) {
+
+            $ore = $dt->format('H');
+            $minuti = $dt->format('i');
+
+            return sprintf("%s:%s", $ore, $minuti);
+        }
+
+        return "";
+    }
 }
