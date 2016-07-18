@@ -64,7 +64,7 @@ class ValidateHandler
      * Cast to STRING, upperCase (alias)
      */
     public function strToUpper($value, $preserveNull = false) {
-        return $this-stringToUpper($value, $preserveNull);
+        return $this->stringToUpper($value, $preserveNull);
     }
 
     /*
