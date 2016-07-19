@@ -90,6 +90,8 @@
                             <button type="submit" id="save" class="btn btn-success"><em
                                         class="fa fa-plus"></em>{{ 'form.crea'|trans }}</button>
                         {% endif %}
+                        {% else %}
+                            <button type="button" id="save" style="display:none !important;"></button>
                         {% endif %}
                     </div>
             </div>
