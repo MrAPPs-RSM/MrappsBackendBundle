@@ -902,6 +902,7 @@ class DefaultController extends Controller
                 $success = true;
 
             } else {
+                $defaultBucket = null;
                 $localDir = $this->getLocalUploadDir();
                 $s3Key = $sha1;
 
