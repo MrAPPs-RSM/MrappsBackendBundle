@@ -29,11 +29,19 @@
                         <div>
                             {% if field.extra_fields is defined and field.extra_fields is iterable %}
                                 {% for f in field.extra_fields %}
+                                    {% if f.type == 'checkbox' %}
                                     <div class="checkbox c-checkbox needsclick">
                                         <label class="needsclick">
                                             <input type="checkbox" name="{{field.name}}_{{f.name}}" id="{{field.name}}_extra_{{f.name}}" class="needsclick" {#{% if field.value is defined %}ng-checked="{{field.value}}" ng-init="form.{{field.name}}='{{field.value}}'"{% endif %}#} value="1" {% if f.default == true %}checked{% endif %} />
                                             <span class="fa fa-check"></span>{{ f.title }}</label>
                                     </div>
+                                    {% endif %}
+                                    {% if f.type == 'text' %}
+                                        <div>
+                                            {{ f.title }}
+                                            <input type="text" name="{{field.name}}_{{f.name}}" id="{{field.name}}_extra_{{f.name}}" class="form-control" value=""/>
+                                        </div>
+                                    {% endif %}
                                 {% endfor %}
                             {% endif %}
                         </div>
