@@ -66,11 +66,13 @@ $scope.{{field.name}}SaveSelect = function() {
 
         var nuovoElemento = $.extend({}, $scope.{{field.name}}Select.selected);
         {% if field.extra_fields is defined and field.extra_fields is iterable %}
-        {% for f in field.extra_fields %}
+        {% for k,f in field.extra_fields %}
         {% if f.type == "checkbox" %}
         nuovoElemento.{{ f.name }} = $('#{{field.name}}_extra_{{f.name}}').is(':checked');
+        $('#{{field.name}}_extra_{{f.name}}').attr('checked', false);
         {% else %}
         nuovoElemento.{{ f.name }} = $('#{{field.name}}_extra_{{f.name}}').val();
+        $('#{{field.name}}_extra_{{f.name}}').val('');
         {% endif %}
         {% endfor %}
         {% endif %}
