@@ -55,6 +55,8 @@ class ImmagineRepository extends EntityRepository
                     $em->persist($immagine);
                     $em->flush($immagine);
 
+                    unlink($savePath);
+
                     return $immagine;
                 }
             }
