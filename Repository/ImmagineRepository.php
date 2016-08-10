@@ -53,7 +53,7 @@ class ImmagineRepository extends EntityRepository
                     }
                     $immagine->setUrl($s3Path);
                     $em->persist($immagine);
-                    $em->flush();
+                    $em->flush($immagine);
 
                     return $immagine;
                 }
