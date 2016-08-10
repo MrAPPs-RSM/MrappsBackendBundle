@@ -40,7 +40,7 @@ class ImmagineRepository extends EntityRepository
 
                     $sha1 = sha1_file($savePath);
 
-                    $s3Key = 'mrapps_backend_files/' . $sha1;
+                    $s3Key = 'mrapps_backend_images/' . $sha1;
                     $position = strrpos($key, ".");
                     $s3Path = $s3Key . substr($key, $position);
 
