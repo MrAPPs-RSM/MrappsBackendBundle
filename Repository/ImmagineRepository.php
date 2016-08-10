@@ -27,10 +27,10 @@ class ImmagineRepository extends EntityRepository
             $head = $s3->headObject($key, $bucket);
             if($head !== null) {
 
-                $etag = $head['ETag'];
+                $etag = str_replace('"', '', $head['ETag']);
 
                 $webFolder = realpath($container->get('kernel')->getRootDir() . '/../web') . '/';
-                $tempRelativeFolder = $container->get('mrapps_backend.temp_folder') . '/';
+                $tempRelativeFolder = $container->getParameter('mrapps_backend.temp_folder') . '/';
                 $tempFolder = $webFolder . $tempRelativeFolder;
 
                 $savePath = $tempFolder.$etag;
