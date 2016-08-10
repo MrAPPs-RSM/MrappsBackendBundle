@@ -3,6 +3,9 @@
 namespace Mrapps\BackendBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Mrapps\BackendBundle\Classes\Utils;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Mrapps\BackendBundle\Entity\Immagine;
 
 /**
  * ImmagineRepository
@@ -12,4 +15,51 @@ use Doctrine\ORM\EntityRepository;
  */
 class ImmagineRepository extends EntityRepository
 {
+    public function generateImageFromS3(ContainerInterface $container, $bucket, $key) {
+
+        $em = $this->getEntityManager();
+
+        if (Utils::bundleMrappsAmazonExists($container)) {
+
+            /* @var $s3 \Mrapps\AmazonBundle\Handler\S3Handler */
+            $s3 = $container->get('mrapps.amazon.s3');
+
+            $head = $s3->headObject($key, $bucket);
+            if($head !== null) {
+
+                $etag = $head['ETag'];
+
+                $webFolder = realpath($container->get('kernel')->getRootDir() . '/../web') . '/';
+                $tempRelativeFolder = $container->get('mrapps_backend.temp_folder') . '/';
+                $tempFolder = $webFolder . $tempRelativeFolder;
+
+                $savePath = $tempFolder.$etag;
+
+                $s3->downloadObject($key, $savePath, false, $bucket);
+                if(file_exists($savePath)) {
+
+                    $sha1 = sha1_file($savePath);
+
+                    $s3Key = 'mrapps_backend_files/' . $sha1;
+                    $position = strrpos($key, ".");
+                    $s3Path = $s3Key . substr($key, $position);
+
+                    if(!$s3->objectExists($s3Path)) $s3->uploadObject($s3Path, $savePath);
+
+                    //Entity
+                    $immagine = $this->findOneBy(array('url' => $s3Path));
+                    if ($immagine == null) {
+                        $immagine = new Immagine();
+                    }
+                    $immagine->setUrl($s3Path);
+                    $em->persist($immagine);
+                    $em->flush();
+
+                    return $immagine;
+                }
+            }
+        }
+
+        return null;
+    }
 }
