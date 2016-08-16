@@ -42,10 +42,10 @@ class ImmagineRepository extends EntityRepository
 
                     try {
                         $imagine = new Imagine();
-                        $imagine->load($savePath);
+                        $imagine->open($savePath);
                     } catch (\Exception $e) {
                         $logger = $container->get("logger");
-                        $logger->error("Image " . $key . " - " . $e->getMessage());
+                        $logger->error("Image " . $savePath . " - " . $e->getMessage());
                         return null;
                     }
 
