@@ -2,6 +2,7 @@
 
 namespace Mrapps\BackendBundle\Repository;
 
+use Imagine\Imagick\Imagine;
 use Doctrine\ORM\EntityRepository;
 use Mrapps\BackendBundle\Classes\Utils;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -37,6 +38,15 @@ class ImmagineRepository extends EntityRepository
 
                 $s3->downloadObject($key, $savePath, false, $bucket);
                 if(file_exists($savePath)) {
+			
+		 try {
+                        $imagine = new Imagine();
+                        $imagine->load($savePath);
+                    } catch (Exception $e) {
+                        $logger = $container->get("logger");
+                        $logger->error("Image " . $key . " - " . $e->getMessage());
+                        return null;
+                    }
 
                     $sha1 = sha1_file($savePath);
 
