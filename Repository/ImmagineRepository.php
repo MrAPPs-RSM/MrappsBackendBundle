@@ -16,7 +16,8 @@ use Mrapps\BackendBundle\Entity\Immagine;
  */
 class ImmagineRepository extends EntityRepository
 {
-    public function generateImageFromS3(ContainerInterface $container, $bucket, $key) {
+    public function generateImageFromS3(ContainerInterface $container, $bucket, $key)
+    {
 
         $em = $this->getEntityManager();
 
@@ -26,7 +27,7 @@ class ImmagineRepository extends EntityRepository
             $s3 = $container->get('mrapps.amazon.s3');
 
             $head = $s3->headObject($key, $bucket);
-            if($head !== null) {
+            if ($head !== null) {
 
                 $etag = str_replace('"', '', $head['ETag']);
 
@@ -34,15 +35,15 @@ class ImmagineRepository extends EntityRepository
                 $tempRelativeFolder = $container->getParameter('mrapps_backend.temp_folder') . '/';
                 $tempFolder = $webFolder . $tempRelativeFolder;
 
-                $savePath = $tempFolder.$etag;
+                $savePath = $tempFolder . $etag;
 
                 $s3->downloadObject($key, $savePath, false, $bucket);
-                if(file_exists($savePath)) {
-			
-		 try {
+                if (file_exists($savePath)) {
+
+                    try {
                         $imagine = new Imagine();
                         $imagine->load($savePath);
-                    } catch (Exception $e) {
+                    } catch (\Exception $e) {
                         $logger = $container->get("logger");
                         $logger->error("Image " . $key . " - " . $e->getMessage());
                         return null;
@@ -54,7 +55,7 @@ class ImmagineRepository extends EntityRepository
                     $position = strrpos($key, ".");
                     $s3Path = $s3Key . substr($key, $position);
 
-                    if(!$s3->objectExists($s3Path)) $s3->uploadObject($s3Path, $savePath);
+                    if (!$s3->objectExists($s3Path)) $s3->uploadObject($s3Path, $savePath);
 
                     //Entity
                     $immagine = $this->findOneBy(array('url' => $s3Path));
