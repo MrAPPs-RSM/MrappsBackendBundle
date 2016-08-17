@@ -1,6 +1,8 @@
 {# Table #}
+$scope.{{ field.name }}IsLoading = true;
 $scope.form.{{field.name}} = [];
 $scope.{{field.name}}RefreshTable = function() {
+    $scope.{{ field.name }}IsLoading = true;
     $http.post('{{ field.data_url }}', {'origin':'table','form':$scope.form,
         {% if field.data_custom is defined %}{{ field.data_custom |raw }}{% endif %}
     }).then(function (response) {
@@ -8,6 +10,7 @@ $scope.{{field.name}}RefreshTable = function() {
         {% if field.select2.fetch_all is defined and field.select2.fetch_all == true %}
         $scope.{{field.name}}RefreshSelect('');
         {% endif %}
+        $scope.{{ field.name }}IsLoading = false;
     });
 };
 $scope.{{field.name}}RefreshTable();
@@ -92,7 +95,15 @@ $scope.{{field.name}}SaveSelect = function() {
 $scope.{{field.name}}AddNew = false;
 
 $scope.{{field.name}}OpenAdd = function() {
+    {% if field.max is defined %}
+    if($scope.form.{{field.name}}.length >= {{ field.max }}) {
+        toastr.error("Impossibile aggiungere più di {{ field.max }} elementi", '{{ 'form.errore'|trans }}');
+    }else {
+        $scope.{{field.name}}AddNew = true;
+    }
+    {% else %}
     $scope.{{field.name}}AddNew = true;
+    {% endif %}
 };
 
 $scope.{{field.name}}CloseAdd = function() {

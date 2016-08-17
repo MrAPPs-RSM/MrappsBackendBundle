@@ -69,7 +69,15 @@
                     <tbody ui-sortable="{{field.name}}SortableOptions" ng-model="form.{{field.name}}">
                     <tr ng-repeat="r in form.{{field.name}}">
                         {% for c in field.columns if (c.visible is not defined or c.visible == true) %}
-                            <td data-title="'{{ c.title }}'">{/ r.{{ c.name }} /}</td>
+                            {% set column_type = 'text' %}
+                            {% if c.type is defined %}
+                                {% set column_type = c.type %}
+                            {% endif %}
+                            {% if column_type == 'image' %}
+                                <td data-title="'{{ c.title }}'"><img ng-src="{/ r.{{ c.name }} /}" alt="{{ c.name }}" height="50" width="50" /></td>
+                            {% elseif column_type == 'text' %}
+                                <td data-title="'{{ c.title }}'">{/ r.{{ c.name }} /}</td>
+                            {% endif %}
                         {% endfor %}
                         {% if field.extra_fields is defined and field.extra_fields is iterable %}
                             {% for f in field.extra_fields %}
@@ -100,6 +108,10 @@
                     </tbody>
                 </table>
             </div>
+            <i ng-show='{{ field.name }}IsLoading' class='fa fa-spin fa-spinner'></i>
+            {% if field.max is defined %}
+                <div>Numero di elementi: {/ form.{{field.name}}.length /}/{{ field.max }}</div>
+            {% endif %}
         </div>
         {% if field.didascalia is defined %}
             <div class="col-sm-4">
