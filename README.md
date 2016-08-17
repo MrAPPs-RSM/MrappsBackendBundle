@@ -93,6 +93,7 @@ knp_gaufrette:
             adapter:    amazon_s3_adapter
             
 liip_imagine:
+    driver:    imagick
     loaders:
         stream.amazon_s3:
             stream:
