@@ -39,7 +39,13 @@
                                     {% if f.type == 'text' %}
                                         <div>
                                             {{ f.title }}
-                                            <input type="text" name="{{field.name}}_{{f.name}}" id="{{field.name}}_extra_{{f.name}}" class="form-control" value=""/>
+                                            <input type="text" name="{{field.name}}_{{f.name}}" id="{{field.name}}_extra_{{f.name}}" class="form-control" value="{{f.default}}"/>
+                                        </div>
+                                    {% endif %}
+                                    {% if f.type == 'number' %}
+                                        <div>
+                                            {{ f.title }}
+                                            <input type="number" name="{{field.name}}_{{f.name}}" id="{{field.name}}_extra_{{f.name}}" class="form-control" {% if f.default is defined %}value="{{f.default}}"{% endif %} {% if f.min is defined %}min="{{f.min}}"{% endif %} {% if f.max is defined %}max="{{f.max}}"{% endif %} />
                                         </div>
                                     {% endif %}
                                 {% endfor %}
