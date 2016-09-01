@@ -87,14 +87,12 @@
                         {% endfor %}
                         {% if field.extra_fields is defined and field.extra_fields is iterable %}
                             {% for f in field.extra_fields %}
-                            <td data-title="'{{ f.title }}'">
-                                {% if f.type == "checkbox" %}
-                                    <input type="checkbox" onclick='event.preventDefault();' ng-checked="r.{{ f.name }}">
-                                {% elseif f.type == "text" %}
-                                    {/ r.{{ f.name }} /}
-                                {% else %}
-                                    <td data-title="'{{ f.title }}'">{/ r.{{ f.name }} /}</td>
-                                {% endif %}
+                                <td data-title="'{{ f.title }}'">
+                                    {% if f.type == "checkbox" %}
+                                        <input type="checkbox" onclick='event.preventDefault();' ng-checked="r.{{ f.name }}">
+                                    {% else %}
+                                        {/ r.{{ f.name }} /}
+                                    {% endif %}
                                 </td>
                             {% endfor %}
                         {% endif %}
