@@ -259,7 +259,7 @@ class Utils
      * @return array Ritorna il risultato della query
      *
      */
-    public static function getListResults($em = null, $entity = '', $count = 0, $page = 1, $filters = array(), $sorting = array())
+    public static function getListResults($em = null, $entity = '', $count = 0, $page = 1, $filters = array(), $sorting = array(), $customWhere = null, $customParams = null)
     {
         if ($em !== null && strlen($entity) > 0) {
 
@@ -293,8 +293,8 @@ class Utils
             $params = array();
             $where = '';
             $inCount = 1;
+            $tmp = array();
             if (count($filters) > 0) {
-                $tmp = array();
                 foreach ($filters as $campo => $valore) {
                     if (is_numeric($valore) || is_object($valore)) {
                         $tmp[] = sprintf(" a.%s " . Operator::Equal . " :%s ", $campo, $campo);
@@ -333,6 +333,16 @@ class Utils
                     }
 
                 }
+            }
+
+            if($customWhere !== null) {
+                $tmp[] = $customWhere;
+                if($customParams !== null) {
+                    $params = array_merge($params, $customParams);
+                }
+            }
+
+            if(count($tmp) > 0) {
                 $where = 'WHERE ' . implode('AND', $tmp);
             }
 
