@@ -5,6 +5,7 @@
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
             <div class="panel panel-default">
                 <div class="panel-heading clearfix">
+                    {% if field.disable_editing is not defined or field.disable_editing == false %}
                     <div class="panel-title" ng-show='{{field.name}}AddNew'>
                         <ui-select ng-disabled='{{ field.name }}Select.progress' name="{{ field.name }}Selected" ng-model="{{field.name}}Select.selected">
                             <ui-select-match>
@@ -57,6 +58,7 @@
                             <em class="fa fa-plus"></em>
                         </span>{{ 'form.aggiungi_nuovo'|trans }}
                     </button>
+                    {% endif %}
                 </div>
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -69,7 +71,9 @@
                                 <th sortable="'{{ f.name }}'">{{ f.title }}</th>
                             {% endfor %}
                         {% endif %}
+                        {% if field.disable_editing is not defined or field.disable_editing == false %}
                         <th>Azioni</th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody ui-sortable="{{field.name}}SortableOptions" ng-model="form.{{field.name}}">
@@ -96,6 +100,7 @@
                                 </td>
                             {% endfor %}
                         {% endif %}
+                        {% if field.disable_editing is not defined or field.disable_editing == false %}
                         <td>
                             <button type="button" ng-click="{{field.name}}DeleteItem(r)" class="btn btn-sm btn-danger">
                                 <em class="fa fa-trash-o"></em>
@@ -108,6 +113,7 @@
                                 {% endfor %}
                             {% endif %}
                         </td>
+                        {% endif %}
                     </tr>
                     </tbody>
                 </table>

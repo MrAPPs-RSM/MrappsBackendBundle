@@ -15,6 +15,7 @@ $scope.{{field.name}}RefreshTable = function() {
 };
 $scope.{{field.name}}RefreshTable();
 
+{% if field.disable_editing is not defined or field.disable_editing == false %}
 $scope.{{field.name}}DeleteItem = function(item) {
     var index = $scope.form.{{field.name}}.indexOf(item);
     $scope.form.{{field.name}}.splice(index, 1);
@@ -23,6 +24,7 @@ $scope.{{field.name}}DeleteItem = function(item) {
     {% endif %}
     toastr.success('Elemento eliminato', '');
 };
+{% endif %}
 
 $scope.{{field.name}}GoItem = function(path, item) {
     $window.location.href = path + '?id=' + item.id;
@@ -94,6 +96,7 @@ $scope.{{field.name}}SaveSelect = function() {
 
 $scope.{{field.name}}AddNew = false;
 
+{% if field.disable_editing is not defined or field.disable_editing == false %}
 $scope.{{field.name}}OpenAdd = function() {
     {% if field.max is defined %}
     if($scope.form.{{field.name}}.length >= {{ field.max }}) {
@@ -114,3 +117,4 @@ $scope.{{field.name}}CloseAdd = function() {
     {% endif %}
     $scope.{{field.name}}AddNew = false;
 };
+{% endif %}
