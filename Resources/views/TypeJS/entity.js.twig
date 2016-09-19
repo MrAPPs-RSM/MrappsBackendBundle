@@ -7,7 +7,7 @@ $scope.{{field.name}}RefreshTable = function() {
         {% if field.data_custom is defined %}{{ field.data_custom |raw }}{% endif %}
     }).then(function (response) {
         $scope.form.{{field.name}} = response.data;
-        {% if field.select2.fetch_all is defined and field.select2.fetch_all == true %}
+        {% if (field.disable_editing is not defined or field.disable_editing == false) and field.select2.fetch_all is defined and field.select2.fetch_all == true %}
         $scope.{{field.name}}RefreshSelect('');
         {% endif %}
         $scope.{{ field.name }}IsLoading = false;
@@ -19,7 +19,7 @@ $scope.{{field.name}}RefreshTable();
 $scope.{{field.name}}DeleteItem = function(item) {
     var index = $scope.form.{{field.name}}.indexOf(item);
     $scope.form.{{field.name}}.splice(index, 1);
-    {% if field.select2.fetch_all is defined and field.select2.fetch_all == true %}
+    {% if (field.disable_editing is not defined or field.disable_editing == false) and field.select2.fetch_all is defined and field.select2.fetch_all == true %}
     $scope.{{field.name}}RefreshSelect('');
     {% endif %}
     toastr.success('Elemento eliminato', '');
@@ -35,6 +35,7 @@ $scope.{{field.name}}SortableOptions = {
 };
 
 {# Select2 #}
+{% if field.disable_editing is not defined or field.disable_editing == false %}
 
 $scope.{{field.name}}Select = {
     'progress': false,
@@ -96,7 +97,6 @@ $scope.{{field.name}}SaveSelect = function() {
 
 $scope.{{field.name}}AddNew = false;
 
-{% if field.disable_editing is not defined or field.disable_editing == false %}
 $scope.{{field.name}}OpenAdd = function() {
     {% if field.max is defined %}
     if($scope.form.{{field.name}}.length >= {{ field.max }}) {
