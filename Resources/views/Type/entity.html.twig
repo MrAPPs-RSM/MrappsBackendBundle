@@ -6,77 +6,77 @@
             <div class="panel panel-default">
                 <div class="panel-heading clearfix">
                     {% if field.disable_editing is not defined or field.disable_editing == false %}
-                    <div class="panel-title" ng-show='{{field.name}}AddNew'>
-                        <ui-select ng-disabled='{{ field.name }}Select.progress' name="{{ field.name }}Selected" ng-model="{{field.name}}Select.selected">
-                            <ui-select-match>
-                                <span ng-bind="$select.selected.{{ field.select2.string_field }}"></span>
-                            </ui-select-match>
-                            <ui-select-choices {% if field.select2.fetch_all is not defined or field.select2.fetch_all == false %}refresh="{{field.name}}RefreshSelect($select.search)" refresh-delay="300"{% endif %} {% if field.select2.group_by is defined and field.select2.group_by|length > 0 %}group-by="'{{ field.select2.group_by }}'"{% endif %} repeat="item in ({{ field.name }}Select.data | filter: $select.search) track by item.{{ field.select2.id_field }}">
-                                <span ng-bind="item.{{ field.select2.string_field }}"></span>
-                            </ui-select-choices>
-                        </ui-select>
-                        <i ng-show='{{ field.name }}Select.progress' class='fa fa-spin fa-spinner'></i>
-                        <button ng-disabled='{{ field.name }}Select.progress' type="button" class="btn btn-labeled btn-info pull-right" ng-click="{{field.name}}SaveSelect()">
+                        <div class="panel-title" ng-show='{{field.name}}AddNew'>
+                            <ui-select ng-disabled='{{ field.name }}Select.progress' name="{{ field.name }}Selected" ng-model="{{field.name}}Select.selected">
+                                <ui-select-match>
+                                    <span ng-bind="$select.selected.{{ field.select2.string_field }}"></span>
+                                </ui-select-match>
+                                <ui-select-choices {% if field.select2.fetch_all is not defined or field.select2.fetch_all == false %}refresh="{{field.name}}RefreshSelect($select.search)" refresh-delay="300"{% endif %} {% if field.select2.group_by is defined and field.select2.group_by|length > 0 %}group-by="'{{ field.select2.group_by }}'"{% endif %} repeat="item in ({{ field.name }}Select.data | filter: $select.search) track by item.{{ field.select2.id_field }}">
+                                    <span ng-bind="item.{{ field.select2.string_field }}"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                            <i ng-show='{{ field.name }}Select.progress' class='fa fa-spin fa-spinner'></i>
+                            <button ng-disabled='{{ field.name }}Select.progress' type="button" class="btn btn-labeled btn-info pull-right" ng-click="{{field.name}}SaveSelect()">
                             <span class="btn-label">
                                 <em class="fa fa-check"></em>
                             </span>Salva
-                        </button>
-                        <button ng-disabled='{{ field.name }}Select.progress' type="button" class="btn btn-labeled btn-warning pull-right" ng-click="{{field.name}}CloseAdd()">
+                            </button>
+                            <button ng-disabled='{{ field.name }}Select.progress' type="button" class="btn btn-labeled btn-warning pull-right" ng-click="{{field.name}}CloseAdd()">
                             <span class="btn-label">
                                 <em class="fa fa-ban"></em>
                             </span>Annulla
-                        </button>
-                        <div class="cb"></div>
-                        <div>
-                            {% if field.extra_fields is defined and field.extra_fields is iterable %}
-                                {% for f in field.extra_fields %}
-                                    {% if f.type == 'checkbox' %}
-                                        <div class="checkbox c-checkbox needsclick">
-                                            <label class="needsclick">
-                                                <input type="checkbox" name="{{field.name}}_{{f.name}}" id="{{field.name}}_extra_{{f.name}}" class="needsclick" {#{% if field.value is defined %}ng-checked="{{field.value}}" ng-init="form.{{field.name}}='{{field.value}}'"{% endif %}#} value="1" {% if f.default == true %}checked{% endif %} />
-                                                <span class="fa fa-check"></span>{{ f.title }}</label>
-                                        </div>
-                                    {% endif %}
-                                    {% if f.type == 'text' %}
-                                        <div>
-                                            {{ f.title }}
-                                            <input type="text" name="{{field.name}}_{{f.name}}" id="{{field.name}}_extra_{{f.name}}" class="form-control" value="{{f.default}}"/>
-                                        </div>
-                                    {% endif %}
-                                    {% if f.type == 'number' %}
-                                        <div>
-                                            {{ f.title }}
-                                            <input type="number" name="{{field.name}}_{{f.name}}" id="{{field.name}}_extra_{{f.name}}" class="form-control" {% if f.default is defined %}value="{{f.default}}"{% endif %} {% if f.min is defined %}min="{{f.min}}"{% endif %} {% if f.max is defined %}max="{{f.max}}"{% endif %} />
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
+                            </button>
+                            <div class="cb"></div>
+                            <div>
+                                {% if field.extra_fields is defined and field.extra_fields is iterable %}
+                                    {% for f in field.extra_fields %}
+                                        {% if f.type == 'checkbox' %}
+                                            <div class="checkbox c-checkbox needsclick">
+                                                <label class="needsclick">
+                                                    <input type="checkbox" name="{{field.name}}_{{f.name}}" id="{{field.name}}_extra_{{f.name}}" class="needsclick" {#{% if field.value is defined %}ng-checked="{{field.value}}" ng-init="form.{{field.name}}='{{field.value}}'"{% endif %}#} value="1" {% if f.default == true %}checked{% endif %} />
+                                                    <span class="fa fa-check"></span>{{ f.title }}</label>
+                                            </div>
+                                        {% endif %}
+                                        {% if f.type == 'text' %}
+                                            <div>
+                                                {{ f.title }}
+                                                <input type="text" name="{{field.name}}_{{f.name}}" id="{{field.name}}_extra_{{f.name}}" class="form-control" value="{{f.default}}"/>
+                                            </div>
+                                        {% endif %}
+                                        {% if f.type == 'number' %}
+                                            <div>
+                                                {{ f.title }}
+                                                <input type="number" name="{{field.name}}_{{f.name}}" id="{{field.name}}_extra_{{f.name}}" class="form-control" {% if f.default is defined %}value="{{f.default}}"{% endif %} {% if f.min is defined %}min="{{f.min}}"{% endif %} {% if f.max is defined %}max="{{f.max}}"{% endif %} />
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
-                    <button type="button" class="btn btn-labeled btn-success pull-right" ng-click="{{field.name}}OpenAdd()" ng-show='!{{field.name}}AddNew'>
+                        <button type="button" class="btn btn-labeled btn-success pull-right" ng-click="{{field.name}}OpenAdd()" ng-show='!{{field.name}}AddNew'>
                         <span class="btn-label">
                             <em class="fa fa-plus"></em>
                         </span>{{ 'form.aggiungi_nuovo'|trans }}
-                    </button>
+                        </button>
                     {% endif %}
                 </div>
                 <table class="table table-bordered table-striped">
                     <thead>
                     <tr>
                         {% for c in field.columns if (c.visible is not defined or c.visible == true) %}
-                            <th sortable="'{{ c.name }}'">{{ c.title }}</th>
+                            <th {% if field.disable_sorting is not defined or field.disable_sorting == false %}sortable="'{{ c.name }}'"{% endif %}>{{ c.title }}</th>
                         {% endfor %}
                         {% if field.extra_fields is defined and field.extra_fields is iterable %}
                             {% for f in field.extra_fields %}
-                                <th sortable="'{{ f.name }}'">{{ f.title }}</th>
+                                <th {% if field.disable_sorting is not defined or field.disable_sorting == false %}sortable="'{{ f.name }}'"{% endif %}>{{ f.title }}</th>
                             {% endfor %}
                         {% endif %}
                         {% if field.disable_editing is not defined or field.disable_editing == false %}
-                        <th>Azioni</th>
+                            <th>Azioni</th>
                         {% endif %}
                     </tr>
                     </thead>
-                    <tbody ui-sortable="{{field.name}}SortableOptions" ng-model="form.{{field.name}}">
+                    <tbody {% if field.disable_sorting is not defined or field.disable_sorting == false %}ui-sortable="{{field.name}}SortableOptions"{% endif %} ng-model="form.{{field.name}}">
                     <tr ng-repeat="r in form.{{field.name}}">
                         {% for c in field.columns if (c.visible is not defined or c.visible == true) %}
                             {% set column_type = 'text' %}
@@ -101,18 +101,18 @@
                             {% endfor %}
                         {% endif %}
                         {% if field.disable_editing is not defined or field.disable_editing == false %}
-                        <td>
-                            <button type="button" ng-click="{{field.name}}DeleteItem(r)" class="btn btn-sm btn-danger">
-                                <em class="fa fa-trash-o"></em>
-                            </button>
-                            {% if field.action is defined and field.action is iterable %}
-                                {% for action in field.action %}
-                                    <button type="button" ng-click="{{field.name}}GoItem('{{action.url}}', r)" class="btn btn-sm btn-warning">
-                                        <em class="fa {{ action.icon }}"></em>
-                                    </button>
-                                {% endfor %}
-                            {% endif %}
-                        </td>
+                            <td>
+                                <button type="button" ng-click="{{field.name}}DeleteItem(r)" class="btn btn-sm btn-danger">
+                                    <em class="fa fa-trash-o"></em>
+                                </button>
+                                {% if field.action is defined and field.action is iterable %}
+                                    {% for action in field.action %}
+                                        <button type="button" ng-click="{{field.name}}GoItem('{{action.url}}', r)" class="btn btn-sm btn-warning">
+                                            <em class="fa {{ action.icon }}"></em>
+                                        </button>
+                                    {% endfor %}
+                                {% endif %}
+                            </td>
                         {% endif %}
                     </tr>
                     </tbody>

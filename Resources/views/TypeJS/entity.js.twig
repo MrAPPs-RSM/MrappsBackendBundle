@@ -6,7 +6,11 @@ $scope.{{field.name}}RefreshTable = function() {
     $http.post('{{ field.data_url }}', {'origin':'table','form':$scope.form,
         {% if field.data_custom is defined %}{{ field.data_custom |raw }}{% endif %}
     }).then(function (response) {
+        {% if field.reverse_results is defined and field.reverse_results == true %}
+        response.data.reverse();
+        {% endif %}
         $scope.form.{{field.name}} = response.data;
+
         {% if (field.disable_editing is not defined or field.disable_editing == false) and field.select2.fetch_all is defined and field.select2.fetch_all == true %}
         $scope.{{field.name}}RefreshSelect('');
         {% endif %}
@@ -30,9 +34,11 @@ $scope.{{field.name}}GoItem = function(path, item) {
     $window.location.href = path + '?id=' + item.id;
 };
 
+{% if field.disable_sorting is not defined or field.disable_sorting == false %}
 $scope.{{field.name}}SortableOptions = {
     stop: function (e, ui) {}
 };
+{% endif %}
 
 {# Select2 #}
 {% if field.disable_editing is not defined or field.disable_editing == false %}
@@ -83,7 +89,12 @@ $scope.{{field.name}}SaveSelect = function() {
         {% endfor %}
         {% endif %}
 
+        {% if field.reverse_results is defined and field.reverse_results == true %}
+        $scope.form.{{field.name}}.unshift(nuovoElemento);
+        {% else %}
         $scope.form.{{field.name}}.push(nuovoElemento);
+        {% endif %}
+
         $scope.{{field.name}}CloseAdd();
         toastr.success('Elemento inserito', '');
 
