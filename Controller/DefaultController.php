@@ -568,8 +568,13 @@ class DefaultController extends Controller
                     $defaultLanguage = $em->getRepository('MrappsBackendBundle:Language')->findByIso("en");
                 }
 
-                //Se ancora non è stata settata la lingua di default, prende la prima lingua dell'array
                 if($defaultLanguage == null) {
+                    if (!isset($languagesAllowed[0])) {
+                        throw new \RuntimeException(
+                            'At least one language must exists!'
+                        );
+                    }
+
                     $defaultLanguage = $languagesAllowed[0];
                 }
 
