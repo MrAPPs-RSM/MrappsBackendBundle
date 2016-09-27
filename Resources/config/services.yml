@@ -1,5 +1,10 @@
 services:
 
+    mrapps.backend.translator:
+        class: Mrapps\BackendBundle\Services\Translator
+        arguments:
+            - @doctrine.orm.entity_manager
+
     mrapps.backend.fields.builder:
         class: Mrapps\BackendBundle\Fields\FieldBuilder
         arguments:
