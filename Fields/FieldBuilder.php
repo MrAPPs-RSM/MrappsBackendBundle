@@ -4,47 +4,20 @@ namespace Mrapps\BackendBundle\Fields;
 
 final class FieldBuilder
 {
-    private $parameters;
+    private $validator;
 
-    private static $mandatories = [
-        'type',
-        'title',
-        'required',
-        'value',
-        'name',
-    ];
-
-    private function __construct(array $parameters)
+    public function __construct(Validator $validator)
     {
-        $this->parameters = $parameters;
+        $this->validator = $validator;
     }
 
-    public static function createTextField(array $parameters)
+    public function createTextField(array $parameters)
     {
-        $notFoundFields = [];
-        foreach (static::$mandatories as $mandatoryField) {
-            if (!isset($parameters[$mandatoryField])) {
-                $notFoundFields[] = $mandatoryField;
-            }
-        }
+        $this->validator->check(
+            $parameters,
+            $this->field = TextField::withParameters($parameters)
+        );
 
-        if (count($notFoundFields) > 0) {
-            throw new \RuntimeException(
-                'Some mandatory values are not defined'
-            );
-        }
-
-        return new self($parameters);
-    }
-
-    public function asArray()
-    {
-        return [
-            'title'    => $this->parameters['title'],
-            'type'     => $this->parameters['type'],
-            'name'     => $this->parameters['name'],
-            'required' => $this->parameters['required'],
-            'value'    => $this->parameters['value'],
-        ];
+        return $this->field;
     }
 }

@@ -1,4 +1,13 @@
 services:
+
+    mrapps.backend.fields.builder:
+        class: Mrapps\BackendBundle\Fields\FieldBuilder
+        arguments:
+            - @mrapps.backend.fields.validator
+
+    mrapps.backend.fields.validator:
+        class: Mrapps\BackendBundle\Fields\Validator
+
     mrapps_backend:
         class: Mrapps\BackendBundle\Twig\MrappsBackendBundleTwigExtension
         arguments: ['@service_container']
