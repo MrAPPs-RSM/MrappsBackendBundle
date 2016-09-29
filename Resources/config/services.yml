@@ -1,5 +1,10 @@
 services:
 
+    mrapps.backend.merger:
+        class: Mrapps\BackendBundle\Services\EntityMerger
+        arguments:
+            - @mrapps.backend.translator
+
     mrapps.backend.translator:
         class: Mrapps\BackendBundle\Services\Translator
         arguments:
