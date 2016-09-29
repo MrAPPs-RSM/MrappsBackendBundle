@@ -6,7 +6,7 @@ class Validator
 {
     public function check(
         array $parameters,
-        TextField $type
+        FieldInterface $type
     ) {
         $notFoundFields = [];
         foreach ($type->getMandatories() as $mandatoryField) {
@@ -17,7 +17,10 @@ class Validator
 
         if (count($notFoundFields) > 0) {
             throw new \RuntimeException(
-                'Some mandatory values are not defined'
+                'Some mandatory values are not defined. '
+                . 'Missing parameters: "'
+                . implode(', ' , $notFoundFields)
+                . '".'
             );
         }
     }
