@@ -4,6 +4,7 @@ namespace Mrapps\BackendBundle\Services;
 
 use Doctrine\ORM\EntityManager;
 use Mrapps\BackendBundle\Entity\TranslatedEntity;
+use Mrapps\BackendBundle\Exception\TranslationNotFoundException;
 
 class Translator
 {
@@ -53,11 +54,11 @@ class Translator
             ]);
 
         if (!$translatedEntity) {
-            throw new \RuntimeException(
+            throw new TranslationNotFoundException(
                 'Translation not found for '
                 . get_class($entity) . ' entity '
                 . ' with id ' . $entity->getId()
-                . ' in langage ' . $this->language
+                . ' in langage ' . $this->language->getIsoCode()
             );
         }
 
