@@ -4,6 +4,7 @@ services:
         class: Mrapps\BackendBundle\Services\EntityMerger
         arguments:
             - @mrapps.backend.translator
+            - @security.token_storage
 
     mrapps.backend.translator:
         class: Mrapps\BackendBundle\Services\Translator

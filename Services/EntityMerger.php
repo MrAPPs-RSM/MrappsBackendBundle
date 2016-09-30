@@ -2,16 +2,22 @@
 
 namespace Mrapps\BackendBundle\Services;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+
 class EntityMerger
 {
     private $row;
 
     private $translator;
 
+    private $tokenStorage;
+
     public function __construct(
-        Translator $translator
+        Translator $translator,
+        TokenStorage $tokenStorage
     ) {
         $this->translator = $translator;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function setLocale($locale)
@@ -34,7 +40,17 @@ class EntityMerger
 
         $entity = $this->translator->getTranslation($entity);
         foreach ($transFields as $attribute => $accessor) {
-            $this->row[$index][$attribute] = $entity->$accessor();
+            if (is_string($accessor)) {
+                $this->row[$index][$attribute] = $entity->$accessor();
+            } else {
+                $roles = $this->tokenStorage->getToken()->getRoles();
+                foreach ($roles as $role) {
+                    if (isset($accessor[$role->getRole()])) {
+                        $grantedAccessor = $accessor[$role->getRole()];
+                        $this->row[$index][$attribute] = $entity->$grantedAccessor();
+                    }
+                }
+            }
         }
     }
 
