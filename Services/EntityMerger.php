@@ -2,6 +2,7 @@
 
 namespace Mrapps\BackendBundle\Services;
 
+use Mrapps\BackendBundle\Exception\TranslationNotFoundException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class EntityMerger
@@ -34,11 +35,15 @@ class EntityMerger
     {
         $index = count($this->row);
 
+        try {
+            $translatedEntity = $this->translator->getTranslation($entity);
+        } catch (TranslationNotFoundException $exception) {
+            return;
+        }
+
         foreach ($normalFields as $attribute => $accessor) {
             $this->row[$index][$attribute] = $entity->$accessor();
         }
-
-        $translatedEntity = $this->translator->getTranslation($entity);
 
         if (!$translatedEntity) {
             throw new \RuntimeException(
