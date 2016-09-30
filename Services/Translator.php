@@ -52,6 +52,15 @@ class Translator
                 'lang' => $this->language,
             ]);
 
+        if (!$translatedEntity) {
+            throw new \RuntimeException(
+                'Translation not found for '
+                . get_class($entity) . ' entity '
+                . ' with id ' . $entity->getId()
+                . ' in langage ' . $this->language
+            );
+        }
+
         return $translatedEntity;
     }
 }

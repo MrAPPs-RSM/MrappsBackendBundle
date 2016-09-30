@@ -38,10 +38,20 @@ class EntityMerger
             $this->row[$index][$attribute] = $entity->$accessor();
         }
 
-        $entity = $this->translator->getTranslation($entity);
+        $translatedEntity = $this->translator->getTranslation($entity);
+
+        if (!$translatedEntity) {
+            throw new \RuntimeException(
+                'Translation not found for entity '
+                . get_class($entity)
+                . ' with id '
+                . $entity->getId()
+            );
+        }
+
         foreach ($transFields as $attribute => $accessor) {
             if (is_string($accessor)) {
-                $this->row[$index][$attribute] = $entity->$accessor();
+                $this->row[$index][$attribute] = $translatedEntity->$accessor();
             } else {
                 $roles = $this->tokenStorage->getToken()->getRoles();
 
@@ -49,7 +59,7 @@ class EntityMerger
                 foreach ($roles as $role) {
                     if (isset($accessor[$role->getRole()])) {
                         $grantedAccessor = $accessor[$role->getRole()];
-                        $this->row[$index][$attribute] = $entity->$grantedAccessor();
+                        $this->row[$index][$attribute] = $translatedEntity->$grantedAccessor();
                         $grantedAccessorFound = true;
                     }
                 }
@@ -57,10 +67,11 @@ class EntityMerger
                 if ($grantedAccessorFound == false) {
                     if (isset($accessor['*'])) {
                         $grantedAccessor = $accessor['*'];
-                        $this->row[$index][$attribute] = $entity->$grantedAccessor();
+                        $this->row[$index][$attribute] = $translatedEntity->$grantedAccessor();
                     }
                 }
             }
+
         }
     }
 
