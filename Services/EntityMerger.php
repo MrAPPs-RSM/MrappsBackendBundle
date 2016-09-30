@@ -44,9 +44,19 @@ class EntityMerger
                 $this->row[$index][$attribute] = $entity->$accessor();
             } else {
                 $roles = $this->tokenStorage->getToken()->getRoles();
+
+                $grantedAccessorFound = false;
                 foreach ($roles as $role) {
                     if (isset($accessor[$role->getRole()])) {
                         $grantedAccessor = $accessor[$role->getRole()];
+                        $this->row[$index][$attribute] = $entity->$grantedAccessor();
+                        $grantedAccessorFound = true;
+                    }
+                }
+
+                if ($grantedAccessorFound == false) {
+                    if (isset($accessor['*'])) {
+                        $grantedAccessor = $accessor['*'];
                         $this->row[$index][$attribute] = $entity->$grantedAccessor();
                     }
                 }
