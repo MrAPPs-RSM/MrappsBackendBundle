@@ -5,19 +5,19 @@ form:
     errore_server: 'Server request error'
     compila_campi: 'Please fill the required fields..'
     aggiungi_nuovo: 'Add new'
-    modifica: Edit
-    crea: Add
-    errore: Error!
-    salvato: Saved!
+    modifica: 'Edit'
+    crea: 'Add'
+    errore: 'Error!'
+    salvato: 'Saved!'
     immagine_salvata: 'Image saved'
     elemento:
-        creato: Created!
-        completato: Completated!
-        elemento_creato: 'Elemento creato'
-        elemento_modificato: 'Elemento modificato'
-        salvare_modifiche: 'Salvare le modifiche?'
+        creato: 'Created!'
+        completato: 'Completed!'
+        elemento_creato: 'Item created'
+        elemento_modificato: 'Item updated'
+        salvare_modifiche: 'Save updates?'
         nuovo_elemento: 'Create the new element?'
-        procedere: 'Procedere?'
+        procedere: 'Proceed?'
 
 # sidebar
 sidebar:
