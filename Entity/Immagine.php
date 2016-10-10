@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="mrapps_backend_images")
  */
 class Immagine extends Base
+    implements \JsonSerializable
 {
     /**
      * @ORM\Column(name="url", type="string", length=254, nullable=false)
@@ -40,4 +41,10 @@ class Immagine extends Base
         return $this->url;
     }
 
+    public function jsonSerialize()
+    {
+        return [
+            'url' => $this->getUrl()
+        ];
+    }
 }
