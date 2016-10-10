@@ -4,6 +4,7 @@ namespace Mrapps\BackendBundle\Services;
 
 use Mrapps\BackendBundle\Exception\TranslationNotFoundException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class EntityMerger
 {
@@ -13,12 +14,16 @@ class EntityMerger
 
     private $tokenStorage;
 
+    private $requestStack;
+
     public function __construct(
         Translator $translator,
-        TokenStorage $tokenStorage
+        TokenStorage $tokenStorage,
+        RequestStack $requestStack
     ) {
         $this->translator = $translator;
         $this->tokenStorage = $tokenStorage;
+        $this->requestStack = $requestStack;
     }
 
     public function setLocale($locale)
@@ -83,5 +88,28 @@ class EntityMerger
     public function getRow()
     {
         return $this->row;
+    }
+
+    private function getMergedEntityAsArray(TranslatedEntity $entity)
+    {
+        $locale = $this->get('request_stack')
+            ->getCurrentRequest()
+            ->getLocale();
+
+        $merger = $this->get('mrapps.backend.merger');
+        $merger->setLocale($locale);
+        $merger->initRow();
+        $merger->merge(
+            $entity,
+            $baseFields = [
+                'id' => 'getId',
+            ],
+            $translatedFields = [
+                'name'=>'getName',
+                'logo'=>'getLogo',
+            ]
+        );
+
+        return $merger->getRow();
     }
 }

@@ -5,6 +5,7 @@ services:
         arguments:
             - @mrapps.backend.translator
             - @security.token_storage
+            - @request_stack
 
     mrapps.backend.translator:
         class: Mrapps\BackendBundle\Services\Translator

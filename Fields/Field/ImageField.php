@@ -12,7 +12,7 @@ final class ImageField
         'title',
         'type',
         'required',
-        'value',
+        // 'value', // allowed: not mandatory
     ];
 }
 
