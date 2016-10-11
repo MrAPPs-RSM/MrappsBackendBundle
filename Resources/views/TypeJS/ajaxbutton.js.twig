@@ -13,7 +13,7 @@ $scope.executeAjax{{ field.name }} = function() {
                                 $scope.form[k] = v;
                             }
                         });
-                        {% if field.callback is defined and field.callback|length > 0 %}{{ callback|escape('js') }}{% endif %}
+                        {% if field.callback is defined and field.callback|length > 0 %}{{ field.callback|escape('js') }}{% endif %}
                     }else {
                         toastr.error(response.data.message,'Errore!');
                     }
