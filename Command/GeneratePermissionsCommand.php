@@ -42,6 +42,7 @@ class GeneratePermissionsCommand extends ContainerAwareCommand
         $controllers = array();
 
         foreach ($routes as $r) {
+	        if(!isset($r->getDefaults()['_controller'])) continue;
             $ctrl = $r->getDefaults()['_controller'];
             $pos = strpos($ctrl, '::');
             if($pos !== false) {
