@@ -1,0 +1,34 @@
+<fieldset id="{{field.name}}" {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
+    <div class="form-group">
+
+        <div class="panel-heading clearfix">
+            <button id="add-details"
+                ng-click="addSection"
+                type="button" class="btn btn-labeled btn-success pull-right">
+                <span class="btn-label">
+                    <em class="fa fa-plus"></em>
+                </span>{{ 'form.aggiungi_nuovo'|trans }}
+            </button>
+        </div>
+
+        <div ng-repeat="form.{{field.name}} as detail">
+            <div class="panel-heading clearfix mrbackend-sections">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Title</label>
+                    <div class="col-sm-9">
+                        <input type="text" ng-model="{/detail.title/}"
+                                class="form-control ng-pristine ng-untouched ng-valid">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Descrizione</label>
+                    <div class="col-sm-9">
+                        <textarea ng-model="{/detail.description/}"
+                                class="form-control ng-pristine ng-untouched ng-valid"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</fieldset>
