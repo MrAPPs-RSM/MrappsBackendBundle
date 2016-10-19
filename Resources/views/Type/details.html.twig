@@ -12,22 +12,8 @@
             {% endif %}
         </div>
 
-            <div>{/form.{{field.name}}/}</div>
         <div ng-repeat="detail in form.{{field.name}}">
             <div class="panel-heading clearfix mrbackend-sections">
-                
-                {#['id' => 1, 'titolo' => 'ciaobbelli', 'descrizione' => 'aaa'],#}
-                
-                
-                {#'structure' => [
-                    
-                    ['type' => 'hidden', 'name' => 'id', 'title' => 'id'],
-                    ['type' => 'text', 'name' => 'titolo', 'title' => 'Titolo dettaglio'],
-                    ['type' => 'textarea', 'name' => 'descrizione', 'title' => 'Descrizione dettaglio'],
-                ],#}
-                
-                {#{"id":1,"titolo":"ciaobbelliq","descrizione":"aaa","_details_original":{"id":1,"titolo":"ciaobbelli","descrizione":"aaa"}}#}
-                
                 {% for s in field.structure %}
                 {% if s.visible is not defined or s.visible %}
                 <div class="form-group">
@@ -41,7 +27,7 @@
                         {% endif %}
                         <button type="button" class="btn btn-labeled btn-warning"
                                 ng-show='detail.{{ s.name }}!=detail._{{field.name}}_original.{{ s.name }}'
-                                ng-click='{{field.name}}UndoEdit("{{ s.name }}",$index)'>
+                                ng-click='{{field.name}}UndoEditDetail("{{ s.name }}",$index)'>
                             <span class="btn-label">
                                 <em class="fa fa-undo"></em>
                             </span>{{ 'form.annulla'|trans }}
@@ -50,24 +36,24 @@
                         <span>{/ detail.{{ s.name }} /}</span>
                         {% endif %}
                     </div>
-                    
-                    {#
-                    TODO
-                    **gestire canAdd
-                    **gestire adding
-                    **gestire editing\undo (pulsante "annulla" che appare solo se il campo è stato modificato)
-                    **gestire canEdit (disabilitare campi oppure mettere delle label)
-                    gestire deleting (pulsante delete)
-                    gestire canDelete (gestisce visibilità pulsante delete)
-                    gestire max (controllo nell'add + contatore in fondo) 
-                    #}
                 </div>
                 {% else %}
                 <input type="hidden" ng-model="detail.{{ s.name }}">
                 {% endif %}
                 {% endfor %}
+                {% if field.disable_delete is not defined or field.disable_delete==false %}
+                <button type="button" class="btn btn-labeled btn-danger"
+                        ng-click='{{field.name}}DeleteDetail($index)'>
+                    <span class="btn-label">
+                        <em class="fa fa-trash"></em>
+                    </span>{{ 'form.elimina'|trans }}
+                </button>
+                {% endif %}
             </div>
         </div>
+        {% if field.max is defined %}
+            <div>Numero di elementi: {/ form.{{field.name}}.length /}/{{ field.max }}</div>
+        {% endif %}
 
     </div>
 </fieldset>

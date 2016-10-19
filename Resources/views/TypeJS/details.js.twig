@@ -1,21 +1,45 @@
 $scope.form.{{field.name}} = {{field.value|json_encode|raw}};
+
+$scope.{{field.name}}CreateBackup = function(d) {
+    var backup = {};
+    {% for s in field.structure %}
+    backup.{{ s.name }} = d.{{ s.name }};
+    {% endfor %}
+    d._{{field.name}}_original = backup;
+    
+    return d;
+};
+
 $.each($scope.form.{{field.name}}, function(k,v) {
-var backup = {};
-{% for s in field.structure %}
-backup.{{ s.name }} = v.{{ s.name }};
-{% endfor %}
-$scope.form.{{field.name}}[k]._{{field.name}}_original = backup;
+    $scope.form.{{field.name}}[k] = $scope.{{field.name}}CreateBackup(v);
 });
 
 {% if field.disable_add is not defined or field.disable_add==false %}
 $scope.{{field.name}}AddDetail = function() {
+    {% if field.max is defined %}
+    if($scope.form.{{field.name}}.length >= {{ field.max }}) {
+        toastr.error("Impossibile aggiungere più di {{ field.max }} elementi", '{{ 'form.errore'|trans }}');
+        return;
+    }
+    {% endif %}
     var newElement = { {% for s in field.structure %}'{{ s.name }}':''{% if loop.last == false %},{% endif %}{% endfor %} };
+    newElement = $scope.{{field.name}}CreateBackup(newElement);
     $scope.form.{{field.name}}.push(newElement);
 };
 {% endif %}
 
 {% if field.disable_edit is not defined or field.disable_edit==false %}
-$scope.{{field.name}}UndoEdit = function(field,i) {
+$scope.{{field.name}}UndoEditDetail = function(field,i) {
+if(confirm("Annullare le modifiche?")) {
 $scope.form.{{field.name}}[i][field] = $scope.form.{{field.name}}[i]._{{field.name}}_original[field];
+}
+};
+{% endif %}
+
+{% if field.disable_delete is not defined or field.disable_delete==false %}
+$scope.{{field.name}}DeleteDetail = function(i) {
+if(confirm("Eliminare questo elemento?")) {
+$scope.form.{{field.name}}.splice(i, 1);
+}
 };
 {% endif %}
