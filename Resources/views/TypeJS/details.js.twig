@@ -1,0 +1,21 @@
+$scope.form.{{field.name}} = {{field.value|json_encode|raw}};
+$.each($scope.form.{{field.name}}, function(k,v) {
+var backup = {};
+{% for s in field.structure %}
+backup.{{ s.name }} = v.{{ s.name }};
+{% endfor %}
+$scope.form.{{field.name}}[k]._{{field.name}}_original = backup;
+});
+
+{% if field.disable_add is not defined or field.disable_add==false %}
+$scope.{{field.name}}AddDetail = function() {
+    var newElement = { {% for s in field.structure %}'{{ s.name }}':''{% if loop.last == false %},{% endif %}{% endfor %} };
+    $scope.form.{{field.name}}.push(newElement);
+};
+{% endif %}
+
+{% if field.disable_edit is not defined or field.disable_edit==false %}
+$scope.{{field.name}}UndoEdit = function(field,i) {
+$scope.form.{{field.name}}[i][field] = $scope.form.{{field.name}}[i]._{{field.name}}_original[field];
+};
+{% endif %}

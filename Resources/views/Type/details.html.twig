@@ -2,31 +2,70 @@
     <div class="form-group">
 
         <div class="panel-heading clearfix">
-            <button id="add-details"
-                ng-click="addSection"
-                type="button" class="btn btn-labeled btn-success pull-right">
+            <div>{{ field.name }}</div>
+            {% if field.disable_add is not defined or field.disable_add==false %}
+            <button type="button" class="btn btn-labeled btn-success pull-right" ng-click="{{field.name}}AddDetail()">
                 <span class="btn-label">
                     <em class="fa fa-plus"></em>
                 </span>{{ 'form.aggiungi_nuovo'|trans }}
             </button>
+            {% endif %}
         </div>
 
-        <div ng-repeat="form.{{field.name}} as detail">
+            <div>{/form.{{field.name}}/}</div>
+        <div ng-repeat="detail in form.{{field.name}}">
             <div class="panel-heading clearfix mrbackend-sections">
+                
+                {#['id' => 1, 'titolo' => 'ciaobbelli', 'descrizione' => 'aaa'],#}
+                
+                
+                {#'structure' => [
+                    
+                    ['type' => 'hidden', 'name' => 'id', 'title' => 'id'],
+                    ['type' => 'text', 'name' => 'titolo', 'title' => 'Titolo dettaglio'],
+                    ['type' => 'textarea', 'name' => 'descrizione', 'title' => 'Descrizione dettaglio'],
+                ],#}
+                
+                {#{"id":1,"titolo":"ciaobbelliq","descrizione":"aaa","_details_original":{"id":1,"titolo":"ciaobbelli","descrizione":"aaa"}}#}
+                
+                {% for s in field.structure %}
+                {% if s.visible is not defined or s.visible %}
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Title</label>
+                    <label class="col-sm-2 control-label">{{ s.title }}</label>
                     <div class="col-sm-9">
-                        <input type="text" ng-model="{/detail.title/}"
-                                class="form-control ng-pristine ng-untouched ng-valid">
+                        {% if field.disable_edit is not defined or field.disable_edit==false %}
+                        {% if s.type=='text' %}
+                        <input type="text" ng-model="detail.{{ s.name }}" class="form-control">
+                        {% elseif s.type=='textarea' %}
+                        <textarea ng-model="detail.{{ s.name }}" class="form-control"></textarea>
+                        {% endif %}
+                        <button type="button" class="btn btn-labeled btn-warning"
+                                ng-show='detail.{{ s.name }}!=detail._{{field.name}}_original.{{ s.name }}'
+                                ng-click='{{field.name}}UndoEdit("{{ s.name }}",$index)'>
+                            <span class="btn-label">
+                                <em class="fa fa-undo"></em>
+                            </span>{{ 'form.annulla'|trans }}
+                        </button>
+                        {% else %}
+                        <span>{/ detail.{{ s.name }} /}</span>
+                        {% endif %}
                     </div>
+                    
+                    {#
+                    TODO
+                    **gestire canAdd
+                    **gestire adding
+                    **gestire editing\undo (pulsante "annulla" che appare solo se il campo è stato modificato)
+                    **gestire canEdit (disabilitare campi oppure mettere delle label)
+                    gestire deleting (pulsante delete)
+                    gestire canDelete (gestisce visibilità pulsante delete)
+                    gestire max (controllo nell'add + contatore in fondo) 
+                    #}
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Descrizione</label>
-                    <div class="col-sm-9">
-                        <textarea ng-model="{/detail.description/}"
-                                class="form-control ng-pristine ng-untouched ng-valid"></textarea>
-                    </div>
-                </div>
+                {% else %}
+                <input type="hidden" ng-model="detail.{{ s.name }}">
+                {% endif %}
+                {% endfor %}
             </div>
         </div>
 
