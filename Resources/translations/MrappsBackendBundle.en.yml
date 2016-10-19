@@ -10,6 +10,8 @@ form:
     errore: 'Error!'
     salvato: 'Saved!'
     immagine_salvata: 'Image saved'
+    annulla: 'Undo'
+    elimina: 'Delete'
     elemento:
         creato: 'Created!'
         completato: 'Completed!'
