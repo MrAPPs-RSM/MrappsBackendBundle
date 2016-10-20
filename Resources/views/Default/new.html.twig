@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-minicolors/jquery.minicolors.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/ui-select/dist/select.min.css') }}">
     <link rel="stylesheet" href="{{ asset('bundles/mrappsbackend/css/jquery.filthypillow.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/sweetalert/dist/sweetalert.css') }}">
 {% endblock css %}
 {% block content %}
 
@@ -122,6 +123,7 @@
     <script src="{{ asset('assets/vendor/angular-google-maps/dist/angular-google-maps.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('bundles/mrappsbackend/js/jquery.filthypillow.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/sweetalert/dist/sweetalert.min.js') }}"></script>
 {% endblock srcjavascript %}
 {% block javascript %}
     <script type="text/javascript">
@@ -225,6 +227,13 @@
 
         function FormValidationController($scope, $http, $window, FileUploader, uiGmapGoogleMapApi) {
 
+            $scope.addSection = function () {
+                $scope.details.push({
+                    'section': '',
+                    'description': ''
+                });
+            }
+
             $scope.go = function (path, replaceId) {
                 if (typeof(replaceId) !== "undefined" && replaceId !== null) {
                     path = path.replace(/__PLACEHOLDER_ID__/g, replaceId);
@@ -308,6 +317,10 @@
 
             // Submit form
             vm.submitForm = function () {
+
+                console.log($scope.form);
+                return;
+
                 vm.submitted = true;
                 if (vm.formValidate.$valid) {
                     {% if confirmSave == true %}
