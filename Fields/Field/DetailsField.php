@@ -12,6 +12,16 @@ final class DetailsField
         'name',
         'title',
         'required',
+        'structure',
+        'value',
     ];
+    
+    /*
+     * optional:
+     * 
+     * - disable_add
+     * - disable_edit
+     * - disable_delete
+     * - max
+     */
 }
-
