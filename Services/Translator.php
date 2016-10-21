@@ -58,7 +58,7 @@ class Translator
                 'Translation not found for '
                 . get_class($entity) . ' entity '
                 . ' with id ' . $entity->getId()
-                . ' in langage ' . $this->language->getIsoCode()
+                . ' in language ' . ($this->language!==null?$this->language->getIsoCode():'')
             );
         }
 
