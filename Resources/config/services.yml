@@ -6,6 +6,7 @@ services:
             - @mrapps.backend.translator
             - @security.token_storage
             - @request_stack
+            - @doctrine.orm.entity_manager
 
     mrapps.backend.translator:
         class: Mrapps\BackendBundle\Services\Translator
