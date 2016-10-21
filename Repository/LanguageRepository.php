@@ -27,4 +27,8 @@ class LanguageRepository extends EntityRepository
 
         return $output;
     }
+    
+    public function getAvailableLanguages() {
+        return $this->findBy(['visible' => 1], ['weight' => 'asc', 'id' => 'asc']);
+    }
 }

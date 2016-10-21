@@ -1,4 +1,5 @@
 {% trans_default_domain 'MrappsBackendBundle' %}
+{% if field.value is not iterable %}{% set field = field|merge({'value':[]}) %}{% endif %}
 $scope.form.{{field.name}} = {{field.value|json_encode|raw}};
 
 $scope.{{field.name}}CreateBackup = function(d) {

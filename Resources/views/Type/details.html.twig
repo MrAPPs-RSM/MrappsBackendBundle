@@ -1,4 +1,5 @@
 {% trans_default_domain 'MrappsBackendBundle' %}
+{% if field.value is not iterable %}{% set field = field|merge({'value':[]}) %}{% endif %}
 <fieldset id="{{field.name}}" {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
     <div class="form-group">
 

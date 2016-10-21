@@ -318,9 +318,6 @@
             // Submit form
             vm.submitForm = function () {
 
-                console.log($scope.form);
-                return;
-
                 vm.submitted = true;
                 if (vm.formValidate.$valid) {
                     {% if confirmSave == true %}
