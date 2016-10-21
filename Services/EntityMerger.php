@@ -21,28 +21,27 @@ class EntityMerger
     
     private $defaultLocale;
     
-    private $retrieveAllLanguages;
+    private $areAllLanguagesRequested;
 
     public function __construct(
         Translator $translator,
         TokenStorage $tokenStorage,
-        RequestStack $requestStack,
-        EntityManager $manager
+        RequestStack $requestStack
     ) {
         $this->translator = $translator;
         $this->tokenStorage = $tokenStorage;
         $this->requestStack = $requestStack;
-        $this->manager = $manager;
+        $this->manager = $this->translator->getManager();
         $this->defaultLocale = null;
-        $this->retrieveAllLanguages = false;
+        $this->areAllLanguagesRequested = false;
     }
     
-    public function retrieveAllLanguages() {
-        $this->retrieveAllLanguages = true;
+    public function enableRequestAllLanguages() {
+        $this->areAllLanguagesRequested = true;
     }
     
-    public function dontRetrieveAllLanguages() {
-        $this->retrieveAllLanguages = false;
+    public function disableRequestAllLanguages() {
+        $this->areAllLanguagesRequested = false;
     }
 
 
@@ -148,7 +147,7 @@ class EntityMerger
     
     private function mergeAllLanguagesFields($entity, $index, $transFields) {
         
-        if($this->retrieveAllLanguages) {
+        if($this->areAllLanguagesRequested) {
             $availableLanguages = $this->manager->getRepository('MrappsBackendBundle:Language')->getAvailableLanguages();
             foreach ($availableLanguages as $lang) {
                 $this->mergeTransFields($entity, $index, $transFields, $lang->getIsoCode());

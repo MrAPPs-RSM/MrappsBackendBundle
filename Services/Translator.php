@@ -28,7 +28,12 @@ class Translator
                 'isoCode' => $this->locale,
             ]);
     }
-
+    
+    public function getManager()
+    {
+        return $this->manager;
+    }
+    
     public function getTranslation(TranslatedEntity $entity)
     {
         if (!isset($this->locale)) {
