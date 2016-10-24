@@ -2,7 +2,7 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">{{field.title}}{% if switch is not defined and field.required %} *{% endif %}</label>
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
-            <input ng-disabled="{{field.name}}_uploading" filestyle="" type="file" data-button-text="Single" data-class-button="btn btn-default" data-classinput="form-control inline" nv-file-select="" uploader="{{field.name}}" class="form-control" />
+            <input {% if field.accept is defined %}accept="{{field.accept}}"{% endif %} ng-disabled="{{field.name}}_uploading" filestyle="" type="file" data-button-text="Single" data-class-button="btn btn-default" data-classinput="form-control inline" nv-file-select="" uploader="{{field.name}}" class="form-control" />
             {#<span ng-repeat="item in uploader.queue">
                 <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
             </span>#}
