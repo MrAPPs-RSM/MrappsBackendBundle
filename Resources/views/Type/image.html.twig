@@ -3,6 +3,7 @@
         <label class="col-sm-2 control-label">{{ field.title }}{% if switch is not defined and field.required %} *{% endif %}</label>
         <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
             <input {#{% if field.filters is defined %}filters="{{ field.filters }}"{% endif %}#} filestyle=""
+                                                                                                 accept="image/jpeg,image/png,image/gif"
                                                                                                  type="file"
                                                                                                  data-button-text="Single"
                                                                                                  data-class-button="btn btn-default"

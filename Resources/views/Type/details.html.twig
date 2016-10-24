@@ -19,7 +19,7 @@
                 {% for s in field.structure %}
                 {% if s.visible is not defined or s.visible %}
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">{{ s.title }}</label>
+                    <label class="col-sm-2 control-label">{{ s.title }}{% if s.required is defined and s.required==true %} *{% endif %}</label>
                     <div class="col-sm-9">
                         {% if field.disable_edit is not defined or field.disable_edit==false %}
                         {% if s.type=='text' %}
@@ -27,8 +27,9 @@
                         {% elseif s.type=='textarea' %}
                         <textarea ng-model="detail.{{ s.name }}" class="form-control" {% if s.tinymce is defined and s.tinymce==true %} ui-tinymce="tinymceOptions" {% endif %}></textarea>
                         {% endif %}
+                        {% if if s.required is defined and s.required==true %}<span ng-show="form.validateInput('{{s.name}}', 'required')" class="text-danger">This field is required</span>{% endif %}
                         <button type="button" class="btn btn-labeled btn-warning"
-                                ng-show='detail.{{ s.name }}!=detail._{{field.name}}_original.{{ s.name }}'
+                                ng-show='detail._{{field.name}}_original.{{ s.name }}!=""&&detail.{{ s.name }}!=detail._{{field.name}}_original.{{ s.name }}'
                                 ng-click='{{field.name}}UndoEditDetail("{{ s.name }}",$index)'>
                             <span class="btn-label">
                                 <em class="fa fa-undo"></em>
