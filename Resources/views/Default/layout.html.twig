@@ -1,3 +1,4 @@
+{% trans_default_domain 'MrappsBackendBundle' %}
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -24,8 +25,68 @@
 <div data-ui-view="" data-autoscroll="false" class="wrapper">
     <header class="topnavbar-wrapper">
         {% block topnavbar %}
-            {# {{ render(controller('MrappsBackendBundle:Default:__topNavBar', {"request" : app.request})) }} #}
-            {{ mrappsBackendLanguages.getTopNavBar(app.request, app.user) | raw }}
+            <nav role="navigation" class="navbar topnavbar">
+                <div class="navbar-header">
+                    <a {% if default_route_name is defined and default_route_name|length > 0 %}
+                        href="{{ path(default_route_name) }}"
+                    {% endif %}
+                            class="navbar-brand">
+                        <div class="brand-logo">
+                            <img src="{{ asset(logo_path) }}" alt="Logo" class="img-responsive"/>
+                        </div>
+                        <div class="brand-logo-collapsed">
+                            <img src="{{ asset(logo_path) }}" alt="Logo" class="img-responsive"/>
+                        </div>
+                    </a>
+                </div>
+                <div class="nav-wrapper">
+                    <ul class="nav navbar-nav">
+                        <!-- Button to show/hide the sidebar on mobile. Visible on mobile only.-->
+                        <a href="" id="left_toggler" class="visible-xs sidebar-toggle">
+                            <em class="fa fa-navicon"></em>
+                        </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mrapps_backend_profile_changepwd') }}"
+                               title="{{ 'profilo.cambia_pwd'|trans }}">
+                                <i class="fa fa-unlock-alt"></i>
+                                {{ 'profilo.cambia_pwd'|trans }}
+                            </a>
+                        </li>
+                        <li>
+                            {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                                {% if default_route_name is defined and default_route_name|length > 0 %}
+                                    <a href="{{ path(default_route_name, {'_switch_user':'_exit'}) }}"
+                                       title="{{ 'profilo.esci_impersonifica'|trans }}">
+                                        <em class="icon-lock"></em>
+                                        {{ 'profilo.esci_impersonifica'|trans }}
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{{ path('fos_user_security_logout') }}" title="{{ 'profilo.logout'|trans }}">
+                                    <em class="icon-lock"></em>
+                                    {{ 'profilo.logout'|trans }}
+                                </a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                    <div class="dropdown languages-list">
+                        <button class="btn btn-link dropdown-toggle" type="button" id="dropdownLanguages"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="true">
+                            <i class="fa fa-flag"></i> Language
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownLanguages">
+                            {% for key, lang in languages %}
+                                <li>
+                                    <a href="{{ localized_url(current_route, key,route_params) }}">{{ lang }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
         {% endblock topnavbar %}
     </header>
     {#<aside class="aside" class="aside" ng-controller="SidebarController">#}

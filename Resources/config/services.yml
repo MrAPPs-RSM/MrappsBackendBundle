@@ -51,4 +51,11 @@ services:
                     - [setRequest , ["@service_container"]]
 
     mrapps.backend.validate:
-                class: Mrapps\BackendBundle\Handler\ValidateHandler
+            class: Mrapps\BackendBundle\Handler\ValidateHandler
+
+    mrapps.twig_extension:
+            class: Mrapps\BackendBundle\Twig\LocalizedPath
+            arguments: ['@request_stack', '@router']
+            public: false
+            tags:
+                - { name: twig.extension }

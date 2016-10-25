@@ -6,11 +6,8 @@ use Mrapps\BackendBundle\Entity\SidebarEntry;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Mrapps\BackendBundle\Classes\Utils;
 use Mrapps\BackendBundle\Entity\Immagine;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,18 +18,19 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  */
 class DefaultController extends Controller
 {
-    public function security(Request $request, $action) {
+    public function security(Request $request, $action)
+    {
 
         $canProceed = false;
 
         $compact = Utils::getControllerCompactName($request->attributes->get('_controller'));
 
         $user = $this->getUser();
-        if($user !== null && is_object($user)) {
+        if ($user !== null && is_object($user)) {
 
             $canProceed = ($user->hasRole('ROLE_SUPER_ADMIN'));
 
-            if(!$canProceed) {
+            if (!$canProceed) {
 
                 //Ruoli che possono accedere all'oggetto
                 $em = $this->getDoctrine()->getManager();
@@ -40,10 +38,10 @@ class DefaultController extends Controller
 
                 //Ruoli dell'utente
                 $userRoles = $user->getRoles();
-                foreach($userRoles as $r) {
+                foreach ($userRoles as $r) {
 
                     //L'utente ha almeno un ruolo valido?
-                    if(isset($roles[$r])) {
+                    if (isset($roles[$r])) {
                         $canProceed = true;
                         break;
                     }
@@ -51,7 +49,7 @@ class DefaultController extends Controller
             }
         }
 
-        if(!$canProceed) {
+        if (!$canProceed) {
             throw new AccessDeniedHttpException("Accesso non autorizzato!");
         }
 
@@ -80,31 +78,17 @@ class DefaultController extends Controller
         return $this->getRequest()->getSchemeAndHttpHost() . '/uploads/' . $dir;
     }
 
-    public function __topNavBarAction(Request $request)
+    private function _checkRoleSidebar($sidebar = null)
     {
-        $defaultRouteName = $this->getDefaultRouteForUser();
-        //$defaultRouteName = $this->container->getParameter('mrapps_backend.default_route_name');
-        $url = $this->container->get('request')->get('_route');
 
-        return $this->render('MrappsBackendBundle:Default:top-navbar.html.twig',
-            array("logo_path" => $this->container->hasParameter('mrapps_backend.logo_path') ? $this->container->getParameter('mrapps_backend.logo_path') : null,
-                "default_route_name" => $defaultRouteName,
-                "request" => $request,
-                "languages" => Utils::getLanguages()
-            )
-        );
-    }
-
-    private function _checkRoleSidebar($sidebar = null) {
-
-        if($sidebar !== null) {
+        if ($sidebar !== null) {
 
             $type = trim($sidebar->getType());
-            if(strlen($type) == 0) $type = 'view';
+            if (strlen($type) == 0) $type = 'view';
 
             //Primo livello con figli => sempre visibile
             $sidebarRoute = trim($sidebar->getRoute());
-            if(strlen($sidebarRoute) == 0 && $sidebar->getParent() == null) {
+            if (strlen($sidebarRoute) == 0 && $sidebar->getParent() == null) {
                 return true;
             }
 
@@ -114,7 +98,7 @@ class DefaultController extends Controller
 
             $user = $this->getUser();
 
-            if($user !== null) {
+            if ($user !== null) {
 
                 $em = $this->getDoctrine()->getManager();
                 $perm = $em->getRepository('MrappsBackendBundle:Permission')->getPermissions($controllerCompact, $user);
@@ -124,20 +108,20 @@ class DefaultController extends Controller
 
                 //Controllo lista ruoli che possono accedere alla rotta
                 $allowedRolesStr = trim($sidebar->getRoles());
-                if(strlen($allowedRolesStr) > 0) {
+                if (strlen($allowedRolesStr) > 0) {
                     $allowedRoles = explode(',', $sidebar->getRoles());
 
                     $canProceedRoles = false;
 
                     foreach ($allowedRoles as $r) {
                         $r = strtoupper(trim($r));
-                        if(strlen($r) > 0 && $user->hasRole($r)) {
+                        if (strlen($r) > 0 && $user->hasRole($r)) {
                             $canProceedRoles = true;
                             break;
                         }
                     }
 
-                }else {
+                } else {
                     $canProceedRoles = true;
                 }
 
@@ -148,20 +132,21 @@ class DefaultController extends Controller
         return false;
     }
 
-    private function __getSidebarLabel(SidebarEntry $sidebar = null) {
+    private function __getSidebarLabel(SidebarEntry $sidebar = null)
+    {
 
-        if($sidebar !== null) {
+        if ($sidebar !== null) {
 
             $label = trim($sidebar->getLabel());
             $labelCanon = strtolower($label);
 
-            if(substr($labelCanon, 0, 5) == 'fnc::') {
+            if (substr($labelCanon, 0, 5) == 'fnc::') {
 
                 $fnc = substr($label, 5);
                 $controller = $sidebar->getController();
 
                 $label = '';
-                if(strlen($controller) > 0) {
+                if (strlen($controller) > 0) {
 
                     try {
                         $obj = new $controller;
@@ -169,7 +154,7 @@ class DefaultController extends Controller
                         $obj = null;
                     }
 
-                    if($obj !== null) {
+                    if ($obj !== null) {
                         try {
                             $label = $obj->$fnc($this->container);
                         } catch (\Exception $ex) {
@@ -214,13 +199,13 @@ class DefaultController extends Controller
 
         //Organizzazione voci di menu secondo livello
         $secondoLivelloParents = array();
-        foreach($secondoLivello as $sidebar) {
+        foreach ($secondoLivello as $sidebar) {
 
             //Check ruolo
-            if($this->isGranted('ROLE_SUPER_ADMIN') || $this->_checkRoleSidebar($sidebar)) {
+            if ($this->isGranted('ROLE_SUPER_ADMIN') || $this->_checkRoleSidebar($sidebar)) {
 
                 $parentId = ($sidebar->getParent() !== null) ? $sidebar->getParent()->getId() : 0;
-                if(!isset($secondoLivelloParents[$parentId])) {
+                if (!isset($secondoLivelloParents[$parentId])) {
                     $secondoLivelloParents[$parentId] = array();
                 }
                 $secondoLivelloParents[$parentId][] = $sidebar;
@@ -228,25 +213,25 @@ class DefaultController extends Controller
         }
 
         //Gestione sidebar primo livello
-        foreach($primoLivello as $sidebar) {
+        foreach ($primoLivello as $sidebar) {
 
             //Check ruolo
-            if($this->isGranted('ROLE_SUPER_ADMIN') || $this->_checkRoleSidebar($sidebar)) {
+            if ($this->isGranted('ROLE_SUPER_ADMIN') || $this->_checkRoleSidebar($sidebar)) {
 
                 $thisId = $sidebar->getId();
-                if(isset($secondoLivelloParents[$thisId]) && count($secondoLivelloParents[$thisId]) > 0) {
+                if (isset($secondoLivelloParents[$thisId]) && count($secondoLivelloParents[$thisId]) > 0) {
 
                     $hasSubmenu = true;
 
                     $url = array();
 
-                    foreach($secondoLivelloParents[$thisId] as $subSidebar) {
+                    foreach ($secondoLivelloParents[$thisId] as $subSidebar) {
 
                         //Rotta submenu
                         $route = $subSidebar->getRoute();
                         try {
                             $subUrl = (strlen($route) > 0) ? $this->generateUrl($route) : '';
-                        }catch(\Exception $e) {
+                        } catch (\Exception $e) {
                             $subUrl = '';
                         }
 
@@ -257,7 +242,7 @@ class DefaultController extends Controller
                         );
                     }
 
-                }else {
+                } else {
 
                     $hasSubmenu = false;
 
@@ -265,12 +250,12 @@ class DefaultController extends Controller
                     $route = $sidebar->getRoute();
                     try {
                         $url = (strlen($route) > 0) ? $this->generateUrl($route) : '';
-                    }catch(\Exception $e) {
+                    } catch (\Exception $e) {
                         $url = '';
                     }
                 }
 
-                if ( $url != null && !empty($url) ) {
+                if ($url != null && !empty($url)) {
                     $menu[] = array(
                         'has_submenu' => $hasSubmenu,
                         'title' => $this->__getSidebarLabel($sidebar),
@@ -298,9 +283,9 @@ class DefaultController extends Controller
         ));
     }
 
-    private function getDefaultRouteForUser() {
-
-        return Utils::getDefaultRouteForUser($this->container, $this->getUser());
+    private function getDefaultRouteForUser($user)
+    {
+        return Utils::getDefaultRouteForUser($this->container, $user);
     }
 
     /**
@@ -309,33 +294,34 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        $defaultRouteForUser = $this->getDefaultRouteForUser();
+        $defaultRouteForUser = $this->getDefaultRouteForUser($this->getUser());
 
         return new RedirectResponse($this->generateUrl($defaultRouteForUser));
     }
 
-    public function __customAction(Request $request, $params = array()) {
+    public function __customAction(Request $request, $params = array())
+    {
 
         //Tipologia di permesso (es. view)
-        if(!is_array($params)) $params = array();
+        if (!is_array($params)) $params = array();
         $permissionsType = '';
-        if(isset($params['__permissions_type'])) {
+        if (isset($params['__permissions_type'])) {
             $permissionsType = strtolower(trim($params['__permissions_type']));
             unset($params['__permissions_type']);
         }
-        if(strlen($permissionsType) == 0) $permissionsType = 'view';
+        if (strlen($permissionsType) == 0) $permissionsType = 'view';
 
         //Check permessi
         $this->security($request, $permissionsType);
 
         //Template
         $template = '';
-        if(isset($params['__template'])) {
+        if (isset($params['__template'])) {
             $template = trim($params['__template']);
             unset($params['__template']);
         }
 
-        if(strlen($template) > 0) {
+        if (strlen($template) > 0) {
 
             $em = $this->getDoctrine()->getManager();
             $currentObject = Utils::getControllerCompactName($request->attributes->get('_controller'));
@@ -346,7 +332,7 @@ class DefaultController extends Controller
 
             return $this->render($template, $params);
 
-        }else {
+        } else {
             throw new \InvalidArgumentException("Parametro __template mancante. Specificare un template valido nella forma AppBundle:Default:test.");
         }
     }
@@ -370,19 +356,29 @@ class DefaultController extends Controller
 
         //Setta i nomi a tutte le action
         $laCount = 1;
-        if(is_array($linkAction)) {
+        if (is_array($linkAction)) {
             foreach ($linkAction as $k => $la) {
-                if(!isset($la['name'])) {
-                    $linkAction[$k]['name'] = '__action_'.$laCount;
+                if (!isset($la['name'])) {
+                    $linkAction[$k]['name'] = '__action_' . $laCount;
                 }
                 $laCount++;
             }
         }
 
 
+        $defaultRouteName = $this->getDefaultRouteForUser($request->getUser());
+
         return $this->render('MrappsBackendBundle:Default:table.html.twig', array(
-            'current_object' => $currentObject,
             'current_route' => $request->get('_route'),
+            'route_params' => !empty($request->get('_route_params'))
+                ? $request->get('_route_params')
+                : [],
+            'default_route_name' => $defaultRouteName,
+            'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
+                ? $this->container->getParameter('mrapps_backend.logo_path')
+                : null,
+            'languages' => Utils::getLanguages(),
+            'current_object' => $currentObject,
             'title' => $title,
             'tableColumns' => $tableColumns,
             'defaultSorting' => json_encode($defaultSorting),
@@ -431,12 +427,12 @@ class DefaultController extends Controller
         //Elimina gli array non validi prima di sistemare i dati
         $riallineaChiavi = false;
         foreach ($fields as $k => $f) {
-            if(!isset($f['type'])) {
+            if (!isset($f['type'])) {
                 unset($fields[$k]);
                 $riallineaChiavi = true;
             }
         }
-        if($riallineaChiavi) {
+        if ($riallineaChiavi) {
             $fields = array_values($fields);    //Riallineamento chiavi per far funzionare il raggruppamento in pannelli
         }
 
@@ -444,25 +440,25 @@ class DefaultController extends Controller
         foreach ($fields as $k => $f) {
 
             //Opening Time
-            if($f['type'] == 'openingtime') {
+            if ($f['type'] == 'openingtime') {
 
                 //Generale
-                if(!isset($f['step'])) {
+                if (!isset($f['step'])) {
                     $fields[$k]['step'] = 1;
                 }
-                if(!isset($f['value']['closed'])) {
+                if (!isset($f['value']['closed'])) {
                     $fields[$k]['value']['closed'] = false;
                 }
 
                 //Valori di default
-                if(!isset($f['value']['morning']['start'])) $fields[$k]['value']['morning']['start'] = '';
-                if(!isset($f['value']['morning']['end'])) $fields[$k]['value']['morning']['end'] = '';
-                if(!isset($f['value']['afternoon']['start'])) $fields[$k]['value']['afternoon']['start'] = '';
-                if(!isset($f['value']['afternoon']['end'])) $fields[$k]['value']['afternoon']['end'] = '';
+                if (!isset($f['value']['morning']['start'])) $fields[$k]['value']['morning']['start'] = '';
+                if (!isset($f['value']['morning']['end'])) $fields[$k]['value']['morning']['end'] = '';
+                if (!isset($f['value']['afternoon']['start'])) $fields[$k]['value']['afternoon']['start'] = '';
+                if (!isset($f['value']['afternoon']['end'])) $fields[$k]['value']['afternoon']['end'] = '';
             }
 
             //DateTime Range
-            if($f['type'] == 'datarange') {
+            if ($f['type'] == 'datarange') {
 
                 //Converte i value da timestamp a ISO 8601 date
                 $startValue = Utils::convertTimestampToIso8601((isset($f['start']['value'])) ? $f['start']['value'] : null);
@@ -482,38 +478,10 @@ class DefaultController extends Controller
                 $fields[$k]['end']['min'] = $endMin;
                 $fields[$k]['end']['max'] = $endMax;
 
-
-//                //Default
-//                $actualTime = time();
-//                if($startValue == null) $startValue = $actualTime;
-//                if($endValue == null) $endValue = $actualTime;
-//
-//                //Start
-//                $newStartDate = date('Y-m-d', $startValue).'T00:00:00.000Z';
-//                $newStartHours = intval(date('H', $startValue));
-//                $newStartMinutes = intval(date('i', $startValue));
-//
-//
-//                //End
-//                $newEndDate = date('Y-m-d', $endValue).'T00:00:00.000Z';
-//                $newEndHours = intval(date('H', $endValue));
-//                $newEndMinutes = intval(date('i', $endValue));
-//
-//
-//                $fields[$k]['start']['value'] = array(
-//                    'date' => $newStartDate,
-//                    'hours' => $newStartHours,
-//                    'minutes' => $newStartMinutes,
-//                );
-//                $fields[$k]['end']['value'] = array(
-//                    'date' => $newEndDate,
-//                    'hours' => $newEndHours,
-//                    'minutes' => $newEndMinutes,
-//                );
             }
 
             //Mappa
-            if($f['type'] == 'latlng') {
+            if ($f['type'] == 'latlng') {
 
                 //Numero random, necessario per il marker (tipo mappa)
                 $rnd = mt_rand(1, 999999);
@@ -524,7 +492,7 @@ class DefaultController extends Controller
             }
 
             //Pannello
-            if($f['type'] == 'panel') {
+            if ($f['type'] == 'panel') {
                 $panels[] = array(
                     'index' => $k,
                     'label' => (isset($f['label'])) ? $f['label'] : '',
@@ -532,25 +500,25 @@ class DefaultController extends Controller
             }
 
             //Campo multilingua
-            if(isset($f['lang']) && $f['lang'] == true) {
+            if (isset($f['lang']) && $f['lang'] == true) {
 
                 $enFound = false;
                 $defaultLanguage = null;
                 $languagesAllowed = array();
 
                 //Limite alle lingue disponibili per questo campo (lista isocode)
-                if(isset($f['lang_allow_only']) && is_array($f['lang_allow_only']) && count($f['lang_allow_only']) > 0) {
+                if (isset($f['lang_allow_only']) && is_array($f['lang_allow_only']) && count($f['lang_allow_only']) > 0) {
 
                     foreach ($languages as $l) {
-                        if(in_array($l->getIsoCode(), $f['lang_allow_only'])) {
+                        if (in_array($l->getIsoCode(), $f['lang_allow_only'])) {
                             $languagesAllowed[] = $l;
 
                             //Lingua default -> la lingua letta dalla request
-                            if($l->getIsoCode() == $locale) {
+                            if ($l->getIsoCode() == $locale) {
                                 $defaultLanguage = $l;
                             }
 
-                            if($l->getIsoCode() == 'en') {
+                            if ($l->getIsoCode() == 'en') {
                                 $enFound = true;
                             }
                         }
@@ -559,17 +527,17 @@ class DefaultController extends Controller
                     //Rimuovo il campo per non fare confusione
                     unset($fields[$k]['lang_allow_only']);
 
-                }else {
+                } else {
                     $languagesAllowed = $languages;
                 }
 
                 //Se non è stata settata la lingua di default, controlla se può impostare "en"
-                if($defaultLanguage == null && $enFound) {
+                if ($defaultLanguage == null && $enFound) {
                     $defaultLanguage = $em->getRepository('MrappsBackendBundle:Language')->findByIso("en");
                 }
 
                 //Se ancora non è stata settata la lingua di default, prende la prima lingua dell'array
-                if($defaultLanguage == null) {
+                if ($defaultLanguage == null) {
                     $defaultLanguage = $languagesAllowed[0];
                 }
 
@@ -582,13 +550,13 @@ class DefaultController extends Controller
         $prevPanelIndex = 0;
 
         //Raggruppamento in pannelli
-        if(count($panels) == 0) {
+        if (count($panels) == 0) {
             $panels[] = array('index' => 0, 'label' => '');
             $prevPanelIndex = -1;
         }
 
         //Se il primo elemento non è un pannello ne creo uno fittizio
-        if($panels[0]['index'] != 0) {
+        if ($panels[0]['index'] != 0) {
             $panels = array_merge(array(array('index' => 0, 'label' => '')), $panels);
             $prevPanelIndex = -1;
         }
@@ -596,14 +564,14 @@ class DefaultController extends Controller
         foreach ($panels as $k => $p) {
 
             //Scorre i campi a partire dall'indice successivo a quello del pannello precedente
-            for($i = $prevPanelIndex+1; $i < count($fields); $i++) {
+            for ($i = $prevPanelIndex + 1; $i < count($fields); $i++) {
 
-                if(!isset($panels[$k]['fields'])) $panels[$k]['fields'] = array();
+                if (!isset($panels[$k]['fields'])) $panels[$k]['fields'] = array();
 
                 //Aggiunge i campi al pannello
-                if($fields[$i]['type'] != 'panel') {
+                if ($fields[$i]['type'] != 'panel') {
                     $panels[$k]['fields'][] = $fields[$i];
-                }else {
+                } else {
                     //Quando trova un altro pannello si ferma
                     $prevPanelIndex = $i;
                     break;
@@ -611,9 +579,18 @@ class DefaultController extends Controller
             }
         }
 
+        $defaultRouteName = $this->getDefaultRouteForUser($request->getUser());
 
         return $this->render('MrappsBackendBundle:Default:new.html.twig', array(
             'current_route' => $request->get('_route'),
+            'route_params' => !empty($request->get('_route_params'))
+                ? $request->get('_route_params')
+                : [],
+            'default_route_name' => $defaultRouteName,
+            'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
+                ? $this->container->getParameter('mrapps_backend.logo_path')
+                : null,
+            'languages' => Utils::getLanguages(),
             'title' => $title,
             'panels' => $panels,
             'linkSave' => $linkSave,
@@ -626,7 +603,6 @@ class DefaultController extends Controller
             'linkAction' => $linkAction,
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,
-            'languages' => $languages,
             'confirmMessages' => $confirmMessages,
             'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps","ui.utils.masks"',
         ));
@@ -646,12 +622,12 @@ class DefaultController extends Controller
         //Elimina gli array non validi prima di sistemare i dati
         $riallineaChiavi = false;
         foreach ($fields as $k => $f) {
-            if(!isset($f['type'])) {
+            if (!isset($f['type'])) {
                 unset($fields[$k]);
                 $riallineaChiavi = true;
             }
         }
-        if($riallineaChiavi) {
+        if ($riallineaChiavi) {
             $fields = array_values($fields);    //Riallineamento chiavi per far funzionare il raggruppamento in pannelli
         }
 
@@ -659,7 +635,7 @@ class DefaultController extends Controller
         foreach ($fields as $k => $f) {
 
             //Pannello
-            if($f['type'] == 'panel') {
+            if ($f['type'] == 'panel') {
                 $panels[] = array(
                     'index' => $k,
                     'label' => (isset($f['label'])) ? $f['label'] : '',
@@ -671,13 +647,13 @@ class DefaultController extends Controller
         $prevPanelIndex = 0;
 
         //Raggruppamento in pannelli
-        if(count($panels) == 0) {
+        if (count($panels) == 0) {
             $panels[] = array('index' => 0, 'label' => '');
             $prevPanelIndex = -1;
         }
 
         //Se il primo elemento non è un pannello ne creo uno fittizio
-        if($panels[0]['index'] != 0) {
+        if ($panels[0]['index'] != 0) {
             $panels = array_merge(array(array('index' => 0, 'label' => '')), $panels);
             $prevPanelIndex = -1;
         }
@@ -685,14 +661,14 @@ class DefaultController extends Controller
         foreach ($panels as $k => $p) {
 
             //Scorre i campi a partire dall'indice successivo a quello del pannello precedente
-            for($i = $prevPanelIndex+1; $i < count($fields); $i++) {
+            for ($i = $prevPanelIndex + 1; $i < count($fields); $i++) {
 
-                if(!isset($panels[$k]['fields'])) $panels[$k]['fields'] = array();
+                if (!isset($panels[$k]['fields'])) $panels[$k]['fields'] = array();
 
                 //Aggiunge i campi al pannello
-                if($fields[$i]['type'] != 'panel') {
+                if ($fields[$i]['type'] != 'panel') {
                     $panels[$k]['fields'][] = $fields[$i];
-                }else {
+                } else {
                     //Quando trova un altro pannello si ferma
                     $prevPanelIndex = $i;
                     break;
@@ -700,15 +676,23 @@ class DefaultController extends Controller
             }
         }
 
+        $defaultRouteName = $this->getDefaultRouteForUser($request->getUser());
 
         return $this->render('MrappsBackendBundle:Default:show.html.twig', array(
             'current_route' => $request->get('_route'),
+            'route_params' => !empty($request->get('_route_params'))
+                ? $request->get('_route_params')
+                : [],
+            'default_route_name' => $defaultRouteName,
+            'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
+                ? $this->container->getParameter('mrapps_backend.logo_path')
+                : null,
+            'languages' => Utils::getLanguages(),
             'title' => $title,
             'panels' => $panels,
             'linkEdit' => $linkEdit,
             'linkNew' => $linkNew,
             'linkBreadcrumb' => $linkBreadcrumb,
-            'languages' => $languages,
             'angular' => '',
         ));
     }
@@ -1104,7 +1088,7 @@ class DefaultController extends Controller
         $returnRoute = trim($returnRoute);
         try {
             $routeUrl = (strlen($returnRoute) > 0) ? $this->generateUrl($returnRoute) : '';
-        }catch(\Exception $e) {
+        } catch (\Exception $e) {
             $routeUrl = '';
         }
 
@@ -1112,8 +1096,19 @@ class DefaultController extends Controller
 
         $permissions = $em->getRepository('MrappsBackendBundle:Permission')->findBy(array('object' => $object));
 
+        $defaultRouteName = $this->getDefaultRouteForUser($request->getUser());
+
         return $this->render('MrappsBackendBundle:Default:permissions.html.twig', array(
-            'title' => "Gestione permessi per l'oggetto '".$object."'",
+            'current_route' => $request->get('_route'),
+            'route_params' => !empty($request->get('_route_params'))
+                ? $request->get('_route_params')
+                : [],
+            'default_route_name' => $defaultRouteName,
+            'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
+                ? $this->container->getParameter('mrapps_backend.logo_path')
+                : null,
+            'languages' => Utils::getLanguages(),
+            'title' => "Gestione permessi per l'oggetto '" . $object . "'",
             'angular' => '"ngTable","ngResource"',
             'permissions' => $permissions,
             'route_url' => $routeUrl,
@@ -1134,9 +1129,9 @@ class DefaultController extends Controller
         $content = json_decode($request->getContent(), true);
 
         $object = (isset($content['object'])) ? trim($content['object']) : '';
-        if(strlen($object) > 0 && isset($content['rows'])) {
+        if (strlen($object) > 0 && isset($content['rows'])) {
 
-            foreach($content['rows'] as $row) {
+            foreach ($content['rows'] as $row) {
 
                 $role = strtoupper(trim($row['role']));
                 $canView = (bool)$row['can_view'];
@@ -1145,7 +1140,7 @@ class DefaultController extends Controller
                 $canDelete = (bool)$row['can_delete'];
 
                 //SuperAdmin avrà sempre permessi massimi
-                if($role == 'ROLE_SUPER_ADMIN') {
+                if ($role == 'ROLE_SUPER_ADMIN') {
                     $canView = true;
                     $canCreate = true;
                     $canEdit = true;
@@ -1165,7 +1160,7 @@ class DefaultController extends Controller
             $success = true;
             $message = '';
 
-        }else {
+        } else {
             $success = false;
             $message = 'Parametri non validi.';
         }
@@ -1184,14 +1179,14 @@ class DefaultController extends Controller
 
         $url = strtolower(trim($request->get('url')));
 
-        if(strlen($url) > 0) {
+        if (strlen($url) > 0) {
 
             $pos = strpos($url, 'facebook.com');
 
-            if($pos !== false) {
+            if ($pos !== false) {
 
-                if(substr($url, 0, 4) != "http") {
-                    $url = 'http://'.$url;
+                if (substr($url, 0, 4) != "http") {
+                    $url = 'http://' . $url;
                 }
 
                 $channel = curl_init();
@@ -1207,24 +1202,32 @@ class DefaultController extends Controller
                 curl_setopt($channel, CURLOPT_SSL_VERIFYPEER, FALSE);
                 curl_setopt($channel, CURLOPT_SSL_VERIFYHOST, FALSE);
                 curl_exec($channel);
-                $httpCode = curl_getinfo($channel, CURLINFO_HTTP_CODE );
+                $httpCode = curl_getinfo($channel, CURLINFO_HTTP_CODE);
                 curl_close($channel);
 
                 $valid = ($httpCode == 200);
             }
-        }else {
+        } else {
             $valid = true;
         }
 
         return new JsonResponse(array('valid' => $valid, 'code' => $httpCode, 'url' => $url));
     }
 
-    public function __calendarAction($title, $calendarAjax, $linkBreadcrumb = null, $calendarNew= null, $calendarDelete= null, $fields = null)
+    public function __calendarAction(Request $request, $title, $calendarAjax, $linkBreadcrumb = null, $calendarNew = null, $calendarDelete = null, $fields = null)
     {
-
-        $em = $this->getDoctrine()->getManager();
+        $defaultRouteName = $this->getDefaultRouteForUser($request->getUser());
 
         return $this->render('MrappsBackendBundle:Default:calendar.html.twig', array(
+            'current_route' => $request->get('_route'),
+            'route_params' => !empty($request->get('_route_params'))
+                ? $request->get('_route_params')
+                : [],
+            'default_route_name' => $defaultRouteName,
+            'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
+                ? $this->container->getParameter('mrapps_backend.logo_path')
+                : null,
+            'languages' => Utils::getLanguages(),
             'title' => $title,
             'calendarAjax' => $calendarAjax,
             'linkBreadcrumb' => $linkBreadcrumb,
