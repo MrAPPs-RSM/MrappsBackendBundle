@@ -46,16 +46,6 @@ fos_user_change_password:
     
 ```
 
-## setup config.yml per usare swicth lingua in twig
-
-```
-twig:
-    debug:            "%kernel.debug%"
-    strict_variables: "%kernel.debug%"
-    globals:
-        mrappsBackendLanguages: "@mrapps.backend.languages"
-```
-
 ##setup config.yml per usare liip_bundle + storage files locale
 
 ```
