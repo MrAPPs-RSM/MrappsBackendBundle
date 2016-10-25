@@ -725,10 +725,10 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/upload/immagine", name="mrapps_backend_uploadimmagine")
+     * @Route("/upload/immagine/{acl}", name="mrapps_backend_uploadimmagine")
      * @Method({"POST"})
      */
-    public function uploadImmagineAction(Request $request)
+    public function uploadImmagineAction(Request $request, $acl = 'public-read')
     {
         $responseLocation = '';
         $responseId = 0;
@@ -764,7 +764,7 @@ class DefaultController extends Controller
                 $s3Path = $s3Key . substr($file->getClientOriginalName(), $position);
 
                 //Upload immagine su s3
-                if (!$s3->objectExists($s3Path)) $s3->uploadObject($s3Path, $filePath);
+                if (!$s3->objectExists($s3Path)) $s3->uploadObject($s3Path, $filePath, $acl);
 
                 //Entity
                 $immagine = $em->getRepository('MrappsBackendBundle:Immagine')->findOneBy(array('url' => $s3Path));
@@ -853,10 +853,10 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/upload/file", name="mrapps_backend_uploadfile")
+     * @Route("/upload/file/{acl}", name="mrapps_backend_uploadfile")
      * @Method({"POST"})
      */
-    public function uploadFileAction(Request $request)
+    public function uploadFileAction(Request $request, $acl = 'public-read')
     {
         $success = false;
         $message = '';
@@ -897,7 +897,7 @@ class DefaultController extends Controller
                 $defaultBucket = $this->container->getParameter('mrapps_amazon.parameters.default_bucket');
 
                 //Upload file su s3
-                if (!$s3->objectExists($url)) $s3->uploadObject($url, $filePath);
+                if (!$s3->objectExists($url)) $s3->uploadObject($url, $filePath, $acl);
 
                 $success = true;
 

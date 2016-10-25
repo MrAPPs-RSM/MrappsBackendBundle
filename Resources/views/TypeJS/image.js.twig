@@ -8,7 +8,11 @@ $scope.{{ field.name }}_url = '';
 {% endif %}
 
 $scope.{{ field.name }} = new FileUploader({
+    {% if field.acl is defined %}
+    url: '{{ path('mrapps_backend_uploadimmagine', {'acl':field.acl}) }}',
+    {% else %}
     url: '{{ path('mrapps_backend_uploadimmagine') }}',
+    {% endif %}
     autoUpload: true,
     queueLimit: 1
 });
