@@ -335,14 +335,14 @@ class Utils
                 }
             }
 
-            if($customWhere !== null) {
+            if ($customWhere !== null) {
                 $tmp[] = $customWhere;
-                if($customParams !== null) {
+                if ($customParams !== null) {
                     $params = array_merge($params, $customParams);
                 }
             }
 
-            if(count($tmp) > 0) {
+            if (count($tmp) > 0) {
                 $where = 'WHERE ' . implode('AND', $tmp);
             }
 
@@ -792,27 +792,20 @@ class Utils
 
     public static function getDefaultRouteForUser($container, $user)
     {
-
         $defaultRoutes = $container->getParameter('mrapps_backend.default_routes');
 
         $roles = ($user !== null && is_object($user)) ? $user->getRoles() : array();
         $roles[] = 'DEFAULT';
 
-        $defaultRouteForUser = '';
-        $canProceed = true;
         foreach ($roles as $role) {
-            if ($canProceed) {
-                foreach ($defaultRoutes as $route) {
-                    if ($route['role'] == $role) {
-                        $defaultRouteForUser = $route['name'];
-                        $canProceed = false;
-                        break;
-                    }
+            foreach ($defaultRoutes as $route) {
+                if ($route['role'] == $role) {
+                    return $route['name'];
                 }
             }
         }
 
-        return $defaultRouteForUser;
+        return '';
     }
 
     public static function convertTimestampToIso8601($timestamp = null)
