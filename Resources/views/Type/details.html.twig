@@ -7,64 +7,65 @@
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 col-lg-offset-2">
                 <div class="panel-heading clearfix">
-
-                        {% if field.disable_add is not defined or field.disable_add==false %}
-                            <button type="button" class="btn btn-labeled btn-success pull-right"
-                                    ng-click="{{ field.name }}AddDetail()">
+                    <div>{{ field.title }}</div>
+                    {% if field.disable_add is not defined or field.disable_add==false %}
+                        <button type="button" class="btn btn-labeled btn-success pull-right"
+                                ng-click="{{ field.name }}AddDetail()">
                                 <span class="btn-label">
                                     <em class="fa fa-plus"></em>
                                 </span>{{ 'form.aggiungi_nuovo'|trans }}
-                            </button>
-                        {% endif %}
-                    </div>
-
-                </div>
-            </div>
-
-
-            <div ng-repeat="detail in form.{{ field.name }}">
-                <div class="panel-heading clearfix mrbackend-sections">
-                    {% for s in field.structure %}
-                        {% if s.visible is not defined or s.visible %}
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">{{ s.title }}{% if s.required is defined and s.required==true %} *{% endif %}</label>
-                                <div class="col-sm-9">
-                                    {% if field.disable_edit is not defined or field.disable_edit==false %}
-                                        {% if s.type=='text' %}
-                                            <input type="text" ng-model="detail.{{ s.name }}" class="form-control">
-                                        {% elseif s.type=='textarea' %}
-                                            <textarea ng-model="detail.{{ s.name }}"
-                                                      class="form-control" {% if s.tinymce is defined and s.tinymce==true %} ui-tinymce="tinymceOptions" {% endif %}></textarea>
-                                        {% endif %}
-                                        <button type="button" class="btn btn-labeled btn-warning"
-                                                ng-show='detail._{{ field.name }}_original.{{ s.name }}!=""&&detail.{{ s.name }}!=detail._{{ field.name }}_original.{{ s.name }}'
-                                                ng-click='{{ field.name }}UndoEditDetail("{{ s.name }}",$index)'>
-                            <span class="btn-label">
-                                <em class="fa fa-undo"></em>
-                            </span>{{ 'form.annulla'|trans }}
-                                        </button>
-                                    {% else %}
-                                        <span>{/ detail.{{ s.name }} /}</span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% else %}
-                            <input type="hidden" ng-model="detail.{{ s.name }}">
-                        {% endif %}
-                    {% endfor %}
-                    {% if field.disable_delete is not defined or field.disable_delete==false %}
-                        <button type="button" class="btn btn-labeled btn-danger"
-                                ng-click='{{ field.name }}DeleteDetail($index)'>
-                    <span class="btn-label">
-                        <em class="fa fa-trash"></em>
-                    </span>{{ 'form.elimina'|trans }}
                         </button>
                     {% endif %}
                 </div>
-            </div>
-            {% if field.max is defined %}
-                <div>Numero di elementi: {/ form.{{ field.name }}.length /}/{{ field.max }}</div>
-            {% endif %}
 
+            </div>
         </div>
+
+
+        <div ng-repeat="detail in form.{{ field.name }}">
+            <div class="panel-heading clearfix mrbackend-sections">
+                {% for s in field.structure %}
+                    {% if s.visible is not defined or s.visible %}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ s.title }}{% if s.required is defined and s.required==true %} *{% endif %}</label>
+                            <div class="col-sm-9">
+                                {% if field.disable_edit is not defined or field.disable_edit==false %}
+                                    {% if s.type=='text' %}
+                                        <input type="text" ng-model="detail.{{ s.name }}" class="form-control">
+                                    {% elseif s.type=='textarea' %}
+                                        <textarea ng-model="detail.{{ s.name }}"
+                                                  class="form-control" {% if s.tinymce is defined and s.tinymce==true %} ui-tinymce="tinymceOptions" {% endif %}></textarea>
+                                    {% endif %}
+                                    <button type="button" class="btn btn-labeled btn-warning"
+                                            ng-show='detail._{{ field.name }}_original.{{ s.name }}!=""&&detail.{{ s.name }}!=detail._{{ field.name }}_original.{{ s.name }}'
+                                            ng-click='{{ field.name }}UndoEditDetail("{{ s.name }}",$index)'>
+
+                            <span class="btn-label">
+                                <em class="fa fa-undo"></em>
+                            </span>{{ 'form.annulla'|trans }}
+                                    </button>
+                                {% else %}
+                                    <span>{/ detail.{{ s.name }} /}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <input type="hidden" ng-model="detail.{{ s.name }}">
+                    {% endif %}
+                {% endfor %}
+                {% if field.disable_delete is not defined or field.disable_delete==false %}
+                    <button type="button" class="btn btn-labeled btn-danger"
+                            ng-click='{{ field.name }}DeleteDetail($index)'>
+                    <span class="btn-label">
+                        <em class="fa fa-trash"></em>
+                    </span>{{ 'form.elimina'|trans }}
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        {% if field.max is defined %}
+            <div>Numero di elementi: {/ form.{{ field.name }}.length /}/{{ field.max }}</div>
+        {% endif %}
+
+    </div>
 </fieldset>
