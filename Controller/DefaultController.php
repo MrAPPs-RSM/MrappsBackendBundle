@@ -416,7 +416,7 @@ class DefaultController extends Controller
         }
 
         $em = $this->getDoctrine()->getManager();
-        $languages = $em->getRepository('MrappsBackendBundle:Language')->findBy(["visible" => true]);
+        $languages = $em->getRepository('MrappsBackendBundle:Language')->getAvailableLanguages();
 
         $locale = $request->getLocale();
 
