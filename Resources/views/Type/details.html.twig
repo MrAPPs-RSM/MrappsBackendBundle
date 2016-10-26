@@ -27,7 +27,6 @@
                         {% elseif s.type=='textarea' %}
                         <textarea ng-model="detail.{{ s.name }}" class="form-control" {% if s.tinymce is defined and s.tinymce==true %} ui-tinymce="tinymceOptions" {% endif %}></textarea>
                         {% endif %}
-                        {% if s.required is defined and s.required==true %}<span ng-show="form.validateInput('{{s.name}}', 'required')" class="text-danger">This field is required</span>{% endif %}
                         <button type="button" class="btn btn-labeled btn-warning"
                                 ng-show='detail._{{field.name}}_original.{{ s.name }}!=""&&detail.{{ s.name }}!=detail._{{field.name}}_original.{{ s.name }}'
                                 ng-click='{{field.name}}UndoEditDetail("{{ s.name }}",$index)'>
