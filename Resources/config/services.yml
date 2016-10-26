@@ -1,5 +1,10 @@
 services:
 
+    mrapps.backend.archive.builder:
+        class: Mrapps\BackendBundle\Services\ArchiveBuilder
+        arguments:
+            - @doctrine.orm.entity_manager
+
     mrapps.backend.merger:
         class: Mrapps\BackendBundle\Services\EntityMerger
         arguments:
@@ -59,7 +64,6 @@ services:
             public: false
             tags:
                 - { name: twig.extension }
-
 
     mrapps.backend.public_url_provider:
             class: Mrapps\BackendBundle\Services\PublicUrlProvider
