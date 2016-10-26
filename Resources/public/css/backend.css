@@ -270,6 +270,15 @@ now {
     line-height: 30px;
 }
 
+.form-control,
+.mce-tinymce.mce-container.mce-panel {
+	margin-bottom: 15px;
+}
+
+[ng-repeat*="detail"]:nth-child(odd) {
+	background-color: rgb(249, 249, 249);
+}
+
 .btn.btn-default {
 	border-color:#eaeaea;
 }
