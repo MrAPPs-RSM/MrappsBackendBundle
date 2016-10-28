@@ -2,31 +2,35 @@
 
 namespace Mrapps\BackendBundle\Responses;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 final class MrResponse
 {
-    private $success;
+    private $attributes;
 
-    private $message;
+    private static $attrToDefault = [
+        'data' => null,
+        'message' => '',
+        'success' => true,
+    ];
 
-    private $data;
-
-    private function __construct()
+    private function __construct(array $params)
     {
+        foreach (static::$attrToDefault as $name => $default) {
+            if (!isset($params[$name]) || $params[$name] == []) {
+                $params[$name] = static::$attrToDefault[$name];
+            }
+        }
+
+        $this->attributes = $params;
     }
 
-    public static function build(array $params)
+    public static function getJsonResponse(array $params)
     {
-        $this->data    = $params['data'];
-        $this->message = $params['message'];
-        $this->success = $params['success'];
-    }
+        $response = new self($params);
 
-    public function getResponse()
-    {
-        return [
-            'success' => $this->success,
-            'data' => $this->data,
-            'message' => $this->message,
-        ];
+        return new JsonResponse(
+            $response->attributes
+        );
     }
 }
