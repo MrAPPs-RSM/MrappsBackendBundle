@@ -11,7 +11,6 @@ final class TextField
         'type',
         'title',
         'required',
-        'value',
         'name',
     ];
 }

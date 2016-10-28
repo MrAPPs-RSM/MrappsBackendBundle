@@ -13,7 +13,6 @@ final class DetailsField
         'title',
         'required',
         'structure',
-        'value',
     ];
     
     /*

@@ -44,9 +44,9 @@
                     {% for column in tableColumns %}
                         {% if column.visible is not defined or column.visible == true %}
                             <td data-title="'{{ column.title }}'"
-                                    {% if column.filterable is defined %}
+                                    {% if column.filterable is defined and column.filterable==true %}
                                         {% set colType= (column.type=='checkbox'?'select':column.type) %}
-                                        filter="{ '{{ column.name }}': '{{ colType }}' }" {% if column.type=='checkbox' or (column.type=='select' and column.filter_options is defined) %} filter-data="{{ column.name }}_filter" {% endif %}{% endif %} {% if column.sortable is defined %}sortable="'{{ column.name }}'"{% endif %} {% if column.clickable is defined %}ng-click="$event.stopPropagation();showChildren(row.id)"
+                                        filter="{ '{{ column.name }}': '{{ colType }}' }" {% if column.type=='checkbox' or (column.type=='select' and column.filter_options is defined) %} filter-data="{{ column.name }}_filter" {% endif %}{% endif %} {% if column.sortable is defined and column.sortable==true %}sortable="'{{ column.name }}'"{% endif %} {% if column.clickable is defined %}ng-click="$event.stopPropagation();showChildren(row.id)"
                             {% endif %}>
                                 {% if column.type == 'image' %}
                                     <img ng-src="{/ row.{{ column.name }} /}">
