@@ -16,6 +16,12 @@ final class MrResponse
 
     private function __construct(array $params)
     {
+        if (isset($params['success'])) {
+            if (false === $params['success']) {
+                $params['success'] = 'false';
+            }
+        }
+
         foreach (static::$attrToDefault as $name => $default) {
             if (!isset($params[$name]) || $params[$name] == []) {
                 $params[$name] = static::$attrToDefault[$name];
