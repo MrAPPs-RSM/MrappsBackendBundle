@@ -169,27 +169,4 @@ class EntityMerger
     {
         return $this->row;
     }
-
-    private function getMergedEntityAsArray(TranslatedEntity $entity)
-    {
-        $locale = $this->get('request_stack')
-            ->getCurrentRequest()
-            ->getLocale();
-
-        $merger = $this->get('mrapps.backend.merger');
-        $merger->setLocale($locale);
-        $merger->initRow();
-        $merger->merge(
-            $entity,
-            $baseFields = [
-                'id' => 'getId',
-            ],
-            $translatedFields = [
-                'name' => 'getName',
-                'logo' => 'getLogo',
-            ]
-        );
-
-        return $merger->getRow();
-    }
 }
