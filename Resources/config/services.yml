@@ -70,4 +70,4 @@ services:
     mrapps.backend.parameters_handler:
                 class: Mrapps\BackendBundle\Services\ParametersHandler
                 calls:
-                    - [setParameterBag, ["@=service('kernel').getContainer().getParameterBag()"]]
+                    - [setParameters, ["@=service('kernel').getContainer().getParameterBag()"]]

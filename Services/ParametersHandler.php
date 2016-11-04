@@ -7,17 +7,17 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ParametersHandler
 {
-    /**@var ParameterBagInterface $parameterBag */
-    private $parameterBag;
+    /**@var ParameterBagInterface $parameters */
+    private $parameters;
 
-    public function setParameterBag(ParameterBagInterface $params)
+    public function setParameters(ParameterBagInterface $params)
     {
-        $this->parameterBag = $params;
+        $this->parameters = $params;
     }
 
     public function getParameter($name)
     {
-        return $this->parameterBag->get($name);
+        return $this->parameters->get($name);
     }
 
     public function bundleExists($bundleName)
