@@ -67,15 +67,20 @@ class PublicUrlProvider
         return $this->baseUrl;
     }
 
+    public function getRelativeUri()
+    {
+        if ($this->parametersHandler->bundleMrappsAmazonExists()) {
+            return str_replace("uploads/", "", $this->file->getRelativePath());
+        }
+
+        return $this->file->getRelativePath();
+    }
+
     public function getUri()
     {
         $this->ensureFileEntityExists();
 
-        if ($this->parametersHandler->bundleMrappsAmazonExists()) {
-            return $this->baseUrl . str_replace("uploads/", "", $this->file->getRelativePath());
-        }
-
-        return $this->baseUrl . $this->file->getRelativePath();
+        return $this->baseUrl . $this->getRelativeUri();
     }
 
     public function getRealPathFromFileEntity()

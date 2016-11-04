@@ -4,6 +4,7 @@ services:
         class: Mrapps\BackendBundle\Services\ArchiveBuilder
         arguments:
             - @doctrine.orm.entity_manager
+            - @mrapps.backend.public_url_provider
 
     mrapps.backend.merger:
         class: Mrapps\BackendBundle\Services\EntityMerger

@@ -3,6 +3,8 @@
 namespace Mrapps\BackendBundle\Services;
 
 use Doctrine\ORM\EntityManager;
+use Mrapps\BackendBundle\Interfaces\FileInterface;
+use Mrapps\BackendBundle\Interfaces\PublicUrlProviderInterface;
 
 class ArchiveBuilder
 {
@@ -14,9 +16,14 @@ class ArchiveBuilder
 
     private $isArchiveCreated = false;
 
-    public function __construct(EntityManager $manager)
-    {
+    private $urlProvider;
+
+    public function __construct(
+        EntityManager $manager,
+        PublicUrlProviderInterface $urlProvider
+    ) {
         $this->manager = $manager;
+        $this->urlProvider = $urlProvider;
         $this->zipArchive = new \ZipArchive();
     }
 
@@ -57,6 +64,20 @@ class ArchiveBuilder
     public function getArchive()
     {
         return $this->zipArchive;
+    }
+
+    public function addFromFileEntity(FileInterface $file)
+    {
+        $this->ensureArchiveNameIsDefined();
+
+        $this->urlProvider->setFileEntity($file);
+
+        $this->zipArchive->addFromString(
+            $this->urlProvider->getRelativeUri(),
+            file_get_contents(
+                $this->urlProvider->getUri() 
+            )
+        );
     }
 
     public function addFromString($fileName, $content)
