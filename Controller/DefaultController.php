@@ -699,7 +699,7 @@ class DefaultController extends Controller
 
     private function getThumbnailUrl($imageUrl = null)
     {
-        if (Utils::bundleLiipExists($this->container)) {
+        if ($this->get('mrapps.backend.parameters_handler')->bundleExists('LiipImagineBundle')) {
 
             return $this->get('liip_imagine.cache.manager')->getBrowserPath($imageUrl, 'backend_thumbnail');
 

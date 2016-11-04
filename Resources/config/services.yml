@@ -65,3 +65,8 @@ services:
             class: Mrapps\BackendBundle\Services\PublicUrlProvider
             arguments:
                 - '@request_stack'
+
+    mrapps.backend.parameters_handler:
+                class: Mrapps\BackendBundle\Services\ParametersHandler
+                calls:
+                    - [setParameterBag, ["@=service('kernel').getContainer().getParameterBag()"]]

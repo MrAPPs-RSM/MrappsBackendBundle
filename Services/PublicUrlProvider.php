@@ -8,15 +8,47 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class PublicUrlProvider
     implements PublicUrlProviderInterface
 {
+
     private $file;
 
+    /**@var RequestStack $requestStack */
     private $requestStack;
 
+    /**@var ParametersHandler $parametersHandler */
+    private $parametersHandler;
+
+    private $baseUrl;
+
     public function __construct(
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        ParametersHandler $parametersHandler
     )
     {
-        $this->requestStack = $requestStack;
+        $this->parametersHandler = $parametersHandler;
+
+        if ($parametersHandler->bundleMrappsAmazonExists()) {
+            if ($parametersHandler->getParameter("mrapps_amazon.cdn.enable")) {
+
+                $this->baseUrl = $parametersHandler->getParameter("mrapps_amazon.cdn.url");
+            } else {
+
+                $this->baseUrl = "https://" . $parametersHandler->getParameter("mrapps_amazon.parameters.default_bucket") . ".s3.amazonaws.com/";
+            }
+        } else {
+            $this->requestStack = $requestStack;
+
+            $request = $requestStack->getCurrentRequest();
+            $this->baseUrl = $request->getSchemeAndHttpHost() . "/";
+        }
+    }
+
+    private function ensureFileEntityExists()
+    {
+        if (!isset($this->file)) {
+            throw new \RuntimeException(
+                'Entity not found!'
+            );
+        }
     }
 
     public function setFileEntity(File $file)
@@ -26,33 +58,23 @@ class PublicUrlProvider
         return $this;
     }
 
+    public function getBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+
     public function getUri()
     {
-        if (!$this->file) {
-            throw new \RuntimeException();
-        }
+        $this->ensureFileEntityExists();
 
-        $request = $this->requestStack->getCurrentRequest();
-        $baseUrl = $request->getSchemeAndHttpHost();
-
-        return $baseUrl . '/'
-        . $this->file->getOriginalName();
+        return $this->baseUrl . $this->file->getOriginalName();
     }
 
-    public function ensureFileEntityExists($file)
+    public function getRealPathFromFileEntity()
     {
-        if (null == $file) {
-            throw new \RuntimeException(
-                'Entity not found!'
-            );
-        }
-    }
+        $this->ensureFileEntityExists();
 
-    public function getRealPathFromFileEntity($file)
-    {
-        $this->ensureFileEntityExists($file);
-
-        $fileName = $file->getOriginalName();
+        $fileName = $this->file->getOriginalName();
         $filePath = __DIR__
             . '/../../../web/'
             . $fileName;

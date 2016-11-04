@@ -5,6 +5,7 @@ namespace Mrapps\BackendBundle\Classes;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Collections\Criteria;
 use Mrapps\BackendBundle\Entity\LanguageBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Mrapps\BackendBundle\Model\DraftInterface;
@@ -75,25 +76,31 @@ class Utils
         return array_reverse($output);
     }
 
-    public static function bundleExists($container = null, $bundleName = '')
+    /**
+     * @deprecated Use mrapps.backend.parameters_handler service
+     * @see mrapps.backend.parameters_handler service
+     */
+    public static function bundleExists(ContainerInterface $container = null, $bundleName = '')
     {
-
-        if ($container !== null && strlen($bundleName) > 0) {
-            $bundles = $container->getParameter('kernel.bundles');
-            return array_key_exists($bundleName, $bundles);
-        }
-
-        return false;
+        return $container->get("mrapps.backend.parameters_handler")->bundleExists($bundleName);
     }
 
+    /**
+     * @deprecated Use mrapps.backend.parameters_handler service
+     * @see mrapps.backend.parameters_handler service
+     */
     public static function bundleMrappsAmazonExists($container = null)
     {
-        return Utils::bundleExists($container, 'MrappsAmazonBundle');
+        return $container->get("mrapps.backend.parameters_handler")->bundleMrappsAmazonExists();
     }
 
+    /**
+     * @deprecated Use mrapps.backend.parameters_handler service
+     * @see mrapps.backend.parameters_handler service
+     */
     public static function bundleLiipExists($container = null)
     {
-        return Utils::bundleExists($container, 'LiipImagineBundle');
+        return $container->get("mrapps.backend.parameters_handler")->bundleExists('LiipImagineBundle');
     }
 
 
