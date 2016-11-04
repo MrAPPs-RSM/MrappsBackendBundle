@@ -2,13 +2,15 @@
 
 namespace Mrapps\BackendBundle\Services;
 
-use Mrapps\BackendBundle\Entity\File;
+use Mrapps\BackendBundle\Interfaces\FileInterface;
+use Mrapps\BackendBundle\Interfaces\PublicUrlProviderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class PublicUrlProvider
     implements PublicUrlProviderInterface
 {
 
+    /**@var FileInterface $file */
     private $file;
 
     /**@var RequestStack $requestStack */
@@ -44,14 +46,16 @@ class PublicUrlProvider
 
     private function ensureFileEntityExists()
     {
-        if (!isset($this->file)) {
+        if (!isset($this->file)
+            || !$this->file instanceof FileInterface
+        ) {
             throw new \RuntimeException(
-                'Entity not found!'
+                'Entity not found or Invalid!'
             );
         }
     }
 
-    public function setFileEntity(File $file)
+    public function setFileEntity(FileInterface $file)
     {
         $this->file = $file;
 
@@ -67,7 +71,11 @@ class PublicUrlProvider
     {
         $this->ensureFileEntityExists();
 
-        return $this->baseUrl . $this->file->getOriginalName();
+        if ($this->parametersHandler->bundleMrappsAmazonExists()) {
+            return $this->baseUrl . str_replace("uploads/", "", $this->file->getRelativePath());
+        }
+
+        return $this->baseUrl . $this->file->getRelativePath();
     }
 
     public function getRealPathFromFileEntity()

@@ -31,55 +31,6 @@ class PublicUrlProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testWheneverEntityIsMissedUriRequestThrowAnException()
-    {
-        $this->request->expects($this->once())
-            ->method('getSchemeAndHttpHost')
-            ->will($this->returnValue('http://erbozeta.accentratore'));
-        $this->requestStack->expects($this->once())
-            ->method('getCurrentRequest')
-            ->will($this->returnValue($this->request));
-
-        $this->urlProvider = new PublicUrlProvider(
-            $this->requestStack,
-            $this->parametersHandler
-        );
-
-        $this->urlProvider->getUri();
-    }
-
-    public function testProvidePublicUriOfFiles()
-    {
-        $this->request->expects($this->once())
-            ->method('getSchemeAndHttpHost')
-            ->will($this->returnValue('http://erbozeta.accentratore'));
-        $this->requestStack->expects($this->once())
-            ->method('getCurrentRequest')
-            ->will($this->returnValue($this->request));
-
-        $this->urlProvider = new PublicUrlProvider(
-            $this->requestStack,
-            $this->parametersHandler
-        );
-
-        $this->file = $this
-            ->getMockBuilder('Mrapps\BackendBundle\Entity\File')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->file->expects($this->once())
-            ->method('getOriginalName')
-            ->will($this->returnValue('uploads/mrapps_backend_files/2f321da97661432d55a8f42dd1a727888c3f902b.jpg'));
-
-        $this->assertSame(
-            'http://erbozeta.accentratore/uploads/mrapps_backend_files/2f321da97661432d55a8f42dd1a727888c3f902b.jpg',
-            $this->urlProvider
-                ->setFileEntity($this->file)
-                ->getUri()
-        );
-    }
 
     public function testBaseUrlWhenAmazonBundleNotEnableReturnDomain()
     {
@@ -101,7 +52,6 @@ class PublicUrlProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('http://erbozeta.accentratore/', $this->urlProvider->getBaseUrl());
     }
-
 
     public function testBaseUrlWhenAmazonBundleEnableReturnAwsDomain()
     {
@@ -127,12 +77,6 @@ class PublicUrlProviderTest extends \PHPUnit_Framework_TestCase
                     return "erbozeta";
                 }
             });
-
-        /*
-        ->willReturnOnConsecutiveCalls(
-            false,
-            "erbozeta"
-        );*/
 
         $requestStack = $this
             ->getMockBuilder('Symfony\Component\HttpFoundation\RequestStack')
@@ -181,5 +125,99 @@ class PublicUrlProviderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals('http://static.erbozeta.com/', $this->urlProvider->getBaseUrl());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testWheneverEntityIsMissedUriRequestThrowAnException()
+    {
+        $this->request->expects($this->once())
+            ->method('getSchemeAndHttpHost')
+            ->will($this->returnValue('http://erbozeta.accentratore'));
+        $this->requestStack->expects($this->once())
+            ->method('getCurrentRequest')
+            ->will($this->returnValue($this->request));
+
+        $this->urlProvider = new PublicUrlProvider(
+            $this->requestStack,
+            $this->parametersHandler
+        );
+
+        $this->urlProvider->getUri();
+    }
+
+    public function testProvidePublicUriOfFiles()
+    {
+        $this->request->expects($this->once())
+            ->method('getSchemeAndHttpHost')
+            ->will($this->returnValue('http://erbozeta.accentratore'));
+        $this->requestStack->expects($this->once())
+            ->method('getCurrentRequest')
+            ->will($this->returnValue($this->request));
+
+        $this->urlProvider = new PublicUrlProvider(
+            $this->requestStack,
+            $this->parametersHandler
+        );
+
+        $this->file = $this
+            ->getMockBuilder('Mrapps\BackendBundle\Entity\File')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->file->expects($this->once())
+            ->method('getRelativePath')
+            ->will($this->returnValue('uploads/mrapps_backend_files/2f321da97661432d55a8f42dd1a727888c3f902b.jpg'));
+
+        $this->assertSame(
+            'http://erbozeta.accentratore/uploads/mrapps_backend_files/2f321da97661432d55a8f42dd1a727888c3f902b.jpg',
+            $this->urlProvider
+                ->setFileEntity($this->file)
+                ->getUri()
+        );
+    }
+
+    public function testProvidePublicUriOfImagesWhenAmazonBundleEnable()
+    {
+        $this->parametersHandler->expects($this->exactly(2))
+            ->method("bundleMrappsAmazonExists")
+            ->willReturn(true);
+
+
+        $this->parametersHandler
+            ->expects($this->exactly(2))
+            ->method("getParameter")
+            ->withConsecutive(
+                $this->equalTo("mrapps_amazon.cdn.enable"),
+                $this->equalTo("mrapps_amazon.parameters.default_bucket")
+            )
+            ->willReturnCallback(function ($parameter) {
+                if ($parameter == "mrapps_amazon.cdn.enable") {
+                    return false;
+                } else {
+                    return "erbozeta";
+                }
+            });
+
+
+        $this->urlProvider = new PublicUrlProvider(
+            $this->requestStack,
+            $this->parametersHandler
+        );
+
+        $this->file = $this
+            ->getMockBuilder('Mrapps\BackendBundle\Entity\Immagine')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->file->expects($this->once())
+            ->method('getRelativePath')
+            ->will($this->returnValue('uploads/mrapps_backend_images/65bc9c632702c1a60639718c02a2b1629536ba43.png'));
+
+        $this->assertSame(
+            'https://erbozeta.s3.amazonaws.com/mrapps_backend_images/65bc9c632702c1a60639718c02a2b1629536ba43.png',
+            $this->urlProvider
+                ->setFileEntity($this->file)
+                ->getUri()
+        );
     }
 }
