@@ -3,13 +3,14 @@
 namespace Mrapps\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Mrapps\BackendBundle\Interfaces\FileInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="Mrapps\BackendBundle\Repository\FileRepository")
  * @ORM\Table(name="mrapps_backend_files")
  */
-class File extends Base
+class File extends Base implements FileInterface
 {
     /**
      * @ORM\Column(name="s3_key", type="string", length=1000)
@@ -133,5 +134,10 @@ class File extends Base
     public function getS3Key()
     {
         return $this->s3Key;
+    }
+
+    public function getRelativePath()
+    {
+        return $this->getS3Key();
     }
 }

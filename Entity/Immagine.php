@@ -3,6 +3,7 @@
 namespace Mrapps\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Mrapps\BackendBundle\Interfaces\FileInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -10,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="mrapps_backend_images")
  */
 class Immagine extends Base
-    implements \JsonSerializable
+    implements \JsonSerializable, FileInterface
 {
     /**
      * @ORM\Column(name="url", type="string", length=254, nullable=false)
@@ -34,7 +35,7 @@ class Immagine extends Base
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -46,5 +47,10 @@ class Immagine extends Base
         return [
             'url' => $this->getUrl()
         ];
+    }
+
+    public function getRelativePath()
+    {
+        return $this->getUrl();
     }
 }

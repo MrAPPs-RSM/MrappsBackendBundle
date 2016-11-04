@@ -59,3 +59,15 @@ services:
             public: false
             tags:
                 - { name: twig.extension }
+
+
+    mrapps.backend.public_url_provider:
+            class: Mrapps\BackendBundle\Services\PublicUrlProvider
+            arguments:
+                - '@request_stack'
+                - '@mrapps.backend.parameters_handler'
+
+    mrapps.backend.parameters_handler:
+                class: Mrapps\BackendBundle\Services\ParametersHandler
+                calls:
+                    - [setParameters, ["@=service('kernel').getContainer().getParameterBag()"]]

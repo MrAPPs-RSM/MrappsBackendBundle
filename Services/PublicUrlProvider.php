@@ -1,0 +1,99 @@
+<?php
+
+namespace Mrapps\BackendBundle\Services;
+
+use Mrapps\BackendBundle\Interfaces\FileInterface;
+use Mrapps\BackendBundle\Interfaces\PublicUrlProviderInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+
+class PublicUrlProvider
+    implements PublicUrlProviderInterface
+{
+
+    /**@var FileInterface $file */
+    private $file;
+
+    /**@var RequestStack $requestStack */
+    private $requestStack;
+
+    /**@var ParametersHandler $parametersHandler */
+    private $parametersHandler;
+
+    private $baseUrl;
+
+    public function __construct(
+        RequestStack $requestStack,
+        ParametersHandler $parametersHandler
+    )
+    {
+        $this->parametersHandler = $parametersHandler;
+
+        if ($parametersHandler->bundleMrappsAmazonExists()) {
+            if ($parametersHandler->getParameter("mrapps_amazon.cdn.enable")) {
+
+                $this->baseUrl = $parametersHandler->getParameter("mrapps_amazon.cdn.url");
+            } else {
+
+                $this->baseUrl = "https://" . $parametersHandler->getParameter("mrapps_amazon.parameters.default_bucket") . ".s3.amazonaws.com/";
+            }
+        } else {
+            $this->requestStack = $requestStack;
+
+            $request = $requestStack->getCurrentRequest();
+            $this->baseUrl = $request->getSchemeAndHttpHost() . "/";
+        }
+    }
+
+    private function ensureFileEntityExists()
+    {
+        if (!isset($this->file)
+            || !$this->file instanceof FileInterface
+        ) {
+            throw new \RuntimeException(
+                'Entity not found or Invalid!'
+            );
+        }
+    }
+
+    public function setFileEntity(FileInterface $file)
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    public function getBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+
+    public function getUri()
+    {
+        $this->ensureFileEntityExists();
+
+        if ($this->parametersHandler->bundleMrappsAmazonExists()) {
+            return $this->baseUrl . str_replace("uploads/", "", $this->file->getRelativePath());
+        }
+
+        return $this->baseUrl . $this->file->getRelativePath();
+    }
+
+    public function getRealPathFromFileEntity()
+    {
+        $this->ensureFileEntityExists();
+
+        $fileName = $this->file->getOriginalName();
+        $filePath = __DIR__
+            . '/../../../web/'
+            . $fileName;
+        $realPath = realpath($filePath);
+
+        if (false === $realPath) {
+            throw new \RuntimeException(
+                'File ' . $filePath . ' not found!'
+            );
+        }
+
+        return $realPath;
+    }
+}
