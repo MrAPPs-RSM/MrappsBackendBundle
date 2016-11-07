@@ -14,7 +14,8 @@ class Translator
 
     public function __construct(
         EntityManager $manager
-    ) {
+    )
+    {
         $this->manager = $manager;
     }
 
@@ -28,12 +29,12 @@ class Translator
                 'isoCode' => $this->locale,
             ]);
     }
-    
+
     public function getManager()
     {
         return $this->manager;
     }
-    
+
     public function getTranslation(TranslatedEntity $entity)
     {
         if (!isset($this->locale)) {
@@ -48,11 +49,18 @@ class Translator
             );
         }
 
-        $parts = explode('_',str_replace('\\', '_', get_class($entity)));
-        $unifiedEntidyIdentifier = "$parts[0]:$parts[2]";
+        $className = get_class($entity);
+
+        if (strpos($className, 'Proxies') !== false) {
+            $proxyClassName = get_class($entity);
+            $className = $this->manager->getClassMetadata($proxyClassName)->rootEntityName;
+        }
+
+        $parts = explode('_', str_replace('\\', '_', $className));
+        $unifiedEntityIdentifier = "$parts[0]:$parts[2]";
 
         $translatedEntity = $this->manager
-            ->getRepository($unifiedEntidyIdentifier . 'Lang')
+            ->getRepository($unifiedEntityIdentifier . 'Lang')
             ->findOneBy([
                 'padre' => $entity,
                 'lang' => $this->language,
@@ -63,7 +71,7 @@ class Translator
                 'Translation not found for '
                 . get_class($entity) . ' entity '
                 . ' with id ' . $entity->getId()
-                . ' in language ' . ($this->language!==null?$this->language->getIsoCode():'')
+                . ' in language ' . ($this->language !== null ? $this->language->getIsoCode() : '')
             );
         }
 
