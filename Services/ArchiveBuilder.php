@@ -21,16 +21,21 @@ class ArchiveBuilder
 
     private $kernel;
 
+    private $amazon;
+
     public function __construct(
         EntityManager $manager,
         PublicUrlProviderInterface $urlProvider,
-        \AppKernel $kernel,
-        S3Handler $amazon
+        \AppKernel $kerne
     ) {
         $this->manager = $manager;
         $this->urlProvider = $urlProvider;
         $this->zipArchive = new \ZipArchive();
         $this->kernel = $kernel;
+    }
+
+    public function setAmazonS3Service(S3Handler $amazon)
+    {
         $this->amazon = $amazon;
     }
 
@@ -79,27 +84,38 @@ class ArchiveBuilder
 
         $this->urlProvider->setFileEntity($file);
 
-        $amazonProtectedUrl = $this->amazon->getObjectUrlWithExpire(
-            $file->getAmazonS3Key(),
-            '+10 minutes'
+        $this->zipArchive->addFromString(
+            $this->urlProvider->getRelativeUri(),
+            $this->getFileContent($file)
         );
+    }
 
-        $amazonContent = @file_get_contents(
-            $amazonProtectedUrl
-        );
+    private function getFileContent(FileInterface $file)
+    {
+        if ($this->amazon) {
+            $amazonProtectedUrl = $this->amazon->getObjectUrlWithExpire(
+                $file->getAmazonS3Key(),
+                '+10 minutes'
+            );
 
-        if (!$amazonContent) {
-            $localContent = @file_get_contents(
+            $fileContent = @file_get_contents(
+                $amazonProtectedUrl
+            );
+        } else {
+            $fileContent = @file_get_contents(
                 $this->kernel->getRootDir()
                 . '/../web/uploads/'
                 . $this->urlProvider->getRelativeUri()
             );
         }
 
-        $this->zipArchive->addFromString(
-            $this->urlProvider->getRelativeUri(),
-            null != $amazonContent ? $amazonContent : $localContent
-        );
+        if (!$fileContent) {
+            throw new \RuntimeException(
+                'I cant get file content'
+            );
+        }
+
+        return $fileContent;
     }
 
     public function addFromString($fileName, $content)

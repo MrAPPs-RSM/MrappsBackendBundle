@@ -6,7 +6,6 @@ services:
             - @doctrine.orm.entity_manager
             - @mrapps.backend.public_url_provider
             - @kernel
-            - @mrapps.amazon.s3
 
     mrapps.backend.merger:
         class: Mrapps\BackendBundle\Services\EntityMerger
