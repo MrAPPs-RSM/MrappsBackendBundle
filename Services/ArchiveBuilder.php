@@ -26,7 +26,7 @@ class ArchiveBuilder
     public function __construct(
         EntityManager $manager,
         PublicUrlProviderInterface $urlProvider,
-        \AppKernel $kerne
+        \AppKernel $kernel
     ) {
         $this->manager = $manager;
         $this->urlProvider = $urlProvider;
