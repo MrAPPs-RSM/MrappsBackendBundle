@@ -5,6 +5,7 @@ namespace Mrapps\BackendBundle\Services;
 use Doctrine\ORM\EntityManager;
 use Mrapps\BackendBundle\Interfaces\FileInterface;
 use Mrapps\BackendBundle\Interfaces\PublicUrlProviderInterface;
+use Mrapps\AmazonBundle\Handler\S3Handler;
 
 class ArchiveBuilder
 {
@@ -18,13 +19,19 @@ class ArchiveBuilder
 
     private $urlProvider;
 
+    private $kernel;
+
     public function __construct(
         EntityManager $manager,
-        PublicUrlProviderInterface $urlProvider
+        PublicUrlProviderInterface $urlProvider,
+        \AppKernel $kernel,
+        S3Handler $amazon
     ) {
         $this->manager = $manager;
         $this->urlProvider = $urlProvider;
         $this->zipArchive = new \ZipArchive();
+        $this->kernel = $kernel;
+        $this->amazon = $amazon;
     }
 
     public function setArchiveName($archiveName)
@@ -72,11 +79,26 @@ class ArchiveBuilder
 
         $this->urlProvider->setFileEntity($file);
 
+        $amazonProtectedUrl = $this->amazon->getObjectUrlWithExpire(
+            $file->getAmazonS3Key(),
+            '+10 minutes'
+        );
+
+        $amazonContent = @file_get_contents(
+            $amazonProtectedUrl
+        );
+
+        if (!$amazonContent) {
+            $localContent = @file_get_contents(
+                $this->kernel->getRootDir()
+                . '/../web/uploads/'
+                . $this->urlProvider->getRelativeUri()
+            );
+        }
+
         $this->zipArchive->addFromString(
             $this->urlProvider->getRelativeUri(),
-            file_get_contents(
-                $this->urlProvider->getUri() 
-            )
+            null != $amazonContent ? $amazonContent : $localContent
         );
     }
 

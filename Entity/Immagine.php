@@ -53,4 +53,9 @@ class Immagine extends Base
     {
         return $this->getUrl();
     }
+
+    public function getAmazonS3Key()
+    {
+        return $this->getUrl();
+    }
 }

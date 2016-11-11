@@ -24,21 +24,16 @@ class PublicUrlProvider
     public function __construct(
         RequestStack $requestStack,
         ParametersHandler $parametersHandler
-    )
-    {
+    ) {
         $this->parametersHandler = $parametersHandler;
-
         if ($parametersHandler->bundleMrappsAmazonExists()) {
             if ($parametersHandler->getParameter("mrapps_amazon.cdn.enable")) {
-
                 $this->baseUrl = $parametersHandler->getParameter("mrapps_amazon.cdn.url");
             } else {
-
                 $this->baseUrl = "https://" . $parametersHandler->getParameter("mrapps_amazon.parameters.default_bucket") . ".s3.amazonaws.com/";
             }
         } else {
             $this->requestStack = $requestStack;
-
             $request = $requestStack->getCurrentRequest();
             $this->baseUrl = $request->getSchemeAndHttpHost() . "/";
         }
