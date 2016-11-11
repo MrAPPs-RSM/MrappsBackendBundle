@@ -140,4 +140,9 @@ class File extends Base implements FileInterface
     {
         return $this->getS3Key();
     }
+
+    public function getAmazonS3Key()
+    {
+        return $this->getS3Key();
+    }
 }
