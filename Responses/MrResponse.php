@@ -39,4 +39,13 @@ final class MrResponse
             $response->attributes
         );
     }
+    
+    public static function withDefaultParams($success, array $data = null, $message = '')
+    {
+        return static::getJsonResponse([
+            "data" => $data,
+            "success" => $success,
+            "message" => $message,
+        ]);
+    }
 }
