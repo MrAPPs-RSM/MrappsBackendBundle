@@ -16,14 +16,8 @@ final class MrResponse
 
     private function __construct(array $params)
     {
-        if (isset($params['success'])) {
-            if (false === $params['success']) {
-                $params['success'] = 'false';
-            }
-        }
-
         foreach (static::$attrToDefault as $name => $default) {
-            if (!isset($params[$name]) || $params[$name] == []) {
+            if (!isset($params[$name])) {
                 $params[$name] = static::$attrToDefault[$name];
             }
         }
@@ -39,7 +33,7 @@ final class MrResponse
             $response->attributes
         );
     }
-    
+
     public static function withDefaultParams($success, array $data = null, $message = '')
     {
         return static::getJsonResponse([
