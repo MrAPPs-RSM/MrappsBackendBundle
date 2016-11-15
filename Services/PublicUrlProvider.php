@@ -35,7 +35,11 @@ class PublicUrlProvider
             if ($parametersHandler->getParameter("mrapps_amazon.cdn.enable")) {
                 $this->baseUrl = $parametersHandler->getParameter("mrapps_amazon.cdn.url");
             } else {
-                $this->baseUrl = "https://" . $parametersHandler->getParameter("mrapps_amazon.parameters.default_bucket") . ".s3.amazonaws.com/";
+                $this->baseUrl = "https://s3-" .
+                    $parametersHandler->getParameter("mrapps_amazon.parameters.amazon_region") .
+                    ".amazonaws.com/" .
+                    $parametersHandler->getParameter("mrapps_amazon.parameters.default_bucket")
+                    . "/";
             }
         } else {
             $this->requestStack = $requestStack;
