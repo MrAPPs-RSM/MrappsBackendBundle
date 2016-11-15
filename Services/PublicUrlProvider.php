@@ -6,6 +6,10 @@ use Mrapps\BackendBundle\Interfaces\FileInterface;
 use Mrapps\BackendBundle\Interfaces\PublicUrlProviderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+use Gaufrette\Filesystem;
+use Gaufrette\Adapter\Local as LocalAdapter;
+use Gaufrette\Adapter\AwsS3 as AwsAdapter;
+
 class PublicUrlProvider
     implements PublicUrlProviderInterface
 {
@@ -24,7 +28,8 @@ class PublicUrlProvider
     public function __construct(
         RequestStack $requestStack,
         ParametersHandler $parametersHandler
-    ) {
+    )
+    {
         $this->parametersHandler = $parametersHandler;
         if ($parametersHandler->bundleMrappsAmazonExists()) {
             if ($parametersHandler->getParameter("mrapps_amazon.cdn.enable")) {
