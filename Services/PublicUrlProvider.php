@@ -36,7 +36,7 @@ class PublicUrlProvider
                 $this->baseUrl = $parametersHandler->getParameter("mrapps_amazon.cdn.url");
             } else {
                 $this->baseUrl = "https://s3-" .
-                    $parametersHandler->getParameter("mrapps_amazon.parameters.amazon_region") .
+                    $parametersHandler->getParameter("mrapps_amazon.parameters.region") .
                     ".amazonaws.com/" .
                     $parametersHandler->getParameter("mrapps_amazon.parameters.default_bucket")
                     . "/";
