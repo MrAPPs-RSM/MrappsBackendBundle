@@ -6,7 +6,6 @@ use Mrapps\BackendBundle\Exception\TranslationNotFoundException;
 use Mrapps\BackendBundle\Interfaces\FileInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Doctrine\ORM\EntityManager;
 
 class EntityMerger
 {
@@ -79,6 +78,20 @@ class EntityMerger
         $this->row = [];
     }
 
+    private function getValueFromEntityAccessor($entity, $accessor)
+    {
+        $valueAccessor = $entity->$accessor();
+
+        if ($valueAccessor instanceof FileInterface) {
+            return isset($valueAccessor) ?
+                $this->publicUrlProvider->setFileEntity($valueAccessor)
+                    ->getUri()
+                : null;
+        }
+
+        return $valueAccessor;
+    }
+
     public function merge($entity, $normalFields, $transFields)
     {
 
@@ -94,23 +107,13 @@ class EntityMerger
     private function mergeNormalFields($entity, $index, $normalFields)
     {
         foreach ($normalFields as $attribute => $accessor) {
-
-            $value = $entity->$accessor();
-
-            if ($value instanceof FileInterface) {
-                $this->row[$index][$attribute] = isset($value) ?
-                    $this->publicUrlProvider->setFileEntity($value)
-                        ->getUri()
-                    : null;
-            } else {
-                $this->row[$index][$attribute] = $value;
-            }
+            $this->row[$index][$attribute] = $this->getValueFromEntityAccessor($entity, $accessor);
         }
     }
 
+
     private function mergeTransFields($entity, $index, $transFields, $overrideLocale = null)
     {
-
         $locale = (null === $overrideLocale) ? $this->defaultLocale : $overrideLocale;
 
         $this->setLocale($locale);
@@ -132,10 +135,13 @@ class EntityMerger
 
         foreach ($transFields as $attribute => $accessor) {
             if (is_string($accessor)) {
+
+                $value = $this->getValueFromEntityAccessor($translatedEntity, $accessor);
+
                 if (null !== $overrideLocale) {
-                    $this->row[$index]['_languages'][$locale][$attribute] = $translatedEntity->$accessor();
+                    $this->row[$index]['_languages'][$locale][$attribute] = $value;
                 } else {
-                    $this->row[$index][$attribute] = $translatedEntity->$accessor();
+                    $this->row[$index][$attribute] = $value;
                 }
 
             } else {
@@ -145,10 +151,13 @@ class EntityMerger
                 foreach ($roles as $role) {
                     if (isset($accessor[$role->getRole()])) {
                         $grantedAccessor = $accessor[$role->getRole()];
+
+                        $value = $this->getValueFromEntityAccessor($translatedEntity, $grantedAccessor);
+
                         if (null !== $overrideLocale) {
-                            $this->row[$index]['_languages'][$locale][$attribute] = $translatedEntity->$grantedAccessor();
+                            $this->row[$index]['_languages'][$locale][$attribute] = $value;
                         } else {
-                            $this->row[$index][$attribute] = $translatedEntity->$grantedAccessor();
+                            $this->row[$index][$attribute] = $value;
                         }
                         $grantedAccessorFound = true;
                     }
@@ -157,10 +166,13 @@ class EntityMerger
                 if ($grantedAccessorFound == false) {
                     if (isset($accessor['*'])) {
                         $grantedAccessor = $accessor['*'];
+
+                        $value = $this->getValueFromEntityAccessor($translatedEntity, $grantedAccessor);
+
                         if (null !== $overrideLocale) {
-                            $this->row[$index]['_languages'][$locale][$attribute] = $translatedEntity->$grantedAccessor();
+                            $this->row[$index]['_languages'][$locale][$attribute] = $value;
                         } else {
-                            $this->row[$index][$attribute] = $translatedEntity->$grantedAccessor();
+                            $this->row[$index][$attribute] = $value;
                         }
                     }
                 }
@@ -182,28 +194,5 @@ class EntityMerger
     public function getRow()
     {
         return $this->row;
-    }
-
-    private function getMergedEntityAsArray(TranslatedEntity $entity)
-    {
-        $locale = $this->get('request_stack')
-            ->getCurrentRequest()
-            ->getLocale();
-
-        $merger = $this->get('mrapps.backend.merger');
-        $merger->setLocale($locale);
-        $merger->initRow();
-        $merger->merge(
-            $entity,
-            $baseFields = [
-                'id' => 'getId',
-            ],
-            $translatedFields = [
-                'name' => 'getName',
-                'logo' => 'getLogo',
-            ]
-        );
-
-        return $merger->getRow();
     }
 }
