@@ -312,6 +312,7 @@ class Utils
 
                         if ($operator == Operator::GreaterOrEqual ||
                             $operator == Operator::Equal ||
+                            $operator == Operator::NotEqual ||
                             $operator == Operator::Greater ||
                             $operator == Operator::Lower ||
                             $operator == Operator::LowerOrEqual
@@ -322,9 +323,9 @@ class Utils
                         } elseif ($operator == Operator::IsNull ||
                             $operator == Operator::IsNotNull
                         ) {
-                            $tmp[] = sprintf(" a.%s " . $operator, $campo);
+                            $tmp[] = sprintf(" a.%s %s ",$campo, $operator);
 
-                        } elseif ($operator == Operator::In) {
+                        } elseif ($operator == Operator::In || $operator == Operator::NotIn) {
                             $tmp[] = sprintf(" a.%s %s (?%s) ", $campo, $operator, $inCount);
                             $params[$inCount] = $valore['value'];
                             $inCount++;

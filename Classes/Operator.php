@@ -5,6 +5,7 @@ namespace Mrapps\BackendBundle\Classes;
 class Operator
 {
     const Equal = "=";
+    const NotEqual = "!=";
     const GreaterOrEqual = ">=";
     const LowerOrEqual = "<=";
     const Lower = "<";
@@ -12,5 +13,6 @@ class Operator
     const IsNull = "IS NULL";
     const IsNotNull = "IS NOT NULL";
     const In = "IN";
+    const NotIn = "NOT IN";
     const InSubquery = "INSUBQUERY";
 }
