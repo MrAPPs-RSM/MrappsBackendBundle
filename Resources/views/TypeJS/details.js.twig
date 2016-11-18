@@ -80,32 +80,6 @@ $scope.{{field.name}}DeleteDetail = function(i) {
             {% for opt in s.options %}
                 $scope.{{ field.name }}_{{ s.name }}_Items.push({{ opt|json_encode()|raw }});
             {% endfor %}
-        {% elseif s.type=='date' %}
-            {#$scope.{{ field.name }}_{{s.name}}_dpOpened = false;
-            $scope.{{ field.name }}_{{s.name}}_dpOpen = function ($event) {
-                $event.preventDefault();
-                $event.stopPropagation();
-                $scope.{{ field.name }}_{{s.name}}_dpOpened = true;
-            };
-            $scope.{{ field.name }}_{{s.name}}_dpOptions = {
-                startingDay: 1
-            };
-
-            $scope.{{ field.name }}_{{s.name}}_modelToView = function () {
-                var date_{{ field.name }}_{{s.name}}_tzOffset = $scope.form.{{ field.name }}_{{s.name}}.getTimezoneOffset();
-                var date_{{ field.name }}_{{s.name}}_newTs = $scope.form.{{ field.name }}_{{s.name}}.getTime()+(date_{{ field.name }}_{{s.name}}_tzOffset*60000);
-                $scope.form.{{ field.name }}_{{s.name}}_view = new Date(date_{{ field.name }}_{{s.name}}_newTs);
-            }
-
-            $scope.{{ field.name }}_{{s.name}}_viewToModel = function () {
-                var date_{{ field.name }}_{{s.name}}_tzOffset = $scope.form.{{ field.name }}_{{s.name}}_view.getTimezoneOffset();
-                var date_{{ field.name }}_{{s.name}}_newTs = $scope.form.{{ field.name }}_{{s.name}}_view.getTime()-(date_{{ field.name }}_{{s.name}}_tzOffset*60000);
-                $scope.form.{{ field.name }}_{{s.name}} = new Date(date_{{ field.name }}_{{s.name}}_newTs);
-            }
-
-            $scope.{{field.name}}_onChange = function() {
-                $scope.{{ field.name }}_{{s.name}}_viewToModel();
-            };#}
         {% endif %}
     {% endif %}
 {% endfor %}

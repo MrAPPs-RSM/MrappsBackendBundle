@@ -47,14 +47,7 @@
                                             </ui-select-choices>
                                         </ui-select>
                                     {% elseif s.type=='date' %}
-                                        {#<div>{/{{ field.name }}_{{s.name}}_dpOpened/}</div>
-                                        
-                                        <input type="text" class="form-control" datepicker-popup="{{s.format}}" ng-click="{{field.name}}_{{s.name}}_dpOpen($event)" ng-change="{{field.name}}_{{s.name}}_onChange()"
-                                            ng-model="detail.{{ s.name }}" is-open="{{field.name}}_{{s.name}}_dpOpened" datepicker-options="{{field.name}}_{{s.name}}_dpOptions" show-button-bar="false"
-                                         />
-                                         <span class="input-group-btn">
-                                             <button type="button" class="btn btn-default btn-form" ng-click="{{field.name}}_{{s.name}}_dpOpen($event)"><i class="fa fa-calendar"></i></button>
-                                         </span>#}
+                                        <input type="text" class="form-control" placeholder="__/__/____" ng-model="detail.{{ s.name }}" mask="39/19/2999" />
                                     {% endif %}
                                     <div ng-show='detail._{{ field.name }}_original.{{ s.name }}!=""&&detail.{{ s.name }}!=detail._{{ field.name }}_original.{{ s.name }}'>
                                         <button type="button" class="btn btn-labeled btn-warning pull-right"

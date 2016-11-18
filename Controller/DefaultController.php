@@ -604,7 +604,7 @@ class DefaultController extends Controller
             'confirmSave' => $confirmSave,
             'images_url' => $imagesUrl,
             'confirmMessages' => $confirmMessages,
-            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps","ui.utils.masks"',
+            'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps","ui.utils.masks","ngMask"',
         ));
     }
 
