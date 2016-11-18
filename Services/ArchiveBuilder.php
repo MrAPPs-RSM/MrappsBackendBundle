@@ -44,6 +44,11 @@ class ArchiveBuilder
         $this->archiveName = $archiveName;
     }
 
+    public function getArchiveName()
+    {
+        return $this->archiveName;
+    }
+
     private function ensureArchiveNameIsDefined()
     {
         if (!$this->archiveName) {
