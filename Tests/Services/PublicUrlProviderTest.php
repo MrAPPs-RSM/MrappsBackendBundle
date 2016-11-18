@@ -64,15 +64,18 @@ class PublicUrlProviderTest extends \PHPUnit_Framework_TestCase
 
 
         $this->parametersHandler
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method("getParameter")
             ->withConsecutive(
                 $this->equalTo("mrapps_amazon.cdn.enable"),
+                $this->equalTo("mrapps_amazon.parameters.region"),
                 $this->equalTo("mrapps_amazon.parameters.default_bucket")
             )
             ->willReturnCallback(function ($parameter) {
                 if ($parameter == "mrapps_amazon.cdn.enable") {
                     return false;
+                } else if ($parameter == "mrapps_amazon.parameters.region") {
+                    return "eu-west-1";
                 } else {
                     return "erbozeta";
                 }
@@ -88,7 +91,7 @@ class PublicUrlProviderTest extends \PHPUnit_Framework_TestCase
             $this->parametersHandler
         );
 
-        $this->assertEquals('https://erbozeta.s3.amazonaws.com/', $this->urlProvider->getBaseUrl());
+        $this->assertEquals('https://s3-eu-west-1.amazonaws.com/erbozeta/', $this->urlProvider->getBaseUrl());
     }
 
 
@@ -185,15 +188,18 @@ class PublicUrlProviderTest extends \PHPUnit_Framework_TestCase
 
 
         $this->parametersHandler
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method("getParameter")
             ->withConsecutive(
                 $this->equalTo("mrapps_amazon.cdn.enable"),
+                $this->equalTo("mrapps_amazon.parameters.region"),
                 $this->equalTo("mrapps_amazon.parameters.default_bucket")
             )
             ->willReturnCallback(function ($parameter) {
                 if ($parameter == "mrapps_amazon.cdn.enable") {
                     return false;
+                } else if ($parameter == "mrapps_amazon.parameters.region") {
+                    return "eu-west-1";
                 } else {
                     return "erbozeta";
                 }
@@ -213,8 +219,9 @@ class PublicUrlProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getRelativePath')
             ->will($this->returnValue('uploads/mrapps_backend_images/65bc9c632702c1a60639718c02a2b1629536ba43.png'));
 
+
         $this->assertSame(
-            'https://erbozeta.s3.amazonaws.com/mrapps_backend_images/65bc9c632702c1a60639718c02a2b1629536ba43.png',
+            'https://s3-eu-west-1.amazonaws.com/erbozeta/mrapps_backend_images/65bc9c632702c1a60639718c02a2b1629536ba43.png',
             $this->urlProvider
                 ->setFileEntity($this->file)
                 ->getUri()
