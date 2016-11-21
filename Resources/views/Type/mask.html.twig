@@ -1,0 +1,17 @@
+<fieldset id="{{field.name}}" {% if field.disable_dotted is defined and field.disable_dotted %}class="bb0"{% endif %}>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{field.title}}{% if switch is not defined and field.required %} *{% endif %}</label>
+        <div class="{% if field.didascalia is defined %}col-sm-6{% else %}col-sm-9{% endif %}">
+            <input type="text" name="{{field.name}}" {% if field.placeholder is defined %}placeholder="{{field.placeholder}}"{% endif %} {% if switch is not defined and field.required %}required="true"{% endif %} {% if field.minlength is defined %}ng-minlength="{{field.minlength}}"{% endif %} {% if field.maxlength is defined %}ng-maxlength="{{field.maxlength}}"{% endif %} ng-model="form.{{field.name}}" {% if field.value is defined %}ng-init="form.{{field.name}}='{{field.value|quote}}'"{% endif %} {% if field.disable is defined %}ng-disabled="{{field.disable}}"{% endif %} {% if field.pattern is defined %}ng-pattern="{{field.pattern}}"{% endif %} class="form-control"/>
+            {% if switch is not defined and field.required %}<span ng-show="form.validateInput('{{field.name}}', 'required')" class="text-danger">This field is required</span>{% endif %}
+            {% if field.minlength is defined %}<span ng-show="form.validateInput('{{field.name}}', 'minlength')" class="text-danger">This field requires a min length of {{field.minlength}}</span>{% endif %}
+            {% if field.maxlength is defined %}<span ng-show="form.validateInput('{{field.name}}', 'maxlength')" class="text-danger">This field requires a max length of {{field.maxlength}}</span>{% endif %}
+            {% if field.pattern is defined %}<span ng-show="form.validateInput('{{field.name}}', 'pattern')" class="text-danger">This field does not accept special characters</span>{% endif %}
+        </div>
+        {% if field.didascalia is defined %}
+            <div class="col-sm-4">
+                <small class="text-muted">{{field.didascalia}}</small>
+            </div>
+        {% endif %}
+    </div>
+</fieldset>
