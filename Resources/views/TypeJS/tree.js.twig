@@ -4,7 +4,7 @@ $scope.{{ field.name }}Config = {
         multiple: {{ field.multiple|default("false") }},
         animation: true,
         error: function (error) {
-            alert('treeCtrl: error from js tree - ' + angular.toJson(error));
+            toastr.error('treeCtrl: error from js tree - ' + angular.toJson(error), 'Error');
         },
         check_callback: true,
         worker: true

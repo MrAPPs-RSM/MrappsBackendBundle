@@ -12,6 +12,9 @@ form:
     immagine_salvata: 'Immagine salvata'
     annulla: 'Annulla'
     elimina: 'Elimina'
+    operazione:
+        completata: 'Operazione completata con successo'
+        annullata: 'Operazione annullata'
     elemento:
         creato: Creato!
         completato: Completato!

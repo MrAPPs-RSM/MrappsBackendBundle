@@ -1,8 +1,19 @@
 $scope.{{ field.name }}Loading = false;
 $scope.executeAjax{{ field.name }} = function() {
     {% if field.confirm is defined and field.confirm|length > 0 %}
-    if(confirm("{{ field.confirm|escape('js') }}")) {
-        {% endif %}
+    swal({
+        title: "{{ 'form.elemento.procedere'|trans|e('js') }}",
+        text: "{{ field.confirm|escape('js') }}",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "{{ 'checkbox.si'|trans|e('js') }}",
+        cancelButtonText: "{{ 'checkbox.no'|trans|e('js') }}",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }, function (isConfirm) {
+        if (isConfirm) {
+    {% endif %}
         $scope.{{ field.name }}Loading = true;
         $http.post('{{ field.url }}', {'form':$scope.form})
                 .then(function (response) {
@@ -20,6 +31,9 @@ $scope.executeAjax{{ field.name }} = function() {
                     $scope.{{ field.name }}Loading = false;
                 });
         {% if field.confirm is defined and field.confirm|length > 0 %}
-    }
+        } else {
+            swal("{{ 'form.errore'|trans|e('js') }}", "{{ 'operazione.annullata'|trans|e('js') }}", "error");
+        }
+    });
     {% endif %}
 };

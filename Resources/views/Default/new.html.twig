@@ -322,7 +322,18 @@
                 vm.submitted = true;
                 if (vm.formValidate.$valid) {
                     {% if confirmSave == true %}
-                    if (confirm("{{ confirmMessages['question'] }}")) {
+                        swal({
+                            title: "{{ 'form.elemento.procedere'|trans|e('js') }}",
+                            text: "{{ confirmMessages['question'] }}",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "{{ 'checkbox.si'|trans|e('js') }}",
+                            cancelButtonText: "{{ 'checkbox.no'|trans|e('js') }}",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function (isConfirm) {
+                            if (isConfirm) {
                         {% endif %}
                         document.getElementById("save").disabled = true;
                         addOverlay();
@@ -336,11 +347,11 @@
                         }).then(function successCallback(response) {
                             removeOverlay();
                             if (!response.data.success) {
-                                toastr.error(response.data.message, '{{ 'form.errore'|trans }}');
+                                swal(response.data.message?response.data.message:'{{ 'form.errore'|trans }}', '{{ 'form.errore'|trans }}', "error");
                             } else {
 
                                 {% if edit %}
-                                toastr.success('{{ 'form.salvato'|trans }}', '{{ confirmMessages['success'] }}');
+                                swal('{{ 'form.salvato'|trans }}', '{{ confirmMessages['success'] }}', "success");
 
                                 {# Aggiornamento valori modificati lato server #}
                                 if (typeof response.data.data === "object") {
@@ -365,11 +376,14 @@
 
                         }, function errorCallback(response) {
                             removeOverlay();
-                            toastr.error('{{ 'form.errore'|trans }}', '{{ 'form.errore_server'|trans }}');
+                            swal('{{ 'form.errore'|trans }}', '{{ 'form.errore_server'|trans }}', "error");
                             document.getElementById("save").disabled = false;
                         });
                         {% if confirmSave == true %}
-                    }
+                        } else {
+                            swal("{{ 'form.errore'|trans|e('js') }}", "{{ 'operazione.annullata'|trans|e('js') }}", "error");
+                        }
+                    });
                     {% endif %}
                 } else {
                     toastr.error('{{ 'form.errore'|trans }}', '{{ 'form.compila_campi'|trans }}');
@@ -382,7 +396,20 @@
             $scope.linkActionProgress{{ loop.index }} = false;
             $scope.linkActionFunction{{ loop.index }} = function () {
 
-                {% if item.confirm is defined and item.confirm == true %}if (confirm("{{ item.confirmMessage|e('js') }}")) { {% endif %}
+                {% if item.confirm is defined and item.confirm == true %}
+                swal({
+                    title: "{{ 'form.elemento.procedere'|trans|e('js') }}",
+                    text: "{{ item.confirmMessage|e('js') }}",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "{{ 'checkbox.si'|trans|e('js') }}",
+                    cancelButtonText: "{{ 'checkbox.no'|trans|e('js') }}",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }, function (isConfirm) {
+                    if (isConfirm) {
+                {% endif %}
 
                     $scope.linkActionProgress{{ loop.index }} = true;
                     addOverlay();
@@ -396,19 +423,24 @@
                     }).then(function successCallback(response) {
                         removeOverlay();
                         if (!response.data.success) {
-                            toastr.error(response.data.message, '{{ 'form.errore'|trans }}');
+                            swal(response.data.message, '{{ 'form.errore'|trans }}', "error");
                         } else {
-                            toastr.success(response.data.message, '{{ 'form.elemento.completato'|trans }}');
+                            swal(response.data.message, '{{ 'form.elemento.completato'|trans }}', "success");
                             {% if item.callback is defined and item.callback|length > 0 %}{{ item.callback|raw }}{% endif %}
                         }
                         $scope.linkActionProgress{{ loop.index }} = false;
 
                     }, function errorCallback(response) {
                         removeOverlay();
-                        toastr.error('{{ 'form.errore'|trans }}', '{{ 'form.errore_server'|trans }}');
+                        swal('{{ 'form.errore'|trans }}', '{{ 'form.errore_server'|trans }}', "error");
                         $scope.linkActionProgress{{ loop.index }} = false;
                     });
-                    {% if item.confirm is defined and item.confirm == true %}}{% endif %}
+                    {% if item.confirm is defined and item.confirm == true %}
+                    } else {
+                            swal("{{ 'form.errore'|trans|e('js') }}", "{{ 'operazione.annullata'|trans|e('js') }}", "error");
+                        }
+                    });
+                    {% endif %}
             };
             {% endfor %}
             {% endif %}
