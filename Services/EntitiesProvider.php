@@ -24,7 +24,11 @@ class EntitiesProvider
     )
     {
         $this->manager = $manager;
+        $this->beginQuery();
+    }
 
+    public function beginQuery()
+    {
         $this->entities = [];
 
         $this->offset = 0;
