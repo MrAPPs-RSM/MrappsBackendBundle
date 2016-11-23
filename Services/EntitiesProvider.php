@@ -37,21 +37,25 @@ class EntitiesProvider
         $this->sorting = [];
 
         $this->queryParameters = [];
+        return $this;
     }
 
     public function setOffset($offset)
     {
         $this->offset = $offset;
+        return $this;
     }
 
     public function setLimit($limit)
     {
         $this->limit = $limit;
+        return $this;
     }
 
     public function setPage($page)
     {
         $this->offset = ($page - 1) * $this->limit;
+        return $this;
     }
 
     public function setSorting(array $sorting, $alias)
@@ -59,6 +63,8 @@ class EntitiesProvider
         foreach ($sorting as $field => $orderWay) {
             $this->addSort($field, $alias, $orderWay);
         }
+
+        return $this;
     }
 
     public function setFilters(array $filters, $alias)
@@ -75,6 +81,8 @@ class EntitiesProvider
 
             $this->addFilter($field, $alias, $val, $operator);
         }
+
+        return $this;
     }
 
     private function getFullEntityName($entityName)
@@ -107,22 +115,27 @@ class EntitiesProvider
             "type" => $type,
             "alias" => $alias,
         ];
+        return $this;
     }
 
     public function setPrimaryEntityName($primaryEntityName, $alias)
     {
         $fullEntityName = $this->getFullEntityName($primaryEntityName);
         $this->addEntityName($fullEntityName, $alias, "FROM");
+
+        return $this;
     }
 
     public function innerJoinWith($propertyName, $alias)
     {
         $this->addEntityName($propertyName, $alias, "INNER_JOIN");
+        return $this;
     }
 
     public function leftJoinWith($propertyName, $alias)
     {
         $this->addEntityName($propertyName, $alias, "LEFT_JOIN");
+        return $this;
     }
 
     private function isDraftSubclass($entityFullName)
@@ -152,12 +165,16 @@ class EntitiesProvider
             "value" => $value,
             "operator" => $operator,
         ];
+
+        return $this;
     }
 
     private function addSort($propertyName, $alias, $orderWay = 'ASC')
     {
         $sortFieldName = $this->composeFullPropertyName($propertyName, $alias);
         $this->sorting[] = sprintf(" %s %s", $sortFieldName, $orderWay);
+
+        return $this;
     }
 
     private function paramNameFromFieldAndIndex($field, $index)
@@ -287,7 +304,6 @@ class EntitiesProvider
 
     public function getSql()
     {
-
         $dqlQuery = $this->composeDqlQuery();
         $query = $this->manager->createQuery($dqlQuery);
         return $query->getSQL();
