@@ -126,15 +126,15 @@ class EntitiesProvider
         return $this;
     }
 
-    public function innerJoinWith($propertyName, $alias)
+    public function innerJoinWith($fullPropertyName, $alias)
     {
-        $this->addEntityName($propertyName, $alias, "INNER_JOIN");
+        $this->addEntityName($fullPropertyName, $alias, "INNER_JOIN");
         return $this;
     }
 
-    public function leftJoinWith($propertyName, $alias)
+    public function leftJoinWith($fullPropertyName, $alias)
     {
-        $this->addEntityName($propertyName, $alias, "LEFT_JOIN");
+        $this->addEntityName($fullPropertyName, $alias, "LEFT_JOIN");
         return $this;
     }
 
@@ -195,23 +195,23 @@ class EntitiesProvider
             switch ($value["operator"]) {
                 case Operator::IsNull:
                 case Operator::IsNotNull:
-                    $where[] = ssprintf(" %s %s ", $filterField, $value["operator"]);
+                    $where[] = sprintf(" %s %s ", $filterField, $value["operator"]);
                     break;
                 case Operator::In:
                 case Operator::NotIn:
-                    $where[] = ssprintf(" %s %s (?%s) ", $filterField, $value["operator"], $parameterName);
+                    $where[] = sprintf(" %s %s (?%s) ", $filterField, $value["operator"], $parameterName);
                     $this->queryParameters[$parameterName] = $value["value"];
                     $counter++;
                     break;
                 case Operator::InSubquery:
-                    $where[] = ssprintf(" %s %s (%s) ", $filterField, Operator::In, $value['value']);
+                    $where[] = sprintf(" %s %s (%s) ", $filterField, Operator::In, $value['value']);
                     break;
                 case Operator::Like:
-                    $where[] = ssprintf(" %s LIKE :%s ", $filterField, $parameterName);
+                    $where[] = sprintf(" %s LIKE :%s ", $filterField, $parameterName);
                     $this->queryParameters[$parameterName] = '%' . $value["value"] . '%';
                     break;
                 default:
-                    $where[] = ssprintf(" %s %s :%s ", $filterField, $value["operator"], $parameterName);
+                    $where[] = sprintf(" %s %s :%s ", $filterField, $value["operator"], $parameterName);
                     $this->queryParameters[$parameterName] = $value["value"];
                     break;
             }
@@ -267,7 +267,7 @@ class EntitiesProvider
                     throw new \Exception("[EntitiesProvider] Invalid entity type\n" . $entityName . " -> " . $value["type"]);
                 }
 
-                $fromQuery .= sprintf(" %s %s.%s ", $join, $value["alias"], $entityName);
+                $fromQuery .= sprintf(" %s %s %s ", $join, $entityName, $value["alias"]);
             }
         }
 
