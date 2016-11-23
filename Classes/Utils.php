@@ -265,6 +265,8 @@ class Utils
      *
      * @return array Ritorna il risultato della query
      *
+     * @deprecated Use mrapps.backend.entities_provider service
+     * @see mrapps.backend.entities_provider service
      */
     public static function getListResults($em = null, $entity = '', $count = 0, $page = 1, $filters = array(), $sorting = array(), $customWhere = null, $customParams = null)
     {
@@ -323,7 +325,7 @@ class Utils
                         } elseif ($operator == Operator::IsNull ||
                             $operator == Operator::IsNotNull
                         ) {
-                            $tmp[] = sprintf(" a.%s %s ",$campo, $operator);
+                            $tmp[] = sprintf(" a.%s %s ", $campo, $operator);
 
                         } elseif ($operator == Operator::In || $operator == Operator::NotIn) {
                             $tmp[] = sprintf(" a.%s %s (?%s) ", $campo, $operator, $inCount);
