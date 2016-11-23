@@ -39,14 +39,35 @@ class EntitiesProvider
         $this->queryParameters = [];
     }
 
-    private function setOffset($offset)
+    public function setOffset($offset)
     {
         $this->offset = $offset;
     }
 
-    private function setLimit($limit)
+    public function setLimit($limit)
     {
         $this->limit = $limit;
+    }
+
+    public function setPage($page)
+    {
+        $this->offset = ($page - 1) * $this->limit;
+    }
+
+    public function setSorting(array $sorting)
+    {
+        $alias = null;
+
+        foreach ($this->entities as $entityName => $value) {
+            if ($value["type"] == "FROM") {
+                $alias = $value["alias"];
+                break;
+            }
+        }
+
+        foreach ($sorting as $field => $orderWay) {
+            $this->addSort($field, $alias, $orderWay);
+        }
     }
 
     private function getFullEntityName($entityName)
