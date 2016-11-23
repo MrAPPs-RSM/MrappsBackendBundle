@@ -111,6 +111,14 @@
                     return $sce.trustAsHtml(val);
                 };
             }]);
+        
+            myAngular.config(function($locationProvider) {
+                $locationProvider.html5Mode({
+                    enabled: true,
+                    requireBase: false,
+                    rewriteLinks: false
+                });
+            });
 
             function NGTableCtrl($http, $window, $scope, $location, $filter, NgTableParams, $resource, $rootScope) {
                 var self = this;
@@ -146,8 +154,10 @@
 
                 var isDataLoading = false;
 
+                var paginaAttuale = (location.hash.substr(0, 5) == "#page") ? parseInt(location.hash.substr(5)) : 1;
+
                 self.tableParams2 = new NgTableParams({
-                    page: 1,            // show first page
+                    page: paginaAttuale,
                     count: 10,          // count per page
                     sorting: {{ defaultSorting|raw }},
                     filter: {{ defaultFilter|raw }},
@@ -177,6 +187,8 @@
                                 $('#overlay-waiting').remove();
 
                                 isDataLoading = false;
+                                location.hash = '';
+                                location.hash = '#page'+params.page();
                             });
                         }
                     }
