@@ -85,8 +85,8 @@ class EntitiesProvider
             $fullEntityName = $entityName;
         }
 
-        if (!class_exists($fullEntityName) ||
-            !$this->manager->getMetadataFactory()->isTransient($fullEntityName)
+        if (!class_exists($fullEntityName) /*||
+            !$this->manager->getMetadataFactory()->isTransient($fullEntityName)*/
         ) {
             throw new \Exception("[EntitiesProvider] Invalid class name provided");
         }
@@ -125,7 +125,7 @@ class EntitiesProvider
 
     private function composeFullPropertyName($propertyName, $alias)
     {
-        return printf("%s.%s", $alias, $propertyName);
+        return sprintf("%s.%s", $alias, $propertyName);
     }
 
     private function addFilter($propertyName, $alias, $value, $operator = null)
@@ -150,7 +150,7 @@ class EntitiesProvider
     private function addSort($propertyName, $alias, $orderWay = 'ASC')
     {
         $sortFieldName = $this->composeFullPropertyName($propertyName, $alias);
-        $this->sorting[] = printf(" %s %s", $sortFieldName, $orderWay);
+        $this->sorting[] = sprintf(" %s %s", $sortFieldName, $orderWay);
     }
 
     private function paramNameFromFieldAndIndex($field, $index)
@@ -162,33 +162,32 @@ class EntitiesProvider
     private function composeWhereBlock()
     {
         $counter = 0;
+        $where = [];
 
         foreach ($this->filters as $filterField => $value) {
-
-            $where = [];
 
             $parameterName = $this->paramNameFromFieldAndIndex($filterField, $counter);
 
             switch ($value["operator"]) {
                 case Operator::IsNull:
                 case Operator::IsNotNull:
-                    $where[] = sprintf(" %s %s ", $filterField, $value["operator"]);
+                    $where[] = ssprintf(" %s %s ", $filterField, $value["operator"]);
                     break;
                 case Operator::In:
                 case Operator::NotIn:
-                    $where[] = sprintf(" %s %s (?%s) ", $filterField, $value["operator"], $parameterName);
+                    $where[] = ssprintf(" %s %s (?%s) ", $filterField, $value["operator"], $parameterName);
                     $this->queryParameters[$parameterName] = $value["value"];
                     $counter++;
                     break;
                 case Operator::InSubquery:
-                    $where[] = sprintf(" %s %s (%s) ", $filterField, Operator::In, $value['value']);
+                    $where[] = ssprintf(" %s %s (%s) ", $filterField, Operator::In, $value['value']);
                     break;
                 case Operator::Like:
-                    $where[] = sprintf(" %s LIKE :%s ", $filterField, $parameterName);
+                    $where[] = ssprintf(" %s LIKE :%s ", $filterField, $parameterName);
                     $this->queryParameters[$parameterName] = '%' . $value["value"] . '%';
                     break;
                 default:
-                    $where[] = sprintf(" %s %s :%s ", $filterField, $value["operator"], $parameterName);
+                    $where[] = ssprintf(" %s %s :%s ", $filterField, $value["operator"], $parameterName);
                     $this->queryParameters[$parameterName] = $value["value"];
                     break;
             }
@@ -220,7 +219,7 @@ class EntitiesProvider
             if (empty($fromQuery)
                 && $value["type"] == "FROM"
             ) {
-                $fromQuery = printf(" FROM %s %s ", $entityName, $value["alias"]);
+                $fromQuery = sprintf(" FROM %s %s ", $entityName, $value["alias"]);
 
                 if ($this->isDraftSubclass($entityName)) {
                     $publishedField = $this->composeFullPropertyName("published", $value["alias"]);
@@ -231,8 +230,7 @@ class EntitiesProvider
                 }
 
                 if (count($this->sorting) == 0) {
-                    $createdAtField = $this->composeFullPropertyName("published", $value["alias"]);
-                    $this->sorting[$createdAtField] = 'desc';    //Sorting di default
+                    $this->addSort('createdAt', $value["alias"], 'desc');
                 }
 
             } else {
@@ -245,11 +243,11 @@ class EntitiesProvider
                     throw new \Exception("[EntitiesProvider] Invalid entity type\n" . $entityName . " -> " . $value["type"]);
                 }
 
-                $fromQuery .= printf(" %s %s.%s ", $join, $value["alias"], $entityName);
+                $fromQuery .= sprintf(" %s %s.%s ", $join, $value["alias"], $entityName);
             }
         }
 
-        $selectBlock = printf("SELECT %s ", implode(",", $select));
+        $selectBlock = sprintf("SELECT %s ", implode(",", $select));
 
         $whereBlock = $this->composeWhereBlock();
         $sortBlock = $this->composeSortBlock();
@@ -278,5 +276,12 @@ class EntitiesProvider
         }
 
         return $result;
+    }
+    
+    public function getSql() {
+        
+        $dqlQuery = $this->composeDqlQuery();
+        $query = $this->manager->createQuery($dqlQuery);
+        return $query->getSQL();
     }
 }
