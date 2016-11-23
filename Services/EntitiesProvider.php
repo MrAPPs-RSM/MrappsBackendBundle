@@ -148,7 +148,7 @@ class EntitiesProvider
         return sprintf("%s.%s", $alias, $propertyName);
     }
 
-    private function addFilter($propertyName, $alias, $value, $operator = null)
+    public function addFilter($propertyName, $alias, $value, $operator = null)
     {
         $field = $this->composeFullPropertyName($propertyName, $alias);
 
@@ -169,7 +169,7 @@ class EntitiesProvider
         return $this;
     }
 
-    private function addSort($propertyName, $alias, $orderWay = 'ASC')
+    public function addSort($propertyName, $alias, $orderWay = 'ASC')
     {
         $sortFieldName = $this->composeFullPropertyName($propertyName, $alias);
         $this->sorting[] = sprintf(" %s %s", $sortFieldName, $orderWay);
