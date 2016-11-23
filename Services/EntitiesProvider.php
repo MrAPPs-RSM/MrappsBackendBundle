@@ -214,7 +214,7 @@ class EntitiesProvider
 
                 if ($value["type"] == "INNER_JOIN") {
                     $join = " INNER JOIN ";
-                } elseif ($value["type"] == "INNER_JOIN") {
+                } elseif ($value["type"] == "LEFT_JOIN") {
                     $join = " LEFT JOIN ";
                 } else {
                     throw new \Exception("[EntitiesProvider] Invalid entity type\n" . $entityName . " -> " . $value["type"]);
