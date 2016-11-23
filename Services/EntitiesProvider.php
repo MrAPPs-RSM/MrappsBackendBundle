@@ -54,19 +54,26 @@ class EntitiesProvider
         $this->offset = ($page - 1) * $this->limit;
     }
 
-    public function setSorting(array $sorting)
+    public function setSorting(array $sorting, $alias)
     {
-        $alias = null;
-
-        foreach ($this->entities as $entityName => $value) {
-            if ($value["type"] == "FROM") {
-                $alias = $value["alias"];
-                break;
-            }
-        }
-
         foreach ($sorting as $field => $orderWay) {
             $this->addSort($field, $alias, $orderWay);
+        }
+    }
+
+    public function setFilters(array $filters, $alias)
+    {
+        foreach ($filters as $field => $value) {
+
+            if (is_array($value)) {
+                $val = $value["value"];
+                $operator = $value["operator"];
+            } else {
+                $val = $value;
+                $operator = null;
+            }
+
+            $this->addFilter($field, $alias, $val, $operator);
         }
     }
 
@@ -277,9 +284,10 @@ class EntitiesProvider
 
         return $result;
     }
-    
-    public function getSql() {
-        
+
+    public function getSql()
+    {
+
         $dqlQuery = $this->composeDqlQuery();
         $query = $this->manager->createQuery($dqlQuery);
         return $query->getSQL();
