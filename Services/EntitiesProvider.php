@@ -28,11 +28,21 @@ class EntitiesProvider
         $this->entities = [];
 
         $this->offset = 0;
-        $this->limit = null;
+        $this->limit = 10;
         $this->filters = [];
         $this->sorting = [];
 
         $this->queryParameters = [];
+    }
+
+    private function setOffset($offset)
+    {
+        $this->offset = $offset;
+    }
+
+    private function setLimit($limit)
+    {
+        $this->limit = $limit;
     }
 
     private function getFullEntityName($entityName)
@@ -112,7 +122,7 @@ class EntitiesProvider
         ];
     }
 
-    private function addSorting($propertyName, $alias, $orderWay = 'ASC')
+    private function addSort($propertyName, $alias, $orderWay = 'ASC')
     {
         $sortFieldName = $this->composeFullPropertyName($propertyName, $alias);
         $this->sorting[] = printf(" %s %s", $sortFieldName, $orderWay);
@@ -222,7 +232,7 @@ class EntitiesProvider
         return $selectBlock . $fromQuery . $whereBlock . $sortBlock;
     }
 
-    public function getResult($offset = 0, $limit = 10)
+    public function getResult()
     {
         $dqlQuery = $this->composeDqlQuery();
         $query = $this->manager->createQuery($dqlQuery);
@@ -231,8 +241,8 @@ class EntitiesProvider
             $query->setParameters($this->queryParameters);
         }
 
-        $query->setFirstResult($offset)
-            ->setMaxResults($limit);
+        $query->setFirstResult($this->offset)
+            ->setMaxResults($this->limit);
 
         $paginator = new Paginator($query, true);
 
