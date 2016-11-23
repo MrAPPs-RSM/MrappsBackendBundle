@@ -4,6 +4,7 @@ namespace Mrapps\BackendBundle\Classes;
 
 class Operator
 {
+    const Like = "LIKE";
     const Equal = "=";
     const NotEqual = "!=";
     const GreaterOrEqual = ">=";
