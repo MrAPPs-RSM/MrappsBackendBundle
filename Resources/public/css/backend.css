@@ -12985,13 +12985,6 @@ flatdoc .button .badge {
 	line-height:29px;
 }
 
-#immagine {
-	position:relative;
-	overflow:auto;
-	width:100%;
-	height:100%;
-}
-
 #overlay-waiting {
 	position:fixed;
 	top:0;
