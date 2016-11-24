@@ -11,14 +11,16 @@
                 <div class="panel-title {% if (linkNew is defined and linkNew is not empty) or linkCustom is not null %}pull-left{% endif %}">
                 </div>
                 {% if is_granted('ROLE_SUPER_ADMIN') and current_object is defined and current_object|length > 0 and current_route is defined and current_route|length > 0 %}
-                    <button type="submit" class="btn btn-labeled btn-info pull-left" ng-click="go('{{ path('mrapps_backend_permissions', {'object':current_object,'returnRoute':current_route }) }}')">
+                    <button type="submit" class="btn btn-labeled btn-info pull-left"
+                            ng-click="go('{{ path('mrapps_backend_permissions', {'object':current_object,'returnRoute':current_route }) }}')">
                         <span class="btn-label">
                             <em class="fa fa-check-square-o"></em>
                         </span>Permessi ({{ current_object }})
                     </button>
                 {% endif %}
                 {% if linkNew is defined and linkNew is not null and permissions.create == true %}
-                    <button type="submit" class="btn btn-labeled btn-success pull-right" ng-click="go('{% if linkNew is iterable %}{{ path(linkNew.route, linkNew.params) }}{% else %}{{ linkNew }}{% endif %}')">
+                    <button type="submit" class="btn btn-labeled btn-success pull-right"
+                            ng-click="go('{% if linkNew is iterable %}{{ path(linkNew.route, linkNew.params) }}{% else %}{{ linkNew }}{% endif %}')">
                     <span class="btn-label">
                         <em class="fa fa-plus"></em>
                     </span>{{ 'form.aggiungi_nuovo'|trans }}
@@ -64,7 +66,8 @@
                     <td class="button-column">
                         {% if linkEdit is not null and permissions.edit == true %}
                             <button ng-if="!row.hasOwnProperty('disableEdit')||row.disableEdit==false" type="button"
-                                    ng-click="go({% if linkEdit is iterable %}'{{ path(linkEdit.route, linkEdit.params|merge({'id':'__PLACEHOLDER_ID__'})) }}',row.id{% else %}'{{ linkEdit }}/'+row.id{% endif %})" class="btn btn-sm btn-warning">
+                                    ng-click="go({% if linkEdit is iterable %}'{{ path(linkEdit.route, linkEdit.params|merge({'id':'__PLACEHOLDER_ID__'})) }}',row.id{% else %}'{{ linkEdit }}/'+row.id{% endif %})"
+                                    class="btn btn-sm btn-warning">
                                 <em class="fa fa-edit"></em>
                             </button>
                         {% endif %}
@@ -76,7 +79,8 @@
                         {% endif %}
                         {% if linkAction is not null and permissions.edit == true %}
                             {% for item in linkAction %}
-                                <button type="button" ng-if="!row.hasOwnProperty('__linkActions') || !row.__linkActions.hasOwnProperty('{{ item.name }}') || row.__linkActions.{{ item.name }}==true"
+                                <button type="button"
+                                        ng-if="!row.hasOwnProperty('__linkActions') || !row.__linkActions.hasOwnProperty('{{ item.name }}') || row.__linkActions.{{ item.name }}==true"
                                         ng-click="{% if item.is_js == false %}go('{{ item.url }}/'+row.id){% else %}customFunction{{ loop.index }}(row){% endif %}"
                                         class="{{ item.class }}">
                                     <em class="{{ item.icon }}"></em>
@@ -106,18 +110,18 @@
 
             myAngular.controller("NGTableCtrl", NGTableCtrl);
 
-            myAngular.filter('rawHtml', ['$sce', function($sce){
-                return function(val) {
+            myAngular.filter('rawHtml', ['$sce', function ($sce) {
+                return function (val) {
                     return $sce.trustAsHtml(val);
                 };
             }]);
 
             function NGTableCtrl($http, $window, $scope, $location, $filter, NgTableParams, $resource, $rootScope) {
                 var self = this;
-                var Api = $resource('{{ linkData }}');
+                var Api = $resource('{{ linkData }}', null, {'query': {method: 'GET', isArray: false}});
 
                 $scope.go = function (path, replaceId) {
-                    if(typeof(replaceId) !== "undefined" && replaceId !== null) {
+                    if (typeof(replaceId) !== "undefined" && replaceId !== null) {
                         path = path.replace(/__PLACEHOLDER_ID__/g, replaceId);
                     }
                     $window.location.href = path;
@@ -127,7 +131,10 @@
 
                 {% for column in tableColumns %}
                 {% if column.type=='checkbox' %}
-                $scope.{{ column.name }}_filter = [{"id": null, "title": ""}, {"id": 1, "title": "{{ 'checkbox.si'|trans }}"}, {
+                $scope.{{ column.name }}_filter = [{"id": null, "title": ""}, {
+                    "id": 1,
+                    "title": "{{ 'checkbox.si'|trans }}"
+                }, {
                     "id": 0,
                     "title": "{{ 'checkbox.no'|trans }}"
                 }];
@@ -155,23 +162,29 @@
                     //total: dati.length, // length of data
                     getData: function ($defer, params) {
 
-                        if(isDataLoading === false) {
+                        if (isDataLoading === false) {
                             isDataLoading = true;
                             $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>{{ 'form.attendere'|trans }}</div></div>');
-                            Api.query(params.url(), function (data) {
+                            Api.query(params.url(), function (json) {
 
-                                // update table params
-                                params.total(data.length);
-                                // use build-in angular filter
-                                /*var orderedData = params.filter() ?
-                                 $filter('filter')(data, params.filter()) :
-                                 data;*/
-                                var orderedData = params.sorting() ?
-                                        $filter('orderBy')(data, params.orderBy()) :
-                                        orderedData;
-                                self.data = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+                                var total = 0;
+                                var result = null;
 
-                                params.total(orderedData.length); // set total for recalc pagination
+                                if (typeof json.success != 'undefined') {
+                                    total = json.data.total;
+                                    result = json.data.result;
+                                } else {
+                                    var orderedData = params.sorting() ?
+                                            $filter('orderBy')(json, params.orderBy()) :
+                                            orderedData;
+                                    result = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+
+                                    total = result.length;
+                                }
+
+                                params.total(total);
+                                self.data = result;
+
 
                                 $defer.resolve(self.data);
                                 $('#overlay-waiting').remove();
@@ -215,11 +228,13 @@
                 {% endif %}
                 {% if linkOrder is not null %}
                 $scope.sortableOptions = {
-                    start: function(e, ui) {
+                    start: function (e, ui) {
                         $scope.isDragging = true;
                     },
-                    stop: function(e, ui) {
-                        setTimeout(function(){ $scope.isDragging = false; }, 300);
+                    stop: function (e, ui) {
+                        setTimeout(function () {
+                            $scope.isDragging = false;
+                        }, 300);
                         //if(!self.tableParams2.hasFilter()){
                         $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>Attendere...</div></div>');
                         $http({

@@ -279,7 +279,7 @@ class EntitiesProvider
         return $selectBlock . $fromQuery . $whereBlock . $sortBlock;
     }
 
-    public function getResult()
+    private function createQueryBuilder()
     {
         $dqlQuery = $this->composeDqlQuery();
         $query = $this->manager->createQuery($dqlQuery);
@@ -288,6 +288,21 @@ class EntitiesProvider
             $query->setParameters($this->queryParameters);
         }
 
+        return $query;
+    }
+
+    public function countResults()
+    {
+        $query = $this->createQueryBuilder();
+
+        $paginator = new Paginator($query, true);
+
+        return $paginator->getIterator()->count();
+    }
+
+    public function getResult()
+    {
+        $query = $this->createQueryBuilder();
         $query->setFirstResult($this->offset)
             ->setMaxResults($this->limit);
 
