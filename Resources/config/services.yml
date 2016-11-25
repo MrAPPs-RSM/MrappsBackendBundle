@@ -77,3 +77,8 @@ services:
                 class: Mrapps\BackendBundle\Services\ParametersHandler
                 calls:
                     - [setParameters, ["@=service('kernel').getContainer().getParameterBag()"]]
+
+    mrapps.backend.entities_provider:
+            class: Mrapps\BackendBundle\Services\EntitiesProvider
+            arguments:
+                - '@doctrine.orm.entity_manager'
