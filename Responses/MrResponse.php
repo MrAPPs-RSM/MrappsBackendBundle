@@ -34,6 +34,15 @@ final class MrResponse
         );
     }
 
+    public static function withMessageAndData($message, array $data)
+    { 
+        return static::getJsonResponse([
+            "data" => $data,
+            "success" => true,
+            "message" => $message,
+        ]);
+    }
+
     public static function withMessage($message)
     {
         return static::getJsonResponse([
