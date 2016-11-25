@@ -227,7 +227,7 @@ class EntitiesProvider
         return " ORDER BY " . implode(",", $this->sorting);
     }
 
-    private function composeDqlQuery()
+    private function composeDqlQuery($useDefaultsIfNeeded = true)
     {
         if (count($this->entities) == 0) {
             throw new \Exception("[EntitiesProvider] Add at least one entity to get data");
@@ -245,16 +245,18 @@ class EntitiesProvider
             ) {
                 $fromQuery = sprintf(" FROM %s %s ", $entityName, $value["alias"]);
 
-                if ($this->isDraftSubclass($entityName)) {
-                    $publishedField = $this->composeFullPropertyName("published", $value["alias"]);
+                if ($useDefaultsIfNeeded) {
+                    if ($this->isDraftSubclass($entityName)) {
+                        $publishedField = $this->composeFullPropertyName("published", $value["alias"]);
 
-                    if (!isset($this->filters[$publishedField])) {
-                        $this->filters[$publishedField] = 0; //filtro di default
+                        if (!isset($this->filters[$publishedField])) {
+                            $this->filters[$publishedField] = 0; //filtro di default
+                        }
                     }
-                }
 
-                if (count($this->sorting) == 0) {
-                    $this->addSort('createdAt', $value["alias"], 'desc');
+                    if (count($this->sorting) == 0) {
+                        $this->addSort('createdAt', $value["alias"], 'desc');
+                    }
                 }
 
             } else {
@@ -279,9 +281,9 @@ class EntitiesProvider
         return $selectBlock . $fromQuery . $whereBlock . $sortBlock;
     }
 
-    private function createQueryBuilder()
+    private function createQueryBuilder($useDefaultsIfNeeded = true)
     {
-        $dqlQuery = $this->composeDqlQuery();
+        $dqlQuery = $this->composeDqlQuery($useDefaultsIfNeeded);
         $query = $this->manager->createQuery($dqlQuery);
 
         if (count($this->queryParameters) > 0) {
@@ -293,8 +295,7 @@ class EntitiesProvider
 
     public function countResults()
     {
-        $query = $this->createQueryBuilder();
-
+        $query = $this->createQueryBuilder(false);
         $paginator = new Paginator($query, true);
 
         return $paginator->getIterator()->count();
@@ -302,7 +303,7 @@ class EntitiesProvider
 
     public function getResult()
     {
-        $query = $this->createQueryBuilder();
+        $query = $this->createQueryBuilder(true);
         $query->setFirstResult($this->offset)
             ->setMaxResults($this->limit);
 

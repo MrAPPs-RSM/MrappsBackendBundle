@@ -115,8 +115,8 @@
                     return $sce.trustAsHtml(val);
                 };
             }]);
-        
-            myAngular.config(function($locationProvider) {
+
+            myAngular.config(function ($locationProvider) {
                 $locationProvider.html5Mode({
                     enabled: true,
                     requireBase: false,
@@ -126,7 +126,6 @@
 
             function NGTableCtrl($http, $window, $scope, $location, $filter, NgTableParams, $resource, $rootScope) {
                 var self = this;
-                var Api = $resource('{{ linkData }}', null, {'query': {method: 'GET', isArray: false}});
 
                 $scope.go = function (path, replaceId) {
                     if (typeof(replaceId) !== "undefined" && replaceId !== null) {
@@ -175,10 +174,16 @@
                         if (isDataLoading === false) {
                             isDataLoading = true;
                             $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>{{ 'form.attendere'|trans }}</div></div>');
-                            Api.query(params.url(), function (json) {
 
+                            $http({
+                                method: 'GET',
+                                url: '{{ linkData }}',
+                                params: params.url()
+                            }).then(function successCallback(response) {
                                 var total = 0;
                                 var result = null;
+
+                                var json = response.data;
 
                                 if (typeof json.success != 'undefined') {
                                     total = json.data.total;
@@ -201,7 +206,9 @@
 
                                 isDataLoading = false;
                                 location.hash = '';
-                                location.hash = '#page'+params.page();
+                                location.hash = '#page' + params.page();
+                            }, function errorCallback(response) {
+                                console.log(response);
                             });
                         }
                     }
