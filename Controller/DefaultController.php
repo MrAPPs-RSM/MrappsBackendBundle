@@ -301,6 +301,16 @@ class DefaultController extends Controller
 
     public function __customAction(Request $request, $params = array())
     {
+        $baseParams = [
+            'current_route' => $request->get('_route'),
+            'route_params' => !empty($request->get('_route_params'))
+                ? $request->get('_route_params')
+                : [],
+            'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
+                ? $this->container->getParameter('mrapps_backend.logo_path')
+                : null,
+            'languages' => Utils::getLanguages(),
+        ];
 
         //Tipologia di permesso (es. view)
         if (!is_array($params)) $params = array();
@@ -322,7 +332,7 @@ class DefaultController extends Controller
         }
 
         if (strlen($template) > 0) {
-
+            
             $em = $this->getDoctrine()->getManager();
             $currentObject = Utils::getControllerCompactName($request->attributes->get('_controller'));
 
@@ -330,7 +340,7 @@ class DefaultController extends Controller
             $permissions = $em->getRepository('MrappsBackendBundle:Permission')->getPermissions($currentObject, $this->getUser());
             $params['permissions'] = $permissions;
 
-            return $this->render($template, $params);
+            return $this->render($template, array_merge($baseParams, $params));
 
         } else {
             throw new \InvalidArgumentException("Parametro __template mancante. Specificare un template valido nella forma AppBundle:Default:test.");
