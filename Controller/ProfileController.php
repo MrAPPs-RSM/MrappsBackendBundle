@@ -5,14 +5,8 @@ namespace Mrapps\BackendBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Mrapps\BackendBundle\Classes\Utils;
-use Mrapps\BackendBundle\Entity\Immagine;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use FOS\UserBundle\Model\UserInterface;
 
 /**
@@ -27,35 +21,36 @@ class ProfileController extends Controller
     public function changePasswordAction(Request $request)
     {
         $errors = array();
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        /**@var UserInterface $user */
+        $user = $this->getUser();
 
-        $form = $this->container->get('fos_user.change_password.form');
-        $formHandler = $this->container->get('fos_user.change_password.form.handler');
+        $form = $this->get('fos_user.change_password.form');
+        $formHandler = $this->get('fos_user.change_password.form.handler');
 
         $process = $formHandler->process($user);
-        if ($process) {
-            $this->setFlash('fos_user_success', 'change_password.flash.success');
-        }else {
+
+        if (!$process) {
             foreach ($form->getErrors(true) as $er) {
                 $errors[] = $er;
             }
         }
+
+        $defaultRouteName = Utils::getDefaultRouteForUser($this->container, $user);
 
         return $this->render('MrappsBackendBundle:Profile:change_password.html.twig', array(
             'title' => "Cambia Password",
             'form' => $form->createView(),
             'errors' => $errors,
             'success' => $process,
+            'current_route' => $request->get('_route'),
+            'route_params' => !empty($request->get('_route_params'))
+                ? $request->get('_route_params')
+                : [],
+            'default_route_name' => $defaultRouteName,
+            'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
+                ? $this->container->getParameter('mrapps_backend.logo_path')
+                : null,
+            'languages' => Utils::getLanguages(),
         ));
     }
-
-    /**
-     * @param string $action
-     * @param string $value
-     */
-    protected function setFlash($action, $value)
-    {
-        $this->container->get('session')->getFlashBag()->set($action, $value);
-    }
-
 }
