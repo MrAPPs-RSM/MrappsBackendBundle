@@ -199,7 +199,7 @@ class EntitiesProvider
                     break;
                 case Operator::In:
                 case Operator::NotIn:
-                    $where[] = sprintf(" %s %s (?%s) ", $filterField, $value["operator"], $parameterName);
+                    $where[] = sprintf(" %s %s (:%s) ", $filterField, $value["operator"],$parameterName);
                     $this->queryParameters[$parameterName] = $value["value"];
                     $counter++;
                     break;
