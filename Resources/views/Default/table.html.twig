@@ -192,11 +192,10 @@
                                     var orderedData = params.sorting() ?
                                             $filter('orderBy')(json, params.orderBy()) :
                                             orderedData;
+                                    total = orderedData.length;
                                     result = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-                                    total = result.length;
                                 }
-
+                                
                                 params.total(total);
                                 self.data = result;
 
