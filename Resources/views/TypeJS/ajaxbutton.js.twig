@@ -18,7 +18,7 @@ $scope.executeAjax{{ field.name }} = function() {
         $http.post('{{ field.url }}', {'form':$scope.form})
                 .then(function (response) {
                     if(response.data.success) {
-                        toastr.success(response.data.message,'');
+                        swal(response.data.message, "", "success");
                         $.each(response.data.data, function(k,v) {
                             if(typeof $scope.form[k] != "undefined") {
                                 $scope.form[k] = v;
@@ -26,7 +26,7 @@ $scope.executeAjax{{ field.name }} = function() {
                         });
                         {% if field.callback is defined and field.callback|length > 0 %}{{ field.callback|raw }}{% endif %}
                     }else {
-                        toastr.error(response.data.message,'Errore!');
+                        swal(response.data.message, '{{ 'form.errore'|trans }}', "error");
                     }
                     $scope.{{ field.name }}Loading = false;
                 });
