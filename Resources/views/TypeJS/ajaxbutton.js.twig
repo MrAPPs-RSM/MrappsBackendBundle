@@ -1,3 +1,4 @@
+{% trans_default_domain 'MrappsBackendBundle' %}
 $scope.{{ field.name }}Loading = false;
 $scope.executeAjax{{ field.name }} = function() {
     {% if field.confirm is defined and field.confirm|length > 0 %}
@@ -32,7 +33,7 @@ $scope.executeAjax{{ field.name }} = function() {
                 });
         {% if field.confirm is defined and field.confirm|length > 0 %}
         } else {
-            swal("{{ 'form.errore'|trans|e('js') }}", "{{ 'operazione.annullata'|trans|e('js') }}", "error");
+            swal("{{ 'form.errore'|trans|e('js') }}", "{{ 'form.operazione.annullata'|trans|e('js') }}", "error");
         }
     });
     {% endif %}
