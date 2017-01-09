@@ -61,6 +61,13 @@ class EntitiesProvider
     public function setSorting(array $sorting, $alias)
     {
         foreach ($sorting as $field => $orderWay) {
+            
+            $dotPos = strpos($field, '.');
+            if(false !== $dotPos) {
+                $alias = substr($field, 0, $dotPos);
+                $field = substr($field, $dotPos+1);
+            }
+            
             $this->addSort($field, $alias, $orderWay);
         }
 
@@ -310,7 +317,7 @@ class EntitiesProvider
         $query = $this->createQueryBuilder(true);
         $query->setFirstResult($this->offset)
             ->setMaxResults($this->limit);
-
+    
         $paginator = new Paginator($query, true);
 
         $result = [];
