@@ -1,5 +1,8 @@
 # new, edit e delete
 
+generale:
+    titolo: 'Title'
+
 form:
     attendere: 'Loading...'
     errore_server: 'Server request error'
@@ -10,6 +13,8 @@ form:
     errore: 'Error!'
     salvato: 'Saved!'
     immagine_salvata: 'Image saved'
+    immagine_aggiunta: 'Image added'
+    file_aggiunto: 'File added'
     annulla: 'Undo'
     elimina: 'Delete'
     operazione:

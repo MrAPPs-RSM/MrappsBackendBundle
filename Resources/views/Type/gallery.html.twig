@@ -59,9 +59,14 @@
             <li ng-repeat="immagine in gallery_{{field.name}}_immagini" class="col-xs-12 col-sm-3 col-md-3 col-lg-2 text-center">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="gallery-backend" ng-style="{'background-image':'url({/ immagine.url /})'}"></div>
+                        <div class="gallery-backend" ng-style="{{field.name}}_getImageStyle(immagine)"></div>
                         <br />
                     </div><!-- .col -->
+                    {% if field.any_files is defined and field.any_files %}
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <input type="text" ng-model="immagine.data.file_name" class="form-control" placeholder='{{ 'generale.titolo'|trans }}'>
+                    </div>
+                    {% endif %}
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <button type="button" class="btn btn-danger btn-xs" ng-click="gallery_{{field.name}}.removeId(gallery_{{field.name}}_immagini, $index)">
                             <span class="fa fa-trash"></span> Remove

@@ -1,11 +1,39 @@
 {% set uploader_name = ['gallery_',field.name]|join %}
 
+$scope.{{ field.name }}_assets = {
+    'file': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
+    'image': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
+    'video': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
+    'pdf': '{{ asset('/bundles/mrappsbackend/img/pdf.png') }}',
+    'zip': '{{ asset('/bundles/mrappsbackend/img/zip.png') }}',
+    'json': '{{ asset('/bundles/mrappsbackend/img/json.png') }}'
+};
+
 $scope.gallery_{{ field.name }}_immagini = [];
 
 $scope.{{ uploader_name }} = new FileUploader({
-    url: '{{ path('mrapps_backend_uploadimmagine') }}',
+    url: '{% if field.any_files is defined and field.any_files %}{{ path('mrapps_backend_uploadfile') }}{% else %}{{ path('mrapps_backend_uploadimmagine') }}{% endif %}',
     autoUpload: true
 });
+
+$scope.{{field.name}}_getImageStyle = function(immagine) {
+
+    if(typeof(immagine) !== "undefined" &&
+    {% if field.any_files is defined and field.any_files %}
+    typeof(immagine.data.url) !== "undefined" && jQuery.trim(immagine.data.url).length > 0
+    {% else %}
+    typeof(immagine.url) !== "undefined" && jQuery.trim(immagine.url).length > 0
+    {% endif %}
+    ){
+        return {'background-image':'url('+{% if field.any_files is defined and field.any_files %}immagine.data.url{% else %}immagine.url{% endif %}+')'};
+    }else {
+        if(typeof($scope.{{ field.name }}_assets[immagine.data.normalized_type]) !== "undefined") {
+            return {'background-image':'url('+$scope.{{ field.name }}_assets[immagine.data.normalized_type]+')'};
+        }else {
+            return "";
+        }
+    }
+}
 
 $scope.{{ uploader_name }}.removeId = function (array, index) {
     array.splice(index, 1);
@@ -33,7 +61,7 @@ $scope.{{ uploader_name }}.onSuccessItem = function (fileItem, response, status,
         $('#load_{{ field.name }}').addClass('hide');
         $scope.gallery_{{field.name}}_immagini.push(response);
         $scope.form.{{ field.name }} = $scope.gallery_{{ field.name }}_immagini;
-        toastr.success('{{ 'form.immagine_salvata'|trans }}', response.message);
+        toastr.success('{% if field.any_files is defined and field.any_files %}{{ 'form.file_aggiunto'|trans }}{% else %}{{ 'form.immagine_aggiunta'|trans }}{% endif %}', response.message);
     }
     document.getElementById("save").disabled = false;
 };

@@ -729,6 +729,7 @@ class DefaultController extends Controller
         $responseUrl = '';
         $responseError = '';
         $success = false;
+        $fileTitle = '';
 
         $tmpImg = $request->files->all();
 
@@ -799,6 +800,7 @@ class DefaultController extends Controller
                     $s3Key = $sha1;
                     $position = strrpos($file->getClientOriginalName(), ".");
                     $fileName = $s3Key . substr($file->getClientOriginalName(), $position);
+                    $fileTitle = $file->getClientOriginalName();
 
                     $file->move(
                         $localDir,
@@ -839,6 +841,7 @@ class DefaultController extends Controller
             'location' => $responseLocation,       //location viene usato da tinymce
             'id' => $responseId,
             'url' => $responseUrl,
+            'title' => $fileTitle,
             'message' => $responseError,
             'success' => $success,
         );
@@ -946,7 +949,13 @@ class DefaultController extends Controller
                 $data['id'] = $fileEntity->getId();
                 $data['mime'] = $mimeType;
                 $data['file_name'] = $originalName;
-                $data['normalized_type'] = $em->getRepository('MrappsBackendBundle:File')->getNormalizedType($this->container, $mimeType);
+                
+                $normalizedType = $em->getRepository('MrappsBackendBundle:File')->getNormalizedType($this->container, $mimeType);
+                $data['normalized_type'] = $normalizedType;
+                
+                if($normalizedType == 'image') {
+                    $data['url'] = $this->getThumbnailUrl($url);
+                }
 
                 $success = true;
                 $message = '';
