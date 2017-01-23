@@ -500,6 +500,32 @@ class DefaultController extends Controller
                 //Api Key Google Maps
                 $fields[$k]['gmaps_api_key'] = $gmapsApiKey;
             }
+            
+            //Gallery
+            if($f['type'] == 'gallery') {
+                
+                if(isset($f['any_files']) && (bool)$f['any_files'] == true) {
+                    
+                    $value = json_decode(trim($f['value']), true);
+                    if(null != $value) {
+                        $newValue = [];
+                        foreach ($value as $file) {
+                            
+                            $converted = ['data' => [
+                                'id' => $file['id'],
+                                'file_name' => $file['title'],
+                            ]];
+                            
+                            if(isset($file['mime'])) $converted['data']['normalized_type'] = $file['mime'];
+                            if(isset($file['url'])) $converted['data']['url'] = $file['url'];
+                            
+                            $newValue[] = $converted;
+                        }
+                       
+                        $fields[$k]['value'] = json_encode($newValue);
+                    }
+                }
+            }
 
             //Pannello
             if ($f['type'] == 'panel') {
@@ -710,8 +736,11 @@ class DefaultController extends Controller
     private function getThumbnailUrl($imageUrl = null)
     {
         if ($this->get('mrapps.backend.parameters_handler')->bundleExists('LiipImagineBundle')) {
-
-            return $this->get('liip_imagine.cache.manager')->getBrowserPath($imageUrl, 'backend_thumbnail');
+            try {
+                return $this->get('liip_imagine.cache.manager')->getBrowserPath($imageUrl, 'backend_thumbnail');
+            } catch (\Exception $ex) {
+                return '';
+            }
 
         } else {
             return $imageUrl;

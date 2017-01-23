@@ -18,7 +18,7 @@ $scope.{{ uploader_name }} = new FileUploader({
 
 $scope.{{field.name}}_getImageStyle = function(immagine) {
 
-    if(typeof(immagine) !== "undefined" &&
+    if(typeof(immagine) !== "undefined" && typeof(immagine.data) !== "undefined" &&
     {% if field.any_files is defined and field.any_files %}
     typeof(immagine.data.url) !== "undefined" && jQuery.trim(immagine.data.url).length > 0
     {% else %}
