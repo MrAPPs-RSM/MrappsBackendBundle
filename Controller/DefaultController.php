@@ -349,6 +349,8 @@ class DefaultController extends Controller
 
     public function __listAction(Request $request, $title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null, $deleteMessages = array())
     {
+        if(!is_array($defaultFilter) || empty($defaultFilter)) $defaultFilter = ['id' => ''];
+        
         $this->security($request, 'view');
 
         $em = $this->getDoctrine()->getManager();
