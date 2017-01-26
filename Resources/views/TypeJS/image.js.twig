@@ -35,3 +35,31 @@ $scope.{{ field.name }}.onSuccessItem = function (fileItem, response, status, he
     }
     document.getElementById("save").disabled = false;
 };
+
+$scope.{{ field.name }}_deleteFile = function() {
+
+    swal({
+        title: "{{ 'form.elemento.procedere'|trans|e('js') }}",
+        text: "Eliminare questa immagine?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "{{ 'checkbox.si'|trans|e('js') }}",
+        cancelButtonText: "{{ 'checkbox.no'|trans|e('js') }}",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }, function (isConfirm) {
+        if (isConfirm) {
+        
+            $scope.form.{{ field.name }} = null;
+            $scope.{{ field.name }}_url = '';
+            
+            $scope.$digest();
+            
+            swal('{{ 'form.operazione.completata'|trans }}', '', "success");
+        }else {
+            swal("{{ 'form.errore'|trans|e('js') }}", "{{ 'operazione.annullata'|trans|e('js') }}", "error");
+        }
+    });
+    
+};
