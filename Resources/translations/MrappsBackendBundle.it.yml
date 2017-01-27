@@ -6,7 +6,7 @@ generale:
 form:
     attendere: 'Attendere...'
     errore_server: 'Errore nella richiesta al server'
-    compila_campi: 'Compila i campi richiesti.'
+    compila_campi: 'Compila i campi richiesti:'
     aggiungi_nuovo: 'Aggiungi Nuovo'
     modifica: Modifica
     crea: Crea

@@ -6,7 +6,7 @@ generale:
 form:
     attendere: 'Loading...'
     errore_server: 'Server request error'
-    compila_campi: 'Please fill the required fields..'
+    compila_campi: 'Please fill the required fields:'
     aggiungi_nuovo: 'Add new'
     modifica: 'Edit'
     crea: 'Add'

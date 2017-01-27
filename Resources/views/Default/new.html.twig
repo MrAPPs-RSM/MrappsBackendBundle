@@ -255,6 +255,8 @@
             {% endif %}
             {% endfor %}
             {% endfor %}
+                
+            var errorsLabels = [];
 
             {% for field in jsFields %}
 
@@ -271,9 +273,11 @@
             {% set field = field|merge({"value" : null}) %}
             {% endif %}
             {{ include(twig_name, { 'field': field }) }}
+            errorsLabels["{{field.name}}"] = "{% if field.title is defined and field.title|trim|length > 0 %}{{field.title}}{% else %}{{field.name}}{% endif %} ({{lang.name}})";
             {% endfor %}
             {% else %}
             {{ include(twig_name, { 'field': field }) }}
+            errorsLabels["{{field.name}}"] = "{% if field.title is defined and field.title|trim|length > 0 %}{{field.title}}{% else %}{{field.name}}{% endif %}";
             {% endif %}
 
             {% endfor %}
@@ -386,7 +390,18 @@
                     });
                     {% endif %}
                 } else {
-                    toastr.error('{{ 'form.errore'|trans }}', '{{ 'form.compila_campi'|trans }}');
+                    
+                    var listFields = "";
+                    if(typeof(vm.formValidate.$error.required) !== "undefined") {
+                        angular.forEach(vm.formValidate.$error.required, function(field){
+                            if(field.$invalid){
+                                var errorLabel = typeof(errorsLabels[field.$name]) !== "undefined" ? errorsLabels[field.$name] : field.$name;
+                                listFields += errorLabel+"<br/>";
+                            }
+                        });
+                    }
+                    
+                    toastr.error('{{ 'form.compila_campi'|trans }}<br/>'+listFields,'{{ 'form.errore'|trans }}');
                     return false;
                 }
             };
