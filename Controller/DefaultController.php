@@ -301,6 +301,9 @@ class DefaultController extends Controller
 
     public function __customAction(Request $request, $params = array())
     {
+        $em = $this->getDoctrine()->getManager();
+        $languages = $em->getRepository('MrappsBackendBundle:Language')->getAvailableLanguages();
+        
         $baseParams = [
             'current_route' => $request->get('_route'),
             'route_params' => !empty($request->get('_route_params'))
@@ -309,7 +312,7 @@ class DefaultController extends Controller
             'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
                 ? $this->container->getParameter('mrapps_backend.logo_path')
                 : null,
-            'languages' => Utils::getLanguages(),
+            'languages' => Utils::getLanguages($languages),
         ];
 
         //Tipologia di permesso (es. view)
@@ -333,7 +336,6 @@ class DefaultController extends Controller
 
         if (strlen($template) > 0) {
             
-            $em = $this->getDoctrine()->getManager();
             $currentObject = Utils::getControllerCompactName($request->attributes->get('_controller'));
 
             //Permessi per questo oggetto
@@ -376,6 +378,8 @@ class DefaultController extends Controller
                 $laCount++;
             }
         }
+        
+        $languages = $em->getRepository('MrappsBackendBundle:Language')->getAvailableLanguages();
 
 
         $defaultRouteName = $this->getDefaultRouteForUser($request->getUser());
@@ -389,7 +393,7 @@ class DefaultController extends Controller
             'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
                 ? $this->container->getParameter('mrapps_backend.logo_path')
                 : null,
-            'languages' => Utils::getLanguages(),
+            'languages' => Utils::getLanguages($languages),
             'current_object' => $currentObject,
             'title' => $title,
             'tableColumns' => $tableColumns,
@@ -628,7 +632,7 @@ class DefaultController extends Controller
             'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
                 ? $this->container->getParameter('mrapps_backend.logo_path')
                 : null,
-            'languages' => Utils::getLanguages(),
+            'languages' => Utils::getLanguages($languages),
             'title' => $title,
             'panels' => $panels,
             'linkSave' => $linkSave,
@@ -725,7 +729,7 @@ class DefaultController extends Controller
             'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
                 ? $this->container->getParameter('mrapps_backend.logo_path')
                 : null,
-            'languages' => Utils::getLanguages(),
+            'languages' => Utils::getLanguages($languages),
             'title' => $title,
             'panels' => $panels,
             'linkEdit' => $linkEdit,
@@ -1147,6 +1151,8 @@ class DefaultController extends Controller
         $permissions = $em->getRepository('MrappsBackendBundle:Permission')->findBy(array('object' => $object));
 
         $defaultRouteName = $this->getDefaultRouteForUser($request->getUser());
+        
+        $languages = $em->getRepository('MrappsBackendBundle:Language')->getAvailableLanguages();
 
         return $this->render('MrappsBackendBundle:Default:permissions.html.twig', array(
             'current_route' => $request->get('_route'),
@@ -1157,7 +1163,7 @@ class DefaultController extends Controller
             'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
                 ? $this->container->getParameter('mrapps_backend.logo_path')
                 : null,
-            'languages' => Utils::getLanguages(),
+            'languages' => Utils::getLanguages($languages),
             'title' => "Gestione permessi per l'oggetto '" . $object . "'",
             'angular' => '"ngTable","ngResource"',
             'permissions' => $permissions,
@@ -1267,6 +1273,9 @@ class DefaultController extends Controller
     public function __calendarAction(Request $request, $title, $calendarAjax, $linkBreadcrumb = null, $calendarNew = null, $calendarDelete = null, $fields = null)
     {
         $defaultRouteName = $this->getDefaultRouteForUser($request->getUser());
+        
+        $em = $this->getDoctrine()->getManager();
+        $languages = $em->getRepository('MrappsBackendBundle:Language')->getAvailableLanguages();
 
         return $this->render('MrappsBackendBundle:Default:calendar.html.twig', array(
             'current_route' => $request->get('_route'),
@@ -1277,7 +1286,7 @@ class DefaultController extends Controller
             'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
                 ? $this->container->getParameter('mrapps_backend.logo_path')
                 : null,
-            'languages' => Utils::getLanguages(),
+            'languages' => Utils::getLanguages($languages),
             'title' => $title,
             'calendarAjax' => $calendarAjax,
             'linkBreadcrumb' => $linkBreadcrumb,

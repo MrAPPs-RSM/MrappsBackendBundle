@@ -792,12 +792,16 @@ class Utils
         return $array;
     }
 
-    public static function getLanguages()
+    public static function getLanguages($entities = null)
     {
-        return [
-            "it" => "Italiano",
-            "en" => "English"
-        ];
+        if(null == $entities) return ["it" => "Italiano", "en" => "English"];
+        
+        $output = [];
+        foreach ($entities as $l) {
+            $output[$l->getIsoCode()] = $l->getName();
+        }
+        
+        return $output;
     }
 
     public static function getDefaultRouteForUser($container, $user)
