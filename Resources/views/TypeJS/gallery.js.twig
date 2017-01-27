@@ -49,22 +49,54 @@ $scope.{{ uploader_name }}.onAfterAddingFile = function (item) {
 };
 {% endif %}
 
+$scope.{{field.name}}_uploading = false;
+$scope.{{field.name}}_totalItems = 0;
+$scope.{{field.name}}_actualItem = 0;
+$scope.{{field.name}}_progress = 0;
+$scope.{{ uploader_name }}.onAfterAddingAll = function (addedItems) {
+    $scope.{{field.name}}_totalItems = addedItems.length;
+    $scope.{{field.name}}_actualItem = 0;
+    $scope.{{field.name}}_progress = 0;
+}
+
 $scope.{{ uploader_name }}.onBeforeUploadItem = function (item) {
-    document.getElementById("save").disabled = true;
-    $('#load_{{ field.name }}').removeClass('hide');
+    $scope.{{field.name}}_uploading = true;
+    $scope.{{field.name}}_actualItem++;
+    $scope.{{field.name}}_updateProgress();
 };
+
+$scope.{{field.name}}_updateProgress = function () {
+    if($scope.{{field.name}}_totalItems == 0) {
+        $scope.{{field.name}}_progress = 100;
+    }else {
+        $scope.{{field.name}}_progress = ($scope.{{field.name}}_actualItem*100)/$scope.{{field.name}}_totalItems;
+    }
+}
 
 $scope.{{ uploader_name }}.onSuccessItem = function (fileItem, response, status, headers) {
     if (response.success == false) {
         toastr.error('{{ 'form.errore'|trans }}', response.message);
     } else {
-        $('#load_{{ field.name }}').addClass('hide');
         $scope.gallery_{{field.name}}_immagini.push(response);
         $scope.form.{{ field.name }} = $scope.gallery_{{ field.name }}_immagini;
         toastr.success('{% if field.any_files is defined and field.any_files %}{{ 'form.file_aggiunto'|trans }}{% else %}{{ 'form.immagine_aggiunta'|trans }}{% endif %}', response.message);
     }
-    document.getElementById("save").disabled = false;
 };
+
+$scope.{{ uploader_name }}.onErrorItem = function (fileItem, response, status, headers) {
+    toastr.error('{{ 'form.errore_caricamento_file'|trans }} '+fileItem.file.name, '');
+};
+
+$scope.{{ uploader_name }}.onCompleteAll = function () {
+    $scope.{{field.name}}_uploading = false;
+    $scope.{{field.name}}_totalItems = 0;
+    $scope.{{field.name}}_actualItem = 0;
+    $scope.{{field.name}}_progress = 0;
+    toastr.success('{{ 'form.tutti_files_caricati'|trans }}', '');
+    
+    $scope.$digest();
+}
+
 
 {% if field.value is not null %}
 var gallery = {{ field.value | raw }};

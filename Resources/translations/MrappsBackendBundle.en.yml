@@ -15,6 +15,8 @@ form:
     immagine_salvata: 'Image saved'
     immagine_aggiunta: 'Image added'
     file_aggiunto: 'File added'
+    tutti_files_caricati: 'Upload complete.'
+    errore_caricamento_file: 'Si è verificato un errore durante il caricamento del seguente file: '
     annulla: 'Undo'
     elimina: 'Delete'
     operazione:
