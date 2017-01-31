@@ -12,6 +12,7 @@ final class MrResponse
         'data' => null,
         'message' => '',
         'success' => true,
+        'error_code' => null,
     ];
 
     private function __construct(array $params)
@@ -40,6 +41,7 @@ final class MrResponse
             "data" => $data,
             "success" => true,
             "message" => $message,
+            "error_code" => null,
         ]);
     }
 
@@ -49,15 +51,17 @@ final class MrResponse
             "data" => null,
             "success" => true,
             "message" => $message,
+            "error_code" => null,
         ]);
     }
     
-    public static function withDefaultParams($success, array $data = null, $message = '')
+    public static function withDefaultParams($success, array $data = null, $message = '', $errorCode = null)
     {
         return static::getJsonResponse([
             "data" => $data,
             "success" => $success,
             "message" => $message,
+            "error_code" => $errorCode,
         ]);
     }
 }

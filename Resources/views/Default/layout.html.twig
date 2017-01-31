@@ -70,6 +70,7 @@
                             {% endif %}
                         </li>
                     </ul>
+                    {% if languages|length > 1 %}
                     <div class="dropdown languages-list">
                         <button class="btn btn-link dropdown-toggle" type="button" id="dropdownLanguages"
                                 data-toggle="dropdown"
@@ -85,6 +86,7 @@
                             {% endfor %}
                         </ul>
                     </div>
+                    {% endif %}
                 </div>
             </nav>
         {% endblock topnavbar %}

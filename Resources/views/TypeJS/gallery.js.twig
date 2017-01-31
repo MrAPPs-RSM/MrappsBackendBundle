@@ -1,11 +1,39 @@
 {% set uploader_name = ['gallery_',field.name]|join %}
 
+$scope.{{ field.name }}_assets = {
+    'file': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
+    'image': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
+    'video': '{{ asset('/bundles/mrappsbackend/img/generic-file.png') }}',
+    'pdf': '{{ asset('/bundles/mrappsbackend/img/pdf.png') }}',
+    'zip': '{{ asset('/bundles/mrappsbackend/img/zip.png') }}',
+    'json': '{{ asset('/bundles/mrappsbackend/img/json.png') }}'
+};
+
 $scope.gallery_{{ field.name }}_immagini = [];
 
 $scope.{{ uploader_name }} = new FileUploader({
-    url: '{{ path('mrapps_backend_uploadimmagine') }}',
+    url: '{% if field.any_files is defined and field.any_files %}{{ path('mrapps_backend_uploadfile') }}{% else %}{{ path('mrapps_backend_uploadimmagine') }}{% endif %}',
     autoUpload: true
 });
+
+$scope.{{field.name}}_getImageStyle = function(immagine) {
+
+    if(typeof(immagine) !== "undefined" && typeof(immagine.data) !== "undefined" &&
+    {% if field.any_files is defined and field.any_files %}
+    typeof(immagine.data.url) !== "undefined" && jQuery.trim(immagine.data.url).length > 0
+    {% else %}
+    typeof(immagine.url) !== "undefined" && jQuery.trim(immagine.url).length > 0
+    {% endif %}
+    ){
+        return {'background-image':'url('+{% if field.any_files is defined and field.any_files %}immagine.data.url{% else %}immagine.url{% endif %}+')'};
+    }else {
+        if(typeof($scope.{{ field.name }}_assets[immagine.data.normalized_type]) !== "undefined") {
+            return {'background-image':'url('+$scope.{{ field.name }}_assets[immagine.data.normalized_type]+')'};
+        }else {
+            return "";
+        }
+    }
+}
 
 $scope.{{ uploader_name }}.removeId = function (array, index) {
     array.splice(index, 1);
@@ -21,22 +49,54 @@ $scope.{{ uploader_name }}.onAfterAddingFile = function (item) {
 };
 {% endif %}
 
+$scope.{{field.name}}_uploading = false;
+$scope.{{field.name}}_totalItems = 0;
+$scope.{{field.name}}_actualItem = 0;
+$scope.{{field.name}}_progress = 0;
+$scope.{{ uploader_name }}.onAfterAddingAll = function (addedItems) {
+    $scope.{{field.name}}_totalItems = addedItems.length;
+    $scope.{{field.name}}_actualItem = 0;
+    $scope.{{field.name}}_progress = 0;
+}
+
 $scope.{{ uploader_name }}.onBeforeUploadItem = function (item) {
-    document.getElementById("save").disabled = true;
-    $('#load_{{ field.name }}').removeClass('hide');
+    $scope.{{field.name}}_uploading = true;
+    $scope.{{field.name}}_actualItem++;
+    $scope.{{field.name}}_updateProgress();
 };
+
+$scope.{{field.name}}_updateProgress = function () {
+    if($scope.{{field.name}}_totalItems == 0) {
+        $scope.{{field.name}}_progress = 100;
+    }else {
+        $scope.{{field.name}}_progress = ($scope.{{field.name}}_actualItem*100)/$scope.{{field.name}}_totalItems;
+    }
+}
 
 $scope.{{ uploader_name }}.onSuccessItem = function (fileItem, response, status, headers) {
     if (response.success == false) {
         toastr.error('{{ 'form.errore'|trans }}', response.message);
     } else {
-        $('#load_{{ field.name }}').addClass('hide');
         $scope.gallery_{{field.name}}_immagini.push(response);
         $scope.form.{{ field.name }} = $scope.gallery_{{ field.name }}_immagini;
-        toastr.success('{{ 'form.immagine_salvata'|trans }}', response.message);
+        toastr.success('{% if field.any_files is defined and field.any_files %}{{ 'form.file_aggiunto'|trans }}{% else %}{{ 'form.immagine_aggiunta'|trans }}{% endif %}', response.message);
     }
-    document.getElementById("save").disabled = false;
 };
+
+$scope.{{ uploader_name }}.onErrorItem = function (fileItem, response, status, headers) {
+    toastr.error('{{ 'form.errore_caricamento_file'|trans }} '+fileItem.file.name, '');
+};
+
+$scope.{{ uploader_name }}.onCompleteAll = function () {
+    $scope.{{field.name}}_uploading = false;
+    $scope.{{field.name}}_totalItems = 0;
+    $scope.{{field.name}}_actualItem = 0;
+    $scope.{{field.name}}_progress = 0;
+    toastr.success('{{ 'form.tutti_files_caricati'|trans }}', '');
+    
+    $scope.$digest();
+}
+
 
 {% if field.value is not null %}
 var gallery = {{ field.value | raw }};

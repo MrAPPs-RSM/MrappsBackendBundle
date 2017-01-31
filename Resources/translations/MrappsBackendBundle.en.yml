@@ -1,15 +1,22 @@
 # new, edit e delete
 
+generale:
+    titolo: 'Title'
+
 form:
     attendere: 'Loading...'
     errore_server: 'Server request error'
-    compila_campi: 'Please fill the required fields..'
+    compila_campi: 'Please fill the required fields:'
     aggiungi_nuovo: 'Add new'
     modifica: 'Edit'
     crea: 'Add'
     errore: 'Error!'
     salvato: 'Saved!'
     immagine_salvata: 'Image saved'
+    immagine_aggiunta: 'Image added'
+    file_aggiunto: 'File added'
+    tutti_files_caricati: 'Upload complete.'
+    errore_caricamento_file: 'Si è verificato un errore durante il caricamento del seguente file: '
     annulla: 'Undo'
     elimina: 'Delete'
     operazione:

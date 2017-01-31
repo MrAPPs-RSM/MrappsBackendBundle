@@ -301,6 +301,9 @@ class DefaultController extends Controller
 
     public function __customAction(Request $request, $params = array())
     {
+        $em = $this->getDoctrine()->getManager();
+        $languages = $em->getRepository('MrappsBackendBundle:Language')->getAvailableLanguages();
+        
         $baseParams = [
             'current_route' => $request->get('_route'),
             'route_params' => !empty($request->get('_route_params'))
@@ -309,7 +312,7 @@ class DefaultController extends Controller
             'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
                 ? $this->container->getParameter('mrapps_backend.logo_path')
                 : null,
-            'languages' => Utils::getLanguages(),
+            'languages' => Utils::getLanguages($languages),
         ];
 
         //Tipologia di permesso (es. view)
@@ -333,7 +336,6 @@ class DefaultController extends Controller
 
         if (strlen($template) > 0) {
             
-            $em = $this->getDoctrine()->getManager();
             $currentObject = Utils::getControllerCompactName($request->attributes->get('_controller'));
 
             //Permessi per questo oggetto
@@ -349,6 +351,8 @@ class DefaultController extends Controller
 
     public function __listAction(Request $request, $title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null, $deleteMessages = array())
     {
+        if(!is_array($defaultFilter) || empty($defaultFilter)) $defaultFilter = ['id' => ''];
+        
         $this->security($request, 'view');
 
         $em = $this->getDoctrine()->getManager();
@@ -374,6 +378,8 @@ class DefaultController extends Controller
                 $laCount++;
             }
         }
+        
+        $languages = $em->getRepository('MrappsBackendBundle:Language')->getAvailableLanguages();
 
 
         $defaultRouteName = $this->getDefaultRouteForUser($request->getUser());
@@ -387,7 +393,7 @@ class DefaultController extends Controller
             'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
                 ? $this->container->getParameter('mrapps_backend.logo_path')
                 : null,
-            'languages' => Utils::getLanguages(),
+            'languages' => Utils::getLanguages($languages),
             'current_object' => $currentObject,
             'title' => $title,
             'tableColumns' => $tableColumns,
@@ -500,6 +506,32 @@ class DefaultController extends Controller
                 //Api Key Google Maps
                 $fields[$k]['gmaps_api_key'] = $gmapsApiKey;
             }
+            
+            //Gallery
+            if($f['type'] == 'gallery') {
+                
+                if(isset($f['any_files']) && (bool)$f['any_files'] == true) {
+                    
+                    $value = json_decode(trim($f['value']), true);
+                    if(null != $value) {
+                        $newValue = [];
+                        foreach ($value as $file) {
+                            
+                            $converted = ['data' => [
+                                'id' => $file['id'],
+                                'file_name' => $file['title'],
+                            ]];
+                            
+                            if(isset($file['mime'])) $converted['data']['normalized_type'] = $file['mime'];
+                            if(isset($file['url'])) $converted['data']['url'] = $file['url'];
+                            
+                            $newValue[] = $converted;
+                        }
+                       
+                        $fields[$k]['value'] = json_encode($newValue);
+                    }
+                }
+            }
 
             //Pannello
             if ($f['type'] == 'panel') {
@@ -600,7 +632,7 @@ class DefaultController extends Controller
             'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
                 ? $this->container->getParameter('mrapps_backend.logo_path')
                 : null,
-            'languages' => Utils::getLanguages(),
+            'languages' => Utils::getLanguages($languages),
             'title' => $title,
             'panels' => $panels,
             'linkSave' => $linkSave,
@@ -697,7 +729,7 @@ class DefaultController extends Controller
             'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
                 ? $this->container->getParameter('mrapps_backend.logo_path')
                 : null,
-            'languages' => Utils::getLanguages(),
+            'languages' => Utils::getLanguages($languages),
             'title' => $title,
             'panels' => $panels,
             'linkEdit' => $linkEdit,
@@ -710,8 +742,11 @@ class DefaultController extends Controller
     private function getThumbnailUrl($imageUrl = null)
     {
         if ($this->get('mrapps.backend.parameters_handler')->bundleExists('LiipImagineBundle')) {
-
-            return $this->get('liip_imagine.cache.manager')->getBrowserPath($imageUrl, 'backend_thumbnail');
+            try {
+                return $this->get('liip_imagine.cache.manager')->getBrowserPath($imageUrl, 'backend_thumbnail');
+            } catch (\Exception $ex) {
+                return '';
+            }
 
         } else {
             return $imageUrl;
@@ -729,6 +764,7 @@ class DefaultController extends Controller
         $responseUrl = '';
         $responseError = '';
         $success = false;
+        $fileTitle = '';
 
         $tmpImg = $request->files->all();
 
@@ -799,6 +835,7 @@ class DefaultController extends Controller
                     $s3Key = $sha1;
                     $position = strrpos($file->getClientOriginalName(), ".");
                     $fileName = $s3Key . substr($file->getClientOriginalName(), $position);
+                    $fileTitle = $file->getClientOriginalName();
 
                     $file->move(
                         $localDir,
@@ -839,6 +876,7 @@ class DefaultController extends Controller
             'location' => $responseLocation,       //location viene usato da tinymce
             'id' => $responseId,
             'url' => $responseUrl,
+            'title' => $fileTitle,
             'message' => $responseError,
             'success' => $success,
         );
@@ -946,7 +984,13 @@ class DefaultController extends Controller
                 $data['id'] = $fileEntity->getId();
                 $data['mime'] = $mimeType;
                 $data['file_name'] = $originalName;
-                $data['normalized_type'] = $em->getRepository('MrappsBackendBundle:File')->getNormalizedType($this->container, $mimeType);
+                
+                $normalizedType = $em->getRepository('MrappsBackendBundle:File')->getNormalizedType($this->container, $mimeType);
+                $data['normalized_type'] = $normalizedType;
+                
+                if($normalizedType == 'image') {
+                    $data['url'] = $this->getThumbnailUrl($url);
+                }
 
                 $success = true;
                 $message = '';
@@ -1107,6 +1151,8 @@ class DefaultController extends Controller
         $permissions = $em->getRepository('MrappsBackendBundle:Permission')->findBy(array('object' => $object));
 
         $defaultRouteName = $this->getDefaultRouteForUser($request->getUser());
+        
+        $languages = $em->getRepository('MrappsBackendBundle:Language')->getAvailableLanguages();
 
         return $this->render('MrappsBackendBundle:Default:permissions.html.twig', array(
             'current_route' => $request->get('_route'),
@@ -1117,7 +1163,7 @@ class DefaultController extends Controller
             'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
                 ? $this->container->getParameter('mrapps_backend.logo_path')
                 : null,
-            'languages' => Utils::getLanguages(),
+            'languages' => Utils::getLanguages($languages),
             'title' => "Gestione permessi per l'oggetto '" . $object . "'",
             'angular' => '"ngTable","ngResource"',
             'permissions' => $permissions,
@@ -1227,6 +1273,9 @@ class DefaultController extends Controller
     public function __calendarAction(Request $request, $title, $calendarAjax, $linkBreadcrumb = null, $calendarNew = null, $calendarDelete = null, $fields = null)
     {
         $defaultRouteName = $this->getDefaultRouteForUser($request->getUser());
+        
+        $em = $this->getDoctrine()->getManager();
+        $languages = $em->getRepository('MrappsBackendBundle:Language')->getAvailableLanguages();
 
         return $this->render('MrappsBackendBundle:Default:calendar.html.twig', array(
             'current_route' => $request->get('_route'),
@@ -1237,7 +1286,7 @@ class DefaultController extends Controller
             'logo_path' => $this->container->hasParameter('mrapps_backend.logo_path')
                 ? $this->container->getParameter('mrapps_backend.logo_path')
                 : null,
-            'languages' => Utils::getLanguages(),
+            'languages' => Utils::getLanguages($languages),
             'title' => $title,
             'calendarAjax' => $calendarAjax,
             'linkBreadcrumb' => $linkBreadcrumb,

@@ -65,3 +65,35 @@ $scope.{{ field.name }}.onErrorItem = function (fileItem, response, status, head
     $scope.{{ field.name }}.clearQueue();
     $scope.form.{{ field.name }} = null;
 };
+
+$scope.{{ field.name }}_deleteFile = function() {
+
+    swal({
+        title: "{{ 'form.elemento.procedere'|trans|e('js') }}",
+        text: "Eliminare questo file?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "{{ 'checkbox.si'|trans|e('js') }}",
+        cancelButtonText: "{{ 'checkbox.no'|trans|e('js') }}",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }, function (isConfirm) {
+        if (isConfirm) {
+        
+            $scope.form.{{ field.name }} = null;
+            $scope.{{ field.name }}_uploading = false;
+            $scope.{{ field.name }}_progress = 0;
+            $scope.{{ field.name }}_original_name = '';
+            $scope.{{ field.name }}_mime_type = '';
+            $scope.{{ field.name }}_normalized_type = 'file';
+            
+            $scope.$digest();
+            
+            swal('{{ 'form.operazione.completata'|trans }}', '', "success");
+        }else {
+            swal("{{ 'form.errore'|trans|e('js') }}", "{{ 'operazione.annullata'|trans|e('js') }}", "error");
+        }
+    });
+    
+};
