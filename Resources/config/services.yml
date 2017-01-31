@@ -82,3 +82,10 @@ services:
             class: Mrapps\BackendBundle\Services\EntitiesProvider
             arguments:
                 - '@doctrine.orm.entity_manager'
+
+    mrapps.twig_extension.absolute_url:
+            class: Mrapps\BackendBundle\Twig\AbsoluteUrl
+            arguments: ['@mrapps.backend.public_url_provider']
+            public: false
+            tags:
+                - { name: twig.extension }
