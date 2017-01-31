@@ -333,6 +333,7 @@
                             closeOnConfirm: false,
                             closeOnCancel: false
                         }, function (isConfirm) {
+                            $("button.confirm").attr('disabled', "disabled");
                             if (isConfirm) {
                         {% endif %}
                         document.getElementById("save").disabled = true;
@@ -345,6 +346,7 @@
                                 'Content-Type': 'application/json'
                             },
                         }).then(function successCallback(response) {
+                            $("button.confirm").attr('disabled', "");
                             removeOverlay();
                             if (!response.data.success) {
                                 swal(response.data.message?response.data.message:'{{ 'form.errore'|trans }}', '{{ 'form.errore'|trans }}', "error");
@@ -375,6 +377,7 @@
                             document.getElementById("save").disabled = false;
 
                         }, function errorCallback(response) {
+                            $("button.confirm").attr('disabled', "");
                             removeOverlay();
                             swal('{{ 'form.errore'|trans }}', '{{ 'form.errore_server'|trans }}', "error");
                             document.getElementById("save").disabled = false;
@@ -410,6 +413,7 @@
                 }, function (isConfirm) {
                     if (isConfirm) {
                 {% endif %}
+                        $("button.confirm").attr('disabled', "disabled");
 
                     $scope.linkActionProgress{{ loop.index }} = true;
                     addOverlay();
@@ -421,6 +425,7 @@
                             'Content-Type': 'application/json'
                         },
                     }).then(function successCallback(response) {
+                        $("button.confirm").attr('disabled', "");
                         removeOverlay();
                         if (!response.data.success) {
                             swal(response.data.message, '{{ 'form.errore'|trans }}', "error");
@@ -431,6 +436,7 @@
                         $scope.linkActionProgress{{ loop.index }} = false;
 
                     }, function errorCallback(response) {
+                        $("button.confirm").attr('disabled', "");
                         removeOverlay();
                         swal('{{ 'form.errore'|trans }}', '{{ 'form.errore_server'|trans }}', "error");
                         $scope.linkActionProgress{{ loop.index }} = false;

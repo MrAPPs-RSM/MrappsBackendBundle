@@ -2,6 +2,7 @@
 $scope.{{ field.name }}Loading = false;
 $scope.executeAjax{{ field.name }} = function() {
     {% if field.confirm is defined and field.confirm|length > 0 %}
+
     swal({
         title: "{{ 'form.elemento.procedere'|trans|e('js') }}",
         text: "{{ field.confirm|escape('js') }}",
@@ -15,9 +16,11 @@ $scope.executeAjax{{ field.name }} = function() {
     }, function (isConfirm) {
         if (isConfirm) {
     {% endif %}
+        $("button.confirm").attr('disabled', "disabled");
         $scope.{{ field.name }}Loading = true;
         $http.post('{{ field.url }}', {'form':$scope.form})
                 .then(function (response) {
+                    $("button.confirm").attr('disabled', "");
                     if(response.data.success) {
                         swal(response.data.message, "", "success");
                         $.each(response.data.data, function(k,v) {
