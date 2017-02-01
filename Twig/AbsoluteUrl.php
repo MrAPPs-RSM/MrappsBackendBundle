@@ -26,13 +26,13 @@ class AbsoluteUrl extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('absolute_url', [$this, 'getAbsoluteUrl']),
+            new \Twig_SimpleFunction('mrapps_absolute_url', [$this, 'getAbsoluteUrl']),
         ];
     }
 
     public function getName()
     {
-        return 'absolute_url';
+        return 'mrapps_absolute_url';
     }
 
     public function getAbsoluteUrl(FileInterface $file)
