@@ -351,12 +351,14 @@
                             },
                         }).then(function successCallback(response) {
                             $("button.confirm").attr('disabled', "");
-                            removeOverlay();
+                            
                             if (!response.data.success) {
+                                removeOverlay();
                                 swal(response.data.message?response.data.message:'{{ 'form.errore'|trans }}', '{{ 'form.errore'|trans }}', "error");
                             } else {
 
                                 {% if edit %}
+                                removeOverlay();
                                 swal('{{ 'form.salvato'|trans }}', '{{ confirmMessages['success'] }}', "success");
 
                                 {# Aggiornamento valori modificati lato server #}
@@ -375,6 +377,7 @@
                                 if (typeof id === "object") {
                                     id = id.id; {# Awesome #}
                                 }
+                                swal('{{ 'form.elemento.elemento_creato'|trans }}', '{{ 'form.elemento.completato'|trans }}', "success");
                                 location.href = '{{ linkEdit }}/' + id + '?create=true';
                                 {% endif %}
                             }
