@@ -44,6 +44,8 @@ class PublicUrlProvider
         } else {
             $this->requestStack = $requestStack;
             $request = $requestStack->getCurrentRequest();
+            
+            if ($request != null)
             $this->baseUrl = $request->getSchemeAndHttpHost() . "/";
         }
     }
