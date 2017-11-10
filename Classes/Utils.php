@@ -335,6 +335,9 @@ class Utils
 
                             $tmp[] = sprintf(" a.%s %s (%s) ", $campo, Operator::In, $valore['value']);
                             $inCount++;
+                        } elseif ($operator == Operator::Like || $operator == Operator::LikeCustom) {
+                            $tmp[] = sprintf(" a.%s LIKE :%s ", $campo, $campo);
+                            $params[$campo] = '%' . $valore['value'] . '%';
                         }
 
                     } else {
