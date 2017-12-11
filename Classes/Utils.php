@@ -351,7 +351,8 @@ class Utils
             if ($customWhere !== null) {
                 $tmp[] = $customWhere;
                 if ($customParams !== null) {
-                    $params = array_merge($params, $customParams);
+                    //$params = array_merge($params, $customParams);
+                    $params = $params + $customParams;  //L'operatore + mantiene le chiavi numeriche (es. WHERE IN (?1))
                 }
             }
 
