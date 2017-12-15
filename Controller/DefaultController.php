@@ -349,7 +349,7 @@ class DefaultController extends Controller
         }
     }
 
-    public function __listAction(Request $request, $title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null, $deleteMessages = array())
+    public function __listAction(Request $request, $title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null, $deleteMessages = array(), $exportCsvEnabled = false, $exportCsvName = '')
     {
         if(!is_array($defaultFilter) || empty($defaultFilter)) $defaultFilter = ['id' => ''];
         
@@ -410,6 +410,8 @@ class DefaultController extends Controller
             'angular' => '"ngTable","ngResource","ui.sortable"',
             'deleteMessages' => $deleteMessages,
             'permissions' => $permissions,
+            'exportCsvEnabled' => $exportCsvEnabled,
+            'exportCsvName' => $exportCsvName,
         ));
     }
 
@@ -1295,5 +1297,59 @@ class DefaultController extends Controller
             'fields' => $fields,
             'angular' => '"angularFileUpload","ui.tinymce","ui.sortable","ui.bootstrap","ngJsTree","ui.validate","minicolors","ui.select","uiGmapgoogle-maps"',
         ));
+    }
+
+    /**
+     * @Route("/export_csv", name="mrapps_backend_exportcsv")
+     * @Method({"POST"})
+     */
+    public function exportcsvAction(Request $request)
+    {
+        //Security
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Accesso non autorizzato!');
+
+        $content = json_decode($request->getContent(), true);
+        $recordset = isset($content['recordset']) && is_array($content['recordset']) ? $content['recordset'] : [];
+        $csvName = isset($content['csvName']) ? trim($content['csvName']) : '';
+
+        if(count($recordset) == 0) {
+            return Utils::generateResponse(false, 'Non ci sono record nella selezione corrente.');
+        }
+
+        //Temp Folder
+        $webFolder = realpath($this->container->get('kernel')->getRootDir() . '/../web') . '/';
+        $tempRelativeFolder = $this->container->getParameter('mrapps_backend.temp_folder') . '/';
+        $tempFolder = $webFolder . $tempRelativeFolder;
+
+        //CSV File Name
+        $tempName = sprintf("csv%s_%s.csv", strlen($csvName) > 0 ? '_'.$csvName : '', Utils::getDateStringForUniqueFiles());
+        $relativePath = $this->get('request')->getSchemeAndHttpHost().'/'.$tempRelativeFolder.$tempName;
+        $absolutePath = $tempFolder . $tempName;
+
+        $errorMsg = 'Si è verificato un problema durante la generazione del file CSV, riprovare più tardi.';
+
+        $handle = @fopen($absolutePath, "w");
+        if($handle === false) {
+            return Utils::generateResponse(false, $errorMsg);
+        }
+
+        //Header
+        $keys = array_keys($recordset[0]);
+        fputcsv($handle, $keys, ';');
+
+        //Recordset
+        foreach ($recordset as $r) {
+            fputcsv($handle, $r, ';');
+        }
+
+        if(!fclose($handle)) {
+            return Utils::generateResponse(false, $errorMsg);
+        }
+
+        if(!file_exists($absolutePath)) {
+            return Utils::generateResponse(false, $errorMsg);
+        }
+
+        return Utils::generateResponse(true, '', ['url' => $relativePath]);
     }
 }

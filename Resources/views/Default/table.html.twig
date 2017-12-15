@@ -93,6 +93,13 @@
                 </tbody>
             </table>
         </div>
+        {% if exportCsvEnabled == true %}
+            <div>
+                <button ng-disabled="exportCsvLoading" class="btn btn-sm" type="button" ng-click="exportCsvCurrentView()">
+                    <i ng-show="exportCsvLoading" class="fa fa-spin fa-spinner"></i>&nbsp;Export CSV
+                </button>
+            </div>
+        {% endif %}
     </div>
 
 {% endblock content %}
@@ -212,6 +219,29 @@
                         }
                     }
                 });
+
+                {% if exportCsvEnabled == true %}
+                $scope.exportCsvLoading = false;
+                $scope.exportCsvCurrentView = function () {
+                    if(!$scope.exportCsvLoading) {
+                        $scope.exportCsvLoading = true;
+                        $http.post('{{ path('mrapps_backend_exportcsv') }}', {recordset: self.data, csvName: '{{ exportCsvName }}'})
+                                .then(function successCallback(response) {
+                                    $scope.exportCsvLoading = false;
+                                    if (response.data.success) {
+                                        swal("{{ 'form.elemento.completato'|trans|e('js') }}", "Il download si avvierà in qualche istante..", "success");
+                                        setTimeout(() => { location.href=response.data.data.url; }, 1000);
+                                    } else {
+                                        swal("{{ 'form.errore'|trans|e('js') }}", response.data.message, "error");
+                                    }
+                                }, function errorCallback(response) {
+                                    $scope.exportCsvLoading = false;
+                                    swal("{{ 'form.errore'|trans|e('js') }}", response.message, "error");
+                                });
+                    }
+                };
+                {% endif %}
+
                 {% if linkDelete is not null and permissions.delete == true %}
                 $scope.deleteajax = function (id) {
                     var data = {id: id};
