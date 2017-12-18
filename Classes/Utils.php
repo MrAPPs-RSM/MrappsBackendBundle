@@ -322,6 +322,12 @@ class Utils
 
                             $tmp[] = sprintf(" a.%s " . $operator . " :%s ", $campo, $campo);
                             $params[$campo] = $valore["value"];
+                        } elseif ($operator == Operator::Between && isset($valore["value2"])) {
+                            
+                            $tmp[] = sprintf(" a.%s BETWEEN :%s AND :%s ", $campo, $campo.'1', $campo.'2');
+                            $params[$campo.'1'] = $valore["value"];
+                            $params[$campo.'2'] = $valore["value2"];
+                            
                         } elseif ($operator == Operator::IsNull ||
                             $operator == Operator::IsNotNull
                         ) {

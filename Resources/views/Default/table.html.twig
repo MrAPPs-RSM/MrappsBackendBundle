@@ -46,10 +46,24 @@
                     {% for column in tableColumns %}
                         {% if column.visible is not defined or column.visible == true %}
                             <td data-title="'{{ column.title }}'"
+                                
                                     {% if column.filterable is defined and column.filterable==true %}
-                                        {% set colType= (column.type=='checkbox'?'select':column.type) %}
-                                        filter="{ '{{ column.name }}': '{{ colType }}' }" {% if column.type=='checkbox' or (column.type=='select' and column.filter_options is defined) %} filter-data="{{ column.name }}_filter" {% endif %}{% endif %} {% if column.sortable is defined and column.sortable==true %}sortable="'{{ column.name }}'"{% endif %} {% if column.clickable is defined %}ng-click="$event.stopPropagation();showChildren(row.id)"
-                            {% endif %}>
+                                        
+                                        {% set colType = column.type %}
+                                        {% if colType == 'checkbox' %}{% set colType = 'select' %}{% endif %}
+                                        {% if colType == 'data' %}{% set colType = 'text' %}{% endif %}
+                                        filter="{ '{{ column.name }}': '{{ colType }}' }"
+                                        
+                                        {% if column.type=='checkbox' or (column.type=='select' and column.filter_options is defined) %}
+                                            filter-data="{{ column.name }}_filter"
+                                        {% endif %}
+                                        
+                                    {% endif %}
+                                    
+                                    {% if column.sortable is defined and column.sortable==true %}sortable="'{{ column.name }}'"{% endif %}
+                                    
+                                    {% if column.clickable is defined %}ng-click="$event.stopPropagation();showChildren(row.id)"{% endif %}
+                            >
                                 {% if column.type == 'image' %}
                                     <img height="150px" ng-src="{/ row.{{ column.name }} /}">
                                 {% elseif column.type=='checkbox' %}
@@ -164,9 +178,9 @@
                         self.tableParams2.reload();
                     }
                 };
-
+                
+                var filterTimeout = null;
                 var isDataLoading = false;
-
                 var paginaAttuale = (location.hash.substr(0, 5) == "#page") ? parseInt(location.hash.substr(5)) : 1;
 
                 self.tableParams2 = new NgTableParams({
@@ -177,8 +191,22 @@
                 }, {
                     //total: dati.length, // length of data
                     getData: function ($defer, params) {
-
+                        setGetDataTimeout($defer, params);
+                    }
+                });
+                
+                var setGetDataTimeout = function($defer, params) {
+                    
+                    var timeoutMillis = 1;
+                    if(filterTimeout != null) {
+                        clearTimeout(filterTimeout);
+                        timeoutMillis = 1000;
+                    }
+                    
+                    filterTimeout = setTimeout(function() {
+                        
                         if (isDataLoading === false) {
+
                             isDataLoading = true;
                             $('#main_body').prepend('<div id="overlay-waiting"><div id="overlay-waiting-content"><i class="fa fa-spin fa-spinner"></i>{{ 'form.attendere'|trans }}</div></div>');
 
@@ -217,8 +245,9 @@
                                 console.log(response);
                             });
                         }
-                    }
-                });
+                        
+                    }, timeoutMillis);
+                };
 
                 {% if exportCsvEnabled == true %}
                 $scope.exportCsvLoading = false;

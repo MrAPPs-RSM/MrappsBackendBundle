@@ -17,4 +17,5 @@ class Operator
     const In = "IN";
     const NotIn = "NOT IN";
     const InSubquery = "INSUBQUERY";
+    const Between = "BETWEEN";
 }
