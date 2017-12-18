@@ -198,7 +198,7 @@ class EntitiesProvider
         foreach ($this->filters as $filterField => $value) {
 
             $parameterName = $this->paramNameFromFieldAndIndex($filterField, $counter);
-
+            
             switch ($value["operator"]) {
                 case Operator::IsNull:
                 case Operator::IsNotNull:
@@ -212,6 +212,21 @@ class EntitiesProvider
                     break;
                 case Operator::InSubquery:
                     $where[] = sprintf(" %s %s (%s) ", $filterField, Operator::In, $value['value']);
+                    break;
+                case Operator::Between:
+                    $where[] = sprintf(" %s BETWEEN :%s AND :%s ", $filterField, $parameterName.'_1', $parameterName.'_2');
+                    if(is_array($value['value'])) {
+                        if(count($value['value']) > 1) {
+                            $this->queryParameters[$parameterName.'_1'] = $value['value'][0];
+                            $this->queryParameters[$parameterName.'_2'] = $value['value'][1];
+                        }else {
+                            $this->queryParameters[$parameterName.'_1'] = $value['value'][0];
+                            $this->queryParameters[$parameterName.'_2'] = $value['value'][0];
+                        }
+                    }else {
+                        $this->queryParameters[$parameterName.'_1'] = $value['value'];
+                        $this->queryParameters[$parameterName.'_2'] = $value['value'];
+                    }
                     break;
                 case Operator::Like:
                     $where[] = sprintf(" %s LIKE :%s ", $filterField, $parameterName);
@@ -316,11 +331,14 @@ class EntitiesProvider
         return $paginator->getIterator()->count();
     }
 
-    public function getResult()
+    public function getResult($usePagination = true)
     {
         $query = $this->createQueryBuilder(true);
-        $query->setFirstResult($this->offset)
+        
+        if((bool)$usePagination) {
+            $query->setFirstResult($this->offset)
             ->setMaxResults($this->limit);
+        }
 
         $paginator = new Paginator($query, true);
 

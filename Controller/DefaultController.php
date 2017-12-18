@@ -349,7 +349,7 @@ class DefaultController extends Controller
         }
     }
 
-    public function __listAction(Request $request, $title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null, $deleteMessages = array(), $exportCsvEnabled = false, $exportCsvName = '')
+    public function __listAction(Request $request, $title, $tableColumns, $defaultSorting, $defaultFilter, $linkData, $linkNew = null, $linkEdit = null, $linkDelete = null, $linkOrder = null, $linkBreadcrumb = null, $linkCustom = null, $linkAction = null, $deleteMessages = array(), $linkExportCsv = null, $exportCsvName = '')
     {
         if(!is_array($defaultFilter) || empty($defaultFilter)) $defaultFilter = ['id' => ''];
         
@@ -410,7 +410,7 @@ class DefaultController extends Controller
             'angular' => '"ngTable","ngResource","ui.sortable"',
             'deleteMessages' => $deleteMessages,
             'permissions' => $permissions,
-            'exportCsvEnabled' => $exportCsvEnabled,
+            'linkExportCsv' => $linkExportCsv,
             'exportCsvName' => $exportCsvName,
         ));
     }
@@ -1299,20 +1299,12 @@ class DefaultController extends Controller
         ));
     }
 
-    /**
-     * @Route("/export_csv", name="mrapps_backend_exportcsv")
-     * @Method({"POST"})
-     */
-    public function exportcsvAction(Request $request)
+    public function __exportcsvAction(Request $request, $data, $csvName = '')
     {
         //Security
         $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Accesso non autorizzato!');
 
-        $content = json_decode($request->getContent(), true);
-        $recordset = isset($content['recordset']) && is_array($content['recordset']) ? $content['recordset'] : [];
-        $csvName = isset($content['csvName']) ? trim($content['csvName']) : '';
-
-        if(count($recordset) == 0) {
+        if(count($data) == 0) {
             return Utils::generateResponse(false, 'Non ci sono record nella selezione corrente.');
         }
 
@@ -1334,11 +1326,11 @@ class DefaultController extends Controller
         }
 
         //Header
-        $keys = array_keys($recordset[0]);
+        $keys = array_keys($data[0]);
         fputcsv($handle, $keys, ';');
 
         //Recordset
-        foreach ($recordset as $r) {
+        foreach ($data as $r) {
             fputcsv($handle, $r, ';');
         }
 
