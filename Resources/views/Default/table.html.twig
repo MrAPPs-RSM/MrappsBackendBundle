@@ -50,9 +50,13 @@
                                     {% if column.filterable is defined and column.filterable==true %}
                                         
                                         {% set colType = column.type %}
-                                        {% if colType == 'checkbox' %}{% set colType = 'select' %}{% endif %}
-                                        {% if colType == 'data' %}{% set colType = 'text' %}{% endif %}
-                                        filter="{ '{{ column.name }}': '{{ colType }}' }"
+                                        {% if colType == 'datarange' %}
+                                            filter="{ '{{ column.name }}_start': 'text', '{{ column.name }}_end': 'text' }"
+                                        {% else %}
+                                            {% if colType == 'checkbox' %}{% set colType = 'select' %}{% endif %}
+                                            {% if colType == 'data' %}{% set colType = 'text' %}{% endif %}
+                                            filter="{ '{{ column.name }}': '{{ colType }}' }"
+                                        {% endif %}
                                         
                                         {% if column.type=='checkbox' or (column.type=='select' and column.filter_options is defined) %}
                                             filter-data="{{ column.name }}_filter"
