@@ -257,7 +257,7 @@ class EntitiesProvider
         return " ORDER BY " . implode(",", $this->sorting);
     }
 
-    private function composeDqlQuery($useDefaultsIfNeeded = true)
+    private function composeDqlQuery($useDefaultsIfNeeded = true, $countResults = false)
     {
         if (count($this->entities) == 0) {
             throw new \Exception("[EntitiesProvider] Add at least one entity to get data");
@@ -303,7 +303,7 @@ class EntitiesProvider
             }
         }
 
-        $selectBlock = sprintf("SELECT %s ", implode(",", $select));
+        $selectBlock = sprintf($countResults ? "SELECT COUNT(%s) " : "SELECT %s ", implode(",", $select));
 
         $whereBlock = $this->composeWhereBlock();
         $sortBlock = $this->composeSortBlock();
@@ -311,9 +311,9 @@ class EntitiesProvider
         return $selectBlock . $fromQuery . $whereBlock . $sortBlock;
     }
 
-    private function createQueryBuilder($useDefaultsIfNeeded = true)
+    private function createQueryBuilder($useDefaultsIfNeeded = true, $countResults = false)
     {
-        $dqlQuery = $this->composeDqlQuery($useDefaultsIfNeeded);
+        $dqlQuery = $this->composeDqlQuery($useDefaultsIfNeeded, $countResults);
         $query = $this->manager->createQuery($dqlQuery);
 
         if (count($this->queryParameters) > 0) {
@@ -325,10 +325,8 @@ class EntitiesProvider
 
     public function countResults()
     {
-        $query = $this->createQueryBuilder(false);
-        $paginator = new Paginator($query, true);
-
-        return $paginator->getIterator()->count();
+        $query = $this->createQueryBuilder(false, true);
+        return (int)$query->getSingleScalarResult();
     }
 
     public function getResult($usePagination = true)
