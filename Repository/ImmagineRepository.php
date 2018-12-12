@@ -16,7 +16,7 @@ use Mrapps\BackendBundle\Entity\Immagine;
  */
 class ImmagineRepository extends EntityRepository
 {
-    public function generateImageFromS3(ContainerInterface $container, $bucket, $key)
+    public function generateImageFromS3(ContainerInterface $container, $bucket, $key, $force = false)
     {
 
         $em = $this->getEntityManager();
@@ -55,7 +55,16 @@ class ImmagineRepository extends EntityRepository
                     $position = strrpos($key, ".");
                     $s3Path = $s3Key . substr($key, $position);
 
-                    if (!$s3->objectExists($s3Path)) $s3->uploadObject($s3Path, $savePath);
+                    if((bool)$force) {
+                        if ($s3->objectExists($s3Path)) {
+                            $s3->deleteObject($s3Path);
+                        }
+                        $s3->uploadObject($s3Path, $savePath);
+                    }else {
+                        if (!$s3->objectExists($s3Path)) {
+                            $s3->uploadObject($s3Path, $savePath);
+                        }
+                    }
 
                     //Entity
                     $immagine = $this->findOneBy(array('url' => $s3Path));
