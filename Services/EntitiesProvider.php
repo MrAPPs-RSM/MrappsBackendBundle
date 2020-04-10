@@ -198,7 +198,7 @@ class EntitiesProvider
         foreach ($this->filters as $filterField => $value) {
 
             $parameterName = $this->paramNameFromFieldAndIndex($filterField, $counter);
-            
+
             switch ($value["operator"]) {
                 case Operator::IsNull:
                 case Operator::IsNotNull:
@@ -303,7 +303,7 @@ class EntitiesProvider
             }
         }
 
-        $selectBlock = sprintf($countResults ? "SELECT COUNT(%s) " : "SELECT %s ", implode(",", $select));
+        $selectBlock = $countResults ? sprintf( "SELECT COUNT(%s) " , $select[0]) : sprintf( "SELECT %s " , implode(",", $select));
 
         $whereBlock = $this->composeWhereBlock();
         $sortBlock = $this->composeSortBlock();
@@ -332,10 +332,10 @@ class EntitiesProvider
     public function getResult($usePagination = true)
     {
         $query = $this->createQueryBuilder(true);
-        
+
         if((bool)$usePagination) {
             $query->setFirstResult($this->offset)
-            ->setMaxResults($this->limit);
+                ->setMaxResults($this->limit);
         }
 
         $paginator = new Paginator($query, true);
