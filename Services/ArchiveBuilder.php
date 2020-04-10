@@ -3,6 +3,10 @@
 namespace Mrapps\BackendBundle\Services;
 
 use Doctrine\ORM\EntityManager;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Promise;
+use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Exception\RequestException;
 use Mrapps\BackendBundle\Interfaces\FileInterface;
 use Mrapps\BackendBundle\Interfaces\PublicUrlProviderInterface;
 use Mrapps\AmazonBundle\Handler\S3Handler;
@@ -14,6 +18,7 @@ class ArchiveBuilder
     private $zipArchive;
 
     private $archiveName;
+    private $tempFolderPath;
 
     private $isArchiveCreated = false;
 
@@ -23,15 +28,21 @@ class ArchiveBuilder
 
     private $amazon;
 
+    private $promises;
+
+    /**@var GuzzleClient $httpClient*/
+    private $httpClient;
+
     public function __construct(
         EntityManager $manager,
-        PublicUrlProviderInterface $urlProvider,
+        PublicUrlProvider $urlProvider,
         \AppKernel $kernel
     ) {
         $this->manager = $manager;
         $this->urlProvider = $urlProvider;
         $this->zipArchive = new \ZipArchive();
         $this->kernel = $kernel;
+        $this->httpClient = new GuzzleClient();
     }
 
     public function setAmazonS3Service(S3Handler $amazon)
@@ -42,6 +53,7 @@ class ArchiveBuilder
     public function setArchiveName($archiveName)
     {
         $this->archiveName = $archiveName;
+        $this->tempFolderPath = str_replace(".zip", "", $archiveName);
     }
 
     public function getArchiveName()
@@ -58,13 +70,25 @@ class ArchiveBuilder
         }
     }
 
+    private function deleteDirectory($dir) {
+        system('rm -rf -- ' . escapeshellarg($dir), $retval);
+        return $retval == 0; // UNIX commands return zero on success
+    }
+
     private function createArchive()
     {
-        $this->isArchiveCreated = $this->zipArchive
-            ->open(
-                $this->archiveName,
-                \ZipArchive::CREATE
-            );
+        if(is_dir($this->tempFolderPath)){
+            $this->deleteDirectory($this->tempFolderPath);
+        }
+
+        mkdir($this->tempFolderPath);
+        $this->promises = [];
+
+        if ($this->zipArchive->open($this->archiveName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== TRUE) {
+            die ("An error occurred creating your ZIP file.");
+        }
+
+        $this->isArchiveCreated = true;
     }
 
     public function isArchiveCreated()
@@ -91,15 +115,60 @@ class ArchiveBuilder
 
         $this->zipArchive->addFromString(
             $this->urlProvider->getRelativeUri(),
-            $this->getFileContent($file)
+            $this->getFileContent($file->getAmazonS3Key())
         );
     }
 
-    private function getFileContent(FileInterface $file)
+    public function addFromFilePath($filePath)
+    {
+        $relativePath = str_replace($this->urlProvider->getBaseUrl(), "", $filePath);
+
+        /**@var GuzzleClient $client * */
+        $client = $this->httpClient;
+
+        $absoluteFilePath = $this->tempFolderPath . "/" . str_replace("uploads/", "", $relativePath);
+        $dirname = dirname($absoluteFilePath);
+        if (!is_dir($dirname))
+        {
+            mkdir($dirname, 0755, true);
+        }
+
+        $resource = fopen($absoluteFilePath, 'w');
+        //var_dump($this->getAmazonFileUrl($filePath));
+        $this->promises[] = $client->requestAsync('GET', $this->getAmazonFileUrl($relativePath), ['sink' => $resource]);
+    }
+
+    public function addFromAmazonFilesPath($filesPath)
+    {
+        foreach ($filesPath as $filePath) {
+            $this->addFromFilePath($filePath);
+        }
+
+        $this->downloadAwsFiles();
+    }
+
+    public function downloadAwsFiles(){
+        if(is_array($this->promises) && count($this->promises)>0){
+            Promise\settle($this->promises)->wait();
+            $this->promises = [];
+        }
+    }
+
+    private function getAmazonFileUrl($relativePath){
+        if ($this->amazon) {
+            return $this->amazon->getObjectUrlWithExpire(
+                $relativePath,
+                '+10 minutes'
+            );
+        }
+        return null;
+    }
+
+    private function getFileContent($relativePath)
     {
         if ($this->amazon) {
             $amazonProtectedUrl = $this->amazon->getObjectUrlWithExpire(
-                $file->getAmazonS3Key(),
+                $relativePath,
                 '+10 minutes'
             );
 
@@ -126,6 +195,14 @@ class ArchiveBuilder
     public function addFromString($fileName, $content)
     {
         $this->zipArchive->addFromString($fileName, $content);
+    }
+
+    public function zipFolderAndClose(){
+        $options = ['remove_all_path' => true, 'add_path' => 'mrapps_backend_files/'];
+        $this->zipArchive->addGlob($this->tempFolderPath . "/mrapps_backend_files/*.{jpg,pdf}", GLOB_BRACE, $options);
+        $options['add_path'] = 'mrapps_backend_images/';
+        $this->zipArchive->addGlob($this->tempFolderPath . "/mrapps_backend_images/*.{jpg,pdf}", GLOB_BRACE, $options);
+        $this->close();
     }
 
     public function close()

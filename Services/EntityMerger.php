@@ -61,7 +61,6 @@ class EntityMerger
 
     public function setLocale($locale)
     {
-
         if (null === $this->defaultLocale)
             $this->setDefaultLocale($locale);
         else
@@ -98,6 +97,7 @@ class EntityMerger
         $index = count($this->row);
 
         $this->mergeNormalFields($entity, $index, $normalFields);
+
 
         $this->mergeTransFields($entity, $index, $transFields);
 

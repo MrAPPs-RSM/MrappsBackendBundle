@@ -1,5 +1,6 @@
 {
   "name": "mrapps/backendbundle",
+  "version": "0.8",
   "description": "Pannello Backend standard - Symfony2",
   "type": "symfony-bundle",
   "authors": [
@@ -15,21 +16,17 @@
     "MIT"
   ],
   "require": {
-    "php": ">=5.4",
-    "symfony/symfony": ">=2.6",
+    "php": ">=7.0",
+    "symfony/symfony": ">=2.8.52",
     "friendsofsymfony/user-bundle": "~1.3",
-    "liip/imagine-bundle": "^1.3",
-    "ext-imagick": "*"
+    "liip/imagine-bundle": "1.9.1",
+    "ext-imagick": "*",
+    "sensio/framework-extra-bundle": "3.0.29"
   },
   "autoload": {
     "psr-0": {
       "Mrapps\\BackendBundle": ""
     }
   },
-  "target-dir": "Mrapps/BackendBundle",
-  "extra": {
-    "branch-alias": {
-      "dev-master": "0.1-dev"
-    }
-  }
+  "target-dir": "Mrapps/BackendBundle"
 }
