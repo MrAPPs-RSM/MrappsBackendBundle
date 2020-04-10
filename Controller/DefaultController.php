@@ -75,7 +75,8 @@ class DefaultController extends Controller
 
     public function getLocalUrlDir($dir = 'mrapps_backend_files')
     {
-        return $this->getRequest()->getSchemeAndHttpHost() . '/uploads/' . $dir;
+        return $this->container->get('request_stack')->getCurrentRequest()->getSchemeAndHttpHost()
+            . '/uploads/' . $dir;
     }
 
     private function _checkRoleSidebar($sidebar = null)
